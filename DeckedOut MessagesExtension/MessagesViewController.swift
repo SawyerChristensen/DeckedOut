@@ -7,30 +7,13 @@
 
 import UIKit
 import Messages
+import SwiftUI
 
 class MessagesViewController: MSMessagesAppViewController {
-
-    private lazy var mainMenuVC = MainMenuViewController()
 
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        embedMainMenu()
-    }
-
-    // MARK: – Private helpers
-    private func embedMainMenu() {
-        addChild(mainMenuVC)
-        view.addSubview(mainMenuVC.view)
-        mainMenuVC.view.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            mainMenuVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mainMenuVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mainMenuVC.view.topAnchor.constraint(equalTo: view.topAnchor),
-            mainMenuVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        mainMenuVC.didMove(toParent: self)
     }
 
     
@@ -39,8 +22,9 @@ class MessagesViewController: MSMessagesAppViewController {
     override func willBecomeActive(with conversation: MSConversation) {
         // Called when the extension is about to move from the inactive to active state.
         // This will happen when the extension is about to present UI.
-        
-        // Use this method to configure the extension and restore previously stored state.
+        super.willBecomeActive(with: conversation)
+        requestPresentationStyle(.expanded)
+        presentGameController()
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -80,6 +64,56 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called after the extension transitions to a new presentation style.
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
+    }
+    
+    // MARK: - Helper functions
+    /*private func presentMenuController(for presentationStyle: MSMessagesAppPresentationStyle, with conversation: MSConversation) {
+        let viewModel = MenuViewModel(presentationStyle: presentationStyle)
+        self.menuViewModel = viewModel
+        
+        let menuView = MessagesMainMenuView(viewModel: viewModel) { [weak self] in
+            self?.createGame(conversation: conversation)
+        }
+                
+        presentView(UIHostingController(rootView: menuView))
+    }*/
+    
+    private func presentGameController() {
+        //print("presentGameController")
+        //removeAllChildViewControllers()
+        let gameView = GinGameView()
+        let gameController = UIHostingController(rootView: gameView)
+        
+        presentView(gameController)
+    }
+    
+    private func presentView(_ viewController: UIViewController) {
+        //dismiss any pop-up (like the promotion window) that might be open
+        dismiss(animated: false) { [weak self] in
+            guard let self = self else { return }
+            
+            //remove all existing child view controllers
+            for child in self.children {
+                child.willMove(toParent: nil)
+                child.view.removeFromSuperview()
+                child.removeFromParent()
+            }
+            
+            //add the new view controller
+            self.addChild(viewController)
+            viewController.view.frame = self.view.bounds
+            viewController.view.translatesAutoresizingMaskIntoConstraints = false
+            self.view.addSubview(viewController.view)
+            
+            NSLayoutConstraint.activate([
+                viewController.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                viewController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                viewController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                viewController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            ])
+            
+            viewController.didMove(toParent: self)
+        }
     }
 
 }

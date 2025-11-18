@@ -36,6 +36,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BE944AB12ECB918C0003F673 /* DeckedOutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeckedOutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECF99A02E04746E007B89C0 /* DeckedOut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeckedOut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECF99A92E04746F007B89C0 /* DeckedOut MessagesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "DeckedOut MessagesExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECF99AE2E04746F007B89C0 /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
@@ -52,6 +53,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		BE944AB22ECB918C0003F673 /* DeckedOutTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DeckedOutTests;
+			sourceTree = "<group>";
+		};
 		BECF99A22E04746E007B89C0 /* DeckedOut */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DeckedOut;
@@ -68,6 +74,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BE944AAE2ECB918C0003F673 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BECF99A62E04746F007B89C0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -84,6 +97,7 @@
 			children = (
 				BECF99A22E04746E007B89C0 /* DeckedOut */,
 				BECF99B02E04746F007B89C0 /* DeckedOut MessagesExtension */,
+				BE944AB22ECB918C0003F673 /* DeckedOutTests */,
 				BECF99AD2E04746F007B89C0 /* Frameworks */,
 				BECF99A12E04746E007B89C0 /* Products */,
 			);
@@ -94,6 +108,7 @@
 			children = (
 				BECF99A02E04746E007B89C0 /* DeckedOut.app */,
 				BECF99A92E04746F007B89C0 /* DeckedOut MessagesExtension.appex */,
+				BE944AB12ECB918C0003F673 /* DeckedOutTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,6 +124,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		BE944AB02ECB918C0003F673 /* DeckedOutTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE944AB52ECB918C0003F673 /* Build configuration list for PBXNativeTarget "DeckedOutTests" */;
+			buildPhases = (
+				BE944AAD2ECB918C0003F673 /* Sources */,
+				BE944AAE2ECB918C0003F673 /* Frameworks */,
+				BE944AAF2ECB918C0003F673 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				BE944AB22ECB918C0003F673 /* DeckedOutTests */,
+			);
+			name = DeckedOutTests;
+			packageProductDependencies = (
+			);
+			productName = DeckedOutTests;
+			productReference = BE944AB12ECB918C0003F673 /* DeckedOutTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		BECF999F2E04746E007B89C0 /* DeckedOut */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BECF99C02E047470007B89C0 /* Build configuration list for PBXNativeTarget "DeckedOut" */;
@@ -160,9 +197,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1640;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					BE944AB02ECB918C0003F673 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
 					BECF999F2E04746E007B89C0 = {
 						CreatedOnToolsVersion = 16.4;
 					};
@@ -187,11 +227,19 @@
 			targets = (
 				BECF999F2E04746E007B89C0 /* DeckedOut */,
 				BECF99A82E04746F007B89C0 /* DeckedOut MessagesExtension */,
+				BE944AB02ECB918C0003F673 /* DeckedOutTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		BE944AAF2ECB918C0003F673 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BECF999E2E04746E007B89C0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -209,6 +257,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BE944AAD2ECB918C0003F673 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BECF99A52E04746F007B89C0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -227,6 +282,46 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		BE944AB62ECB918C0003F673 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4X76DT8A23;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOutTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BE944AB72ECB918C0003F673 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4X76DT8A23;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOutTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		BECF99BB2E047470007B89C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -244,7 +339,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Samyer.DeckedOut.MessagesExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -270,7 +365,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Samyer.DeckedOut.MessagesExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -338,6 +433,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -395,6 +491,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -413,7 +510,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Samyer.DeckedOut;
+				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -434,7 +531,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Samyer.DeckedOut;
+				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -445,6 +542,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BE944AB52ECB918C0003F673 /* Build configuration list for PBXNativeTarget "DeckedOutTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE944AB62ECB918C0003F673 /* Debug */,
+				BE944AB72ECB918C0003F673 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BECF999D2E04746E007B89C0 /* Build configuration list for PBXProject "DeckedOut" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
