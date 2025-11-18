@@ -63,12 +63,13 @@ struct FannedHandView: View {
     let isFaceUp: Bool
     
     var body: some View {
-        HStack(spacing: -60) {
+        HStack(spacing: -67) {
             ForEach(Array(cards.enumerated()), id: \.1) { index, card in
                 CardView(imageName: card.imageName, isFaceUp: isFaceUp)
-                    .rotationEffect(.degrees(Double(index - cards.count/2) * 6))
-                    .offset(y: abs(Double(index - cards.count/2)) * -2)
+                    .rotationEffect(.degrees(Double(index - cards.count/2) * 4))
+                    .offset(y: abs(Double(index - cards.count/2) * 5))
             }
         }
+        //.offset(x: isFaceUp ? 10 : 0)
     }
 }

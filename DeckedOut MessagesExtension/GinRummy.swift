@@ -44,16 +44,19 @@ struct GinGameView: View {
 
     
     var body: some View {
+        
         VStack {
-            // Opponent
+            // Opponent's Hand
             FannedHandView(cards: opponentHand, isFaceUp: false)
-                .padding(.top, 20)
+                .rotationEffect(Angle(degrees: 180))
+                .shadow(radius: 20)
+                .padding(.top, 30)
             
             Spacer()
             
-            // Middle: Deck + Discard
+            // Middle section
             HStack {
-                
+                // Deck
                 ZStack {
                     ForEach(0..<5) { i in
                         Image("cardBackRed")
@@ -61,7 +64,7 @@ struct GinGameView: View {
                             .aspectRatio(0.7, contentMode: .fit)
                             .frame(height: 140)
                             .offset(x: CGFloat(-i) * 2, y: CGFloat(-i) * 2)
-                            .shadow(radius: 1)
+                            .shadow(radius: i == 4 ? 1 : 5)
                     }
                 }
                 .onTapGesture {
@@ -70,23 +73,31 @@ struct GinGameView: View {
 
                 Spacer()
 
-                // Discard
+                // Discard Pile
                 if let cardImage = discardTop?.imageName {
                     CardView(imageName: cardImage, isFaceUp: true)
                         .onTapGesture {
-                            print("Draw from discard")
+                            print("Draw from discard pile")
                         }
+                        .shadow(radius: 5)
                 }
             }
             .padding(.horizontal, 80)
             
             Spacer()
             
-            // Player hand
+            // Player's hand
             FannedHandView(cards: playerHand, isFaceUp: true)
-                .padding(.bottom, 20)
+                .padding(.bottom, 40)
+                .shadow(radius: 5)
+                .offset(x: 10)
+            
         }
-        .background(Color.green.opacity(0.2))
+        .background(Image("feltTexture")
+            .luminanceToAlpha()
+            //.blendMode(.multiply))
+            .opacity(0.5))
+        .background(Color(.green).opacity(0.75))
     }
 }
 
