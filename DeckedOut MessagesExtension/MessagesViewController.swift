@@ -67,6 +67,7 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     // MARK: - Helper functions
+    
     /*private func presentMenuController(for presentationStyle: MSMessagesAppPresentationStyle, with conversation: MSConversation) {
         let viewModel = MenuViewModel(presentationStyle: presentationStyle)
         self.menuViewModel = viewModel

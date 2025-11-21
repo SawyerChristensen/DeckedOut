@@ -1,0 +1,25 @@
+Sam: Let me explain a couple things about XCode/ this project.
+
+You can test this code on either a simulator, or your iphone. simply hit the play button and choose the device you want to simulate the imessage extension on.
+
+You will notice there are three folders (4 if you count frameworks). You can ignore all of them except for DeckedOut MessagesExtension. The shortened "DeckOut" would be for a parent app (this has none). I might get rid of the testing folder. I cant seem to figure out how to get it to work other than the "playground" file there. Frameworks you do not touch. XCode manages that
+
+MessagesViewController is the main entry poitn for all iMessage apps. Most of the functions are auto-included when you start a new project and have good comments explaining what they do. I wrote everything under Helper functions (and borrowed from Hex Chess) Right now it just opens the Gin Game view under the "Gin Rummy file"
+
+Gin Rummy Logic is unused atm, but it validates if the user has won or not. I translated this function into Swift from a Java function on Github.
+
+The Deck file describes the basic data types of a deck, rank, suit, and card. These data types are extended in UIUtils.
+
+There is a branch that has maybe 2-3 days of work on it, but its rather complicated and I will slowly be moving code over to main again as I get a grasp on what each line is changing exactly. The other branch is functional, but if I've learned ANYTHING making Hex Chess, it's to not just "trust" the AI even if the code works, because it makes debugging something later an absolute nightmare. not only do you not know what is causing the problem, but you dont know what DOES work and why, which makes debugging 10x longer. Its 100% worth it to actually go through every change and know EXACTLY what it does, so when something does break, (and it will, a lot, especially if youre using AI), you're not fucked. I ran into this issue and couldnt debug something, and had no idea what part of my code I actually needed on the branch. Unfortunately, most of that code is completely functional.
+
+Maybe look on the branch? Idk. I'm kinda tired right now and will revisit this project later once I have a real plan of how I want to build the card dragability fundementally. there are a lot of approaches to how to do this. trust me. its not as easy as it sounds. For example, the card is in your hand. when you drag it out of your hand, does it become a global variable able to be dropped into the discard pile? what if you let it go somewhere? its supposed to go back to your hand. should cards ever be global variables? it makes more sense for the card to be stored in the hand, but what if you drag it far away? it would look nice for the hand to collapse as if the card isnt there anymore, right? how is it both apart of the hand in the back end but not visually? hard questions.
+
+Anyway, its late, and I guess I'll sleep on it. I'd just reccomend getting yourself familiar with Xcode, the project, and the code I have atm. This will make understanding code I add in the future easier to undertand becase you know what has changed. You should also still have access to my hex chess repo if you want to see what a finished Xcode project looks like, (like what a full MessagesViewController) might end up looking like in this project. That's only if you want to though, no worries. I think you'll find Swift relatively straightforward.
+
+Your job specifically. Right now maybe not much in the gin rummy file as I move stuff back from my branch? What would actually be super helpful is a list of possible games we could add, and a list of fundemental design simularities between them, so we can build a strong foundation and library of parts we can quickly use when building out a new card game. I've also typed out a to_do list text file. I keep one in Hex chess and it helps development a lot. it keeps me on track, is good for planning, and remembering changes/updates you can add later when the fundemental stuff is built. maybe check that out?
+
+Goodnight for real now. (Or good morning for you!)
+
+
+P.S.
+(I highly reccomend you get the github desktop applicaiton if you don't  have it already, it works great with XCode.)

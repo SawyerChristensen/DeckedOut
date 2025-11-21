@@ -22,8 +22,7 @@ struct Deck {
     }
 }
 
-/// Represents a single card.
-struct Card: Hashable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice
+struct Card: Hashable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice. In english you say "7 of spades" not "spades, 7" but it also doesnt matter. this works now
     public let suit: Suit
     public let rank: Rank
     
@@ -33,7 +32,6 @@ struct Card: Hashable { //to do later: refactor logic switching rank & suit in c
     }
 }
 
-/// Represents a standard playing card suit.
 public enum Suit: Int, CaseIterable { /// CaseIterable lets us loop through all suits easily.
     case spades = 0
     case hearts = 1
@@ -41,7 +39,7 @@ public enum Suit: Int, CaseIterable { /// CaseIterable lets us loop through all 
     case clubs = 3
 }
 
-/// Represents a standard playing card rank (Ace low).
+///Ace is treated as a low card here! Might want to change later depending on game!
 public enum Rank: Int, CaseIterable { // note the values are 0 indexed!
     case ace = 0
     case two = 1
