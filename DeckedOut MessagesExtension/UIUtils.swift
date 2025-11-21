@@ -70,6 +70,5 @@ struct FannedHandView: View {
                     .offset(y: abs(Double(index - cards.count/2) * 5))
             }
         }
-        //.offset(x: isFaceUp ? 10 : 0)
     }
 }
