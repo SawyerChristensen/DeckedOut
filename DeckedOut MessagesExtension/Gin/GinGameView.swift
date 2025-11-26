@@ -94,7 +94,7 @@ struct GinGameView: View {
             
             
             // Player's hand
-            FannedHandView(cards: game.playerHand, isFaceUp: true,
+            FannedHandView(cards: $game.playerHand, isFaceUp: true,
                            onDragChanged: { card, location in handleDragChanged(card: card, location: location) },
                            onDragEnded: { card, location in handleDragEnded(card: card, location: location) }
                 )
@@ -114,11 +114,11 @@ struct GinGameView: View {
     //MARK: - Helper functions
     func handleDragChanged(card: Card, location: CGPoint) {
         if deckFrame.contains(location) {
-            print("Hovering over DECK")
+            //print("Hovering over DECK")
         } else if discardFrame.contains(location) {
-            print("Hovering over DISCARD")
+            //print("Hovering over DISCARD")
         } else {
-            print("Hovering over nothing")
+            //print("Hovering over nothing")
         }
     }
 

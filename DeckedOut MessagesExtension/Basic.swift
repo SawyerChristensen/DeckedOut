@@ -1,6 +1,7 @@
 import Foundation
 
-struct Card: Hashable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice. In english you say "7 of spades" not "spades, 7" but it also doesnt matter. this works now
+struct Card: Hashable, Identifiable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice. In english you say "7 of spades" not "spades, 7" but it also doesnt matter. this works now
+    public let id = UUID()
     public let suit: Suit
     public let rank: Rank
     
