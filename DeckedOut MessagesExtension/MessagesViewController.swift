@@ -82,8 +82,8 @@ class MessagesViewController: MSMessagesAppViewController {
     private func presentGameController() {
         //print("presentGameController")
         //removeAllChildViewControllers()
-        let gameView = GinGameView()
-        let gameController = UIHostingController(rootView: gameView)
+        let gameRootView = GinRootView()
+        let gameController = UIHostingController(rootView: gameRootView)
         
         presentView(gameController)
     }

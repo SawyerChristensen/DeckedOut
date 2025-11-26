@@ -1,27 +1,5 @@
 import Foundation
 
-struct Deck {
-    private var cards: [Card]
-
-    init() {
-        self.cards = []
-        for suit in Suit.allCases {
-            for rank in Rank.allCases {
-                cards.append(Card(suit: suit, rank: rank))
-            }
-        }
-        shuffle()
-    }
-
-    mutating func shuffle() {
-        cards.shuffle()
-    }
-    
-    mutating func drawCard() -> Card? {
-        return cards.isEmpty ? nil : cards.removeFirst()
-    }
-}
-
 struct Card: Hashable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice. In english you say "7 of spades" not "spades, 7" but it also doesnt matter. this works now
     public let suit: Suit
     public let rank: Rank
@@ -54,4 +32,26 @@ public enum Rank: Int, CaseIterable { // note the values are 0 indexed!
     case jack = 10
     case queen = 11
     case king = 12
+}
+
+struct Deck {
+    private var cards: [Card]
+
+    init() {
+        self.cards = []
+        for suit in Suit.allCases {
+            for rank in Rank.allCases {
+                cards.append(Card(suit: suit, rank: rank))
+            }
+        }
+        shuffle()
+    }
+
+    mutating func shuffle() {
+        cards.shuffle()
+    }
+    
+    mutating func drawCard() -> Card? {
+        return cards.isEmpty ? nil : cards.removeFirst()
+    }
 }

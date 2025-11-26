@@ -8,44 +8,26 @@
 import Foundation
 import SwiftUI
 
+enum Zone {
+    case discard
+    case hand
+    case none
+}
+
+class DragState: ObservableObject {
+    @Published var draggedCard: Card?
+    @Published var dragLocation: CGPoint = .zero
+    @Published var currentZone: Zone = .none
+}
+
 struct GinGameView: View {
-    let playerHand: [Card] = [
-        .init(suit: .hearts, rank: .five),
-        .init(suit: .hearts, rank: .six),
-        .init(suit: .hearts, rank: .seven),
-        
-        .init(suit: .spades, rank: .seven),
-        .init(suit: .diamonds, rank: .seven),
-        .init(suit: .clubs, rank: .seven),
+    @EnvironmentObject var game: GameManager
 
-        .init(suit: .clubs, rank: .eight),
-        .init(suit: .clubs, rank: .nine),
-        .init(suit: .clubs, rank: .ten),
-        .init(suit: .clubs, rank: .jack)
-    ]
-    let opponentHand: [Card] = [
-        .init(suit: .hearts, rank: .five),
-        .init(suit: .hearts, rank: .six),
-        .init(suit: .hearts, rank: .seven),
-        
-        .init(suit: .spades, rank: .seven),
-        .init(suit: .diamonds, rank: .seven),
-        .init(suit: .clubs, rank: .seven),
-
-        .init(suit: .clubs, rank: .eight),
-        .init(suit: .clubs, rank: .nine),
-        .init(suit: .clubs, rank: .ten),
-        .init(suit: .clubs, rank: .jack)
-    ]
-    
-    let discardTop: Card? = .init(suit: .hearts, rank: .ace)
-
-    
     var body: some View {
         
         VStack {
             // Opponent's Hand
-            FannedHandView(cards: opponentHand, isFaceUp: false)
+            FannedHandView(cards: game.opponentHand, isFaceUp: false)
                 .rotationEffect(Angle(degrees: 180))
                 .shadow(radius: 20)
                 .padding(.top, 30)
@@ -72,7 +54,7 @@ struct GinGameView: View {
                 Spacer()
 
                 // Discard Pile
-                if let cardImage = discardTop?.imageName {
+                if let cardImage = game.discardPile.first?.imageName {
                     CardView(imageName: cardImage, isFaceUp: true)
                         .onTapGesture {
                             print("Draw from discard pile")
@@ -85,7 +67,7 @@ struct GinGameView: View {
             Spacer()
             
             // Player's hand
-            FannedHandView(cards: playerHand, isFaceUp: true)
+            FannedHandView(cards: game.playerHand, isFaceUp: true)
                 .padding(.bottom, 40)
                 .shadow(radius: 5)
                 .offset(x: 10)
