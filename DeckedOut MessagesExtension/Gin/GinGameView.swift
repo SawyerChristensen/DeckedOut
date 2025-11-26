@@ -47,7 +47,7 @@ struct GinGameView: View {
                         Image("cardBackRed")
                             .resizable()
                             .aspectRatio(0.7, contentMode: .fit)
-                            .frame(height: 140)
+                            .frame(height: 145)
                             .offset(x: CGFloat(-i) * 2, y: CGFloat(-i) * 2)
                             .shadow(radius: i == 4 ? 1 : 5)
                     }

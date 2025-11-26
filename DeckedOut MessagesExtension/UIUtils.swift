@@ -53,7 +53,7 @@ struct CardView: View {
         Image(isFaceUp ? imageName : "cardBackRed")
             .resizable()
             .aspectRatio(0.7, contentMode: .fit)
-            .frame(height: 140)
+            .frame(height: 145)
             .shadow(radius: 3)
     }
 }
@@ -96,18 +96,21 @@ struct FannedHandView: View {
         HStack(spacing: -67) {
             ForEach(Array(cards.enumerated()), id: \.element) { index, card in
                 
-                DraggableCardView(
-                    card: card,
-                    isFaceUp: isFaceUp,
-                    
-                    onDragChanged: { location in
-                        onDragChanged?(card, location)
-                    },
-                    
-                    onDragEnded: { location in
-                        onDragEnded?(card, location)
+                Group {
+                    if isFaceUp {
+                        DraggableCardView( //its the player's hand!
+                            card: card,
+                            isFaceUp: isFaceUp,
+                            onDragChanged: { location in
+                                onDragChanged?(card, location) },
+                            onDragEnded: { location in
+                                onDragEnded?(card, location) }
+                        )
+                        
+                    } else { //its the opponents hand! you can't drag those!
+                        CardView(imageName: card.imageName, isFaceUp: isFaceUp)
                     }
-                )
+                }
                 .rotationEffect(.degrees(Double(index - cards.count / 2) * 4))
                 .offset(y: abs(Double(index - cards.count / 2) * 5))
             }
