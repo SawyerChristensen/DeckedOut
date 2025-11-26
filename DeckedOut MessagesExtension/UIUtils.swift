@@ -58,16 +58,58 @@ struct CardView: View {
     }
 }
 
+struct DraggableCardView: View {
+    let card: Card
+    let isFaceUp: Bool
+    var onDragChanged: ((CGPoint) -> Void)? = nil
+    var onDragEnded: ((CGPoint) -> Void)? = nil
+
+    @GestureState private var dragOffset: CGSize = .zero
+
+    var body: some View {
+        CardView(imageName: card.imageName, isFaceUp: isFaceUp)
+            .offset(dragOffset)
+            .gesture(
+                DragGesture(coordinateSpace: .global)
+                    .updating($dragOffset) { value, state, _ in
+                        state = value.translation
+                        onDragChanged?(value.location)
+                    }
+                    .onEnded { value in
+                        onDragEnded?(value.location)
+                    }
+            )
+    }
+}
+
+
+
 struct FannedHandView: View {
     let cards: [Card]
     let isFaceUp: Bool
     
+    // Callbacks for zoning
+    var onDragChanged: ((Card, CGPoint) -> Void)? = nil
+    var onDragEnded: ((Card, CGPoint) -> Void)? = nil
+    
     var body: some View {
         HStack(spacing: -67) {
-            ForEach(Array(cards.enumerated()), id: \.1) { index, card in
-                CardView(imageName: card.imageName, isFaceUp: isFaceUp)
-                    .rotationEffect(.degrees(Double(index - cards.count/2) * 4))
-                    .offset(y: abs(Double(index - cards.count/2) * 5))
+            ForEach(Array(cards.enumerated()), id: \.element) { index, card in
+                
+                DraggableCardView(
+                    card: card,
+                    isFaceUp: isFaceUp,
+                    
+                    onDragChanged: { location in
+                        onDragChanged?(card, location)
+                    },
+                    
+                    onDragEnded: { location in
+                        onDragEnded?(card, location)
+                    }
+                )
+                .rotationEffect(.degrees(Double(index - cards.count / 2) * 4))
+                .offset(y: abs(Double(index - cards.count / 2) * 5))
             }
         }
     }

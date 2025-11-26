@@ -22,6 +22,9 @@ class DragState: ObservableObject {
 
 struct GinGameView: View {
     @EnvironmentObject var game: GameManager
+    
+    @State private var deckFrame: CGRect = .zero
+    @State private var discardFrame: CGRect = .zero
 
     var body: some View {
         
@@ -32,7 +35,9 @@ struct GinGameView: View {
                 .shadow(radius: 20)
                 .padding(.top, 30)
             
+            
             Spacer()
+            
             
             // Middle section
             HStack {
@@ -50,6 +55,17 @@ struct GinGameView: View {
                 .onTapGesture {
                     print("Draw from deck")
                 }
+                .background( // what defines the deck's zone
+                    GeometryReader { geo in
+                        Color.clear
+                            .onAppear {
+                                deckFrame = geo.frame(in: .global)
+                            }
+                            .onChange(of: geo.frame(in: .global)) { old, new in
+                                deckFrame = new
+                            }
+                    }
+                )
 
                 Spacer()
 
@@ -60,14 +76,28 @@ struct GinGameView: View {
                             print("Draw from discard pile")
                         }
                         .shadow(radius: 5)
+                        .background( //what defines discard pile's zone
+                            GeometryReader { geo in
+                                Color.clear
+                                    .onAppear { discardFrame = geo.frame(in: .global) }
+                                    .onChange(of: geo.frame(in: .global)) { old, new in
+                                        discardFrame = new
+                                    }
+                            }
+                        )
                 }
             }
             .padding(.horizontal, 80)
             
+            
             Spacer()
             
+            
             // Player's hand
-            FannedHandView(cards: game.playerHand, isFaceUp: true)
+            FannedHandView(cards: game.playerHand, isFaceUp: true,
+                           onDragChanged: { card, location in handleDragChanged(card: card, location: location) },
+                           onDragEnded: { card, location in handleDragEnded(card: card, location: location) }
+                )
                 .padding(.bottom, 40)
                 .shadow(radius: 5)
                 .offset(x: 10)
@@ -79,4 +109,29 @@ struct GinGameView: View {
             .opacity(0.5))
         .background(Color(.green).opacity(0.75))
     }
+    
+    
+    //MARK: - Helper functions
+    func handleDragChanged(card: Card, location: CGPoint) {
+        if deckFrame.contains(location) {
+            print("Hovering over DECK")
+        } else if discardFrame.contains(location) {
+            print("Hovering over DISCARD")
+        } else {
+            print("Hovering over nothing")
+        }
+    }
+
+    func handleDragEnded(card: Card, location: CGPoint) {
+        if deckFrame.contains(location) {
+            print("DROP → Deck zone")
+            //game.drawFromDeck(card)
+        } else if discardFrame.contains(location) {
+            print("DROP → Discard zone")
+            //game.discard(card)
+        } else {
+            print("Drop → No zone, card returns")
+        }
+    }
+
 }
