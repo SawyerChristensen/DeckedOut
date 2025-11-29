@@ -8,18 +8,6 @@
 import Foundation
 import SwiftUI
 
-enum Zone {
-    case discard
-    case hand
-    case none
-}
-
-class DragState: ObservableObject {
-    @Published var draggedCard: Card?
-    @Published var dragLocation: CGPoint = .zero
-    @Published var currentZone: Zone = .none
-}
-
 struct GinGameView: View {
     @EnvironmentObject var game: GameManager
     
@@ -55,60 +43,55 @@ struct GinGameView: View {
                 .onTapGesture {
                     print("Draw from deck")
                 }
-                .background( // what defines the deck's zone
-                    GeometryReader { geo in
-                        Color.clear
-                            .onAppear {
-                                deckFrame = geo.frame(in: .global)
-                            }
-                            .onChange(of: geo.frame(in: .global)) { old, new in
-                                deckFrame = new
-                            }
-                    }
-                )
 
-                Spacer()
-
-                // Discard Pile
-                if let cardImage = game.discardPile.first?.imageName {
-                    CardView(imageName: cardImage, isFaceUp: true)
-                        .onTapGesture {
-                            print("Draw from discard pile")
-                        }
-                        .shadow(radius: 5)
-                        .background( //what defines discard pile's zone
-                            GeometryReader { geo in
-                                Color.clear
-                                    .onAppear { discardFrame = geo.frame(in: .global) }
-                                    .onChange(of: geo.frame(in: .global)) { old, new in
-                                        discardFrame = new
-                                    }
-                            }
-                        )
-                }
-            }
-            .padding(.horizontal, 80)
-            
-            
             Spacer()
-            
-            
-            // Player's hand
-            FannedHandView(cards: $game.playerHand, isFaceUp: true,
-                           onDragChanged: { card, location in handleDragChanged(card: card, location: location) },
-                           onDragEnded: { card, location in handleDragEnded(card: card, location: location) }
-                )
-                .padding(.bottom, 40)
-                .shadow(radius: 5)
-                .offset(x: 10)
-            
+
+            // Discard Pile
+            if let cardImage = game.discardPile.first?.imageName {
+                CardView(imageName: cardImage, isFaceUp: true)
+                    .onTapGesture {
+                        print("Draw from discard pile")
+                    }
+                    .shadow(radius: 5)
+                    .background( //what defines discard pile's zone
+                        GeometryReader { geo in
+                            Color.clear
+                                .onAppear { discardFrame = geo.frame(in: .global) }
+                                .onChange(of: geo.frame(in: .global)) { old, new in
+                                    discardFrame = new
+                                }
+                        }
+                    )
+            }
         }
-        .background(Image("feltTexture")
-            .luminanceToAlpha()
-            //.blendMode(.multiply))
-            .opacity(0.5))
-        .background(Color(.green).opacity(0.75))
+        .padding(.horizontal, 80)
+        
+        
+        Spacer()
+        
+        
+        // Player's hand
+        FannedHandView(
+            cards: $game.playerHand,
+            isFaceUp: true,
+            onDragChanged: { card, location in
+                handleDragChanged(card: card, location: location)
+            },
+            onDragEnded: { card, location in
+                handleDragEnded(card: card, location: location)
+            }
+        )
+        .padding(.bottom, 40)
+        .shadow(radius: 5)
+        .offset(x: 10)
+        
     }
+    .background(Image("feltTexture")
+        .luminanceToAlpha()
+        //.blendMode(.multiply))
+        .opacity(0.5))
+    .background(Color(.green).opacity(0.75))
+}
     
     
     //MARK: - Helper functions
@@ -123,12 +106,15 @@ struct GinGameView: View {
     }
 
     func handleDragEnded(card: Card, location: CGPoint) {
-        if deckFrame.contains(location) {
-            print("DROP → Deck zone")
-            //game.drawFromDeck(card)
-        } else if discardFrame.contains(location) {
-            print("DROP → Discard zone")
-            //game.discard(card)
+        if discardFrame.contains(location) {
+            withAnimation(.spring(response: 0.3)) {
+                if let index = game.playerHand.firstIndex(of: card) {
+                    game.playerHand.remove(at: index)
+                }
+                
+                game.discardPile.insert(card, at: 0)
+            }
+            
         } else {
             print("Drop → No zone, card returns")
         }

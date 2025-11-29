@@ -87,3 +87,5 @@ fastlane/test_output
 # My Personal additions
 .DS_Store
 
+/DeckedOut.xcodeproj/xcuserdata
+DeckedOut.xcodeproj/xcuserdata/sawyerchristensen.xcuserdatad/xcschemes/xcschememanagement.plist

@@ -146,7 +146,6 @@ struct FannedHandView: View {
                 .frame(width: cardWidth, height: cardHeight)
                 .zIndex(isDragging ? 100 : Double(visualIndex))
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: predictedDropIndex)
-                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: draggedCard)
             }
         }
         .frame(height: cardHeight)
@@ -180,17 +179,15 @@ struct FannedHandView: View {
             }
         }
         
-        withAnimation(.spring()) {
-            draggedCard = nil
-            dragOffset = .zero
-            predictedDropIndex = nil
-        }
+        draggedCard = nil
+        dragOffset = .zero
+        predictedDropIndex = nil
         
         onDragEnded?(card, value.location)
     }
     
     private func calculateVisualIndex(for realIndex: Int) -> Int {
-        guard let draggedCard, //cannot find draggedCard in scope, we
+        guard let draggedCard,
               let sourceIndex = cards.firstIndex(of: draggedCard),
               let targetIndex = predictedDropIndex else {
             return realIndex
