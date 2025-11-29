@@ -13,12 +13,14 @@ struct GinGameView: View {
     
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
+    @State private var drewFromDiscard: Bool = false
+    
 
     var body: some View {
         
         VStack {
             // Opponent's Hand
-            FannedHandView(cards: game.opponentHand, isFaceUp: false)
+            FannedHandView(cards: game.opponentHand, isFaceUp: false, drewFromDiscard: false)
                 .rotationEffect(Angle(degrees: 180))
                 .shadow(radius: 20)
                 .padding(.top, 30)
@@ -47,10 +49,12 @@ struct GinGameView: View {
             Spacer()
 
             // Discard Pile
-            if let cardImage = game.discardPile.first?.imageName {
-                CardView(imageName: cardImage, isFaceUp: true)
+            if let topCard = game.discardPile.first {
+                CardView(imageName: topCard.imageName, isFaceUp: true)
                     .onTapGesture {
-                        print("Draw from discard pile")
+                        print("User drew from discard pile")
+                        game.drawFromDiscard()
+                        drewFromDiscard = true
                     }
                     .shadow(radius: 5)
                     .background( //what defines discard pile's zone
@@ -75,6 +79,7 @@ struct GinGameView: View {
             cards: $game.playerHand,
             isFaceUp: true,
             discardPileZone: discardFrame,
+            drewFromDiscard: drewFromDiscard,
             onDragChanged: { card, location in
                 handleDragChanged(card: card, location: location)
             },

@@ -79,6 +79,7 @@ struct FannedHandView: View {
     @Binding var cards: [Card]
     let isFaceUp: Bool
     var discardPileZone: CGRect? = nil
+    let drewFromDiscard: Bool
     
     // Callbacks for zoning
     var onDragChanged: ((Card, CGPoint) -> Void)? = nil
@@ -97,11 +98,17 @@ struct FannedHandView: View {
     
     @State private var predictedDropIndex: Int?
     
+    // NEW: Track which card is animating from discard
+    @State private var animatingCard: Card?
+    @State private var animationOffset: CGSize = .zero
+    @State private var animationRotationCorrection: Angle = .zero
+    
     var body: some View {
         HStack(spacing: spacing) {
             ForEach(cards) { card in
                     
                 let isDragging = draggedCard == card
+                let isAnimating = animatingCard == card
                 let index = cards.firstIndex(of: card)!
                 let visualIndex = calculateVisualIndex(for: index)
                 
@@ -110,17 +117,28 @@ struct FannedHandView: View {
                 let stride = cardWidth + spacing
                 let xOffset = CGFloat(visualIndex - index) * stride
                     
+                var finalRotation: Angle {
+                    if isDragging {
+                        return calculateDragRotation(height: dragOffset.height, angle: angle)
+                    } else if isAnimating {
+                        return animationRotationCorrection
+                    } else {
+                        return angle
+                    }
+                }
+                
                 GeometryReader { geo in
                     let geoFrame = geo.frame(in: .global)
                     
                     Group {
                         if isFaceUp { //Player's hand!
                             CardView(imageName: card.imageName, isFaceUp: isFaceUp)
-                                .rotationEffect(angle)
-                                //.rotationEffect(isDragging ? calculateDragRotation(width: dragOffset.width) : angle)
-                                .offset(x: isDragging ? 0 : xOffset, y: isDragging ? 0 : yOffset) //for the arc
+                                .rotationEffect(finalRotation)
+                                .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
                                 .scaleEffect(isDragging ? 1.1 : 1.0)
                                 .offset(isDragging ? dragOffset : .zero) //for dragging
+                                //.rotationEffect(isAnimating ? animationRotationCorrection : .degrees(0))
+                                .offset(isAnimating ? animationOffset : .zero)
                                 .gesture(
                                     DragGesture(coordinateSpace: .global)
                                         .onChanged { value in
@@ -141,6 +159,13 @@ struct FannedHandView: View {
                                             onDragEnded?(card, value.location) //external change
                                         }
                                 )
+                                .onAppear {
+                                    if drewFromDiscard && index == cards.count - 1,
+                                       let discardZone = discardPileZone {
+                                        animatingCard = card
+                                        animateFromDiscard(card: card, cardFrame: geoFrame, discardZone: discardZone, fanAngle: angle)
+                                    }
+                                }
                             
                         } else { //Opponent's hand! Can't drag these!
                             CardView(imageName: card.imageName, isFaceUp: isFaceUp)
@@ -151,11 +176,33 @@ struct FannedHandView: View {
                 }
                 .frame(width: cardWidth, height: cardHeight)
                 .zIndex(isDragging ? 100 : Double(visualIndex))
-                //.transition(.identity)
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: predictedDropIndex)
+                .animation(.spring(response: 0.4, dampingFraction: 0.75), value: cards.count)
             }
         }
         .frame(height: cardHeight)
+    }
+    
+    private func animateFromDiscard(card: Card, cardFrame: CGRect, discardZone: CGRect, fanAngle: Angle) {
+        // Calculate offset from card's natural position to discard pile
+        let offsetToDiscard = CGSize(
+            width: discardZone.midX - cardFrame.midX,
+            height: discardZone.midY - cardFrame.midY
+        )
+        
+        // Set initial state
+        animationOffset = offsetToDiscard
+        animationRotationCorrection = .degrees(0)
+        
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            animationOffset = .zero
+            animationRotationCorrection = fanAngle
+        }
+            
+        // Clear animation state after animation completes
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            animatingCard = nil
+        }
     }
     
     private func handleDragChange(card: Card, value: DragGesture.Value) {
@@ -177,9 +224,6 @@ struct FannedHandView: View {
     }
     
     private func handleDragEnd(card: Card, value: DragGesture.Value, exactCenter: CGPoint) {
-        print("touch location", value.location)
-        print("center of card", exactCenter)
-        print("center of discard pile", discardPileZone!.midX, discardPileZone!.midY)
         // Check if dropped on discard pile
         if let discardPileZone = discardPileZone {
             let touchLocation = value.location
@@ -206,7 +250,6 @@ struct FannedHandView: View {
                     draggedCard = nil
                     dragOffset = .zero
                     predictedDropIndex = nil
-                    onDragEnded?(card, value.location)
                 }
                 return
             }
@@ -226,8 +269,6 @@ struct FannedHandView: View {
         draggedCard = nil
         dragOffset = .zero
         predictedDropIndex = nil
-        
-        onDragEnded?(card, value.location)
     }
     
     private func calculateVisualIndex(for realIndex: Int) -> Int {
@@ -245,16 +286,28 @@ struct FannedHandView: View {
         return realIndex
     }
     
-    /*private func calculateDragRotation(width: CGFloat) -> Angle {
-        let maxRotation: Double = 20.0
-        let rotation = Double(width / 10)
-        return .degrees(min(max(rotation, -maxRotation), maxRotation))
-    }*/
+    private func calculateDragRotation(height: CGFloat, angle: Angle) -> Angle {
+        // 1. The height at which the card should be fully straight (0 degrees)
+        let rotationStopThreshold: CGFloat = 250.0
+        
+        // 2. Calculate progress from 0.0 to 1.0 based on the height
+        // We use max(0, height) to ensure negative drag doesn't break the math
+        let progress = max(0, abs(height)) / rotationStopThreshold
+        
+        // 3. Invert the progress:
+        // At height 0, factor is 1.0 (Full rotation effect)
+        // At height 250, factor is 0.0 (No rotation)
+        let rotationFactor = 1.0 - progress
+        
+        // 4. Apply the factor to the original angle
+        return Angle.degrees(angle.degrees * rotationFactor)
+    }
 }
 
 extension FannedHandView {
-    init(cards: [Card], isFaceUp: Bool) {
+    init(cards: [Card], isFaceUp: Bool, drewFromDiscard: Bool) {
         self._cards = .constant(cards)  // Creates a constant binding
         self.isFaceUp = isFaceUp
+        self.drewFromDiscard = drewFromDiscard
     }
 }

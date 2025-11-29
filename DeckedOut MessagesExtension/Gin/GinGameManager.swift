@@ -35,7 +35,9 @@ class GameManager: ObservableObject {
                                            .init(suit: .clubs, rank: .jack)]
         
     @Published var discardPile: [Card] = [.init(suit: .hearts, rank: .ace),
-                                          .init(suit: .hearts, rank: .two)]
+                                          .init(suit: .hearts, rank: .two),
+                                          .init(suit: .hearts, rank: .three),
+                                          .init(suit: .hearts, rank: .four)]
     
     @Published var deck: [Card] = [.init(suit: .hearts, rank: .five),
                                    .init(suit: .hearts, rank: .six),
@@ -50,5 +52,11 @@ class GameManager: ObservableObject {
                                    .init(suit: .clubs, rank: .ten)]
     
     // Optional drag state shared across views:
-    @Published var draggedCard: Card? = nil
+    //@Published var draggedCard: Card? = nil
+    
+    func drawFromDiscard() {
+        guard !discardPile.isEmpty else { return }
+        let card = discardPile.removeFirst()
+        playerHand.append(card)
+    }
 }

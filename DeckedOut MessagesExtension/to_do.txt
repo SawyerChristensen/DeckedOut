@@ -1,19 +1,17 @@
-App Roadmap:
-
--Card Dragability. Getting this right is important. You need to consider zoning, and where the card currently is. Is the card over the hand? the hand should react, make space for the new card. is the card over the discard pile? the discard pile should scale a little. look at my branch to see how i did this, but honestly ai wrote msot of it and i dont understand it, so even though it works I want to write it again line by line in main so that I truly understand what each part does.
-
--Once I can drag a card around and have it react properly to the different zones (hand, discard, and "none")
+-draw from deck
 
 -Card fip animations
-
--figure out if the discard pile is a tuple or list.
-
--ONLY once discard pile data type is figured out, working on dragging a card from the discard pile
 
 -work on sending the game state after an action
 
 -work on the hand, deck, and discard pile accept being passed variables from MessagesViewController rather than being hardcoded
 
+-other games?
+
 -work on main menu
 
 -release 1.0?
+
+
+QOL changes:
+-be able to drag from discard pile in Gin as well as tap
