@@ -74,6 +74,7 @@ struct GinGameView: View {
         FannedHandView(
             cards: $game.playerHand,
             isFaceUp: true,
+            discardPileZone: discardFrame,
             onDragChanged: { card, location in
                 handleDragChanged(card: card, location: location)
             },
@@ -116,7 +117,7 @@ struct GinGameView: View {
             }
             
         } else {
-            print("Drop → No zone, card returns")
+            //print("Drop → No zone, card returns")
         }
     }
 

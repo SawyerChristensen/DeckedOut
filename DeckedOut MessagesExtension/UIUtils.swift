@@ -78,6 +78,7 @@ struct DraggableCardView: View {
 struct FannedHandView: View {
     @Binding var cards: [Card]
     let isFaceUp: Bool
+    var discardPileZone: CGRect? = nil
     
     // Callbacks for zoning
     var onDragChanged: ((Card, CGPoint) -> Void)? = nil
@@ -110,13 +111,14 @@ struct FannedHandView: View {
                 let xOffset = CGFloat(visualIndex - index) * stride
                     
                 GeometryReader { geo in
+                    let geoFrame = geo.frame(in: .global)
+                    
                     Group {
-                        
                         if isFaceUp { //Player's hand!
                             CardView(imageName: card.imageName, isFaceUp: isFaceUp)
                                 .rotationEffect(angle)
                                 //.rotationEffect(isDragging ? calculateDragRotation(width: dragOffset.width) : angle)
-                                .offset(x: isDragging ? 0 : xOffset, y: yOffset) //for the arc
+                                .offset(x: isDragging ? 0 : xOffset, y: isDragging ? 0 : yOffset) //for the arc
                                 .scaleEffect(isDragging ? 1.1 : 1.0)
                                 .offset(isDragging ? dragOffset : .zero) //for dragging
                                 .gesture(
@@ -131,7 +133,11 @@ struct FannedHandView: View {
                                             onDragChanged?(card, value.location) //external change
                                         }
                                         .onEnded { value in
-                                            handleDragEnd(card: card, value: value) //internal change
+                                            let cardCenter = CGPoint(
+                                                x: geoFrame.midX + value.translation.width,
+                                                y: geoFrame.midY + value.translation.height
+                                                                                        )
+                                            handleDragEnd(card: card, value: value, exactCenter: cardCenter) //internal change
                                             onDragEnded?(card, value.location) //external change
                                         }
                                 )
@@ -145,6 +151,7 @@ struct FannedHandView: View {
                 }
                 .frame(width: cardWidth, height: cardHeight)
                 .zIndex(isDragging ? 100 : Double(visualIndex))
+                //.transition(.identity)
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: predictedDropIndex)
             }
         }
@@ -169,12 +176,49 @@ struct FannedHandView: View {
         }
     }
     
-    private func handleDragEnd(card: Card, value: DragGesture.Value) {
+    private func handleDragEnd(card: Card, value: DragGesture.Value, exactCenter: CGPoint) {
+        print("touch location", value.location)
+        print("center of card", exactCenter)
+        print("center of discard pile", discardPileZone!.midX, discardPileZone!.midY)
+        // Check if dropped on discard pile
+        if let discardPileZone = discardPileZone {
+            let touchLocation = value.location
+            
+            if discardPileZone.contains(touchLocation) {
+                // Calculate the offset needed to reach discard from card's START position
+                let cardStartLocation = CGPoint(
+                    x: exactCenter.x - dragOffset.width,
+                    y: exactCenter.y - dragOffset.height
+                )
+                
+                let targetOffset = CGSize(
+                    width: discardPileZone.midX - cardStartLocation.x,
+                    height: discardPileZone.midY - cardStartLocation.y
+                )
+                
+                // Animate to discard pile
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    dragOffset = targetOffset
+                }
+                
+                // After animation, notify parent to actually move the card
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    draggedCard = nil
+                    dragOffset = .zero
+                    predictedDropIndex = nil
+                    onDragEnded?(card, value.location)
+                }
+                return
+            }
+        }
+        
+        // Original logic for reordering within hand
         if let sourceIndex = cards.firstIndex(of: card),
            let targetIndex = predictedDropIndex {
             if sourceIndex != targetIndex {
                 withAnimation(.spring()) {
-                    cards.move(fromOffsets: IndexSet(integer: sourceIndex), toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
+                    cards.move(fromOffsets: IndexSet(integer: sourceIndex),
+                              toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
                 }
             }
         }
