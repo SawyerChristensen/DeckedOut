@@ -14,13 +14,13 @@ struct GinGameView: View {
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
     @State private var drewFromDiscard: Bool = false
-    
+    @State private var drewFromDeck: Bool = false
 
     var body: some View {
         
         VStack {
             // Opponent's Hand
-            FannedHandView(cards: game.opponentHand, isFaceUp: false, drewFromDiscard: false)
+            FannedHandView(cards: game.opponentHand, isFaceUp: false, drewFromDiscard: false, drewFromDeck: false)
                 .rotationEffect(Angle(degrees: 180))
                 .shadow(radius: 20)
                 .padding(.top, 30)
@@ -40,10 +40,24 @@ struct GinGameView: View {
                             .frame(height: 145)
                             .offset(x: CGFloat(-i) * 2, y: CGFloat(-i) * 2)
                             .shadow(radius: i == 4 ? 1 : 5)
+                            .background {
+                                if i == 4 { //4 is top card, the stack proceeds up-left, not down-right
+                                    GeometryReader { geo in
+                                        Color.clear
+                                            .onAppear {
+                                                deckFrame = calculateProperDeckZone(from: geo.frame(in: .global))
+                                            }
+                                            .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                                                deckFrame = calculateProperDeckZone(from: newFrame)
+                                            }
+                                    }
+                                }
+                            }
                     }
                 }
                 .onTapGesture {
-                    print("Draw from deck")
+                    game.drawFromDeck()
+                    drewFromDeck = true
                 }
 
             Spacer()
@@ -52,7 +66,6 @@ struct GinGameView: View {
             if let topCard = game.discardPile.first {
                 CardView(imageName: topCard.imageName, isFaceUp: true)
                     .onTapGesture {
-                        print("User drew from discard pile")
                         game.drawFromDiscard()
                         drewFromDiscard = true
                     }
@@ -61,8 +74,8 @@ struct GinGameView: View {
                         GeometryReader { geo in
                             Color.clear
                                 .onAppear { discardFrame = geo.frame(in: .global) }
-                                .onChange(of: geo.frame(in: .global)) { old, new in
-                                    discardFrame = new
+                                .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                                    discardFrame = newFrame
                                 }
                         }
                     )
@@ -79,7 +92,9 @@ struct GinGameView: View {
             cards: $game.playerHand,
             isFaceUp: true,
             discardPileZone: discardFrame,
+            deckZone: deckFrame,
             drewFromDiscard: drewFromDiscard,
+            drewFromDeck: drewFromDeck,
             onDragChanged: { card, location in
                 handleDragChanged(card: card, location: location)
             },
@@ -94,13 +109,24 @@ struct GinGameView: View {
     }
     .background(Image("feltTexture")
         .luminanceToAlpha()
-        //.blendMode(.multiply))
         .opacity(0.5))
     .background(Color(.green).opacity(0.75))
 }
     
+    //MARK: - Game View Helper functions (technically global scope)
+    func calculateProperDeckZone(from frame: CGRect) -> CGRect {
+        var newFrame = frame
+        let topIndex = 4
+        let offsetPerCard: CGFloat = -2
+        
+        let totalOffset = CGFloat(topIndex) * offsetPerCard
+        
+        newFrame.origin.x += totalOffset
+        newFrame.origin.y += totalOffset * 4.5
+        
+        return newFrame
+    }
     
-    //MARK: - Helper functions
     func handleDragChanged(card: Card, location: CGPoint) {
         if deckFrame.contains(location) {
             //print("Hovering over DECK")

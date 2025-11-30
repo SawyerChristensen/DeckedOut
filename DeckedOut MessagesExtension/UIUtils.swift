@@ -57,29 +57,14 @@ struct CardView: View {
             .shadow(radius: 3)
     }
 }
-/*
-struct DraggableCardView: View {
-    let card: Card
-    let isFaceUp: Bool
-    let offset: CGSize
-    let rotation: Angle
-    let isDragging: Bool
-    
-    var body: some View {
-        CardView(imageName: card.imageName, isFaceUp: isFaceUp)
-            .offset(offset)
-            .rotationEffect(rotation)
-            .scaleEffect(isDragging ? 1.1 : 1.0)
-            .shadow(radius: isDragging ? 6 : 3)
-    }
-}*/
-
 
 struct FannedHandView: View {
     @Binding var cards: [Card]
     let isFaceUp: Bool
     var discardPileZone: CGRect? = nil
+    var deckZone: CGRect? = nil
     let drewFromDiscard: Bool
+    let drewFromDeck: Bool
     
     // Callbacks for zoning
     var onDragChanged: ((Card, CGPoint) -> Void)? = nil
@@ -160,10 +145,11 @@ struct FannedHandView: View {
                                         }
                                 )
                                 .onAppear {
-                                    if drewFromDiscard && index == cards.count - 1,
-                                       let discardZone = discardPileZone {
+                                    guard index == cards.count - 1 else { return }
+                                    let sourceZone = drewFromDiscard ? discardPileZone : (drewFromDeck ? deckZone : nil)
+                                    if let zone = sourceZone {
                                         animatingCard = card
-                                        animateFromDiscard(card: card, cardFrame: geoFrame, discardZone: discardZone, fanAngle: angle)
+                                        animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
                                     }
                                 }
                             
@@ -183,15 +169,15 @@ struct FannedHandView: View {
         .frame(height: cardHeight)
     }
     
-    private func animateFromDiscard(card: Card, cardFrame: CGRect, discardZone: CGRect, fanAngle: Angle) {
+    private func animateDraw(card: Card, cardFrame: CGRect, drawZone: CGRect, fanAngle: Angle) {
         // Calculate offset from card's natural position to discard pile
-        let offsetToDiscard = CGSize(
-            width: discardZone.midX - cardFrame.midX,
-            height: discardZone.midY - cardFrame.midY
+        let offsetToDraw = CGSize(
+            width: drawZone.midX - cardFrame.midX,
+            height: drawZone.midY - cardFrame.midY
         )
         
         // Set initial state
-        animationOffset = offsetToDiscard
+        animationOffset = offsetToDraw
         animationRotationCorrection = .degrees(0)
         
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
@@ -305,9 +291,10 @@ struct FannedHandView: View {
 }
 
 extension FannedHandView {
-    init(cards: [Card], isFaceUp: Bool, drewFromDiscard: Bool) {
+    init(cards: [Card], isFaceUp: Bool, drewFromDiscard: Bool, drewFromDeck: Bool) {
         self._cards = .constant(cards)  // Creates a constant binding
         self.isFaceUp = isFaceUp
         self.drewFromDiscard = drewFromDiscard
+        self.drewFromDeck = drewFromDeck
     }
 }
