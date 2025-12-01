@@ -1,5 +1,3 @@
--stop user from drawing more than one card
-
 -send the game state after discard
 
 -the hand, deck, and discard pile should accept being passed variables from MessagesViewController rather than being hardcoded

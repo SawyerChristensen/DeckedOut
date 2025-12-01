@@ -140,13 +140,8 @@ struct GinGameView: View {
     func handleDragEnded(card: Card, location: CGPoint) {
         if discardFrame.contains(location) {
             withAnimation(.spring(response: 0.3)) {
-                if let index = game.playerHand.firstIndex(of: card) {
-                    game.playerHand.remove(at: index)
-                }
-                
-                game.discardPile.insert(card, at: 0)
+                game.discardCard(card: card)
             }
-            
         } else {
             //print("Drop → No zone, card returns")
         }

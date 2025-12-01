@@ -83,6 +83,10 @@ struct CardView: View {
 }
 
 struct FannedHandView: View {
+    //Global Game Manager (source of ultimate supreme truth)
+    @EnvironmentObject var game: GameManager
+    
+    //Passed Arguments
     @Binding var cards: [Card]
     let isFaceUp: Bool
     var discardPileZone: CGRect? = nil
@@ -94,9 +98,17 @@ struct FannedHandView: View {
     var onDragChanged: ((Card, CGPoint) -> Void)? = nil
     var onDragEnded: ((Card, CGPoint) -> Void)? = nil
     
+    // For dragging
     @State var draggedCard: Card?
     @State var dragStartIndex: Int?
     @State var dragOffset: CGSize = .zero
+    @State private var predictedDropIndex: Int?
+    
+    // For animating from deck/discard
+    @State private var animatingCard: Card?
+    @State private var animationOffset: CGSize = .zero
+    @State private var animationRotationCorrection: Angle = .zero
+    @State private var flipRotation: Double = 0
     
     // Constants
     private let cardWidth: CGFloat = 140 * 0.7
@@ -104,14 +116,6 @@ struct FannedHandView: View {
     private let spacing: CGFloat = -67
     private let fanningAngle: Double = 4
     private let fanningOffset: Double = 5
-    
-    @State private var predictedDropIndex: Int?
-    
-    // NEW: Track which card is animating from discard
-    @State private var animatingCard: Card?
-    @State private var animationOffset: CGSize = .zero
-    @State private var animationRotationCorrection: Angle = .zero
-    @State private var flipRotation: Double = 0
     
     var body: some View {
         HStack(spacing: spacing) {
@@ -207,7 +211,7 @@ struct FannedHandView: View {
             flipRotation = 0
         }
         
-        // Set initial state
+        // initial state
         animationOffset = offsetToDraw
         animationRotationCorrection = .degrees(0)
         
@@ -227,62 +231,57 @@ struct FannedHandView: View {
     }
     
     private func handleDragChange(card: Card, value: DragGesture.Value) {
-        // Logic allows gaps to open/close as you drag
         guard let startIndex = cards.firstIndex(of: card) else { return }
-        
         let effectiveCardWidth = cardWidth + spacing
-        // We use the binding dragOffset here
         let stepsMoved = Int(round(dragOffset.width / effectiveCardWidth))
-        
         var newIndex = startIndex + stepsMoved
         newIndex = max(0, min(cards.count - 1, newIndex))
         
         if predictedDropIndex != newIndex {
             predictedDropIndex = newIndex
-            let impact = UIImpactFeedbackGenerator(style: .light)
+            let impact = UIImpactFeedbackGenerator(style: .light) //haptic feedback
             impact.impactOccurred()
         }
     }
     
     private func handleDragEnd(card: Card, value: DragGesture.Value, exactCenter: CGPoint) {
-        // Check if dropped on discard pile
-        if let discardPileZone = discardPileZone {
-            let touchLocation = value.location
+        // Check if card dropped on discard pile, if user is in discard phase
+        if let discardPileZone = discardPileZone,
+            discardPileZone.contains(value.location),
+            game.phase == .discardPhase {
             
-            if discardPileZone.contains(touchLocation) {
-                // Calculate the offset needed to reach discard from card's START position
-                let cardStartLocation = CGPoint(
-                    x: exactCenter.x - dragOffset.width,
-                    y: exactCenter.y - dragOffset.height
-                )
-                
-                let targetOffset = CGSize(
-                    width: discardPileZone.midX - cardStartLocation.x,
-                    height: discardPileZone.midY - cardStartLocation.y
-                )
-                
-                // Animate to discard pile
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    dragOffset = targetOffset
-                }
-                
-                // After animation, notify parent to actually move the card
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    draggedCard = nil
-                    dragOffset = .zero
-                    predictedDropIndex = nil
-                }
-                return
+            // Calculate the offset needed to reach discard from card's START position
+            let cardStartLocation = CGPoint(
+                x: exactCenter.x - dragOffset.width,
+                y: exactCenter.y - dragOffset.height
+            )
+            
+            let targetOffset = CGSize(
+                width: discardPileZone.midX - cardStartLocation.x,
+                height: discardPileZone.midY - cardStartLocation.y
+            )
+            
+            // Animate to discard pile
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                dragOffset = targetOffset
             }
+            
+            // After animation, notify parent to actually move the card
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                draggedCard = nil
+                dragOffset = .zero
+                predictedDropIndex = nil
+            }
+            return
         }
         
-        // Original logic for reordering within hand
+        // Card going back to hand, reorder hand with new card position
         if let sourceIndex = cards.firstIndex(of: card),
            let targetIndex = predictedDropIndex {
             if sourceIndex != targetIndex {
                 withAnimation(.spring()) {
                     cards.move(fromOffsets: IndexSet(integer: sourceIndex),
-                              toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
+                        toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
                 }
             }
         }

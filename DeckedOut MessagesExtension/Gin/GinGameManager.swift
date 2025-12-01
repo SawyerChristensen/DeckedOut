@@ -51,18 +51,36 @@ class GameManager: ObservableObject {
                                    .init(suit: .spades, rank: .nine),
                                    .init(suit: .spades, rank: .ten)]
     
-    // Optional drag state shared across views:
-    //@Published var draggedCard: Card? = nil
-    
-    func drawFromDiscard() {
-        guard !discardPile.isEmpty else { return } //this should never trigger
-        let card = discardPile.removeFirst()
-        playerHand.append(card)
+    enum TurnPhase {
+        case drawPhase    // Waiting for user to pick from Deck or Discard
+        case discardPhase // Waiting for user to drag a card to discard pile
+        case idlePhase    // Opponent's turn
     }
+    
+    @Published var phase: TurnPhase = .drawPhase
     
     func drawFromDeck() {
-        guard !deck.isEmpty else { return } //this should also never trigger
+        guard phase == .drawPhase, !deck.isEmpty else { return }
         let card = deck.removeFirst()
         playerHand.append(card)
+        phase = .discardPhase
     }
+    
+    func drawFromDiscard() {
+        guard phase == .drawPhase, !discardPile.isEmpty else { return }
+        let card = discardPile.removeFirst()
+        playerHand.append(card)
+        phase = .discardPhase
+    }
+    
+    func discardCard(card: Card) {
+        guard phase == .discardPhase,
+            playerHand.count == 11,
+            let index = playerHand.firstIndex(of: card) else { return }
+
+        playerHand.remove(at: index)
+        discardPile.insert(card, at: 0)
+        phase = .idlePhase
+    }
+
 }
