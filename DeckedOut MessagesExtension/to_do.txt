@@ -1,17 +1,15 @@
--draw from deck
+-stop user from drawing more than one card
 
--Card fip animations
+-send the game state after discard
 
--work on sending the game state after an action
+-the hand, deck, and discard pile should accept being passed variables from MessagesViewController rather than being hardcoded
 
--work on the hand, deck, and discard pile accept being passed variables from MessagesViewController rather than being hardcoded
+-other card games?
 
--other games?
+-main menu
 
--work on main menu
-
--release 1.0?
+*** Release 1.0? ***
 
 
 QOL changes:
--be able to drag from discard pile in Gin as well as tap
+-be able to drag from the discard pile in Gin as well as tap

@@ -48,13 +48,37 @@ extension Card {
 struct CardView: View {
     let imageName: String
     let isFaceUp: Bool
+    var animatableFlipAngle: Double = 0
+        
+        var body: some View {
+            let effectiveRotation = animatableFlipAngle + (isFaceUp ? 0 : 180)
+            
+            ZStack {
+                // BACK VIEW
+                Image("cardBackRed")
+                    .resizable()
+                    .aspectRatio(0.7, contentMode: .fit)
+                    .frame(height: 145)
+                    .shadow(radius: 3)
+                    .modifier(FlipOpacity(rotation: effectiveRotation + 180))
+                
+                // FRONT VIEW
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(0.7, contentMode: .fit)
+                    .frame(height: 145)
+                    .shadow(radius: 3)
+                    .modifier(FlipOpacity(rotation: effectiveRotation))
+            }
+            .rotation3DEffect(
+                .degrees(effectiveRotation),
+                axis: (x: 0.0, y: 1.0, z: 0.0) // Rotate around Y-axis
+            )
+        }
     
-    var body: some View {
-        Image(isFaceUp ? imageName : "cardBackRed")
-            .resizable()
-            .aspectRatio(0.7, contentMode: .fit)
-            .frame(height: 145)
-            .shadow(radius: 3)
+    private func shouldShowFront(angle: Double) -> Bool {
+        let normalized = angle.remainder(dividingBy: 360)
+        return abs(normalized) < 90
     }
 }
 
@@ -87,6 +111,7 @@ struct FannedHandView: View {
     @State private var animatingCard: Card?
     @State private var animationOffset: CGSize = .zero
     @State private var animationRotationCorrection: Angle = .zero
+    @State private var flipRotation: Double = 0
     
     var body: some View {
         HStack(spacing: spacing) {
@@ -117,7 +142,7 @@ struct FannedHandView: View {
                     
                     Group {
                         if isFaceUp { //Player's hand!
-                            CardView(imageName: card.imageName, isFaceUp: isFaceUp)
+                            CardView(imageName: card.imageName, isFaceUp: isFaceUp, animatableFlipAngle: isAnimating ? flipRotation : 0)
                                 .rotationEffect(finalRotation)
                                 .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
                                 .scaleEffect(isDragging ? 1.1 : 1.0)
@@ -176,6 +201,12 @@ struct FannedHandView: View {
             height: drawZone.midY - cardFrame.midY
         )
         
+        if drewFromDeck {
+            flipRotation = 180
+        } else {
+            flipRotation = 0
+        }
+        
         // Set initial state
         animationOffset = offsetToDraw
         animationRotationCorrection = .degrees(0)
@@ -183,11 +214,15 @@ struct FannedHandView: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animationOffset = .zero
             animationRotationCorrection = fanAngle
+            if drewFromDeck {
+                flipRotation = 0
+            }
         }
             
         // Clear animation state after animation completes
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             animatingCard = nil
+            flipRotation = 0
         }
     }
     
@@ -296,5 +331,27 @@ extension FannedHandView {
         self.isFaceUp = isFaceUp
         self.drewFromDiscard = drewFromDiscard
         self.drewFromDeck = drewFromDeck
+    }
+}
+
+struct FlipOpacity: AnimatableModifier {
+    var rotation: Double
+    
+    // This tells SwiftUI: "Interpolate this number, and rebuild the view every time it changes"
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue }
+    }
+    
+    func body(content: Content) -> some View {
+        // Normalize angle to -180...180
+        let normalized = rotation.remainder(dividingBy: 360)
+        
+        // Hard cutoff: If within 90 degrees of "center", it's visible.
+        // Otherwise, instant 0 opacity.
+        let isVisible = abs(normalized) < 90
+        
+        content
+            .opacity(isVisible ? 1 : 0)
     }
 }
