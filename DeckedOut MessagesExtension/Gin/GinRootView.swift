@@ -10,7 +10,11 @@ import SwiftUI
 
 //Establishes GameManager as a single source of truth
 struct GinRootView: View {
-    @StateObject private var game = GameManager()
+    @ObservedObject var game: GameManager
+    
+    init(game: GameManager) {
+        self.game = game
+    }
 
     var body: some View {
         GinGameView()

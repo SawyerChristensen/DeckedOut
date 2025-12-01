@@ -1,7 +1,7 @@
 import Foundation
 
-struct Card: Hashable, Identifiable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice. In english you say "7 of spades" not "spades, 7" but it also doesnt matter. this works now
-    public let id = UUID()
+struct Card: Hashable, Identifiable, Codable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice. In english you say "7 of spades" not "spades, 7" but it also doesnt matter. this works now
+    public var id = UUID() //mutable??
     public let suit: Suit
     public let rank: Rank
     
@@ -11,7 +11,7 @@ struct Card: Hashable, Identifiable { //to do later: refactor logic switching ra
     }
 }
 
-public enum Suit: Int, CaseIterable { /// CaseIterable lets us loop through all suits easily.
+public enum Suit: Int, CaseIterable, Codable { /// CaseIterable lets us loop through all suits easily.
     case spades = 0
     case hearts = 1
     case diamonds = 2
@@ -19,7 +19,7 @@ public enum Suit: Int, CaseIterable { /// CaseIterable lets us loop through all 
 }
 
 ///Ace is treated as a low card here! Might want to change later depending on game!
-public enum Rank: Int, CaseIterable { // note the values are 0 indexed!
+public enum Rank: Int, CaseIterable, Codable { // note the values are 0 indexed!
     case ace = 0
     case two = 1
     case three = 2
