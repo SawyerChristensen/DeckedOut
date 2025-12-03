@@ -104,7 +104,7 @@ struct GinGameView: View {
         )
         .padding(.bottom, 40)
         .shadow(radius: 5)
-        .offset(x: 10)
+        //.offset(x: 10)
         
     }
     .background(Image("feltTexture")

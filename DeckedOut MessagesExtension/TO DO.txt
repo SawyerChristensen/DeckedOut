@@ -1,0 +1,34 @@
+-see if we should decode from message or conversation or if it really doesnt matter
+
+-message image & layout
+
+-meld checking & winning
+
+-game sounds
+
+-main menu
+
+-create game init options for 7 card, 10 cards (7 card for mobile default?? (quicker games))
+
+-localizations
+
+-save current phase and where you drew in messagesViewController didResignActive?
+
+-other card games?
+-QOL changes?
+*** Release 1.0? ***
+
+
+
+Bugs:
+-the shade of green changes based on if the device is in light/dark mode
+
+
+
+QOL changes:
+-when the drag starts, the center of the card should move to the center of the touch location. it currently stays off center, usually to the right of the touch, (where you started the drag)
+
+-be able to drag from the discard pile in Gin as well as tap
+-multiple deck aesthetics? could have a menu where you drag your preferred aesthetic to a pile, the pile card goes back to hand. the hand is all of the same card, aces? jacks? and you select from there which one you like most
+
+-do we really need a gin root view or is initializing the game view good enough?

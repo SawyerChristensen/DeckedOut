@@ -36,7 +36,7 @@ public enum Rank: Int, CaseIterable, Codable { // note the values are 0 indexed!
 }
 
 struct Deck {
-    private var cards: [Card]
+    var cards: [Card]
 
     init() {
         self.cards = []

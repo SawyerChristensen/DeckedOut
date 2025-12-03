@@ -11,9 +11,9 @@ import SwiftUI
 
 class MessagesViewController: MSMessagesAppViewController {
     
-    //Le Game Engine
-    let gameManager = GameManager()
-
+    private var menuViewModel: MenuViewModel? //what keeps track of if the menu is compact/extended
+    let gameManager = GameManager()//Le Game Engine
+    
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +32,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // This will happen when the extension is about to present UI.
         super.willBecomeActive(with: conversation)
         decodeMessage(from: conversation)
-        requestPresentationStyle(.expanded)
-        presentGameController()
+        presentMenuController(for: .compact, with: conversation)
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -49,7 +48,7 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     override func didSelect(_ message: MSMessage, conversation: MSConversation) {
-        // Called when a user selects a message when the app is already running (like in compact view)
+        // Called when a user selects a message when the app is already running (like in compact view) //can also handle this in willTransition??
         super.didSelect(message, conversation: conversation)
         print("didSelect")
         decodeMessage(from: conversation)
@@ -88,16 +87,16 @@ class MessagesViewController: MSMessagesAppViewController {
     
     // MARK: - Helper functions
     
-    /*private func presentMenuController(for presentationStyle: MSMessagesAppPresentationStyle, with conversation: MSConversation) {
+    private func presentMenuController(for presentationStyle: MSMessagesAppPresentationStyle, with conversation: MSConversation) {
         let viewModel = MenuViewModel(presentationStyle: presentationStyle)
         self.menuViewModel = viewModel
         
-        let menuView = MessagesMainMenuView(viewModel: viewModel) { [weak self] in
+        let menuView = MainMenuView(viewModel: viewModel) { [weak self] in
             self?.createGame(conversation: conversation)
         }
                 
         presentView(UIHostingController(rootView: menuView))
-    }*/
+    }
     
     private func presentGameController() {
         //print("presentGameController")
@@ -137,6 +136,34 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
+    private func createGame(conversation: MSConversation) { //this is general right now! modify per game selected
+        print("createGame")
+        let session = MSSession()
+        let message = MSMessage(session: session)
+        let layout = MSMessageTemplateLayout()
+        
+        /*if let gameInviteImage = UIImage(named: "iMessageGameInvite") { //remember to
+            layout.image = boardImage
+        }*/
+        layout.caption = "Let's play Gin!"
+        message.layout = layout
+        message.summaryText = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage summary text")
+        
+        let startingGameState = gameManager.createNewGameState()
+        guard let jsonData = try? JSONEncoder().encode(startingGameState) else { return }
+        let jsonString = jsonData.base64EncodedString()
+        var components = URLComponents()
+        components.queryItems = [URLQueryItem(name: "gameState", value: jsonString)]
+        message.url = components.url
+        
+        conversation.insert(message) { error in
+            if let error = error {
+                print("Error inserting message: \(error.localizedDescription)")
+            }
+        }
+        
+    }
+    
     func sendGameMove(gameState: GameState) {
         print("sending game state...")
         guard let conversation = activeConversation else { return }
@@ -154,7 +181,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // Message Appearance
         let layout = MSMessageTemplateLayout()
         layout.caption = "Your Turn!"
-        layout.subcaption = "I just discarded."
+        //layout.subcaption = "I just discarded." //what about message.summaryText?
         message.layout = layout
         
         // ...aaaand send!

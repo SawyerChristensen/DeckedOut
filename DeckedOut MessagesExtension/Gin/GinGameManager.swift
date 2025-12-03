@@ -23,7 +23,26 @@ class GameManager: ObservableObject {
     @Published var discardPile: [Card]
     
     init() { // THESE SHOULD BE SENT TO EMPTY AFTER THE CREATE GAME FUNCTION IS WRITTEN
-        self.playerHand = [.init(suit: .clubs, rank: .ace),
+        
+        self.playerHand = []
+        self.opponentHand = []
+        self.deck = []
+        self.discardPile = []
+        /*
+        self.deck = Deck().cards
+        
+        for card in 0..<9 {
+            self.playerHand.append(deck.removeFirst()) //see if removefirst, remove last is faster
+        }
+        print(self.playerHand.count)
+        
+        for card in 0..<9 {
+            self.opponentHand.append(deck.removeFirst()) //see if removefirst, remove last is faster
+        }
+        
+        self.discardPile.append(deck.removeFirst())*/
+        
+        /*self.playerHand = [.init(suit: .clubs, rank: .ace),
                            .init(suit: .clubs, rank: .two),
                            .init(suit: .clubs, rank: .three),
                            
@@ -60,7 +79,7 @@ class GameManager: ObservableObject {
 
                      .init(suit: .spades, rank: .eight),
                      .init(suit: .spades, rank: .nine),
-                     .init(suit: .spades, rank: .ten)]
+                     .init(suit: .spades, rank: .ten)]*/
         self.phase = .drawPhase
         
         //setupDemoData()
@@ -126,5 +145,25 @@ class GameManager: ObservableObject {
         
         // Start the current user's turn phase
         self.phase = .drawPhase
+    }
+    
+    func createNewGameState() -> GameState {
+        var newDeck = Deck().cards
+        var newPlayerHand: [Card] = []
+        var newOpponentHand: [Card] = []
+        for _ in 0..<10 {
+            newPlayerHand.append(newDeck.popLast()!) //see if removefirst, remove last is faster
+            newOpponentHand.append(newDeck.popLast()!)
+        }
+        var newDiscardPile: [Card] = []
+        newDiscardPile.append(newDeck.removeFirst())
+        
+        let currentGameState = GameState(
+            deck: newDeck,
+            discardPile: newDiscardPile,
+            senderHand: newPlayerHand,
+            receiverHand: newOpponentHand)
+        
+        return currentGameState
     }
 }
