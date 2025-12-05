@@ -1,8 +1,14 @@
--meld checking & winning
+Waiting for opponent screen issues:
+    -waiting for opponent screen does NOT save if you dismiss the view. the user is always able to take another turn when tapping on the bubble. this needs to be fixed. current load state and turn saving is broken
+    -also figure out if the user should be able to reorder their cards in between turns, (player hand order modifies the original array, so that may not be possible with current setup. easier to leave as is and move to QOL changes for later)
+    -check if "waiting for opponent" goes away after opponent move (need live devices...)
+
+
+-proper main menu
+
+-meld checking & win screen
 
 -game sounds
-
--main menu
 
 -create game init options for 7 card, 10 cards (7 card for mobile default?? (quicker games))
 
@@ -15,10 +21,15 @@
 *** Release 1.0? ***
 
 
+*Possible* Bugs:
+-figure out why simulator crashes upon exiting conversation view
+-image resizes slightly from within send view to the conversation view
+
 
 QOL changes:
 -when the drag starts, the center of the card should move to the center of the touch location. it currently stays off center, usually to the right of the touch, (where you started the drag)
 -animate opponent discard upon recieving move
+-discard pile should look a little more random rather than a perfectly straight stack of cards
 
 -be able to drag from the discard pile in Gin as well as tap
 -add sorting capability

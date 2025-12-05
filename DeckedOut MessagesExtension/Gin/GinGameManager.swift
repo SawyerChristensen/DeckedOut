@@ -117,6 +117,6 @@ class GameManager: ObservableObject {
     func currentPlayerWon() -> Bool {
         return GinRummyValidator.canMeldAllTen(hand: self.playerHand)}
     
-    func opponentWon() -> Bool {
+    func opponentWon() -> Bool { //currently unused, but if true should flip the opponents hand, display their cards, and give them a yellow glow in gingameview
         return GinRummyValidator.canMeldAllTen(hand: self.opponentHand)}
 }

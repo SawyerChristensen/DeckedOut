@@ -115,6 +115,13 @@ struct GinGameView: View {
     .background(Image("feltBackground")
         .opacity(0.8))
     .background(Color(.green))
+        
+    .overlay {
+        if game.phase == .idlePhase {
+            WaitingOverlayView()
+                .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+        }
+    }
 }
     
     //MARK: - Game View Helper functions (technically global scope)
