@@ -22,67 +22,13 @@ class GameManager: ObservableObject {
     @Published var deck: [Card]
     @Published var discardPile: [Card]
     
-    init() { // THESE SHOULD BE SENT TO EMPTY AFTER THE CREATE GAME FUNCTION IS WRITTEN
+    init() {
         
         self.playerHand = []
         self.opponentHand = []
         self.deck = []
         self.discardPile = []
-        /*
-        self.deck = Deck().cards
-        
-        for card in 0..<9 {
-            self.playerHand.append(deck.removeFirst()) //see if removefirst, remove last is faster
-        }
-        print(self.playerHand.count)
-        
-        for card in 0..<9 {
-            self.opponentHand.append(deck.removeFirst()) //see if removefirst, remove last is faster
-        }
-        
-        self.discardPile.append(deck.removeFirst())*/
-        
-        /*self.playerHand = [.init(suit: .clubs, rank: .ace),
-                           .init(suit: .clubs, rank: .two),
-                           .init(suit: .clubs, rank: .three),
-                           
-                           .init(suit: .clubs, rank: .four),
-                           .init(suit: .clubs, rank: .five),
-                           .init(suit: .clubs, rank: .six),
-                           .init(suit: .clubs, rank: .seven),
-                           .init(suit: .clubs, rank: .eight),
-                           .init(suit: .clubs, rank: .nine),
-                           .init(suit: .clubs, rank: .ten)]
-        self.opponentHand = [.init(suit: .diamonds, rank: .five),
-                             .init(suit: .diamonds, rank: .six),
-                             .init(suit: .diamonds, rank: .seven),
-                             
-                             .init(suit: .diamonds, rank: .seven),
-                             .init(suit: .diamonds, rank: .seven),
-                             .init(suit: .diamonds, rank: .seven),
-
-                             .init(suit: .diamonds, rank: .eight),
-                             .init(suit: .diamonds, rank: .nine),
-                             .init(suit: .diamonds, rank: .ten),
-                             .init(suit: .diamonds, rank: .jack)]
-        self.discardPile = [.init(suit: .hearts, rank: .ace),
-                            .init(suit: .hearts, rank: .two),
-                            .init(suit: .hearts, rank: .three),
-                            .init(suit: .hearts, rank: .four)]
-        self.deck = [.init(suit: .spades, rank: .five),
-                     .init(suit: .spades, rank: .six),
-                     .init(suit: .spades, rank: .seven),
-                     
-                     .init(suit: .spades, rank: .seven),
-                     .init(suit: .spades, rank: .seven),
-                     .init(suit: .spades, rank: .seven),
-
-                     .init(suit: .spades, rank: .eight),
-                     .init(suit: .spades, rank: .nine),
-                     .init(suit: .spades, rank: .ten)]*/
         self.phase = .drawPhase
-        
-        //setupDemoData()
         }
     
     // The View Controller will listen to this to know when to send the message
@@ -133,6 +79,7 @@ class GameManager: ObservableObject {
     }
     
     func loadState(_ state: GameState) {
+        //print("loadState")
         self.deck = state.deck
         self.discardPile = state.discardPile
         
@@ -166,4 +113,10 @@ class GameManager: ObservableObject {
         
         return currentGameState
     }
+    
+    func currentPlayerWon() -> Bool {
+        return GinRummyValidator.canMeldAllTen(hand: self.playerHand)}
+    
+    func opponentWon() -> Bool {
+        return GinRummyValidator.canMeldAllTen(hand: self.opponentHand)}
 }

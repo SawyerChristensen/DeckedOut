@@ -331,7 +331,7 @@
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = DeckedOut;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gin Rummy";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -357,7 +357,7 @@
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = DeckedOut;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gin Rummy";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

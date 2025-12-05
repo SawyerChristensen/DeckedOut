@@ -31,8 +31,10 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called when the extension is about to move from the inactive to active state.
         // This will happen when the extension is about to present UI.
         super.willBecomeActive(with: conversation)
-        decodeMessage(from: conversation)
-        presentMenuController(for: .compact, with: conversation)
+        //print("willBecomeActive")
+        if let selectedMessage = conversation.selectedMessage {
+            decodeMessage(from: selectedMessage)
+        }
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -50,8 +52,9 @@ class MessagesViewController: MSMessagesAppViewController {
     override func didSelect(_ message: MSMessage, conversation: MSConversation) {
         // Called when a user selects a message when the app is already running (like in compact view) //can also handle this in willTransition??
         super.didSelect(message, conversation: conversation)
-        print("didSelect")
-        decodeMessage(from: conversation)
+        //print("didSelect")
+        decodeMessage(from: message)
+        presentGameController()
     }
    
     override func didReceive(_ message: MSMessage, conversation: MSConversation) {
@@ -59,8 +62,8 @@ class MessagesViewController: MSMessagesAppViewController {
         // extension on a remote device. <- this is questionable. it appears to trigger when a message is sent too
         
         // Use this method to trigger UI updates in response to the message. ^^
-        print("didReceive")
-        decodeMessage(from: conversation)
+        //print("didReceive")
+        decodeMessage(from: message)
     }
     
     override func didStartSending(_ message: MSMessage, conversation: MSConversation) {
@@ -75,8 +78,23 @@ class MessagesViewController: MSMessagesAppViewController {
     
     override func willTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called before the extension transitions to a new presentation style.
+        super.willTransition(to: presentationStyle)
+        guard let conversation = activeConversation else { return }
+        //print("willTransition")
     
-        // Use this method to prepare for the change in presentation style.
+        if gameManager.playerHand == [] && children.first is UIHostingController<MainMenuView> {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                menuViewModel?.presentationStyle = presentationStyle }
+            return
+        }
+        
+        if presentationStyle == .expanded && gameManager.playerHand != [] {
+            //print("presentingGameController")
+            presentGameController() //there is a game loaded, and we're switching to game view
+        } else { //there is either no game loaded, or we are switching to the compact view
+            //print("presentingMenuController")
+            presentMenuController(for: presentationStyle, with: conversation)
+        }
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
@@ -108,7 +126,7 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     private func presentView(_ viewController: UIViewController) {
-        //dismiss any pop-up (like the promotion window) that might be open
+        //dismiss any pop-up (like a win screen) that might be open
         dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
             
@@ -137,15 +155,13 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     private func createGame(conversation: MSConversation) { //this is general right now! modify per game selected
-        print("createGame")
+        //print("createGame")
         let session = MSSession()
         let message = MSMessage(session: session)
         let layout = MSMessageTemplateLayout()
         
-        /*if let gameInviteImage = UIImage(named: "iMessageGameInvite") { //remember to
-            layout.image = boardImage
-        }*/
-        layout.caption = "Let's play Gin!"
+        layout.image = UIImage(named: "GinInvite")
+        layout.caption = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage layout caption")
         message.layout = layout
         message.summaryText = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage summary text")
         
@@ -165,7 +181,7 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     func sendGameMove(gameState: GameState) {
-        print("sending game state...")
+        //print("sending game state...")
         guard let conversation = activeConversation else { return }
         guard let jsonData = try? JSONEncoder().encode(gameState) else { return }
         
@@ -180,8 +196,12 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Message Appearance
         let layout = MSMessageTemplateLayout()
-        layout.caption = "Your Turn!"
-        //layout.subcaption = "I just discarded." //what about message.summaryText?
+        if gameManager.currentPlayerWon() {
+            layout.caption = NSLocalizedString("I won in Gin!", comment: "")
+        } else {
+            layout.image = UIImage(named: "GinInvite")
+            layout.caption = NSLocalizedString("Your turn in Gin!", comment: "iMessage layout caption")
+            message.summaryText = NSLocalizedString("Gin", comment: "1st iMessage summary text") }
         message.layout = layout
         
         // ...aaaand send!
@@ -190,9 +210,9 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func decodeMessage(from conversation: MSConversation) {
-        guard let message = conversation.selectedMessage,
-              let url = message.url,
+    private func decodeMessage(from message: MSMessage) {
+        //print("decodeMessage")
+        guard let url = message.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let queryItems = components.queryItems,
               let stateItem = queryItems.first(where: { $0.name == "gameState" }),

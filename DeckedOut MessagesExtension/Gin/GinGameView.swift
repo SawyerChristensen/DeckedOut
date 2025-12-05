@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GinGameView: View {
     @EnvironmentObject var game: GameManager
+    @State var hasPlayerWon: Bool = false
     
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
@@ -103,14 +104,17 @@ struct GinGameView: View {
             }
         )
         .padding(.bottom, 40)
-        .shadow(radius: 5)
+        .shadow(color: hasPlayerWon ? .yellow : .black.opacity(0.33), radius: hasPlayerWon ? 20 : 5 )
         //.offset(x: 10)
         
     }
-    .background(Image("feltTexture")
-        .luminanceToAlpha()
-        .opacity(0.5))
-    .background(Color(.green).opacity(0.75))
+    //.background(Image("feltTexture")
+    //    .luminanceToAlpha()
+    //    .opacity(0.5))
+    //.background(Color(.green).opacity(0.75))
+    .background(Image("feltBackground")
+        .opacity(0.8))
+    .background(Color(.green))
 }
     
     //MARK: - Game View Helper functions (technically global scope)
@@ -141,6 +145,7 @@ struct GinGameView: View {
         if discardFrame.contains(location) {
             withAnimation(.spring(response: 0.3)) {
                 game.discardCard(card: card)
+                if game.currentPlayerWon() { hasPlayerWon.toggle() }
             }
         } else {
             //print("Drop → No zone, card returns")
