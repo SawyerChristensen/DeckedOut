@@ -39,8 +39,8 @@ struct GinGameView: View {
                             .resizable()
                             .aspectRatio(0.7, contentMode: .fit)
                             .frame(height: 145)
-                            .offset(x: CGFloat(-i) * 2, y: CGFloat(-i) * 2)
-                            .shadow(radius: i == 4 ? 1 : 5)
+                            .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
+                            .shadow(radius: i == 4 ? 1 : 8)
                             .background {
                                 if i == 4 { //4 is top card, the stack proceeds up-left, not down-right
                                     GeometryReader { geo in
@@ -108,21 +108,17 @@ struct GinGameView: View {
         //.offset(x: 10)
         
     }
-    //.background(Image("feltTexture")
-    //    .luminanceToAlpha()
-    //    .opacity(0.5))
-    //.background(Color(.green).opacity(0.75))
-    .background(Image("feltBackground")
-        .opacity(0.8))
-    .background(Color(.green))
-        
-    .overlay {
-        if game.phase == .idlePhase {
-            WaitingOverlayView()
-                .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+        .background(Image("feltBackground")
+            .opacity(0.8))
+        .background(Color(.green))
+            
+        .overlay {
+            if game.phase == .idlePhase {
+                WaitingOverlayView()
+                    .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+            }
         }
     }
-}
     
     //MARK: - Game View Helper functions (technically global scope)
     func calculateProperDeckZone(from frame: CGRect) -> CGRect {
