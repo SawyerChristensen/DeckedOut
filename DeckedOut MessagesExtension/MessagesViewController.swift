@@ -109,8 +109,8 @@ class MessagesViewController: MSMessagesAppViewController {
         let viewModel = MenuViewModel(presentationStyle: presentationStyle)
         self.menuViewModel = viewModel
         
-        let menuView = MainMenuView(viewModel: viewModel) { [weak self] in
-            self?.createGame(conversation: conversation)
+        let menuView = MainMenuView(viewModel: viewModel) { [weak self] selectedSize in
+            self?.createGame(conversation: conversation, handSize: selectedSize)
         }
                 
         presentView(UIHostingController(rootView: menuView))
@@ -154,7 +154,7 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func createGame(conversation: MSConversation) { //this is general right now! modify per game selected
+    private func createGame(conversation: MSConversation, handSize: Int) { //this is general right now! modify per game selected
         //print("createGame")
         let session = MSSession()
         let message = MSMessage(session: session)
@@ -165,7 +165,7 @@ class MessagesViewController: MSMessagesAppViewController {
         message.layout = layout
         message.summaryText = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage summary text")
         
-        let startingGameState = gameManager.createNewGameState()
+        let startingGameState = gameManager.createNewGameState(withHandSize: handSize)
         guard let jsonData = try? JSONEncoder().encode(startingGameState) else { return }
         let jsonString = jsonData.base64EncodedString()
         var components = URLComponents()

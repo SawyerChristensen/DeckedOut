@@ -10,8 +10,8 @@ import Foundation
 /**
  A Gin Rummy hand validator.
  
- This class provides a static function to determine if a 10-card hand
- is a "Gin" hand, meaning all 10 cards can be perfectly
+ This class provides a static function to determine if a card hand
+ is a "Gin" hand, meaning all cards can be perfectly
  arranged into melds (sets and runs) with no deadwood.
  */
 public class GinRummyValidator {
@@ -20,18 +20,13 @@ public class GinRummyValidator {
     private static let numRanks = 13
 
     /**
-     Checks if a given 10-card hand can be fully melded (a "Gin" hand).
+     Checks if a given card hand can be fully melded (a "Gin" hand).
      
-     - Parameter cards: An array of 10 `Card` objects.
-     - Returns: `true` if all 10 cards can be arranged into valid melds,
+     - Parameter cards: An array of `Card` objects.
+     - Returns: `true` if all cards can be arranged into valid melds,
        `false` otherwise.
      */
-    static func canMeldAllTen(hand: [Card]) -> Bool {
-        // We only work with 10-card hands.
-        guard hand.count == 10 else {
-            fatalError("Hand must contain exactly 10 cards.")
-        }
-        
+    static func canMeldAllCards(hand: [Card]) -> Bool {
         // --- 1. Convert the [Card] array to our 2D grid representation ---
         // This makes lookups (e.g., "do we have the 7 of Spades?") instantaneous.
         // `handGrid[suit][rank]` will be 1 if we have the card, 0 otherwise.
@@ -43,7 +38,7 @@ public class GinRummyValidator {
         // --- 2. Start the recursive search ---
         // We pass the grid (which will be modified) and the number
         // of cards we still need to meld.
-        return canMeldRecursive(cardsToMeld: 10, handGrid: &handGrid)
+        return canMeldRecursive(cardsToMeld: hand.count, handGrid: &handGrid) //hand.count should either be 7 or 10
     }
 
     /**
@@ -58,7 +53,7 @@ public class GinRummyValidator {
     private static func canMeldRecursive(cardsToMeld: Int, handGrid: inout [[Int]]) -> Bool {
         
         // --- BASE CASE ---
-        // If we have 0 cards left to meld, we have successfully melded all 10 cards. This is a "Gin" hand!
+        // If we have 0 cards left to meld, we have successfully melded all cards. This is a "Gin" hand!
         if cardsToMeld == 0 {
             return true
         }

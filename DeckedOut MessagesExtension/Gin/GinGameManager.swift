@@ -21,15 +21,16 @@ class GameManager: ObservableObject {
     @Published var opponentHand: [Card]
     @Published var deck: [Card]
     @Published var discardPile: [Card]
+    @Published var phase: TurnPhase = .drawPhase
     
     init() {
-        
         self.playerHand = []
         self.opponentHand = []
         self.deck = []
         self.discardPile = []
         self.phase = .drawPhase
-        }
+    }
+    
     
     // The View Controller will listen to this to know when to send the message
     var onTurnCompleted: ((GameState) -> Void)?
@@ -39,7 +40,7 @@ class GameManager: ObservableObject {
         case discardPhase // Waiting for user to drag a card to discard pile
         case idlePhase    // Opponent's turn
     }
-    @Published var phase: TurnPhase = .drawPhase
+    
     
     
     func drawFromDeck() {
@@ -94,11 +95,11 @@ class GameManager: ObservableObject {
         self.phase = .drawPhase
     }
     
-    func createNewGameState() -> GameState {
+    func createNewGameState(withHandSize: Int) -> GameState {
         var newDeck = Deck().cards
         var newPlayerHand: [Card] = []
         var newOpponentHand: [Card] = []
-        for _ in 0..<10 {
+        for _ in 0..<withHandSize {
             newPlayerHand.append(newDeck.popLast()!) //see if removefirst, remove last is faster
             newOpponentHand.append(newDeck.popLast()!)
         }
@@ -115,8 +116,8 @@ class GameManager: ObservableObject {
     }
     
     func currentPlayerWon() -> Bool {
-        return GinRummyValidator.canMeldAllTen(hand: self.playerHand)}
+        return GinRummyValidator.canMeldAllCards(hand: self.playerHand)}
     
-    func opponentWon() -> Bool { //currently unused, but if true should flip the opponents hand, display their cards, and give them a yellow glow in gingameview
-        return GinRummyValidator.canMeldAllTen(hand: self.opponentHand)}
+    /*func opponentWon() -> Bool { //currently unused, but if true should flip the opponents hand, display their cards, and give them a yellow glow in gingameview
+        return GinRummyValidator.canMeldAllCards(hand: self.opponentHand)}*/
 }

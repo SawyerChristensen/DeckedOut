@@ -12,7 +12,7 @@ struct MainMenuView: View {
     @Environment(\.colorScheme) var colorScheme //for light/dark theme detection
     @Environment(\.locale) var locale //for language detection
     @ObservedObject var viewModel: MenuViewModel
-    var onStartGame: () -> Void
+    var onStartGame: (Int) -> Void //triggers createGame in MessagesViewController
     //can add win counts?
     @State private var cardsAnimatedAway = 0
     
@@ -64,7 +64,7 @@ struct MainMenuView: View {
                     withAnimation(.spring(duration: 0.7)) {
                         cardsAnimatedAway += 1
                     }
-                    onStartGame()
+                    onStartGame(handSize)
                 }) {
                     Text("Start Game!")
                         .font(.system(size: 24, weight: .bold, design: .serif))
@@ -138,7 +138,7 @@ struct MainMenuView: View {
     
     @ViewBuilder
     private func cardOption(selectedHandSize: Int, imageName: String, tilt: Double) -> some View {
-        let isSelected = handSize == selectedHandSize
+        let isSelected = (handSize == selectedHandSize)
         
         Image(imageName)
             .resizable()
