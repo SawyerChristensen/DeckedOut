@@ -28,7 +28,7 @@ struct MainMenuView: View {
             
             Spacer()
             
-            VStack { // Column 1
+            VStack { // 1st Column
                 Spacer()
                 
                 ZStack { // Deck
@@ -46,7 +46,7 @@ struct MainMenuView: View {
                     }
                     
                     Text("Maybe try sending \nthe message? ↗️") //an easter egg!
-                        .font(.system(size: 16, weight: .bold, design: .serif))
+                        .font(.system(size: 14, weight: .bold, design: .serif))
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
                         .opacity(cardsAnimatedAway > 5 ? 1 : 0)
@@ -57,14 +57,24 @@ struct MainMenuView: View {
             
             Spacer()
             
-            VStack { // Column 2
+            VStack { // 2nd Column
                 Spacer()
                 
                 Button(action: {
-                    withAnimation(.spring(duration: 0.7)) {
-                        cardsAnimatedAway += 1
+                    // game logic in the background
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        onStartGame(handSize)
+                        
+                        // main thread for UI/Sound updates
+                        DispatchQueue.main.async {
+                            withAnimation(.spring(duration: 0.7)) {
+                                cardsAnimatedAway += 1
+                            }
+                            if cardsAnimatedAway <= 5 {
+                                SoundManager.instance.playCardDeal()
+                            }
+                        }
                     }
-                    onStartGame(handSize)
                 }) {
                     Text("Start Game!")
                         .font(.system(size: 24, weight: .bold, design: .serif))
@@ -93,7 +103,7 @@ struct MainMenuView: View {
                 
                 Spacer()
                 
-                VStack(spacing: 30) {
+                VStack(spacing: 40) {
                     Text("Hand Size:")
                         .font(.system(size: 20, weight: .semibold, design: .serif))
                         .foregroundColor(.white)

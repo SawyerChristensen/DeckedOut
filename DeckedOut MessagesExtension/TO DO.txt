@@ -1,16 +1,9 @@
 Waiting for opponent screen issues:
-    -waiting for opponent screen does NOT save if you dismiss the view. the user is always able to take another turn when tapping on the bubble. this needs to be fixed. current load state and turn saving is broken
-    -also figure out if the user should be able to reorder their cards in between turns, (player hand order modifies the original array, so that may not be possible with current setup. easier to leave as is and move to QOL changes for later)
     -check if "waiting for opponent" goes away after opponent move (need live devices...)
-
-
--proper main menu
 
 -meld checking & win screen
 
--game sounds
-
--create game init options for 7 card, 10 cards (7 card for mobile default?? (quicker games))
+-better felt background, more green!
 
 -localizations
 
@@ -29,11 +22,13 @@ Waiting for opponent screen issues:
 QOL changes:
 -when the drag starts, the center of the card should move to the center of the touch location. it currently stays off center, usually to the right of the touch, (where you started the drag)
 -animate opponent discard upon recieving move
--discard pile should look a little more random rather than a perfectly straight stack of cards
+-discard pile should look a little more random rather than a perfectly straight stack of cards?
+-be able to rearrange your cards, (but not draw) during the opponents turn
 
 -be able to drag from the discard pile in Gin as well as tap
 -add sorting capability
 -multiple deck aesthetics? could have a menu where you drag your preferred aesthetic to a pile, the pile card goes back to hand. the hand is all of the same card, aces? jacks? and you select from there which one you like most
+-fan out the hand more on 7 card hands?
 
 -do we really need a gin root view or is initializing the game view good enough?
 -in present view do we need to dismiss any pop up windows?

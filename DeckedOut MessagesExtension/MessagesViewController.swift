@@ -8,6 +8,7 @@
 import UIKit
 import Messages
 import SwiftUI
+import AVFoundation //for audio
 
 class MessagesViewController: MSMessagesAppViewController {
     
@@ -17,11 +18,22 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupAudioSession()
         
         // Listen for turn completion
         gameManager.onTurnCompleted = { [weak self] gameState in
             self?.sendGameMove(gameState: gameState)
         }
+    }
+    
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default) //.ambient allows mixing with background music and respects silent switch
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Could not set up audio session: \(error)")
+        }
+        _ = SoundManager.instance //this *should* load the sound manager into ram and trigger the lazy init
     }
 
     
@@ -33,7 +45,7 @@ class MessagesViewController: MSMessagesAppViewController {
         super.willBecomeActive(with: conversation)
         //print("willBecomeActive")
         if let selectedMessage = conversation.selectedMessage {
-            decodeMessage(from: selectedMessage)
+            decodeMessage(from: selectedMessage, conversation: conversation)
         }
     }
     
@@ -53,7 +65,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called when a user selects a message when the app is already running (like in compact view) //can also handle this in willTransition??
         super.didSelect(message, conversation: conversation)
         //print("didSelect")
-        decodeMessage(from: message)
+        decodeMessage(from: message, conversation: conversation)
         presentGameController()
     }
    
@@ -63,7 +75,7 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Use this method to trigger UI updates in response to the message. ^^
         //print("didReceive")
-        decodeMessage(from: message)
+        decodeMessage(from: message, conversation: conversation)
     }
     
     override func didStartSending(_ message: MSMessage, conversation: MSConversation) {
@@ -114,6 +126,7 @@ class MessagesViewController: MSMessagesAppViewController {
         }
                 
         presentView(UIHostingController(rootView: menuView))
+        requestPresentationStyle(.compact)
     }
     
     private func presentGameController() {
@@ -123,6 +136,7 @@ class MessagesViewController: MSMessagesAppViewController {
         let gameController = UIHostingController(rootView: gameRootView)
         
         presentView(gameController)
+        requestPresentationStyle(.expanded)
     }
     
     private func presentView(_ viewController: UIViewController) {
@@ -210,7 +224,7 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func decodeMessage(from message: MSMessage) {
+    private func decodeMessage(from message: MSMessage, conversation: MSConversation) {
         //print("decodeMessage")
         guard let url = message.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
@@ -226,7 +240,8 @@ class MessagesViewController: MSMessagesAppViewController {
             return
         }
         
-        gameManager.loadState(loadedState)
+        let senderID = message.senderParticipantIdentifier
+        let isFromMe = !conversation.remoteParticipantIdentifiers.contains(senderID)
+        gameManager.loadState(loadedState, isPlayersTurn: !isFromMe)
     }
-
 }

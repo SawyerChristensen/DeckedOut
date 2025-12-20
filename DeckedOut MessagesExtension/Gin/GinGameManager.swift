@@ -64,6 +64,7 @@ class GameManager: ObservableObject {
 
         playerHand.remove(at: index)
         discardPile.insert(card, at: 0)
+        SoundManager.instance.playCardSlap()
         phase = .idlePhase
         sendGameState()
     }
@@ -79,7 +80,7 @@ class GameManager: ObservableObject {
         onTurnCompleted?(currentGameState) //send data to MessagesViewController
     }
     
-    func loadState(_ state: GameState) {
+    func loadState(_ state: GameState, isPlayersTurn: Bool) {
         //print("loadState")
         self.deck = state.deck
         self.discardPile = state.discardPile
@@ -92,7 +93,11 @@ class GameManager: ObservableObject {
         self.playerHand = state.receiverHand
         
         // Start the current user's turn phase
-        self.phase = .drawPhase
+        if isPlayersTurn {
+            self.phase = .drawPhase
+        } else {
+            self.phase = .idlePhase
+        }
     }
     
     func createNewGameState(withHandSize: Int) -> GameState {

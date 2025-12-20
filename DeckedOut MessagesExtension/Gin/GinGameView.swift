@@ -16,6 +16,7 @@ struct GinGameView: View {
     @State private var discardFrame: CGRect = .zero
     @State private var drewFromDiscard: Bool = false
     @State private var drewFromDeck: Bool = false
+    @State private var isHoveringDiscard: Bool = false
 
     var body: some View {
         
@@ -59,6 +60,7 @@ struct GinGameView: View {
                 .onTapGesture {
                     game.drawFromDeck()
                     drewFromDeck = true
+                    SoundManager.instance.playCardDeal()
                 }
 
             Spacer()
@@ -69,8 +71,11 @@ struct GinGameView: View {
                     .onTapGesture {
                         game.drawFromDiscard()
                         drewFromDiscard = true
+                        SoundManager.instance.playCardDeal()
                     }
-                    .shadow(radius: 5)
+                    .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
+                    .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
+                    .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
                     .background( //what defines discard pile's zone
                         GeometryReader { geo in
                             Color.clear
@@ -105,12 +110,12 @@ struct GinGameView: View {
         )
         .padding(.bottom, 40)
         .shadow(color: hasPlayerWon ? .yellow : .black.opacity(0.33), radius: hasPlayerWon ? 20 : 5 )
-        //.offset(x: 10)
+        .offset(x: 5)
         
     }
         .background(Image("feltBackground")
             .opacity(0.8))
-        .background(Color(.green))
+        .background(Color(.green).ignoresSafeArea())
             
         .overlay {
             if game.phase == .idlePhase {
@@ -138,17 +143,18 @@ struct GinGameView: View {
         if deckFrame.contains(location) {
             //print("Hovering over DECK")
         } else if discardFrame.contains(location) {
-            //print("Hovering over DISCARD")
+            isHoveringDiscard = true
         } else {
-            //print("Hovering over nothing")
+            isHoveringDiscard = false
         }
     }
 
     func handleDragEnded(card: Card, location: CGPoint) {
+        isHoveringDiscard = false
         if discardFrame.contains(location) {
             withAnimation(.spring(response: 0.3)) {
                 game.discardCard(card: card)
-                if game.currentPlayerWon() { hasPlayerWon.toggle() }
+                if game.currentPlayerWon() { hasPlayerWon.toggle() } //potential race condition!
             }
         } else {
             //print("Drop → No zone, card returns")
