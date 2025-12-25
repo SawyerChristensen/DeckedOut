@@ -10,7 +10,6 @@ import SwiftUI
 
 struct GinGameView: View {
     @EnvironmentObject var game: GameManager
-    @State var hasPlayerWon: Bool = false
     
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
@@ -22,14 +21,13 @@ struct GinGameView: View {
         
         VStack {
             // Opponent's Hand
-            FannedHandView(cards: game.opponentHand, isFaceUp: false, drewFromDiscard: false, drewFromDeck: false)
+            FannedHandView(cards: game.opponentHand, isFaceUp: game.opponentHasWon, drewFromDiscard: false, drewFromDeck: false)
                 .rotationEffect(Angle(degrees: 180))
-                .shadow(radius: 20)
+                .shadow(color: game.opponentHasWon ? .yellow : .black.opacity(0.33), radius: 20 )
                 .padding(.top, 30)
             
             
             Spacer()
-            
             
             // Middle section
             HStack {
@@ -85,41 +83,41 @@ struct GinGameView: View {
                                 }
                         }
                     )
+                }
             }
+            .padding(.horizontal, 80)
+        
+            Spacer()
+            
+            // Player's hand
+            FannedHandView(
+                cards: $game.playerHand,
+                isFaceUp: true,
+                discardPileZone: discardFrame,
+                deckZone: deckFrame,
+                drewFromDiscard: drewFromDiscard,
+                drewFromDeck: drewFromDeck,
+                onDragChanged: { card, location in
+                    handleDragChanged(card: card, location: location)
+                },
+                onDragEnded: { card, location in
+                    handleDragEnded(card: card, location: location)
+                }
+            )
+            .padding(.bottom, 40)
+            .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.33), radius: game.playerHasWon ? 20 : 5 )
+            .offset(x: 5)
+            
         }
-        .padding(.horizontal, 80)
-        
-        
-        Spacer()
-        
-        
-        // Player's hand
-        FannedHandView(
-            cards: $game.playerHand,
-            isFaceUp: true,
-            discardPileZone: discardFrame,
-            deckZone: deckFrame,
-            drewFromDiscard: drewFromDiscard,
-            drewFromDeck: drewFromDeck,
-            onDragChanged: { card, location in
-                handleDragChanged(card: card, location: location)
-            },
-            onDragEnded: { card, location in
-                handleDragEnded(card: card, location: location)
-            }
-        )
-        .padding(.bottom, 40)
-        .shadow(color: hasPlayerWon ? .yellow : .black.opacity(0.33), radius: hasPlayerWon ? 20 : 5 )
-        .offset(x: 5)
-        
-    }
-        .background(Image("feltBackground")
-            .opacity(0.8))
-        .background(Color(.green).ignoresSafeArea())
+        .background(Image("feltBackground"))
             
         .overlay {
             if game.phase == .idlePhase {
                 WaitingOverlayView()
+                    .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+            }
+            else if game.phase == .gameEndPhase {
+                WinScreenView()
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
@@ -154,7 +152,6 @@ struct GinGameView: View {
         if discardFrame.contains(location) {
             withAnimation(.spring(response: 0.3)) {
                 game.discardCard(card: card)
-                if game.currentPlayerWon() { hasPlayerWon.toggle() } //potential race condition!
             }
         } else {
             //print("Drop → No zone, card returns")

@@ -22,6 +22,8 @@ class GameManager: ObservableObject {
     @Published var deck: [Card]
     @Published var discardPile: [Card]
     @Published var phase: TurnPhase = .drawPhase
+    @Published var playerHasWon: Bool = false
+    @Published var opponentHasWon: Bool = false
     
     init() {
         self.playerHand = []
@@ -29,6 +31,8 @@ class GameManager: ObservableObject {
         self.deck = []
         self.discardPile = []
         self.phase = .drawPhase
+        self.playerHasWon = false
+        self.opponentHasWon = false
     }
     
     
@@ -39,6 +43,7 @@ class GameManager: ObservableObject {
         case drawPhase    // Waiting for user to pick from Deck or Discard
         case discardPhase // Waiting for user to drag a card to discard pile
         case idlePhase    // Opponent's turn
+        case gameEndPhase // Only unlocked upon winning
     }
     
     
@@ -59,13 +64,18 @@ class GameManager: ObservableObject {
     
     func discardCard(card: Card) {
         guard phase == .discardPhase,
-            playerHand.count == 11,
-            let index = playerHand.firstIndex(of: card) else { return }
-
+              //playerHand.count == 11, //cards can also equal 8 with games of hand size 7
+              let index = playerHand.firstIndex(of: card) else { return }
+        
         playerHand.remove(at: index)
         discardPile.insert(card, at: 0)
         SoundManager.instance.playCardSlap()
-        phase = .idlePhase
+        self.playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
+        if self.playerHasWon {
+            SoundManager.instance.playGameWin(didWin: true)
+            phase = .gameEndPhase
+            SoundManager.instance.playGameWin(didWin: true)
+        } else { phase = .idlePhase }
         sendGameState()
     }
     
@@ -77,27 +87,28 @@ class GameManager: ObservableObject {
             receiverHand: self.opponentHand
         )
         
+        print(currentGameState)
+        
         onTurnCompleted?(currentGameState) //send data to MessagesViewController
     }
     
-    func loadState(_ state: GameState, isPlayersTurn: Bool) {
-        //print("loadState")
+    func loadState(_ state: GameState, isPlayersTurn: Bool) { //didRecieve, didSelect triggers upon sending as well, triggering loadState. in a perfect world, this would only trigger upon *recieving* a move from the opponent, but that can be changed later. Right now it triggers both times so there is slight repetition
+        //print("loading state")
         self.deck = state.deck
         self.discardPile = state.discardPile
         
-        // The person who sent this message put their cards in "senderHand".
-        // To the receiver, those are the opponent's cards.
-        self.opponentHand = state.senderHand
+        self.playerHand = isPlayersTurn ? state.receiverHand : state.senderHand
+        self.opponentHand = isPlayersTurn ? state.senderHand : state.receiverHand
         
-        // The person who sent this message put the user's cards in "recieverHand".
-        self.playerHand = state.receiverHand
+        checkWin()
         
-        // Start the current user's turn phase
-        if isPlayersTurn {
-            self.phase = .drawPhase
+        if self.playerHasWon || self.opponentHasWon {
+            self.phase = .gameEndPhase
+            SoundManager.instance.playGameWin(didWin: self.playerHasWon)
         } else {
-            self.phase = .idlePhase
+            self.phase = isPlayersTurn ? .drawPhase : .idlePhase
         }
+
     }
     
     func createNewGameState(withHandSize: Int) -> GameState {
@@ -120,9 +131,9 @@ class GameManager: ObservableObject {
         return currentGameState
     }
     
-    func currentPlayerWon() -> Bool {
-        return GinRummyValidator.canMeldAllCards(hand: self.playerHand)}
+    func checkWin() {
+        self.playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
+        self.opponentHasWon = GinRummyValidator.canMeldAllCards(hand: self.opponentHand)
+    }
     
-    /*func opponentWon() -> Bool { //currently unused, but if true should flip the opponents hand, display their cards, and give them a yellow glow in gingameview
-        return GinRummyValidator.canMeldAllCards(hand: self.opponentHand)}*/
 }

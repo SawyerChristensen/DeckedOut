@@ -1,25 +1,33 @@
-Waiting for opponent screen issues:
-    -check if "waiting for opponent" goes away after opponent move (need live devices...)
-
--meld checking & win screen
-
--better felt background, more green!
-
 -localizations
+    -port to Hindi, Spanish, German, Italian, and French 1st
+    -then to Portuguese (Brazilan), Japanese, Korean & Turkish?
 
 -save current phase and where you drew in messagesViewController didResignActive?
 
--other card games?
+-Bug fixes
+
 -QOL changes?
+
 *** Release 1.0? ***
+(Specify Straight Gin Variant) (going gin is required)
+
+
+Other card games? Check if we can rename afterwards
 
 
 *Possible* Bugs:
 -figure out why simulator crashes upon exiting conversation view
 -image resizes slightly from within send view to the conversation view
+-lag between finishing the discard animation and the backend send stuff. finish animation on main thread, everything else on background thread?
+-building the app takes a LONG time, maybe just test version? grey screen for a long time
 
 
 QOL changes:
+-better felt background, more green?
+-restart button from within the win view
+
+-didCancelSending puts the card back on the deck? little easter egg
+
 -when the drag starts, the center of the card should move to the center of the touch location. it currently stays off center, usually to the right of the touch, (where you started the drag)
 -animate opponent discard upon recieving move
 -discard pile should look a little more random rather than a perfectly straight stack of cards?

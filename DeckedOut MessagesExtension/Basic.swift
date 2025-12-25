@@ -51,8 +51,8 @@ struct Deck {
     mutating func shuffle() {
         cards.shuffle()
     }
-    
+    /*
     mutating func drawCard() -> Card? {
         return cards.isEmpty ? nil : cards.removeFirst()
-    }
+    }*/
 }

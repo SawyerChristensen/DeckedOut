@@ -141,9 +141,7 @@ struct MainMenuView: View {
             )
             .ignoresSafeArea()
         )
-        .background(Image("feltBackground")
-            .opacity(0.8))
-        .background(Color(.green))
+        .background(Image("feltBackground"))
     }
     
     @ViewBuilder
