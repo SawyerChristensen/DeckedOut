@@ -47,7 +47,6 @@ class GameManager: ObservableObject {
     }
     
     
-    
     func drawFromDeck() {
         guard phase == .drawPhase, !deck.isEmpty else { return }
         let card = deck.removeFirst()
@@ -74,7 +73,6 @@ class GameManager: ObservableObject {
         if self.playerHasWon {
             SoundManager.instance.playGameWin(didWin: true)
             phase = .gameEndPhase
-            SoundManager.instance.playGameWin(didWin: true)
         } else { phase = .idlePhase }
         sendGameState()
     }
@@ -87,28 +85,46 @@ class GameManager: ObservableObject {
             receiverHand: self.opponentHand
         )
         
-        print(currentGameState)
-        
         onTurnCompleted?(currentGameState) //send data to MessagesViewController
     }
     
-    func loadState(_ state: GameState, isPlayersTurn: Bool) { //didRecieve, didSelect triggers upon sending as well, triggering loadState. in a perfect world, this would only trigger upon *recieving* a move from the opponent, but that can be changed later. Right now it triggers both times so there is slight repetition
+    func saveMidTurnState(conversationID: String) {
+        guard phase == .discardPhase else { return } //only save if the user is currently in the middle of a turn
+        
+        if let encoded = try? JSONEncoder().encode(playerHand) {
+            UserDefaults.standard.set(encoded, forKey: "midTurn_\(conversationID)")
+        }
+    }
+    
+    func clearMidTurnState(conversationID: String) {
+        UserDefaults.standard.removeObject(forKey: "midTurn_\(conversationID)")
+    }
+    
+    func loadState(_ state: GameState, isPlayersTurn: Bool, conversationID: String) { //didRecieve, didSelect triggers upon sending as well, triggering loadState. in a perfect world, this would only trigger upon *recieving* a move from the opponent, but that can be changed later. Right now it triggers both times so there is slight repetition
         //print("loading state")
         self.deck = state.deck
         self.discardPile = state.discardPile
-        
-        self.playerHand = isPlayersTurn ? state.receiverHand : state.senderHand
         self.opponentHand = isPlayersTurn ? state.senderHand : state.receiverHand
         
-        checkWin()
-        
-        if self.playerHasWon || self.opponentHasWon {
-            self.phase = .gameEndPhase
-            SoundManager.instance.playGameWin(didWin: self.playerHasWon)
-        } else {
-            self.phase = isPlayersTurn ? .drawPhase : .idlePhase
+        if isPlayersTurn, //the user is mid-turn
+           let data = UserDefaults.standard.data(forKey: "midTurn_\(conversationID)"),
+           let stashedHand = try? JSONDecoder().decode([Card].self, from: data) {
+            
+            self.playerHand = stashedHand
+            self.phase = .discardPhase
+            
+        } else { //the user is not mid-turn...
+            self.playerHand = isPlayersTurn ? state.receiverHand : state.senderHand
+            
+            checkWin()
+            
+            if self.playerHasWon || self.opponentHasWon {
+                self.phase = .gameEndPhase
+                SoundManager.instance.playGameWin(didWin: self.playerHasWon)
+            } else {
+                self.phase = isPlayersTurn ? .drawPhase : .idlePhase
+            }
         }
-
     }
     
     func createNewGameState(withHandSize: Int) -> GameState {

@@ -58,7 +58,7 @@ struct GinGameView: View {
                 .onTapGesture {
                     game.drawFromDeck()
                     drewFromDeck = true
-                    SoundManager.instance.playCardDeal()
+                    if game.phase == .drawPhase { SoundManager.instance.playCardDeal() } //maybe add an error noise/message in an else statement?
                 }
 
             Spacer()

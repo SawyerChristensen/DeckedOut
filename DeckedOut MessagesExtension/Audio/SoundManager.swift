@@ -45,7 +45,7 @@ class SoundManager {
     }
     
     func playGameWin(didWin: Bool) {
-        var fileToPlay = didWin ? "GameWin" : "GameLoss"
+        let fileToPlay = didWin ? "GameWin" : "GameLoss"
         if let gameOverUrl = Bundle.main.url(forResource: fileToPlay, withExtension: "mp3") {
             gameOverPlayer = try? AVAudioPlayer(contentsOf: gameOverUrl)
             gameOverPlayer?.volume = 0.3

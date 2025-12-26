@@ -1,13 +1,32 @@
 import Foundation
 
-struct Card: Hashable, Identifiable, Codable { //to do later: refactor logic switching rank & suit in card construction but this is largely a cosmetic choice. In english you say "7 of spades" not "spades, 7" but it also doesnt matter. this works now
-    public var id = UUID() //mutable??
+struct Card: Equatable, Identifiable, Codable { //Codable: needed to encode with JSON and transmit the data. Identifiable for iterating over the cards in fannedHandView (and compressing coadable). Equatable to get the firstIndexOf and for meld checking
     public let suit: Suit
     public let rank: Rank
+    var id: Int { return (suit.rawValue * 13) + rank.rawValue}
     
-    public init(suit: Suit, rank: Rank) {
+    init(suit: Suit, rank: Rank) {
         self.suit = suit
         self.rank = rank
+    }
+    
+    // Compact Codable
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawId = try container.decode(Int.self)
+        
+        // Reconstruct from the integer
+        guard let s = Suit(rawValue: rawId / 13),
+              let r = Rank(rawValue: rawId % 13) else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid Card ID")
+        }
+        self.suit = s
+        self.rank = r
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(self.id)
     }
 }
 

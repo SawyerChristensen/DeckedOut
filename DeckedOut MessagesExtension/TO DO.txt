@@ -1,8 +1,10 @@
+-show/animate if opponent drew from discard or deck, animate their discard
+
 -localizations
     -port to Hindi, Spanish, German, Italian, and French 1st
     -then to Portuguese (Brazilan), Japanese, Korean & Turkish?
-
--save current phase and where you drew in messagesViewController didResignActive?
+    
+-optimize for ipad UI
 
 -Bug fixes
 
@@ -23,14 +25,13 @@ Other card games? Check if we can rename afterwards
 
 
 QOL changes:
--better felt background, more green?
+-better felt background, more hd?
+-discard pile should look a little more random rather than a perfectly straight stack of cards?
 -restart button from within the win view
 
 -didCancelSending puts the card back on the deck? little easter egg
 
 -when the drag starts, the center of the card should move to the center of the touch location. it currently stays off center, usually to the right of the touch, (where you started the drag)
--animate opponent discard upon recieving move
--discard pile should look a little more random rather than a perfectly straight stack of cards?
 -be able to rearrange your cards, (but not draw) during the opponents turn
 
 -be able to drag from the discard pile in Gin as well as tap
@@ -40,3 +41,4 @@ QOL changes:
 
 -do we really need a gin root view or is initializing the game view good enough?
 -in present view do we need to dismiss any pop up windows?
+-error noise if the user attempts to draw again when resuming mid-turn?
