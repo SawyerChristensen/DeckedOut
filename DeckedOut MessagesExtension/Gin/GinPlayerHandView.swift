@@ -1,5 +1,5 @@
 //
-//  UIUtils.swift
+//  FannedHandView.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 11/17/25.
@@ -7,83 +7,7 @@
 
 import SwiftUI
 
-extension Suit {
-    var stringValue: String {
-        switch self {
-        case .spades: return "Spades"
-        case .hearts: return "Hearts"
-        case .diamonds: return "Diamonds"
-        case .clubs: return "Clubs"
-        }
-    }
-}
-
-extension Rank {
-    var stringValue: String {
-        switch self {
-        case .ace: return "ace"
-        case .two: return "2"
-        case .three: return "3"
-        case .four: return "4"
-        case .five: return "5"
-        case .six: return "6"
-        case .seven: return "7"
-        case .eight: return "8"
-        case .nine: return "9"
-        case .ten: return "10"
-        case .jack: return "jack"
-        case .queen: return "queen"
-        case .king: return "king"
-        }
-    }
-}
-
-extension Card {
-    var imageName: String {
-        "\(rank.stringValue)\(suit.stringValue)"
-    }
-}
-
-
-struct CardView: View {
-    let imageName: String
-    let isFaceUp: Bool
-    var animatableFlipAngle: Double = 0
-        
-        var body: some View {
-            let effectiveRotation = animatableFlipAngle + (isFaceUp ? 0 : 180)
-            
-            ZStack {
-                // BACK VIEW
-                Image("cardBackRed")
-                    .resizable()
-                    .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: 145)
-                    .shadow(radius: 3)
-                    .modifier(FlipOpacity(rotation: effectiveRotation + 180))
-                
-                // FRONT VIEW
-                Image(imageName)
-                    .resizable()
-                    .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: 145)
-                    .shadow(radius: 3)
-                    .modifier(FlipOpacity(rotation: effectiveRotation))
-            }
-            .rotation3DEffect(
-                .degrees(effectiveRotation),
-                axis: (x: 0.0, y: 1.0, z: 0.0) // Rotate around Y-axis
-            )
-        }
-    
-    private func shouldShowFront(angle: Double) -> Bool {
-        let normalized = angle.remainder(dividingBy: 360)
-        return abs(normalized) < 90
-    }
-}
-
-struct FannedHandView: View {
-    //Global Game Manager (source of ultimate supreme truth)
+struct PlayerHandView: View {
     @EnvironmentObject var game: GameManager
     
     //Passed Arguments
@@ -173,19 +97,15 @@ struct FannedHandView: View {
                                             onDragEnded?(card, value.location) //external change
                                         }
                                 )
-                                .onAppear {
+                                .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
                                     guard index == cards.count - 1 else { return }
-                                    let sourceZone = drewFromDiscard ? discardPileZone : (drewFromDeck ? deckZone : nil)
-                                    if let zone = sourceZone {
+                                    let sourceZone = drewFromDiscard ? discardPileZone : (drewFromDeck ? deckZone : nil) //they might default to nil anyway...
+                                    if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
                                         animatingCard = card
                                         animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
                                     }
                                 }
                             
-                        } else { //Opponent's hand! Can't drag these!
-                            CardView(imageName: card.imageName, isFaceUp: isFaceUp)
-                                .rotationEffect(.degrees(Double(index - cards.count / 2) * 4))
-                                .offset(y: abs(Double(index - cards.count / 2) * 5))
                         }
                     }
                 }
@@ -248,7 +168,9 @@ struct FannedHandView: View {
         // Check if card dropped on discard pile, if user is in discard phase
         if let discardPileZone = discardPileZone,
             discardPileZone.contains(value.location),
-            game.phase == .discardPhase {
+            game.phase == .discardPhase { //is checking the phase a potential race condition?
+            
+            game.indexDiscardedFrom = cards.firstIndex(of: card) //this might be redundant
             
             // Calculate the offset needed to reach discard from card's START position
             let cardStartLocation = CGPoint(
@@ -311,8 +233,7 @@ struct FannedHandView: View {
         let rotationStopThreshold: CGFloat = 250.0
         
         // 2. Calculate progress from 0.0 to 1.0 based on the height
-        // We use max(0, height) to ensure negative drag doesn't break the math
-        let progress = max(0, abs(height)) / rotationStopThreshold
+        let progress = min(max(0, abs(height)) / rotationStopThreshold, 1)
         
         // 3. Invert the progress:
         // At height 0, factor is 1.0 (Full rotation effect)
@@ -324,10 +245,12 @@ struct FannedHandView: View {
     }
 }
 
-extension FannedHandView {
-    init(cards: [Card], isFaceUp: Bool, drewFromDiscard: Bool, drewFromDeck: Bool) {
+extension PlayerHandView {
+    init(cards: [Card], isFaceUp: Bool, discardPileZone: CGRect, deckZone: CGRect, drewFromDiscard: Bool, drewFromDeck: Bool) {
         self._cards = .constant(cards)  // Creates a constant binding
         self.isFaceUp = isFaceUp
+        self.discardPileZone = discardPileZone
+        self.deckZone = deckZone
         self.drewFromDiscard = drewFromDiscard
         self.drewFromDeck = drewFromDeck
     }

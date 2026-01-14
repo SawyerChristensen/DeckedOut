@@ -1,10 +1,14 @@
--show/animate if opponent drew from discard or deck, animate their discard
+-look into edge cases like where the deck becomes empty! (need to reshuffle) (shouldnt be too hard)
+
+-set default to 7
+    
+-opponent game win animation after discarding (hand flips over and phase set)
 
 -localizations
     -port to Hindi, Spanish, German, Italian, and French 1st
     -then to Portuguese (Brazilan), Japanese, Korean & Turkish?
     
--optimize for ipad UI
+-optimize for iPad UI
 
 -Bug fixes
 
@@ -18,13 +22,25 @@ Other card games? Check if we can rename afterwards
 
 
 *Possible* Bugs:
+-fix discard animation turn end hitch?
+
+-image resizes slightly from within send view to the conversation view (might just be in testing)
+
 -figure out why simulator crashes upon exiting conversation view
--image resizes slightly from within send view to the conversation view
+-simulator also doesnt recognize mid turn save, but devices do
+
+-didSelect and didRecieve functionality overlaps and triggers multiple times
+
 -lag between finishing the discard animation and the backend send stuff. finish animation on main thread, everything else on background thread?
--building the app takes a LONG time, maybe just test version? grey screen for a long time
 
 
 QOL changes:
+-remove the 0.5 second wait when recieving a move
+-inits in hand views should be in main body, not extensions?
+-resolve card differences between cards being size 140 or 145
+-Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that...
+-proper animation to discard pile
+-look into *exact* draw offsets, rn they are close enough
 -better felt background, more hd?
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
 -restart button from within the win view

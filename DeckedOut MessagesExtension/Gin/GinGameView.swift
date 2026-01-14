@@ -18,21 +18,19 @@ struct GinGameView: View {
     @State private var isHoveringDiscard: Bool = false
 
     var body: some View {
-        
         VStack {
             // Opponent's Hand
-            FannedHandView(cards: game.opponentHand, isFaceUp: game.opponentHasWon, drewFromDiscard: false, drewFromDeck: false)
-                .rotationEffect(Angle(degrees: 180))
-                .shadow(color: game.opponentHasWon ? .yellow : .black.opacity(0.33), radius: 20 )
+            OpponentHandView(cards: game.opponentHand, isFaceUp: game.opponentHasWon, discardPileZone: discardFrame, deckZone: deckFrame) //maybe replace isFaceUp here and in player hand...
+                //.rotationEffect(Angle(degrees: 180)) //maybe build this into the actual view?
+                //.shadow(color: game.opponentHasWon ? .yellow : .black.opacity(0.33), radius: 20 )
                 .padding(.top, 30)
-            
+                .zIndex(2)
             
             Spacer()
             
             // Middle section
             HStack {
-                // Deck
-                ZStack {
+                ZStack {// Deck
                     ForEach(0..<5) { i in
                         Image("cardBackRed")
                             .resizable()
@@ -57,40 +55,41 @@ struct GinGameView: View {
                 }
                 .onTapGesture {
                     game.drawFromDeck()
-                    drewFromDeck = true
+                    drewFromDeck = true //note: there is an identical variable within gameManager. this variable is for blocking future draws.
                     if game.phase == .drawPhase { SoundManager.instance.playCardDeal() } //maybe add an error noise/message in an else statement?
                 }
 
-            Spacer()
+                Spacer()
 
-            // Discard Pile
-            if let topCard = game.discardPile.first {
-                CardView(imageName: topCard.imageName, isFaceUp: true)
-                    .onTapGesture {
-                        game.drawFromDiscard()
-                        drewFromDiscard = true
-                        SoundManager.instance.playCardDeal()
-                    }
-                    .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
-                    .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
-                    .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
-                    .background( //what defines discard pile's zone
-                        GeometryReader { geo in
-                            Color.clear
-                                .onAppear { discardFrame = geo.frame(in: .global) }
-                                .onChange(of: geo.frame(in: .global)) { _, newFrame in
-                                    discardFrame = newFrame
-                                }
+                // Discard Pile
+                if let topCard = game.discardPile.last {
+                    CardView(imageName: topCard.imageName, isFaceUp: true)
+                        .onTapGesture {
+                            game.drawFromDiscard()
+                            drewFromDiscard = true
+                            SoundManager.instance.playCardDeal()
                         }
-                    )
+                        .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
+                        .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
+                        .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
+                        .background( //what defines discard pile's zone
+                            GeometryReader { geo in
+                                Color.clear
+                                    .onAppear { discardFrame = geo.frame(in: .global) }
+                                    .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                                        discardFrame = newFrame
+                                    }
+                            }
+                        )
                 }
             }
             .padding(.horizontal, 80)
+            .zIndex(1)
         
             Spacer()
             
             // Player's hand
-            FannedHandView(
+            PlayerHandView(
                 cards: $game.playerHand,
                 isFaceUp: true,
                 discardPileZone: discardFrame,
@@ -107,10 +106,10 @@ struct GinGameView: View {
             .padding(.bottom, 40)
             .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.33), radius: game.playerHasWon ? 20 : 5 )
             .offset(x: 5)
+            .zIndex(1)
             
         }
         .background(Image("feltBackground"))
-            
         .overlay {
             if game.phase == .idlePhase {
                 WaitingOverlayView()
@@ -121,9 +120,32 @@ struct GinGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
+        .task { //triggers every UI reinit and waits 0.5 (which is currently every move)
+            do {
+                try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
+                print("wait over and animating turn...")
+                animateOpponentsTurn()
+            } catch {
+                // Task was cancelled (View disappeared), so we do nothing.
+            }
+        }
+        /*.onChange(of: game.phase) { _ , newPhase in //or "oldPhase" "newPhase"
+            if game.phase == .animationPhase {
+                animateOpponentsTurn()
+            }
+        }*/
     }
     
     //MARK: - Game View Helper functions (technically global scope)
+    func animateOpponentsTurn() { //modifies backend, which triggers animation in opponentHandView
+        if game.opponentDrewFromDeck {
+            game.opponentDrawFromDeck()
+        } else {
+            game.opponentDrawFromDiscard()
+        }
+        //animating discard is automatically handled in opponents hand view
+    }
+    
     func calculateProperDeckZone(from frame: CGRect) -> CGRect {
         var newFrame = frame
         let topIndex = 4
@@ -138,9 +160,7 @@ struct GinGameView: View {
     }
     
     func handleDragChanged(card: Card, location: CGPoint) {
-        if deckFrame.contains(location) {
-            //print("Hovering over DECK")
-        } else if discardFrame.contains(location) {
+        if discardFrame.contains(location) {
             isHoveringDiscard = true
         } else {
             isHoveringDiscard = false

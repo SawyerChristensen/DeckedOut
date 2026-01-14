@@ -1,5 +1,5 @@
 //
-//  WaitingOverlayView.swift
+//  WinScreenView.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 12/5/25.
@@ -23,7 +23,7 @@ struct WinScreenView: View {
                     .scaleEffect(animateIn ? 1.0 : 0.5)
                 
                 VStack(spacing: 8) {
-                    Text("GIN RUMMY!")
+                    Text("GIN RUMMY!") //change this is other games are added
                         .font(.system(size: 40, weight: .black, design: .rounded))
                         .foregroundColor(.white)
                     

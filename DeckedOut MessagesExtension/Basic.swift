@@ -4,6 +4,9 @@ struct Card: Equatable, Identifiable, Codable { //Codable: needed to encode with
     public let suit: Suit
     public let rank: Rank
     var id: Int { return (suit.rawValue * 13) + rank.rawValue}
+    var imageName: String {
+        "\(rank.stringValue)\(suit.stringValue)"
+    }
     
     init(suit: Suit, rank: Rank) {
         self.suit = suit
@@ -35,6 +38,15 @@ public enum Suit: Int, CaseIterable, Codable { /// CaseIterable lets us loop thr
     case hearts = 1
     case diamonds = 2
     case clubs = 3
+    
+    var stringValue: String {
+        switch self {
+        case .spades: return "Spades"
+        case .hearts: return "Hearts"
+        case .diamonds: return "Diamonds"
+        case .clubs: return "Clubs"
+        }
+    }
 }
 
 ///Ace is treated as a low card here! Might want to change later depending on game!
@@ -52,6 +64,24 @@ public enum Rank: Int, CaseIterable, Codable { // note the values are 0 indexed!
     case jack = 10
     case queen = 11
     case king = 12
+    
+    var stringValue: String {
+        switch self {
+        case .ace: return "ace"
+        case .two: return "2"
+        case .three: return "3"
+        case .four: return "4"
+        case .five: return "5"
+        case .six: return "6"
+        case .seven: return "7"
+        case .eight: return "8"
+        case .nine: return "9"
+        case .ten: return "10"
+        case .jack: return "jack"
+        case .queen: return "queen"
+        case .king: return "king"
+        }
+    }
 }
 
 struct Deck {
