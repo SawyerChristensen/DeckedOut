@@ -28,7 +28,8 @@ struct OpponentHandView: View {
     @State private var animatingCard: Card?
     @State private var animationOffset: CGSize = .zero
     @State private var animationRotationCorrection: Angle = .zero
-    @State private var flipRotation: Double = 0
+    @State private var flipRotation: Double = 0 //for when the card is being animated
+    @State private var revealRotation: Double = 0 //for when the opponent wins
     @State private var cardWaitingToAnimate: Card?
     
     // Constants
@@ -46,13 +47,13 @@ struct OpponentHandView: View {
                 //print(isAnimating)
                 //print(-abs(Double(index - cards.count / 2) * 5))
                 
-                CardView(imageName: card.imageName, isFaceUp: isFaceUp, animatableFlipAngle: isAnimating ? flipRotation : 0) //should only be flipping on discard!
+                CardView(imageName: card.imageName, isFaceUp: isFaceUp, animatableFlipAngle: isAnimating ? flipRotation : revealRotation)
                     .zIndex(Double(index))
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)
                     .rotationEffect(isAnimating ? animationRotationCorrection : angle)
                     .offset(y: -abs(Double(index - cards.count / 2) * 5))
                     .offset(isAnimating ? animationOffset : .zero)
-                    .shadow(color: game.opponentHasWon ? .yellow : .black.opacity(0.33), radius: isAnimating ? 0 : 20 )
+                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20), x: game.opponentHasWon ? 5 : 0)
                     .background( // capture the global frame of this specific slot
                         GeometryReader { geo in
                             Color.clear
@@ -100,6 +101,13 @@ struct OpponentHandView: View {
                             }
                         }
                     }
+                }
+            }
+        }
+        .onChange(of: game.opponentHasWon) { _, opponentJustWon in
+            if opponentJustWon {
+                withAnimation(.spring(response: 0.8, dampingFraction: 0.7)) {
+                    revealRotation = 180
                 }
             }
         }

@@ -9,6 +9,7 @@ import Foundation
 
 // The game snapshot for sending the game over iMessage
 struct GameState: Codable {
+    let sessionID: UUID
     let deck: [Card]
     let discardPile: [Card]
     let senderHand: [Card]
@@ -16,10 +17,12 @@ struct GameState: Codable {
     let senderDrewFromDeck: Bool
     let indexSenderDrewTo: Int?
     let indexSenderDiscardedFrom: Int?
+    let turnNumber: Int
 }
 
 // MARK: The Game Engine
 class GameManager: ObservableObject {
+    @Published var sessionID: UUID? = nil
     @Published var playerHand: [Card] = []
     @Published var opponentHand: [Card] = []
     @Published var deck: [Card] = []
@@ -30,6 +33,7 @@ class GameManager: ObservableObject {
     @Published var indexDiscardedFrom: Int? = nil
     @Published var playerHasWon: Bool = false
     @Published var opponentHasWon: Bool = false
+    @Published var turnNumber: Int = 0
     
     init() {} // values are already initialized here ^
     
@@ -105,39 +109,59 @@ class GameManager: ObservableObject {
         opponentHand.remove(at: self.indexDiscardedFrom!)
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
-        self.playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.opponentHand)
+        self.opponentHasWon = GinRummyValidator.canMeldAllCards(hand: self.opponentHand)
         if self.opponentHasWon {
             SoundManager.instance.playGameWin(didWin: false)
             phase = .gameEndPhase
         } else { phase = .drawPhase }
     }
     
+    private func reshuffleDiscardIntoDeck() { //for when the deck count is 1 (could be refactored)
+        let topDeck = deck.popLast()!
+        let topDiscard = discardPile.popLast()! //this is the card the user discarded
+        let secondDiscard = discardPile.popLast()! //need 2 cards in the discard pile so when we ready the opponent animation there is still a card there...
+        self.deck = discardPile.shuffled()
+        self.deck.append(topDeck)
+        self.discardPile = [secondDiscard, topDiscard]
+    }
+    
     func saveMidTurnState(conversationID: String) {
-        guard phase == .discardPhase else { return } //only save if the user is currently in the middle of a turn
+        guard phase == .discardPhase, let sID = sessionID else { return } //only save if the user is currently in the middle of a turn
         
         if let encoded = try? JSONEncoder().encode(playerHand) {
-            UserDefaults.standard.set(encoded, forKey: "midTurn_\(conversationID)")
+            UserDefaults.standard.set(encoded, forKey: "midTurn_\(sID.uuidString)")
         }
     }
     
     func clearMidTurnState(conversationID: String) {
-        UserDefaults.standard.removeObject(forKey: "midTurn_\(conversationID)")
+        guard let sID = sessionID else { return }
+        UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
     }
     
-    func loadState(_ state: GameState, isPlayersTurn: Bool, conversationID: String) { //didRecieve, didSelect triggers upon sending as well, triggering loadState. in a perfect world, this would only trigger upon *recieving* a move from the opponent, but that can be changed later. Right now it triggers both times so there is slight repetition
-        //print("loading state...")
-        guard state.discardPile.last != self.discardPile.last else {
-            //print("loading state blocked")
-            return } //only guards against updating when *sending* a move (MAYBE NOT ANYMORE)
+    func loadState(_ state: GameState, isPlayersTurn: Bool, isExplicitTap: Bool, conversationID: String) { //didRecieve, didSelect calls this upon sending as well!
+        let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu)
+        let isSameSession = (self.sessionID == state.sessionID) //is this the game we are already looking at?
+        let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
         
+        guard isInitialLoad || isExplicitTap || (isSameSession && isNewTurn) else { //allow if: (We haven't loaded a session yet) OR (It is the same session AND theres progress in the session)
+            if !isSameSession && !isInitialLoad {
+                print("Action Blocked: User tried to load session \(state.sessionID) while active in \(self.sessionID!)")
+            } else {
+                print("Action Blocked: Turn \(state.turnNumber) is not newer than \(self.turnNumber)")
+            }
+            return
+        }
+        
+        self.sessionID = state.sessionID
         self.deck = state.deck
         self.discardPile = state.discardPile
         
-        if isPlayersTurn,
-           let data = UserDefaults.standard.data(forKey: "midTurn_\(conversationID)"),
+        if isPlayersTurn, //does not check if this is the same game session!! just the same conversation!!
+           let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
            let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
-            //print("loading mid-turn state")
+            print("loading mid-turn state")
             self.playerHand = stashedHand
+            self.opponentHand = state.senderHand
             self.phase = .discardPhase
             
         } else if isPlayersTurn { //the user is beginning their turn...
@@ -170,6 +194,7 @@ class GameManager: ObservableObject {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
             return false
         }
+        //print("Readying opponent turn visuals") //this seems to get triggered multiple times??
         
         self.opponentDrewFromDeck = state.senderDrewFromDeck
         self.indexDrawnTo = drawnIndex
@@ -205,7 +230,8 @@ class GameManager: ObservableObject {
         self.opponentHasWon = GinRummyValidator.canMeldAllCards(hand: self.opponentHand)
     }
     
-    func createNewGameState(withHandSize: Int) -> GameState {
+    func createNewGameState(withHandSize: Int) -> GameState { //should we also set these values to self??
+        let newSessionID = UUID()
         var newDeck = Deck().cards
         var newPlayerHand: [Card] = []
         var newOpponentHand: [Card] = []
@@ -217,26 +243,31 @@ class GameManager: ObservableObject {
         newDiscardPile.append(newDeck.popLast()!)
         
         let currentGameState = GameState(
+            sessionID: newSessionID,
             deck: newDeck,
             discardPile: newDiscardPile,
             senderHand: newPlayerHand,
             receiverHand: newOpponentHand,
             senderDrewFromDeck: false, //defaults to discard pile but shouldnt animate if these are nil:
             indexSenderDrewTo: nil,
-            indexSenderDiscardedFrom: nil)
+            indexSenderDiscardedFrom: nil,
+            turnNumber: 0)
         
         return currentGameState
     }
     
     func sendGameState() {
+        if deck.count == 1 { reshuffleDiscardIntoDeck() }
         let currentGameState = GameState(
+            sessionID: self.sessionID!,
             deck: self.deck,
             discardPile: self.discardPile,
             senderHand: self.playerHand,
             receiverHand: self.opponentHand,
             senderDrewFromDeck: self.opponentDrewFromDeck, //this defaults to discard pile
             indexSenderDrewTo: self.indexDrawnTo,
-            indexSenderDiscardedFrom: self.indexDiscardedFrom
+            indexSenderDiscardedFrom: self.indexDiscardedFrom,
+            turnNumber: self.turnNumber + 1
         )
         
         onTurnCompleted?(currentGameState) //send data to MessagesViewController

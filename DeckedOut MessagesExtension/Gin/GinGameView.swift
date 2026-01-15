@@ -20,9 +20,8 @@ struct GinGameView: View {
     var body: some View {
         VStack {
             // Opponent's Hand
-            OpponentHandView(cards: game.opponentHand, isFaceUp: game.opponentHasWon, discardPileZone: discardFrame, deckZone: deckFrame) //maybe replace isFaceUp here and in player hand...
-                //.rotationEffect(Angle(degrees: 180)) //maybe build this into the actual view?
-                //.shadow(color: game.opponentHasWon ? .yellow : .black.opacity(0.33), radius: 20 )
+            OpponentHandView(cards: game.opponentHand, isFaceUp: false, discardPileZone: discardFrame, deckZone: deckFrame) //maybe replace isFaceUp here and in player hand...
+                //.shadow(color: game.opponentHasWon ? .yellow : .yellow.opacity(0.0), radius: 20 )
                 .padding(.top, 30)
                 .zIndex(2)
             
@@ -104,7 +103,7 @@ struct GinGameView: View {
                 }
             )
             .padding(.bottom, 40)
-            .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.33), radius: game.playerHasWon ? 20 : 5 )
+            .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
             .offset(x: 5)
             .zIndex(1)
             
@@ -123,7 +122,7 @@ struct GinGameView: View {
         .task { //triggers every UI reinit and waits 0.5 (which is currently every move)
             do {
                 try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                print("wait over and animating turn...")
+                //print("0.5s wait over and animating turn...")
                 animateOpponentsTurn()
             } catch {
                 // Task was cancelled (View disappeared), so we do nothing.

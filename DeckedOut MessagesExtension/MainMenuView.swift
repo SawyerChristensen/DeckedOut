@@ -20,7 +20,7 @@ struct MainMenuView: View {
     @State private var card10Image: String = ""
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
     
-    @State private var handSize = 10 //game default
+    @State private var handSize = 7 //full game is normally 10, but 7 is quicker and better suited for mobile
     
     var body: some View {
         

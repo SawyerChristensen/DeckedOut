@@ -45,7 +45,7 @@ class MessagesViewController: MSMessagesAppViewController {
         super.willBecomeActive(with: conversation)
         if let selectedMessage = conversation.selectedMessage { //didSelect only applies when app is already open
             //print("selected a message in willBecomeActive")
-            decodeMessage(from: selectedMessage, conversation: conversation)
+            decodeMessage(from: selectedMessage, conversation: conversation, isExplicitTap: true)
         }
     }
     
@@ -60,7 +60,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called when a user selects a message when the app is *already* running (like in compact view) (messages are also auto-selected, similar to didRecieve)
         super.didSelect(message, conversation: conversation)
         //print("didSelect")
-        decodeMessage(from: message, conversation: conversation)
+        decodeMessage(from: message, conversation: conversation, isExplicitTap: true)
         presentGameController()
     }
    
@@ -69,7 +69,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // Use this method to trigger UI updates in response to the message. ^^
         super.didReceive(message, conversation: conversation)
         //print("didReceive")
-        decodeMessage(from: message, conversation: conversation)
+        decodeMessage(from: message, conversation: conversation, isExplicitTap: false)
     }
     
     override func didStartSending(_ message: MSMessage, conversation: MSConversation) { //maybe use this to bring up waiting for opponent overlays?
@@ -94,7 +94,7 @@ class MessagesViewController: MSMessagesAppViewController {
         }
         
         if presentationStyle == .expanded && gameManager.playerHand != [] {
-            presentGameController() //there is a game loaded, and we're switching to game view
+            presentGameController() //there is a game already loaded, and we're switching to game view
         } else { //there is either no game loaded, or we are switching to the compact view
             presentMenuController(for: presentationStyle, with: conversation)
         }
@@ -214,14 +214,14 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func decodeMessage(from message: MSMessage, conversation: MSConversation) {
+    private func decodeMessage(from message: MSMessage, conversation: MSConversation, isExplicitTap: Bool) {
         guard let url = message.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let queryItems = components.queryItems,
               let stateItem = queryItems.first(where: { $0.name == "gameState" }),
               let stateString = stateItem.value,
               let stateData = Data(base64Encoded: stateString),
-              let loadedState = try? JSONDecoder().decode(GameState.self, from: stateData)
+              let decodedState = try? JSONDecoder().decode(GameState.self, from: stateData)
         else {
             // If any step fails (e.g., this is a new conversation with no history),
             // we just return and let the default "New Game" state stand.
@@ -231,6 +231,10 @@ class MessagesViewController: MSMessagesAppViewController {
         
         let senderID = message.senderParticipantIdentifier
         let isFromMe = !conversation.remoteParticipantIdentifiers.contains(senderID)
-        gameManager.loadState(loadedState, isPlayersTurn: !isFromMe, conversationID: conversation.localParticipantIdentifier.uuidString)
+        gameManager.loadState(
+            decodedState,
+            isPlayersTurn: !isFromMe,
+            isExplicitTap: isExplicitTap,
+            conversationID: conversation.localParticipantIdentifier.uuidString)
     }
 }

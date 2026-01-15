@@ -1,43 +1,48 @@
--look into edge cases like where the deck becomes empty! (need to reshuffle) (shouldnt be too hard)
+-remove FaceUp variable
 
--set default to 7
-    
--opponent game win animation after discarding (hand flips over and phase set)
+-is syncgameflow needed?
+
+-when the user draws from the discard pile, their opponent temporarily sees the left most card in their hand as the 2nd card in the discard pile
 
 -localizations
     -port to Hindi, Spanish, German, Italian, and French 1st
     -then to Portuguese (Brazilan), Japanese, Korean & Turkish?
     
--optimize for iPad UI
+-optimize main menu for iPad UI/expanded view
+    -add main menu win counter
 
 -Bug fixes
-
+-search project for any ?? comments
 -QOL changes?
 
 *** Release 1.0? ***
-(Specify Straight Gin Variant) (going gin is required)
+(Specify Straight Gin Variant) (going full gin is required)
 
+First update:
+-better win screen? (maybe make it a joker card!!) (happy or sad joker with its own colored shadow)
+-use turn number to remove the 0.5 waiting upon recieving a move?
 
 Other card games? Check if we can rename afterwards
 
 
+
 *Possible* Bugs:
 -fix discard animation turn end hitch?
-
 -image resizes slightly from within send view to the conversation view (might just be in testing)
-
 -figure out why simulator crashes upon exiting conversation view
 -simulator also doesnt recognize mid turn save, but devices do
-
 -didSelect and didRecieve functionality overlaps and triggers multiple times
-
 -lag between finishing the discard animation and the backend send stuff. finish animation on main thread, everything else on background thread?
+-mid turn saving cant seem to handle multiple game saves at once
 
 
 QOL changes:
 -remove the 0.5 second wait when recieving a move
+-remove sessionID if we scroll back to mein menu!
+-refactor the deck reshuffling logic when it reaches 0 (animation?)
 -inits in hand views should be in main body, not extensions?
 -resolve card differences between cards being size 140 or 145
+-add isExplicitTap funcaitonlity to loadstate, if the user selects a 2nd game session than the one already loaded. very unique edge case, but could still happen...
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that...
 -proper animation to discard pile
 -look into *exact* draw offsets, rn they are close enough

@@ -68,46 +68,42 @@ struct PlayerHandView: View {
                 GeometryReader { geo in
                     let geoFrame = geo.frame(in: .global)
                     
-                    Group {
-                        if isFaceUp { //Player's hand!
-                            CardView(imageName: card.imageName, isFaceUp: isFaceUp, animatableFlipAngle: isAnimating ? flipRotation : 0)
-                                .rotationEffect(finalRotation)
-                                .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
-                                .scaleEffect(isDragging ? 1.1 : 1.0)
-                                .offset(isDragging ? dragOffset : .zero) //for dragging
-                                //.rotationEffect(isAnimating ? animationRotationCorrection : .degrees(0))
-                                .offset(isAnimating ? animationOffset : .zero)
-                                .gesture(
-                                    DragGesture(coordinateSpace: .global)
-                                        .onChanged { value in
-                                            if draggedCard == nil {
-                                                draggedCard = card
-                                                predictedDropIndex = index
-                                            }
-                                            dragOffset = value.translation
-                                            handleDragChange(card: card, value: value) //internal change
-                                            onDragChanged?(card, value.location) //external change
-                                        }
-                                        .onEnded { value in
-                                            let cardCenter = CGPoint(
-                                                x: geoFrame.midX + value.translation.width,
-                                                y: geoFrame.midY + value.translation.height
-                                                                                        )
-                                            handleDragEnd(card: card, value: value, exactCenter: cardCenter) //internal change
-                                            onDragEnded?(card, value.location) //external change
-                                        }
-                                )
-                                .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
-                                    guard index == cards.count - 1 else { return }
-                                    let sourceZone = drewFromDiscard ? discardPileZone : (drewFromDeck ? deckZone : nil) //they might default to nil anyway...
-                                    if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
-                                        animatingCard = card
-                                        animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
+                    CardView(imageName: card.imageName, isFaceUp: isFaceUp, animatableFlipAngle: isAnimating ? flipRotation : 0)
+                        .rotationEffect(finalRotation)
+                        .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
+                        .scaleEffect(isDragging ? 1.1 : 1.0)
+                        .offset(isDragging ? dragOffset : .zero) //for dragging
+                        //.rotationEffect(isAnimating ? animationRotationCorrection : .degrees(0))
+                        .offset(isAnimating ? animationOffset : .zero)
+                        .gesture(
+                            DragGesture(coordinateSpace: .global)
+                                .onChanged { value in
+                                    if draggedCard == nil {
+                                        draggedCard = card
+                                        predictedDropIndex = index
                                     }
+                                    dragOffset = value.translation
+                                    handleDragChange(card: card, value: value) //internal change
+                                    onDragChanged?(card, value.location) //external change
                                 }
-                            
+                                .onEnded { value in
+                                    let cardCenter = CGPoint(
+                                        x: geoFrame.midX + value.translation.width,
+                                        y: geoFrame.midY + value.translation.height
+                                                                                )
+                                    handleDragEnd(card: card, value: value, exactCenter: cardCenter) //internal change
+                                    onDragEnded?(card, value.location) //external change
+                                }
+                        )
+                        .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
+                            guard index == cards.count - 1 else { return }
+                            let sourceZone = drewFromDiscard ? discardPileZone : (drewFromDeck ? deckZone : nil) //they might default to nil anyway...
+                            if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
+                                animatingCard = card
+                                animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
+                            }
                         }
-                    }
+                            
                 }
                 .frame(width: cardWidth, height: cardHeight)
                 .zIndex(isDragging ? 100 : Double(visualIndex))

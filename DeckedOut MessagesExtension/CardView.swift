@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CardView: View {
     let imageName: String
-    let isFaceUp: Bool
+    let isFaceUp: Bool //should be fully replaced with animatableFlipAngle in a later update
     var animatableFlipAngle: Double = 0
         
         var body: some View {
