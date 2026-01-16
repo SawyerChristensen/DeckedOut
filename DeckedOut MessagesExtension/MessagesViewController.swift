@@ -85,16 +85,18 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called before the extension transitions to a new presentation style.
         super.willTransition(to: presentationStyle)
         guard let conversation = activeConversation else { return }
-        //print("willTransition")
     
-        if gameManager.playerHand == [] && children.first is UIHostingController<MainMenuView> {
+        let isGameActive = !gameManager.playerHand.isEmpty
+        let isShowingMenu = children.first is UIHostingController<MainMenuView>
+        
+        if !isGameActive && isShowingMenu {
             withAnimation(.easeInOut(duration: 0.3)) {
                 menuViewModel?.presentationStyle = presentationStyle }
             return
         }
         
-        if presentationStyle == .expanded && gameManager.playerHand != [] {
-            presentGameController() //there is a game already loaded, and we're switching to game view
+        if presentationStyle == .expanded && isGameActive { //we're switching to game view and there is a game already loaded
+            presentGameController()
         } else { //there is either no game loaded, or we are switching to the compact view
             presentMenuController(for: presentationStyle, with: conversation)
         }

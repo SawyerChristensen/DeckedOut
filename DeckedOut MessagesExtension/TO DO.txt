@@ -1,15 +1,8 @@
--remove FaceUp variable
-
--is syncgameflow needed?
-
--when the user draws from the discard pile, their opponent temporarily sees the left most card in their hand as the 2nd card in the discard pile
+-add main menu win counter
 
 -localizations
     -port to Hindi, Spanish, German, Italian, and French 1st
     -then to Portuguese (Brazilan), Japanese, Korean & Turkish?
-    
--optimize main menu for iPad UI/expanded view
-    -add main menu win counter
 
 -Bug fixes
 -search project for any ?? comments
@@ -19,8 +12,12 @@
 (Specify Straight Gin Variant) (going full gin is required)
 
 First update:
+-figure out live layout
 -better win screen? (maybe make it a joker card!!) (happy or sad joker with its own colored shadow)
 -use turn number to remove the 0.5 waiting upon recieving a move?
+
+-ipad menu that discards to the bottom right?
+
 
 Other card games? Check if we can rename afterwards
 
@@ -38,10 +35,10 @@ Other card games? Check if we can rename afterwards
 
 QOL changes:
 -remove the 0.5 second wait when recieving a move
--remove sessionID if we scroll back to mein menu!
+-resume button if we exit to main menu in game view?
 -refactor the deck reshuffling logic when it reaches 0 (animation?)
--inits in hand views should be in main body, not extensions?
 -resolve card differences between cards being size 140 or 145
+-maybeee a menu that transitions more smoothly? current menu works perfectly fine
 -add isExplicitTap funcaitonlity to loadstate, if the user selects a 2nd game session than the one already loaded. very unique edge case, but could still happen...
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that...
 -proper animation to discard pile
@@ -49,17 +46,20 @@ QOL changes:
 -better felt background, more hd?
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
 -restart button from within the win view
-
 -didCancelSending puts the card back on the deck? little easter egg
-
 -when the drag starts, the center of the card should move to the center of the touch location. it currently stays off center, usually to the right of the touch, (where you started the drag)
 -be able to rearrange your cards, (but not draw) during the opponents turn
-
 -be able to drag from the discard pile in Gin as well as tap
 -add sorting capability
 -multiple deck aesthetics? could have a menu where you drag your preferred aesthetic to a pile, the pile card goes back to hand. the hand is all of the same card, aces? jacks? and you select from there which one you like most
 -fan out the hand more on 7 card hands?
-
 -do we really need a gin root view or is initializing the game view good enough?
 -in present view do we need to dismiss any pop up windows?
 -error noise if the user attempts to draw again when resuming mid-turn?
+
+
+
+Optimizations:
+-is syncgameflow needed?
+-does isFaceUp need to be a passed variable?
+-init in player hand view should be in main body, not the extension

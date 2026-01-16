@@ -23,125 +23,127 @@ struct MainMenuView: View {
     @State private var handSize = 7 //full game is normally 10, but 7 is quicker and better suited for mobile
     
     var body: some View {
-        
-        HStack {
+        ZStack {
+            // Shared Background (Felt & Shading)
+            Image("feltBackground")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
             
-            Spacer()
-            
-            VStack { // 1st Column
-                Spacer()
-                
-                ZStack { // Deck
-                    ForEach(0..<5) { i in
-                        Image("cardBackRed")
-                            .resizable()
-                            .aspectRatio(0.7, contentMode: .fit)
-                            .frame(height: 145)
-                            .rotationEffect(i >= 5 - cardsAnimatedAway ? Angle(degrees: 45) : Angle(degrees: 0))
-                            .offset(x: i >= 5 - cardsAnimatedAway ? 200 : CGFloat(-i) * 3,
-                                    y: i >= 5 - cardsAnimatedAway ? -400 : CGFloat(-i) * 3)
-                        //.rotationEffect(i >= 5 - cardsAnimatedAway ? Angle(degrees: -180) : Angle(degrees: 0))
-                            .opacity(i >= 5 - cardsAnimatedAway ? 0 : 1)
-                            .shadow(radius: i == 4 ? 1 : 8)
-                    }
-                    
-                    Text("Maybe try sending \nthe message? ↗️") //an easter egg!
-                        .font(.system(size: 14, weight: .bold, design: .serif))
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.white)
-                        .opacity(cardsAnimatedAway > 5 ? 1 : 0)
-                }
-                
-                Spacer()
-            }
-            
-            Spacer()
-            
-            VStack { // 2nd Column
-                Spacer()
-                
-                Button(action: {
-                    // game logic in the background
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        onStartGame(handSize)
-                        
-                        // main thread for UI/Sound updates
-                        DispatchQueue.main.async {
-                            withAnimation(.spring(duration: 0.7)) {
-                                cardsAnimatedAway += 1
-                            }
-                            if cardsAnimatedAway <= 5 {
-                                SoundManager.instance.playCardDeal()
-                            }
-                        }
-                    }
-                }) {
-                    Text("Start Game!")
-                        .font(.system(size: 24, weight: .bold, design: .serif))
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 7)
-                        .background(
-                            ZStack {
-                                // Depth Layer
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color.black.opacity(0.3))
-                                    .offset(y: 4)
-                                
-                                // Main Button Body
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(LinearGradient(colors: [Color(white: 0.3), Color(white: 0.1)], startPoint: .top, endPoint: .bottom))
-                            }
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.white.opacity(0.2), lineWidth: 2)
-                        )
-                        .shadow(color: .white.opacity(0.1), radius: 15)
-                }
-                
-                Spacer()
-                
-                VStack(spacing: 40) {
-                    Text("Hand Size:")
-                        .font(.system(size: 20, weight: .semibold, design: .serif))
-                        .foregroundColor(.white)
-                        //.underline()
-                    
-                    HStack(spacing: 30) {
-                        if !card7Image.isEmpty && !card10Image.isEmpty {
-                            cardOption(selectedHandSize: 7, imageName: card7Image, tilt: -8) //left hand
-                            cardOption(selectedHandSize: 10, imageName: card10Image, tilt: 8) //right card
-                        }
-                    }
-                    .onAppear {
-                        card7Image = "7\(suits.randomElement() ?? "Spades")"
-                        card10Image = "10\(suits.randomElement() ?? "Clubs")"
-                    }
-                }
-                
-            }
-            .padding(.trailing, 10)
-        }
-        .background( //shading
-            /*RadialGradient( //a vignette
-                gradient: Gradient(colors: [.white.opacity(0.05), .black.opacity(0.1)]),
-                center: .center,
-                startRadius: 150, // The "clear" center area
-                endRadius: 300   // Where the darkness reaches its peak
-            )*/
             LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.white.opacity(0.1), // "Light source" at top-left
-                    Color.black.opacity(0.1)  // "Shadow" at bottom-right
-                ]),
+                gradient: Gradient(colors: [Color.white.opacity(0.1), Color.black.opacity(0.1)]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-        )
-        .background(Image("feltBackground"))
+
+            // Layout based on current presentation style
+            if viewModel.presentationStyle == .expanded {
+                expandedLayout
+            } else {
+                compactLayout
+            }
+        }
+    }
+    
+    // MARK: - Presentation styles
+    private var compactLayout: some View {
+        HStack {
+            Spacer()
+            deckSection
+            Spacer()
+            VStack(spacing: 20) {
+                startButton
+                handSizePicker
+            }
+            Spacer()
+            //.padding(.trailing, 10)
+        }
+    }
+    
+    private var expandedLayout: some View {
+        VStack {
+            Spacer()
+            Spacer()
+            startButton
+            Spacer()
+            deckSection
+            Spacer()
+            handSizePicker
+            Spacer()
+        }
+    }
+    
+    // MARK: - Layout Components
+    private var deckSection: some View {
+        ZStack {
+            ForEach(0..<5) { i in
+                Image("cardBackRed")
+                    .resizable()
+                    .aspectRatio(0.7, contentMode: .fit)
+                    .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145) // Make cards bigger in expanded!
+                    .rotationEffect(i >= 5 - cardsAnimatedAway ? Angle(degrees: 45) : Angle(degrees: 0))
+                    .offset(x: i >= 5 - cardsAnimatedAway ? 225 : CGFloat(-i) * 3,
+                            y: i >= 5 - cardsAnimatedAway ? -450 : CGFloat(-i) * 3)
+                    //.opacity(i >= 5 - cardsAnimatedAway ? 0 : 1)
+                    .shadow(radius: i == 4 ? 1 : 8)
+            }
+            
+            Text("Maybe try sending \nthe message? ↗️")
+                .font(.system(size: 14, weight: .bold, design: .serif))
+                .multilineTextAlignment(.center)
+                .foregroundColor(.white)
+                .opacity(cardsAnimatedAway > 5 ? 1 : 0)
+        }
+    }
+    
+    private var startButton: some View {
+        Button(action: {
+            DispatchQueue.global(qos: .userInitiated).async {
+                onStartGame(handSize)
+                DispatchQueue.main.async {
+                    withAnimation(.spring(duration: 0.7)) {
+                        cardsAnimatedAway += 1
+                    }
+                    if cardsAnimatedAway <= 5 {
+                        SoundManager.instance.playCardDeal()
+                    }
+                }
+            }
+        }) {
+            Text("Start Game!")
+                .font(.system(size: 28, weight: .bold, design: .serif))
+                .foregroundColor(.white)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 10)
+                .background(
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15).fill(Color.black.opacity(0.3)).offset(y: 4) //depth layer
+                        RoundedRectangle(cornerRadius: 15).fill(LinearGradient(colors: [Color(white: 0.3), Color(white: 0.1)], startPoint: .top, endPoint: .bottom)) //main button body
+                    }
+                )
+                .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 2))
+                .shadow(color: .white.opacity(0.1), radius: 15)
+        }
+    }
+    
+    private var handSizePicker: some View {
+        VStack(spacing: 40) {
+            Text("Hand Size:")
+                .font(.system(size: 20, weight: .semibold, design: .serif))
+                .foregroundColor(.white)
+            
+            HStack(spacing: 30) {
+                if !card7Image.isEmpty && !card10Image.isEmpty {
+                    cardOption(selectedHandSize: 7, imageName: card7Image, tilt: -8) //left card
+                    cardOption(selectedHandSize: 10, imageName: card10Image, tilt: 8) //right card
+                }
+            }
+        }
+        .onAppear {
+            card7Image = "7\(suits.randomElement() ?? "Spades")"
+            card10Image = "10\(suits.randomElement() ?? "Clubs")"
+        }
     }
     
     @ViewBuilder
@@ -168,7 +170,6 @@ struct MainMenuView: View {
             }
     }
 }
-    
 
 class MenuViewModel: ObservableObject { //only tracks presentation style
     @Published var presentationStyle: MSMessagesAppPresentationStyle

@@ -144,11 +144,11 @@ class GameManager: ObservableObject {
         let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
         
         guard isInitialLoad || isExplicitTap || (isSameSession && isNewTurn) else { //allow if: (We haven't loaded a session yet) OR (It is the same session AND theres progress in the session)
-            if !isSameSession && !isInitialLoad {
+            /*if !isSameSession && !isInitialLoad {
                 print("Action Blocked: User tried to load session \(state.sessionID) while active in \(self.sessionID!)")
             } else {
                 print("Action Blocked: Turn \(state.turnNumber) is not newer than \(self.turnNumber)")
-            }
+            }*/
             return
         }
         
@@ -194,7 +194,7 @@ class GameManager: ObservableObject {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
             return false
         }
-        //print("Readying opponent turn visuals") //this seems to get triggered multiple times??
+        //print("Readying opponent turn visuals") //this seems to get triggered multiple times?
         
         self.opponentDrewFromDeck = state.senderDrewFromDeck
         self.indexDrawnTo = drawnIndex
