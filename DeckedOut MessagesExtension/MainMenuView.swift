@@ -77,6 +77,20 @@ struct MainMenuView: View {
     // MARK: - Layout Components
     private var deckSection: some View {
         ZStack {
+            let winCount = WinTracker.shared.getWinCount()
+            if winCount == 0 {
+                Text("Wins: \(winCount)\n\nBetter start!")
+                    .font(.system(size: 20, weight: .semibold, design: .serif))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .opacity(cardsAnimatedAway > 5 ? 1 : 0)
+            } else {
+                Text("Wins: \(winCount)")
+                    .font(.system(size: 20, weight: .semibold, design: .serif))
+                    .foregroundColor(.white)
+                    .opacity(cardsAnimatedAway > 5 ? 1 : 0)
+            }
+            
             ForEach(0..<5) { i in
                 Image("cardBackRed")
                     .resizable()
@@ -85,15 +99,8 @@ struct MainMenuView: View {
                     .rotationEffect(i >= 5 - cardsAnimatedAway ? Angle(degrees: 45) : Angle(degrees: 0))
                     .offset(x: i >= 5 - cardsAnimatedAway ? 225 : CGFloat(-i) * 3,
                             y: i >= 5 - cardsAnimatedAway ? -450 : CGFloat(-i) * 3)
-                    //.opacity(i >= 5 - cardsAnimatedAway ? 0 : 1)
                     .shadow(radius: i == 4 ? 1 : 8)
             }
-            
-            Text("Maybe try sending \nthe message? ↗️")
-                .font(.system(size: 14, weight: .bold, design: .serif))
-                .multilineTextAlignment(.center)
-                .foregroundColor(.white)
-                .opacity(cardsAnimatedAway > 5 ? 1 : 0)
         }
     }
     
@@ -176,5 +183,20 @@ class MenuViewModel: ObservableObject { //only tracks presentation style
 
     init(presentationStyle: MSMessagesAppPresentationStyle) {
         self.presentationStyle = presentationStyle
+    }
+}
+
+class WinTracker {
+    static let shared = WinTracker()
+    private let winsKey = "ginWins"
+
+    func getWinCount() -> Int {
+        return UserDefaults.standard.integer(forKey: winsKey)
+    }
+    
+    func incrementWins() {
+        var currentWins = getWinCount()
+        currentWins += 1
+        UserDefaults.standard.set(currentWins, forKey: winsKey)
     }
 }

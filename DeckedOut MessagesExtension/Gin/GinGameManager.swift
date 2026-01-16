@@ -77,6 +77,7 @@ class GameManager: ObservableObject {
         if self.playerHasWon {
             SoundManager.instance.playGameWin(didWin: true)
             phase = .gameEndPhase
+            WinTracker.shared.incrementWins()
         } else { phase = .idlePhase }
         sendGameState()
     }

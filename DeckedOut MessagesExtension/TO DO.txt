@@ -1,9 +1,3 @@
--add main menu win counter
-
--localizations
-    -port to Hindi, Spanish, German, Italian, and French 1st
-    -then to Portuguese (Brazilan), Japanese, Korean & Turkish?
-
 -Bug fixes
 -search project for any ?? comments
 -QOL changes?
@@ -13,10 +7,13 @@
 
 First update:
 -figure out live layout
+-update cards look? maybe extra option?
 -better win screen? (maybe make it a joker card!!) (happy or sad joker with its own colored shadow)
 -use turn number to remove the 0.5 waiting upon recieving a move?
 
 -ipad menu that discards to the bottom right?
+
+-App store screens for all languages?
 
 
 Other card games? Check if we can rename afterwards
