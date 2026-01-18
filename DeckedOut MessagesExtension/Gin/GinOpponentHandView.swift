@@ -53,7 +53,7 @@ struct OpponentHandView: View {
                     .rotationEffect(isAnimating ? animationRotationCorrection : angle)
                     .offset(y: -abs(Double(index - cards.count / 2) * 5))
                     .offset(isAnimating ? animationOffset : .zero)
-                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20), x: game.opponentHasWon ? 5 : 0)
+                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20))
                     .background( // capture the global frame of this specific slot
                         GeometryReader { geo in
                             Color.clear

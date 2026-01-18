@@ -31,7 +31,7 @@ class MessagesViewController: MSMessagesAppViewController {
             try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default) //.ambient allows mixing with background music and respects silent switch
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            print("Could not set up audio session: \(error)")
+            //print("Could not set up audio session: \(error)")
         }
         _ = SoundManager.instance //this *should* load the sound manager into ram and trigger the lazy init
     }

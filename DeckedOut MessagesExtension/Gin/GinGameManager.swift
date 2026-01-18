@@ -73,8 +73,8 @@ class GameManager: ObservableObject {
         playerHand.remove(at: index) //we could also use indexDiscardedFrom...
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
-        self.playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
-        if self.playerHasWon {
+        playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
+        if playerHasWon {
             SoundManager.instance.playGameWin(didWin: true)
             phase = .gameEndPhase
             WinTracker.shared.incrementWins()
@@ -89,7 +89,7 @@ class GameManager: ObservableObject {
             return
         }
         let card = deck.popLast()!
-        self.opponentHand.insert(card, at: drawIndex)
+        opponentHand.insert(card, at: drawIndex)
     }
     
     func opponentDrawFromDiscard() {
@@ -99,7 +99,7 @@ class GameManager: ObservableObject {
             return
         }
         let card = discardPile.popLast()!
-        self.opponentHand.insert(card, at: drawIndex)
+        opponentHand.insert(card, at: drawIndex)
     }
     
     func opponentDiscardCard(card: Card) { //pseudo discard
@@ -107,11 +107,11 @@ class GameManager: ObservableObject {
         guard phase == .animationPhase else {
             //print("not animation phase! skipping!")
             return }
-        opponentHand.remove(at: self.indexDiscardedFrom!)
+        opponentHand.remove(at: indexDiscardedFrom!)
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
-        self.opponentHasWon = GinRummyValidator.canMeldAllCards(hand: self.opponentHand)
-        if self.opponentHasWon {
+        opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
+        if opponentHasWon {
             SoundManager.instance.playGameWin(didWin: false)
             phase = .gameEndPhase
         } else { phase = .drawPhase }
@@ -121,9 +121,9 @@ class GameManager: ObservableObject {
         let topDeck = deck.popLast()!
         let topDiscard = discardPile.popLast()! //this is the card the user discarded
         let secondDiscard = discardPile.popLast()! //need 2 cards in the discard pile so when we ready the opponent animation there is still a card there...
-        self.deck = discardPile.shuffled()
-        self.deck.append(topDeck)
-        self.discardPile = [secondDiscard, topDiscard]
+        deck = discardPile.shuffled()
+        deck.append(topDeck)
+        discardPile = [secondDiscard, topDiscard]
     }
     
     func saveMidTurnState(conversationID: String) {
@@ -140,6 +140,7 @@ class GameManager: ObservableObject {
     }
     
     func loadState(_ state: GameState, isPlayersTurn: Bool, isExplicitTap: Bool, conversationID: String) { //didRecieve, didSelect calls this upon sending as well!
+        //self can technically be omitted in many places here, but is written for visual clarity when compared with state variables of the same name
         let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu)
         let isSameSession = (self.sessionID == state.sessionID) //is this the game we are already looking at?
         let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
@@ -160,32 +161,36 @@ class GameManager: ObservableObject {
         if isPlayersTurn, //does not check if this is the same game session!! just the same conversation!!
            let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
            let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
-            print("loading mid-turn state")
             self.playerHand = stashedHand
             self.opponentHand = state.senderHand
-            self.phase = .discardPhase
+            phase = .discardPhase
             
         } else if isPlayersTurn { //the user is beginning their turn...
-            //print("loading full turn with animations")
             self.playerHand = state.receiverHand
             let hasVisualsToAnimate = applyOpponentTurnVisuals(state: state)
-            if hasVisualsToAnimate {
-                syncGameFlow(isPlayersTurn: isPlayersTurn) //<- will always be true here
-            } else {
-                checkWin() //this would be a first turn win. chance of that is 1 in 308,984!
+            if hasVisualsToAnimate {//it is not the first turn...
+                phase = .animationPhase
+            } else { //it is the first turn...
+                checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
                 if playerHasWon || opponentHasWon {
-                    self.phase = .gameEndPhase
+                    phase = .gameEndPhase
                     SoundManager.instance.playGameWin(didWin: self.playerHasWon)
                 } else {
-                    self.phase = .drawPhase
+                    phase = .drawPhase
                 }
             }
             
         } else { //it is not the players turn...
-            //print("loading, and it is not the opponent's turn...")
             self.playerHand = state.senderHand
             self.opponentHand = state.receiverHand
-            syncGameFlow(isPlayersTurn: isPlayersTurn) //<- will always be false here
+            playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
+            if playerHasWon {
+                phase = .gameEndPhase
+                SoundManager.instance.playGameWin(didWin: self.playerHasWon)
+            } else {
+                // only enter animation phase if it's our turn to watch the opponent move
+                phase = .idlePhase
+            }
         }
     }
     
@@ -198,40 +203,29 @@ class GameManager: ObservableObject {
         //print("Readying opponent turn visuals") //this seems to get triggered multiple times?
         
         self.opponentDrewFromDeck = state.senderDrewFromDeck
-        self.indexDrawnTo = drawnIndex
-        self.indexDiscardedFrom = discardedIndex
+        indexDrawnTo = drawnIndex
+        indexDiscardedFrom = discardedIndex
         
         var opponentsHandPreAnimation = state.senderHand
-        let cardTheyDiscarded = self.discardPile.popLast()! //we will animate it back later...
+        let cardTheyDiscarded = discardPile.popLast()! //we will animate it back later...
         opponentsHandPreAnimation.insert(cardTheyDiscarded, at: discardedIndex)
         let cardToReturn = opponentsHandPreAnimation.remove(at: drawnIndex)
-        if self.opponentDrewFromDeck {
-            self.deck.append(cardToReturn)
+        if opponentDrewFromDeck {
+            deck.append(cardToReturn)
         } else {
-            self.discardPile.append(cardToReturn)
+            discardPile.append(cardToReturn)
         }
-        self.opponentHand = opponentsHandPreAnimation
+        opponentHand = opponentsHandPreAnimation
         
         return true
     }
     
-    private func syncGameFlow(isPlayersTurn: Bool) { //could use some refactoring. this function is called 2x and something similar is called. the equivalent of this code block is called 3x
-        checkWin()
-        if playerHasWon || opponentHasWon {
-            self.phase = .gameEndPhase
-            SoundManager.instance.playGameWin(didWin: self.playerHasWon)
-        } else {
-            // only enter animation phase if it's our turn to watch the opponent move
-            self.phase = isPlayersTurn ? .animationPhase : .idlePhase
-        }
+    func checkWin() { //set for deprecation when we disallow first turn wins
+        playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
+        opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
     }
     
-    func checkWin() {
-        self.playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
-        self.opponentHasWon = GinRummyValidator.canMeldAllCards(hand: self.opponentHand)
-    }
-    
-    func createNewGameState(withHandSize: Int) -> GameState { //should we also set these values to self??
+    func createNewGameState(withHandSize: Int) -> GameState {
         let newSessionID = UUID()
         var newDeck = Deck().cards
         var newPlayerHand: [Card] = []
@@ -271,7 +265,7 @@ class GameManager: ObservableObject {
             turnNumber: self.turnNumber + 1
         )
         
-        onTurnCompleted?(currentGameState) //send data to MessagesViewController
+        self.onTurnCompleted?(currentGameState) //send data to MessagesViewController
     }
     
 }

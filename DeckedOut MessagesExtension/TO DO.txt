@@ -1,33 +1,23 @@
--Bug fixes
--search project for any ?? comments
--QOL changes?
+-Better felt background
 
-*** Release 1.0? ***
-(Specify Straight Gin Variant) (going full gin is required)
-
-First update:
+Planned for first update:
+-Better App Store screenshots
+-use turn number to remove the 0.5 waiting upon recieving a move?
 -figure out live layout
 -update cards look? maybe extra option?
 -better win screen? (maybe make it a joker card!!) (happy or sad joker with its own colored shadow)
--use turn number to remove the 0.5 waiting upon recieving a move?
-
 -ipad menu that discards to the bottom right?
-
+-reduce win glow and extend range
 -App store screens for all languages?
-
-
+-Shorter bubble pictures! 840 x 520? (Keep an eye out for if the current aspect ratio is a problem or not)
 Other card games? Check if we can rename afterwards
 
 
 
 *Possible* Bugs:
--fix discard animation turn end hitch?
--image resizes slightly from within send view to the conversation view (might just be in testing)
+lag between finishing the discard animation and backend finish turn operations. finish animation on main thread, everything else on background thread? (doesnt seem to be an issue most of the time)
 -figure out why simulator crashes upon exiting conversation view
 -simulator also doesnt recognize mid turn save, but devices do
--didSelect and didRecieve functionality overlaps and triggers multiple times
--lag between finishing the discard animation and the backend send stuff. finish animation on main thread, everything else on background thread?
--mid turn saving cant seem to handle multiple game saves at once
 
 
 QOL changes:
@@ -36,9 +26,11 @@ QOL changes:
 -refactor the deck reshuffling logic when it reaches 0 (animation?)
 -resolve card differences between cards being size 140 or 145
 -maybeee a menu that transitions more smoothly? current menu works perfectly fine
+-look into shadow thing on the main menu on moms phone. some weird accessibility feature?
 -add isExplicitTap funcaitonlity to loadstate, if the user selects a 2nd game session than the one already loaded. very unique edge case, but could still happen...
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that...
 -proper animation to discard pile
+-remove discard highlight if you are not in discard phase?
 -look into *exact* draw offsets, rn they are close enough
 -better felt background, more hd?
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
@@ -53,10 +45,19 @@ QOL changes:
 -do we really need a gin root view or is initializing the game view good enough?
 -in present view do we need to dismiss any pop up windows?
 -error noise if the user attempts to draw again when resuming mid-turn?
-
+-block against first turn wins, (1 in 300,000 something, low priority)
 
 
 Optimizations:
+-remove self in game manager when it isnt needed for clarity
 -is syncgameflow needed?
 -does isFaceUp need to be a passed variable?
 -init in player hand view should be in main body, not the extension
+-figure out audio session failure print statement
+
+
+Possible name for if other games are added:
+DeckedOut
+CardVault
+PocketDeck
+Card Games

@@ -18,97 +18,113 @@ struct GinGameView: View {
     @State private var isHoveringDiscard: Bool = false
 
     var body: some View {
-        VStack {
-            // Opponent's Hand
-            OpponentHandView(cards: game.opponentHand, isFaceUp: false, discardPileZone: discardFrame, deckZone: deckFrame) //maybe replace isFaceUp here and in player hand...
+        ZStack {
+
+            Image("feltBackground") //The Background
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+            
+            VStack {
+                // Opponent's Hand
+                OpponentHandView(cards: game.opponentHand, isFaceUp: false, discardPileZone: discardFrame, deckZone: deckFrame) //maybe replace isFaceUp here and in player hand...
                 //.shadow(color: game.opponentHasWon ? .yellow : .yellow.opacity(0.0), radius: 20 )
-                .padding(.top, 30)
-                .zIndex(2)
-            
-            Spacer()
-            
-            // Middle section
-            HStack {
-                ZStack {// Deck
-                    ForEach(0..<5) { i in
-                        Image("cardBackRed")
-                            .resizable()
-                            .aspectRatio(0.7, contentMode: .fit)
-                            .frame(height: 145)
-                            .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
-                            .shadow(radius: i == 4 ? 1 : 8)
-                            .background {
-                                if i == 4 { //4 is top card, the stack proceeds up-left, not down-right
-                                    GeometryReader { geo in
-                                        Color.clear
-                                            .onAppear {
-                                                deckFrame = calculateProperDeckZone(from: geo.frame(in: .global))
-                                            }
-                                            .onChange(of: geo.frame(in: .global)) { _, newFrame in
-                                                deckFrame = calculateProperDeckZone(from: newFrame)
-                                            }
+                    .padding(.top, 30)
+                    .zIndex(2)
+                
+                Spacer()
+                
+                // Middle section
+                HStack {
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    
+                    ZStack {// Deck
+                        ForEach(0..<5) { i in
+                            Image("cardBackRed")
+                                .resizable()
+                                .aspectRatio(0.7, contentMode: .fit)
+                                .frame(height: 145)
+                                .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
+                                .shadow(radius: i == 4 ? 1 : 8)
+                                .background {
+                                    if i == 4 { //4 is top card, the stack proceeds up-left, not down-right
+                                        GeometryReader { geo in
+                                            Color.clear
+                                                .onAppear {
+                                                    deckFrame = calculateProperDeckZone(from: geo.frame(in: .global))
+                                                }
+                                                .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                                                    deckFrame = calculateProperDeckZone(from: newFrame)
+                                                }
+                                        }
                                     }
                                 }
-                            }
-                    }
-                }
-                .onTapGesture {
-                    game.drawFromDeck()
-                    drewFromDeck = true //note: there is an identical variable within gameManager. this variable is for blocking future draws.
-                    if game.phase == .drawPhase { SoundManager.instance.playCardDeal() } //maybe add an error noise/message in an else statement?
-                }
-
-                Spacer()
-
-                // Discard Pile
-                if let topCard = game.discardPile.last {
-                    CardView(imageName: topCard.imageName, isFaceUp: true)
-                        .onTapGesture {
-                            game.drawFromDiscard()
-                            drewFromDiscard = true
-                            SoundManager.instance.playCardDeal()
                         }
-                        .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
-                        .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
-                        .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
-                        .background( //what defines discard pile's zone
-                            GeometryReader { geo in
-                                Color.clear
-                                    .onAppear { discardFrame = geo.frame(in: .global) }
-                                    .onChange(of: geo.frame(in: .global)) { _, newFrame in
-                                        discardFrame = newFrame
-                                    }
+                    }
+                    .onTapGesture {
+                        game.drawFromDeck()
+                        drewFromDeck = true //note: there is an identical variable within gameManager. this variable is for blocking future draws.
+                        if game.phase == .drawPhase { SoundManager.instance.playCardDeal() } //maybe add an error noise/message in an else statement?
+                    }
+                    
+                    Spacer()
+                    Spacer()
+                    
+                    // Discard Pile
+                    if let topCard = game.discardPile.last {
+                        CardView(imageName: topCard.imageName, isFaceUp: true)
+                            .onTapGesture {
+                                game.drawFromDiscard()
+                                drewFromDiscard = true
+                                if game.phase == .drawPhase { SoundManager.instance.playCardDeal() }
                             }
-                        )
+                            .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
+                            .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
+                            .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
+                            .background( //what defines discard pile's zone
+                                GeometryReader { geo in
+                                    Color.clear
+                                        .onAppear { discardFrame = geo.frame(in: .global) }
+                                        .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                                            discardFrame = newFrame
+                                        }
+                                }
+                            )
+                    }
+                    
+                    Spacer()
+                    Spacer()
+                    Spacer()
                 }
+                //.padding(.horizontal, 80)
+                .zIndex(1)
+                
+                Spacer()
+                
+                // Player's hand
+                PlayerHandView(
+                    cards: $game.playerHand,
+                    isFaceUp: true,
+                    discardPileZone: discardFrame,
+                    deckZone: deckFrame,
+                    drewFromDiscard: drewFromDiscard,
+                    drewFromDeck: drewFromDeck,
+                    onDragChanged: { card, location in
+                        handleDragChanged(card: card, location: location)
+                    },
+                    onDragEnded: { card, location in
+                        handleDragEnded(card: card, location: location)
+                    }
+                )
+                .padding(.bottom, 40)
+                .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
+                .offset(x: 5)
+                .zIndex(1)
+                
             }
-            .padding(.horizontal, 80)
-            .zIndex(1)
-        
-            Spacer()
-            
-            // Player's hand
-            PlayerHandView(
-                cards: $game.playerHand,
-                isFaceUp: true,
-                discardPileZone: discardFrame,
-                deckZone: deckFrame,
-                drewFromDiscard: drewFromDiscard,
-                drewFromDeck: drewFromDeck,
-                onDragChanged: { card, location in
-                    handleDragChanged(card: card, location: location)
-                },
-                onDragEnded: { card, location in
-                    handleDragEnded(card: card, location: location)
-                }
-            )
-            .padding(.bottom, 40)
-            .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
-            .offset(x: 5)
-            .zIndex(1)
-            
         }
-        .background(Image("feltBackground"))
         .overlay {
             if game.phase == .idlePhase {
                 WaitingOverlayView()

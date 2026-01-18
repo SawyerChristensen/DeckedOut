@@ -56,8 +56,8 @@ struct MainMenuView: View {
                 startButton
                 handSizePicker
             }
-            Spacer()
-            //.padding(.trailing, 10)
+            //Spacer()
+            .padding(.trailing, 10)
         }
     }
     
