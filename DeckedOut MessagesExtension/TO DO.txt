@@ -1,16 +1,20 @@
--Better felt background
-
 Planned for first update:
--Better App Store screenshots
--use turn number to remove the 0.5 waiting upon recieving a move?
--figure out live layout
--update cards look? maybe extra option?
--better win screen? (maybe make it a joker card!!) (happy or sad joker with its own colored shadow)
--ipad menu that discards to the bottom right?
--reduce win glow and extend range
--App store screens for all languages?
--Shorter bubble pictures! 840 x 520? (Keep an eye out for if the current aspect ratio is a problem or not)
-Other card games? Check if we can rename afterwards
+-Better felt background
+-iPad menu that discards to the bottom right
+-Use turn number? to remove the 0.5 wait upon recieving a move
+-Better App Store screenshots (app store screens for all languages?)
+-Figure out live layout
+-Bug fixes (disappearing discard pile and mid-turn save duplicate card bug fixed)
+-Reduce win glow and extend radius?
+
+Planned for second update:
+-update card look? maybe extra option?
+-better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)
+
+
+--Look into getting featured on the App Store!
+
+--Add other card games? Rename app if other games are added
 
 
 
@@ -21,7 +25,6 @@ lag between finishing the discard animation and backend finish turn operations. 
 
 
 QOL changes:
--remove the 0.5 second wait when recieving a move
 -resume button if we exit to main menu in game view?
 -refactor the deck reshuffling logic when it reaches 0 (animation?)
 -resolve card differences between cards being size 140 or 145

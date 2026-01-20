@@ -65,25 +65,17 @@ struct GinGameView: View {
                     }
                     .onTapGesture {
                         game.drawFromDeck()
-                        drewFromDeck = true //note: there is an identical variable within gameManager. this variable is for blocking future draws.
+                        drewFromDeck = true
                         if game.phase == .drawPhase { SoundManager.instance.playCardDeal() } //maybe add an error noise/message in an else statement?
                     }
                     
                     Spacer()
                     Spacer()
                     
-                    // Discard Pile
-                    if let topCard = game.discardPile.last {
-                        CardView(imageName: topCard.imageName, isFaceUp: true)
-                            .onTapGesture {
-                                game.drawFromDiscard()
-                                drewFromDiscard = true
-                                if game.phase == .drawPhase { SoundManager.instance.playCardDeal() }
-                            }
-                            .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
-                            .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
-                            .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
-                            .background( //what defines discard pile's zone
+                    ZStack { // Discard Pile Container
+                        Color.clear // A ghost view reserves the space so Spacers don't collapse when discardPile.count == 0
+                            .frame(width: 101.5, height: 145) // 101.5 = 145 * 0.7
+                            .background(
                                 GeometryReader { geo in
                                     Color.clear
                                         .onAppear { discardFrame = geo.frame(in: .global) }
@@ -92,6 +84,22 @@ struct GinGameView: View {
                                         }
                                 }
                             )
+                        
+                        if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
+                            CardView(imageName: topCard.imageName, isFaceUp: true)
+                                .onTapGesture {
+                                    game.drawFromDiscard()
+                                    drewFromDiscard = true
+                                    if game.phase == .drawPhase { SoundManager.instance.playCardDeal() }
+                                }
+                                .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
+                                .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
+                                .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
+                        } else { // display an outline of where a discarded card *should* go
+                            RoundedRectangle(cornerRadius: 8)
+                                .strokeBorder(Color.white.opacity(0.2), lineWidth: 2)
+                                .frame(width: 101.5, height: 145)
+                        }
                     }
                     
                     Spacer()

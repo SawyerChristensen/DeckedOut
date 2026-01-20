@@ -163,6 +163,12 @@ class GameManager: ObservableObject {
            let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
             self.playerHand = stashedHand
             self.opponentHand = state.senderHand
+            if let topDeckCard = deck.last,
+               stashedHand.contains(where: { $0.id == topDeckCard.id }) { // the user previously drew from the deck
+                deck.removeLast()
+            } else { //the user drew from the discard pile instead
+                discardPile.removeLast()
+            }
             phase = .discardPhase
             
         } else if isPlayersTurn { //the user is beginning their turn...
@@ -243,7 +249,7 @@ class GameManager: ObservableObject {
             discardPile: newDiscardPile,
             senderHand: newPlayerHand,
             receiverHand: newOpponentHand,
-            senderDrewFromDeck: false, //defaults to discard pile but shouldnt animate if these are nil:
+            senderDrewFromDeck: false, //defaults to user drawing from discard pile but shouldnt matter if these are also nil:
             indexSenderDrewTo: nil,
             indexSenderDiscardedFrom: nil,
             turnNumber: 0)
@@ -259,7 +265,7 @@ class GameManager: ObservableObject {
             discardPile: self.discardPile,
             senderHand: self.playerHand,
             receiverHand: self.opponentHand,
-            senderDrewFromDeck: self.opponentDrewFromDeck, //this defaults to discard pile
+            senderDrewFromDeck: self.opponentDrewFromDeck,
             indexSenderDrewTo: self.indexDrawnTo,
             indexSenderDiscardedFrom: self.indexDiscardedFrom,
             turnNumber: self.turnNumber + 1
