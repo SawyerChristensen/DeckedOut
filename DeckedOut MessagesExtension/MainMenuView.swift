@@ -64,7 +64,6 @@ struct MainMenuView: View {
     private var expandedLayout: some View {
         VStack {
             Spacer()
-            Spacer()
             startButton
             Spacer()
             deckSection
@@ -91,14 +90,15 @@ struct MainMenuView: View {
                     .opacity(cardsAnimatedAway > 5 ? 1 : 0)
             }
             
+            let isIpad = UIDevice.current.userInterfaceIdiom == .pad
             ForEach(0..<5) { i in
                 Image("cardBackRed")
                     .resizable()
                     .aspectRatio(0.7, contentMode: .fit)
                     .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145) // Make cards bigger in expanded!
                     .rotationEffect(i >= 5 - cardsAnimatedAway ? Angle(degrees: 45) : Angle(degrees: 0))
-                    .offset(x: i >= 5 - cardsAnimatedAway ? 225 : CGFloat(-i) * 3,
-                            y: i >= 5 - cardsAnimatedAway ? -450 : CGFloat(-i) * 3)
+                    .offset(x: i >= 5 - cardsAnimatedAway ? (isIpad ? 400 : 225) : CGFloat(-i) * 3,
+                            y: i >= 5 - cardsAnimatedAway ? (isIpad ? 300 : -450) : CGFloat(-i) * 3)
                     .shadow(radius: i == 4 ? 1 : 8)
             }
         }
@@ -130,8 +130,9 @@ struct MainMenuView: View {
                     }
                 )
                 .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 2))
-                .shadow(color: .white.opacity(0.1), radius: 15)
+                //.shadow(color: .white.opacity(0.1), radius: 15)
         }
+        .buttonStyle(PlainButtonStyle())
     }
     
     private var handSizePicker: some View {

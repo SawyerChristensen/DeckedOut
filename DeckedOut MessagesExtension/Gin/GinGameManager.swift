@@ -27,13 +27,15 @@ class GameManager: ObservableObject {
     @Published var opponentHand: [Card] = []
     @Published var deck: [Card] = []
     @Published var discardPile: [Card] = []
-    @Published var phase: TurnPhase = .animationPhase
+    @Published var phase: TurnPhase = .animationPhase //stays local
     @Published var opponentDrewFromDeck: Bool = false
     @Published var indexDrawnTo: Int? = nil
     @Published var indexDiscardedFrom: Int? = nil
-    @Published var playerHasWon: Bool = false
-    @Published var opponentHasWon: Bool = false
+    @Published var playerHasWon: Bool = false //stays local
+    @Published var opponentHasWon: Bool = false //stays local
     @Published var turnNumber: Int = 0
+    
+    var hasPerformedInitialLoad: Bool = false //stays local
     
     init() {} // values are already initialized here ^
     

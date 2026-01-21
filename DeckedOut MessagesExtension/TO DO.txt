@@ -1,14 +1,6 @@
-Planned for first update:
--Better felt background
--iPad menu that discards to the bottom right
--Use turn number? to remove the 0.5 wait upon recieving a move
--Better App Store screenshots (app store screens for all languages?)
--Figure out live layout
--Bug fixes (disappearing discard pile and mid-turn save duplicate card bug fixed)
--Reduce win glow and extend radius?
-
 Planned for second update:
--update card look? maybe extra option?
+-use live layout when the game is over for transcript view
+-update card look? maybe extra deck option?
 -better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)
 
 
@@ -52,6 +44,8 @@ QOL changes:
 
 
 Optimizations:
+-look into background threating of logic vs main threading of UI
+-look into what variables in GameManager have to be @Published.
 -remove self in game manager when it isnt needed for clarity
 -is syncgameflow needed?
 -does isFaceUp need to be a passed variable?

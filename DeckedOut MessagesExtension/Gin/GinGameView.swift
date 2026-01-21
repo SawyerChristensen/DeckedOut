@@ -144,13 +144,13 @@ struct GinGameView: View {
             }
         }
         .task { //triggers every UI reinit and waits 0.5 (which is currently every move)
-            do {
-                try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                //print("0.5s wait over and animating turn...")
-                animateOpponentsTurn()
-            } catch {
-                // Task was cancelled (View disappeared), so we do nothing.
-            }
+            if !game.hasPerformedInitialLoad{
+                do {
+                    try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
+                    animateOpponentsTurn()
+                } catch { }
+            } else {
+                animateOpponentsTurn() }
         }
         /*.onChange(of: game.phase) { _ , newPhase in //or "oldPhase" "newPhase"
             if game.phase == .animationPhase {
@@ -166,6 +166,7 @@ struct GinGameView: View {
         } else {
             game.opponentDrawFromDiscard()
         }
+        game.hasPerformedInitialLoad = true
         //animating discard is automatically handled in opponents hand view
     }
     

@@ -176,6 +176,8 @@ class MessagesViewController: MSMessagesAppViewController {
         components.queryItems = [URLQueryItem(name: "gameState", value: jsonString)]
         message.url = components.url
         
+        requestPresentationStyle(.compact)
+        
         conversation.insert(message) { error in
             if let error = error {
                 print("Error inserting message: \(error.localizedDescription)")
