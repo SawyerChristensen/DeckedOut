@@ -28,8 +28,8 @@ struct OpponentHandView: View {
     @State private var animatingCard: Card?
     @State private var animationOffset: CGSize = .zero
     @State private var animationRotationCorrection: Angle = .zero
-    @State private var flipRotation: Double = 0 //for when the card is being animated
-    @State private var revealRotation: Double = 0 //for when the opponent wins
+    @State private var animatingRotation: Double = 0 //for when the card is being animated
+    @State private var normalRotation: Double = 180 //default to face down
     @State private var cardWaitingToAnimate: Card?
     
     // Constants
@@ -47,7 +47,7 @@ struct OpponentHandView: View {
                 //print(isAnimating)
                 //print(-abs(Double(index - cards.count / 2) * 5))
                 
-                CardView(imageName: card.imageName, isFaceUp: isFaceUp, animatableFlipAngle: isAnimating ? flipRotation : revealRotation)
+                CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : normalRotation)
                     .zIndex(Double(index))
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)
                     .rotationEffect(isAnimating ? animationRotationCorrection : angle)
@@ -107,7 +107,7 @@ struct OpponentHandView: View {
         .onChange(of: game.opponentHasWon) { _, opponentJustWon in
             if opponentJustWon {
                 withAnimation(.spring(response: 0.8, dampingFraction: 0.7)) {
-                    revealRotation = 180
+                    normalRotation = 0
                 }
             }
         }
@@ -127,8 +127,8 @@ struct OpponentHandView: View {
         }
         
         if !game.opponentDrewFromDeck {
-            flipRotation = -180
-        } else { flipRotation = 0 } //likely redundant but lets be safe
+            animatingRotation = 0
+        } else { animatingRotation = 180 } //likely redundant but lets be safe
         
         // initial state
         animationOffset = offsetToDraw
@@ -138,7 +138,7 @@ struct OpponentHandView: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animationOffset = .zero
             animationRotationCorrection = fanAngle
-            flipRotation = 0
+            animatingRotation = 180
         }
             
         // Clear draw animation state and call discard animation
@@ -157,12 +157,12 @@ struct OpponentHandView: View {
         )
         
         // initial state
-        flipRotation = 0
+        animatingRotation = -180 //card is face down
         animationOffset = .zero
         animationRotationCorrection = fanAngle
         
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-            flipRotation = 180
+            animatingRotation = 0 //card gets discarded face up
             animationOffset = offsetToDiscard
             animationRotationCorrection = .degrees(0)
         }

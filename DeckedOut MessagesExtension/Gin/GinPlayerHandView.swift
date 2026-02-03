@@ -68,7 +68,7 @@ struct PlayerHandView: View {
                 GeometryReader { geo in
                     let geoFrame = geo.frame(in: .global)
                     
-                    CardView(imageName: card.imageName, isFaceUp: isFaceUp, animatableFlipAngle: isAnimating ? flipRotation : 0)
+                    CardView(frontImage: card.imageName, rotation: isAnimating ? flipRotation : 0)
                         .rotationEffect(finalRotation)
                         .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
                         .scaleEffect(isDragging ? 1.1 : 1.0)

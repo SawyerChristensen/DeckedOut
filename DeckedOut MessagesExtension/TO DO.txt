@@ -1,12 +1,23 @@
-Planned for second update:
--use live layout when the game is over for transcript view
--update card look? maybe extra deck option?
+-test if current flip rotation stuff works
+
+-test transcript view on multiple devices
+-add dark mode detection, change background
+
+-new start game button look?
+-update card look? maybe extra deck look option?
+-see if discard animation actually works
+
 -better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)
 
 
---Look into getting featured on the App Store!
-
 --Add other card games? Rename app if other games are added
+    -Crazy 8s
+    -Golf
+    -Scopa
+    -Yaniv
+    -Cribage?
+
+--Look into getting featured on the App Store!
 
 
 
@@ -41,6 +52,7 @@ QOL changes:
 -in present view do we need to dismiss any pop up windows?
 -error noise if the user attempts to draw again when resuming mid-turn?
 -block against first turn wins, (1 in 300,000 something, low priority)
+-animate "waiting for opponent..." on transcript view? possibly too much motion
 
 
 Optimizations:
@@ -51,6 +63,7 @@ Optimizations:
 -does isFaceUp need to be a passed variable?
 -init in player hand view should be in main body, not the extension
 -figure out audio session failure print statement
+-is isExplicitTap really needed?
 
 
 Possible name for if other games are added:

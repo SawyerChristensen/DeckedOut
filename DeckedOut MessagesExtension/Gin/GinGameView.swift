@@ -20,7 +20,7 @@ struct GinGameView: View {
     var body: some View {
         ZStack {
 
-            Image("feltBackground") //The Background
+            Image("feltBackgroundDark") //The Background
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
@@ -86,7 +86,7 @@ struct GinGameView: View {
                             )
                         
                         if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
-                            CardView(imageName: topCard.imageName, isFaceUp: true)
+                            CardView(frontImage: topCard.imageName)
                                 .onTapGesture {
                                     game.drawFromDiscard()
                                     drewFromDiscard = true

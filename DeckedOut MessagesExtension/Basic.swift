@@ -50,7 +50,7 @@ public enum Suit: Int, CaseIterable, Codable { /// CaseIterable lets us loop thr
 }
 
 ///Ace is treated as a low card here! Might want to change later depending on game!
-public enum Rank: Int, CaseIterable, Codable { // note the values are 0 indexed!
+public enum Rank: Int, CaseIterable, Codable { // note the values are 0 indexed! they do not match their english values!
     case ace = 0
     case two = 1
     case three = 2
@@ -102,6 +102,6 @@ struct Deck {
     }
     /*
     mutating func drawCard() -> Card? {
-        return cards.isEmpty ? nil : cards.removeFirst()
+        return cards.popLast()
     }*/
 }

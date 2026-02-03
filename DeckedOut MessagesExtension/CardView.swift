@@ -8,38 +8,36 @@
 import SwiftUI
 
 struct CardView: View {
-    let imageName: String
-    let isFaceUp: Bool //should be fully replaced with animatableFlipAngle in a later update
-    var animatableFlipAngle: Double = 0
-        
-        var body: some View {
-            let effectiveRotation = animatableFlipAngle + (isFaceUp ? 0 : 180)
-            
-            ZStack {
-                // BACK VIEW
-                Image("cardBackRed")
-                    .resizable()
-                    .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: 145)
-                    .shadow(radius: 3)
-                    .modifier(FlipOpacity(rotation: effectiveRotation + 180))
-                
-                // FRONT VIEW
-                Image(imageName)
-                    .resizable()
-                    .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: 145)
-                    .shadow(radius: 3)
-                    .modifier(FlipOpacity(rotation: effectiveRotation))
-            }
-            .rotation3DEffect(
-                .degrees(effectiveRotation),
-                axis: (x: 0.0, y: 1.0, z: 0.0) // Rotate around Y-axis
-            )
-        }
+    let frontImage: String
+    var rotation: Double = 0 //default to face up
+    var backLetter: String?
     
-    private func shouldShowFront(angle: Double) -> Bool {
-        let normalized = angle.remainder(dividingBy: 360)
-        return abs(normalized) < 90
+    private var backImageName: String {
+        if let letter = backLetter { return "\(letter)Card" }
+        else { return "cardBackRed" }
+    }
+        
+    var body: some View {
+        ZStack {
+            // BACK VIEW
+            Image(backImageName)
+                .resizable()
+                .aspectRatio(0.7, contentMode: .fit)
+                .frame(height: 145)
+                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0)) //correcting the "mirroring" effect that distorts the image
+                .modifier(FlipOpacity(rotation: rotation + 180))
+            
+            
+            // FRONT VIEW
+            Image(frontImage)
+                .resizable()
+                .aspectRatio(0.7, contentMode: .fit)
+                .frame(height: 145)
+                .modifier(FlipOpacity(rotation: rotation))
+        }
+        .rotation3DEffect(
+            .degrees(rotation),
+            axis: (x: 0.0, y: 1.0, z: 0.0) // Rotate around Y-axis
+        )
     }
 }

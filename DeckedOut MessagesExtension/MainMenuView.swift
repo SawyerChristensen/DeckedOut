@@ -25,7 +25,7 @@ struct MainMenuView: View {
     var body: some View {
         ZStack {
             // Shared Background (Felt & Shading)
-            Image("feltBackground")
+            Image("feltBackgroundDark")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
