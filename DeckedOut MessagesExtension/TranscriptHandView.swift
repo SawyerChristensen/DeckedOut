@@ -44,12 +44,12 @@ struct TranscriptHandView: View {
                     .offset(y: abs(Double(index - cards.count / 2) * 5))
                     .shadow(color: cardFlipTrigger ? .white.opacity(0.5) : .black.opacity(0.15), radius: 5) //figure out shadow compatibility with animation
                     .animation(
-                        .spring(response: 0.6, dampingFraction: cardFlipTrigger ? 1 : 0.7).delay(Double(index) * 0.2),
+                        .spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.2), //or "dampingFraction: cardFlipTrigger ? 1 : 0.7)"
                         value: cardFlipTrigger
                     )
             }
         }
-        .animation(.spring(response: 0.6, dampingFraction: 0.7), value: cardsAreExpanded)
+        .animation(.spring(response: 0.8, dampingFraction: 1), value: cardsAreExpanded)
         .onReceive(timer) { _ in
             handleAnimationTriggers()
         }
@@ -59,13 +59,13 @@ struct TranscriptHandView: View {
         if !cardFlipTrigger {
             cardFlipTrigger = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                 cardsAreExpanded = true }
             
         } else {
             cardsAreExpanded = false
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 cardFlipTrigger = false }
         }
     }

@@ -11,95 +11,88 @@ import SwiftUI
 struct TranscriptView: View {
     let gameState: GameState
     let isFromMe: Bool
-    
-    static let viewHeight: CGFloat = 200
-
-    private var cards: [Card] {
-        isFromMe ? gameState.senderHand : gameState.receiverHand
-    }
+    var onHeightChange: ((CGFloat) -> Void)? = nil
+    private var cards: [Card] { isFromMe ? gameState.senderHand : gameState.receiverHand }
 
     var body: some View {
-        
-        ZStack(alignment: .bottom) {
-            // The Game Preview
-            VStack(spacing: -40) {
-                // Deck & Discard
-                HStack(spacing: 0) {
-                    Spacer()
-                    deckStack
-                    Spacer()
-                    discardStack
-                    Spacer()
-                }
-                .offset(y: -69)
-                .opacity(0) //for now...
-                
-                TranscriptHandView(cards: cards)
-                    .offset(y: -25)
-            }
+        VStack() {
             
-            // The Caption Bar
-            ZStack(alignment: .top) {
-                Color(UIColor.secondarySystemBackground)
-                    .frame(height: 50)
+            TranscriptHandView(cards: cards)
+                .offset(y: 50)
+                .frame(height: 150)
                 
-                Text(isFromMe ? "Waiting for opponent..." : "Your turn!")
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
-                    .padding(.top, 7)
-            }
-            //.padding(.bottom)
+            CaptionTextView(isWaiting: isFromMe)
             
         }
-        .frame(height: TranscriptView.viewHeight)
+        .background( //for measuring & reporting the view height
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        onHeightChange?(geometry.size.height)
+                    }
+                    .onChange(of: geometry.size.height) { _, newHeight in
+                        onHeightChange?(newHeight)
+                    }
+            }
+        )
         .background(Image("feltBackgroundLight")
             .resizable()
             .aspectRatio(contentMode: .fill)
         )
     }
-    
-    private var deckStack: some View {
-        ZStack {
-            ForEach(0..<5) { i in
-                Image("cardBackRed")
-                    .resizable()
-                    .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: 145)
-                    .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
-                    .shadow(radius: i == 4 ? 1 : 8)
-            }
-        }
-    }
-
-    private var discardStack: some View {
-        Group {
-            if let topDiscard = gameState.discardPile.last {
-                CardView(frontImage: topDiscard.imageName)
-                    .frame(height: 145) // Matches the deck height
-                    .shadow(color: .black.opacity(0.2), radius: 5)
-            }
-        }
-    }
 }
 
-/*
-struct CaptionTextView: View { //for animating "waiting for opponent..." but that may be too much motion
+
+struct CaptionTextView: View { //this is currently working fine, but not as originally designed. currently, multiline view does not actuall force multiple lines. what it does do is get rid of the mirroring in front of the text so that it is at least visually balanced in larger accessibility settings. it doesnt need to be changed, but multiline view triggers without actually forcing a multiline view
     let isWaiting: Bool
     @State private var dotCount = 0
     let timer = Timer.publish(every: 0.6, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        Text(isWaiting ? "Waiting for opponent\(String(repeating: ".", count: dotCount))" : "Your turn!")
-            .font(.body)
-            .fontWeight(.medium)
-            .foregroundColor(.primary)
-            .monospacedDigit()
-            .frame(width: 220, alignment: .leading)
-            .onReceive(timer) { _ in
-                if isWaiting {
-                    dotCount = (dotCount + 1) % 4
+        Group {
+            if isWaiting {
+                ViewThatFits(in: .horizontal) {
+                    singleLineView //try this first, if it doesnt...
+                    
+                    multiLineView //switch to this
                 }
+            } else {
+                Text("Your turn in Gin!")
             }
+        }
+        .font(.body)
+        .fontWeight(.medium)
+        .foregroundColor(.primary)
+        .padding(.top, 6)
+        .padding(.bottom, 12)
+        .frame(maxWidth: .infinity)
+        .background(Color(UIColor.secondarySystemBackground))
+        .onReceive(timer) { _ in
+            if isWaiting { dotCount = (dotCount + 1) % 4 }
+        }
     }
-}*/
+        
+    private var singleLineView: some View {
+        (
+            Text("...")
+                .foregroundColor(.clear)
+            + Text("Waiting for opponent")
+            + Text(String(repeating: ".", count: dotCount))
+            + Text(String(repeating: ".", count: 3 - dotCount))
+                .foregroundColor(.clear)
+        )
+        .lineLimit(1)
+    }
+    
+    private var multiLineView: some View { //note: not actually multi-line yet! basically just a "largeTextView" that balances the text better in higher text sizes
+        (// (No Mirror Dots)
+            Text("Waiting for opponent")
+            + Text(String(repeating: ".", count: dotCount))
+            // We still keep the right-hand buffer so the text doesn't
+            // "jump" horizontally while animating on the last line.
+            + Text(String(repeating: ".", count: 3 - dotCount))
+                .foregroundColor(.clear)
+        )
+        .lineLimit(nil)
+    }
+}

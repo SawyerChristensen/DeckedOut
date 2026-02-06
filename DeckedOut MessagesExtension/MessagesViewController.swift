@@ -13,6 +13,7 @@ import AVFoundation //for audio
 class MessagesViewController: MSMessagesAppViewController {
     
     private var menuViewModel: MenuViewModel? //what keeps track of if the menu is compact/extended
+    private var transcriptHeight: CGFloat = 200 //default fallback transcript live layout height. should never be 200. if it does, be suspicious...
     let gameManager = GameManager()//Le Game Engine
     
     // MARK: – View Life-Cycle
@@ -52,12 +53,8 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    override func contentSizeThatFits(_ size: CGSize) -> CGSize { //need to test if this ever triggers...
-        if presentationStyle == .transcript { //only called when sizing a transcript view anyway
-            return CGSize(width: size.width, height: 200)
-        }
-        print("resizing content for transcript view")
-        return size
+    override func contentSizeThatFits(_ size: CGSize) -> CGSize { //only triggers within a transcript view child of MSMessagesAppViewController
+        return CGSize(width: size.width, height: transcriptHeight)
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -91,14 +88,20 @@ class MessagesViewController: MSMessagesAppViewController {
         
         if presentationStyle == .expanded && isGameActive { //we're switching to game view and there is a game already loaded
             presentGameView()
-        } else { //there is either no game loaded, or we are switching to the compact view
+        } else { //there is either no game loaded, or we are switching to the compact view (Does this account for transcript view??)
             presentMenuView(for: presentationStyle, with: conversation)
         }
     }
     
     // MARK: - Helper functions
     private func presentTranscriptView(for state: GameState, isFromMe: Bool) {
-        let transcriptView = TranscriptView(gameState: state, isFromMe: isFromMe)
+        let transcriptView = TranscriptView(
+            gameState: state,
+            isFromMe: isFromMe,
+            onHeightChange:{ [weak self] height in
+                self?.transcriptHeight = height
+            }
+        )
         let transcriptViewController = UIHostingController(rootView: transcriptView)
         presentView(transcriptViewController)
     }
@@ -152,14 +155,14 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func createGame(conversation: MSConversation, handSize: Int) { //this is general right now! modify per game selected
+    private func createGame(conversation: MSConversation, handSize: Int) {
         let session = MSSession()
         let message = MSMessage(session: session)
-        let layout = MSMessageTemplateLayout()
+        let templateLayout = MSMessageTemplateLayout()
         
-        layout.image = UIImage(named: "GinDefault")
-        layout.caption = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage layout caption")
-        message.layout = layout
+        templateLayout.image = UIImage(named: "GinDefault")
+        templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage layout caption")
+        message.layout = templateLayout
         message.summaryText = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage summary text")
         
         let startingGameState = gameManager.createNewGameState(withHandSize: handSize)
@@ -168,6 +171,9 @@ class MessagesViewController: MSMessagesAppViewController {
         var components = URLComponents()
         components.queryItems = [URLQueryItem(name: "gameState", value: jsonString)]
         message.url = components.url
+        
+        let liveLayout = MSMessageLiveLayout(alternateLayout: templateLayout)
+        message.layout = liveLayout
         
         requestPresentationStyle(.compact)
         
@@ -200,7 +206,7 @@ class MessagesViewController: MSMessagesAppViewController {
         } else {
             templateLayout.image = UIImage(named: "GinDefault")
             templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "iMessage layout caption")
-            message.summaryText = NSLocalizedString("Gin", comment: "1st iMessage summary text") }
+            message.summaryText = NSLocalizedString("Gin", comment: "1st iMessage summary text") } //change this to the card they discarded
         
         let liveLayout = MSMessageLiveLayout(alternateLayout: templateLayout)
         message.layout = liveLayout
@@ -234,3 +240,4 @@ class MessagesViewController: MSMessagesAppViewController {
             conversationID: conversation.localParticipantIdentifier.uuidString)
     }
 }
+

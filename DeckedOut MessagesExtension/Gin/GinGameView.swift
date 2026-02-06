@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GinGameView: View {
     @EnvironmentObject var game: GameManager
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
@@ -20,7 +21,7 @@ struct GinGameView: View {
     var body: some View {
         ZStack {
 
-            Image("feltBackgroundDark") //The Background
+            Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight") //The Background
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()

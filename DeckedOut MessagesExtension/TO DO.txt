@@ -1,58 +1,76 @@
--test if current flip rotation stuff works
+-test if current flip rotation stuff works in every scenario (winning flip!)
 
--test transcript view on multiple devices
--add dark mode detection, change background
+-change summary text to the card they discarded (and add this to hex chess iMessage to do)
 
--new start game button look?
--update card look? maybe extra deck look option?
--see if discard animation actually works
+-test transcript view on multiple devices (moms big text settings!)
+
+-make "start game" main menu text pulsate in scale
+
+-transcript view on game win
+
+-game invite transcript view? LETS PLAY GIN! card flip series
+
+-remove discard highlight if you are not in discard phase?
+
+*----------* UPDATE 1.2 *----------* (The Movement Update)
+
+
+-resolve card differences between cards being size 140 or 145
+
+-fan out the hand more on 7 card hands?
+
+-see if discard animation actually works (proper animation to discard pile)
+
+-discard pile should look a little more random rather than a perfectly straight stack of cards?
+
+-Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that...
 
 -better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)
 
+*----------* UPDATE 1.3 *----------* (The Aesthetic Update)
 
---Add other card games? Rename app if other games are added
+
+-error noise if the user attempts to draw again when resuming mid-turn?
+
+-be able to rearrange your cards, (but not draw) during the opponents turn
+
+-be able to drag from the discard pile in Gin as well as tap
+
+-add auto-sorting capability
+
+*----------* UPDATE 1.4 *----------* (The Functionality Update)
+
+
+
+--Add other card games? Rename app if other games are added (add whole version number to each. pefect previous game before moving on)
     -Crazy 8s
     -Golf
     -Scopa
     -Yaniv
     -Cribage?
 
+-update card look? maybe extra deck look option?
+-multiple deck aesthetics? could have a menu where you drag your preferred aesthetic to a pile, the pile card goes back to hand. the hand is all of the same card, aces? jacks? and you select from there which one you like most
+
+
 --Look into getting featured on the App Store!
 
 
 
 *Possible* Bugs:
-lag between finishing the discard animation and backend finish turn operations. finish animation on main thread, everything else on background thread? (doesnt seem to be an issue most of the time)
+-lag between finishing the discard animation and backend finish turn operations. finish animation on main thread, everything else on background thread? (doesnt seem to be an issue most of the time) (only when simulating!)
 -figure out why simulator crashes upon exiting conversation view
 -simulator also doesnt recognize mid turn save, but devices do
 
 
 QOL changes:
--resume button if we exit to main menu in game view?
+-restart button from within the win view?
 -refactor the deck reshuffling logic when it reaches 0 (animation?)
--resolve card differences between cards being size 140 or 145
--maybeee a menu that transitions more smoothly? current menu works perfectly fine
--look into shadow thing on the main menu on moms phone. some weird accessibility feature?
--add isExplicitTap funcaitonlity to loadstate, if the user selects a 2nd game session than the one already loaded. very unique edge case, but could still happen...
--Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that...
--proper animation to discard pile
--remove discard highlight if you are not in discard phase?
--look into *exact* draw offsets, rn they are close enough
--better felt background, more hd?
--discard pile should look a little more random rather than a perfectly straight stack of cards?
--restart button from within the win view
--didCancelSending puts the card back on the deck? little easter egg
--when the drag starts, the center of the card should move to the center of the touch location. it currently stays off center, usually to the right of the touch, (where you started the drag)
--be able to rearrange your cards, (but not draw) during the opponents turn
--be able to drag from the discard pile in Gin as well as tap
--add sorting capability
--multiple deck aesthetics? could have a menu where you drag your preferred aesthetic to a pile, the pile card goes back to hand. the hand is all of the same card, aces? jacks? and you select from there which one you like most
--fan out the hand more on 7 card hands?
--do we really need a gin root view or is initializing the game view good enough?
--in present view do we need to dismiss any pop up windows?
--error noise if the user attempts to draw again when resuming mid-turn?
--block against first turn wins, (1 in 300,000 something, low priority)
--animate "waiting for opponent..." on transcript view? possibly too much motion
+-resume button if we exit to main menu in game view?
+-block against first turn wins, (1 in ~300,000, low priority)
+-didCancelSending puts the card back on the deck? little easter egg. look into what didCancelSending actually does (low priority)
+-do we really need a gin root view or is initializing the game view good enough? (doesnt really matter now)
+-in present view do we need to dismiss any pop up windows? (doesnt really matter)
 
 
 Optimizations:

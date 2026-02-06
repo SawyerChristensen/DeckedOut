@@ -10,7 +10,7 @@ import Messages
 
 struct MainMenuView: View {
     @Environment(\.colorScheme) var colorScheme //for light/dark theme detection
-    @Environment(\.locale) var locale //for language detection
+    //@Environment(\.locale) var locale //for language detection
     @ObservedObject var viewModel: MenuViewModel
     var onStartGame: (Int) -> Void //triggers createGame in MessagesViewController
     //can add win counts?
@@ -25,17 +25,17 @@ struct MainMenuView: View {
     var body: some View {
         ZStack {
             // Shared Background (Felt & Shading)
-            Image("feltBackgroundDark")
+            Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
             
-            LinearGradient(
+            /*LinearGradient(
                 gradient: Gradient(colors: [Color.white.opacity(0.1), Color.black.opacity(0.1)]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
+            .ignoresSafeArea()*/
 
             // Layout based on current presentation style
             if viewModel.presentationStyle == .expanded {
