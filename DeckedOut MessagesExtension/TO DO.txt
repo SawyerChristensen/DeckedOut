@@ -1,4 +1,8 @@
+-make live layouts tappable! They currently lock you out of the game!
+
 -test if current flip rotation stuff works in every scenario (winning flip!)
+
+-padding on normal caption text might be weird
 
 -change summary text to the card they discarded (and add this to hex chess iMessage to do)
 
@@ -8,7 +12,8 @@
 
 -transcript view on game win
 
--game invite transcript view? LETS PLAY GIN! card flip series
+-game invite transcript view? LETS PLAY GIN! card flip series (DONE)
+    -maybe make just as big as normal live layout? (not done)
 
 -remove discard highlight if you are not in discard phase?
 
@@ -64,6 +69,7 @@
 
 
 QOL changes:
+-make invite view wait on GIN! ?
 -restart button from within the win view?
 -refactor the deck reshuffling logic when it reaches 0 (animation?)
 -resume button if we exit to main menu in game view?

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TranscriptHandView: View {
+struct TranscriptPlayerHandView: View {
     let cards: [Card]
     
     @State private var cardFlipTrigger: Bool = false
@@ -18,7 +18,7 @@ struct TranscriptHandView: View {
     // Constants tuned for the small iMessage bubble
     private let cardWidth: CGFloat = 120 * 0.7
     private let cardHeight: CGFloat = 120
-    private let cardSpacing: CGFloat = -60
+    //private let cardSpacing: CGFloat = -60
     private let fanningAngle: Double = 4
     
     var body: some View {
@@ -44,7 +44,8 @@ struct TranscriptHandView: View {
                     .offset(y: abs(Double(index - cards.count / 2) * 5))
                     .shadow(color: cardFlipTrigger ? .white.opacity(0.5) : .black.opacity(0.15), radius: 5) //figure out shadow compatibility with animation
                     .animation(
-                        .spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.2), //or "dampingFraction: cardFlipTrigger ? 1 : 0.7)"
+                        .spring(response: 0.6, dampingFraction: 0.7)
+                        .delay(Double(index) * 0.2), //or "dampingFraction: cardFlipTrigger ? 1 : 0.7)"
                         value: cardFlipTrigger
                     )
             }

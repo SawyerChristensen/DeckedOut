@@ -95,15 +95,28 @@ class MessagesViewController: MSMessagesAppViewController {
     
     // MARK: - Helper functions
     private func presentTranscriptView(for state: GameState, isFromMe: Bool) {
-        let transcriptView = TranscriptView(
-            gameState: state,
-            isFromMe: isFromMe,
-            onHeightChange:{ [weak self] height in
-                self?.transcriptHeight = height
-            }
-        )
-        let transcriptViewController = UIHostingController(rootView: transcriptView)
+        let rootView = makeTranscriptView(for: state, isFromMe: isFromMe)
+        let transcriptViewController = UIHostingController(rootView: rootView)
         presentView(transcriptViewController)
+    }
+    
+    @ViewBuilder
+    private func makeTranscriptView(for state: GameState, isFromMe: Bool) -> some View {
+        if state.turnNumber == 0 {
+            TranscriptInviteView(
+                onHeightChange: { [weak self] height in
+                    self?.transcriptHeight = height
+                }
+            )
+        } else {
+            TranscriptWaitingView(
+                gameState: state,
+                isFromMe: isFromMe,
+                onHeightChange: { [weak self] height in
+                    self?.transcriptHeight = height
+                }
+            )
+        }
     }
     
     private func presentMenuView(for presentationStyle: MSMessagesAppPresentationStyle, with conversation: MSConversation) {
