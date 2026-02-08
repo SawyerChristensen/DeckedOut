@@ -77,18 +77,27 @@ class MessagesViewController: MSMessagesAppViewController {
         super.willTransition(to: presentationStyle)
         guard let conversation = activeConversation else { return }
     
-        let isGameActive = !gameManager.playerHand.isEmpty
+        let isGameLoaded = !gameManager.playerHand.isEmpty
         let isShowingMenu = children.first is UIHostingController<MainMenuView>
+        let isShowingGame = children.first is UIHostingController<GinRootView>
         
-        if !isGameActive && isShowingMenu {
+        if !isGameLoaded && isShowingMenu { // Menu resizing
             withAnimation(.easeInOut(duration: 0.3)) {
                 menuViewModel?.presentationStyle = presentationStyle }
             return
         }
         
-        if presentationStyle == .expanded && isGameActive { //we're switching to game view and there is a game already loaded
-            presentGameView()
-        } else { //there is either no game loaded, or we are switching to the compact view (Does this account for transcript view??)
+        if presentationStyle == .expanded {
+            if isGameLoaded {
+                if !isShowingGame { // A game IS loaded but game isn't on screen yet -> Show it.
+                    presentGameView()
+                } else { // A game is loaded and is already on screen -> Do nothing! (to prevent erroneous view reinit
+                    return
+                }
+            } else {  // Expanded, but no game loaded -> Show Menu
+                presentMenuView(for: presentationStyle, with: conversation)
+            }
+        } else { // view is compact -> Always Menu
             presentMenuView(for: presentationStyle, with: conversation)
         }
     }
@@ -108,6 +117,9 @@ class MessagesViewController: MSMessagesAppViewController {
                     self?.transcriptHeight = height
                 }
             )
+            .onTapGesture {
+                self.requestPresentationStyle(.expanded)
+            }
         } else {
             TranscriptWaitingView(
                 gameState: state,
@@ -116,6 +128,9 @@ class MessagesViewController: MSMessagesAppViewController {
                     self?.transcriptHeight = height
                 }
             )
+            .onTapGesture {
+                self.requestPresentationStyle(.expanded)
+            }
         }
     }
     

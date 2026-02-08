@@ -143,7 +143,7 @@ class GameManager: ObservableObject {
     
     func loadState(_ state: GameState, isPlayersTurn: Bool, isExplicitTap: Bool, conversationID: String) { //didRecieve, didSelect calls this upon sending as well!
         //self can technically be omitted in many places here, but is written for visual clarity when compared with state variables of the same name
-        let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu)
+        let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu and hasnt tapped a bubble yet)
         let isSameSession = (self.sessionID == state.sessionID) //is this the game we are already looking at?
         let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
         
@@ -154,6 +154,10 @@ class GameManager: ObservableObject {
                 print("Action Blocked: Turn \(state.turnNumber) is not newer than \(self.turnNumber)")
             }*/
             return
+        }
+        
+        if self.sessionID != nil && !isSameSession { //we are entering a different game session!
+            resetToInit() //not sure if this needed, but its good to be safe
         }
         
         self.sessionID = state.sessionID
@@ -200,6 +204,21 @@ class GameManager: ObservableObject {
                 phase = .idlePhase
             }
         }
+    }
+    
+    private func resetToInit() {
+        self.sessionID = nil
+        self.playerHand = []
+        self.opponentHand = []
+        self.deck = []
+        self.discardPile = []
+        self.phase = .animationPhase
+        self.opponentDrewFromDeck = false
+        self.indexDrawnTo = nil
+        self.indexDiscardedFrom = nil
+        self.playerHasWon = false
+        self.opponentHasWon = false
+        self.turnNumber = 0
     }
     
     private func applyOpponentTurnVisuals(state: GameState) -> Bool {

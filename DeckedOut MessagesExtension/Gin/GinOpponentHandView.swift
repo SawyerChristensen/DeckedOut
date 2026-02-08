@@ -44,16 +44,21 @@ struct OpponentHandView: View {
                 let isAnimating = (animatingCard == card)
                 let index = cards.firstIndex(of: card)!
                 let angle = Angle.degrees(Double(index - cards.count/2) * -fanningAngle)
-                //print(isAnimating)
-                //print(-abs(Double(index - cards.count / 2) * 5))
+                let revealRotation = game.opponentHasWon ? 360 : normalRotation
                 
-                CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : normalRotation)
+                CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : revealRotation)
                     .zIndex(Double(index))
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)
                     .rotationEffect(isAnimating ? animationRotationCorrection : angle)
                     .offset(y: -abs(Double(index - cards.count / 2) * 5))
                     .offset(isAnimating ? animationOffset : .zero)
                     .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20))
+                    .animation(
+                        game.opponentHasWon
+                            ? .spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1)
+                            : nil,
+                        value: game.opponentHasWon // Trigger when this value changes
+                    )
                     .background( // capture the global frame of this specific slot
                         GeometryReader { geo in
                             Color.clear
@@ -101,13 +106,6 @@ struct OpponentHandView: View {
                             }
                         }
                     }
-                }
-            }
-        }
-        .onChange(of: game.opponentHasWon) { _, opponentJustWon in
-            if opponentJustWon {
-                withAnimation(.spring(response: 0.8, dampingFraction: 0.7)) {
-                    normalRotation = 0
                 }
             }
         }

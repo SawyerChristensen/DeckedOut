@@ -1,6 +1,6 @@
--make live layouts tappable! They currently lock you out of the game!
+-make live layouts tappable! They currently lock you out of the game! (DONE)
 
--test if current flip rotation stuff works in every scenario (winning flip!)
+-test if current flip rotation stuff works in every scenario (winning flip!) (DONE)
 
 -padding on normal caption text might be weird
 

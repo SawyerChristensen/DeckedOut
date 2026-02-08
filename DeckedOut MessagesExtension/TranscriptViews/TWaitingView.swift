@@ -11,10 +11,11 @@ struct TranscriptWaitingView: View {
     let gameState: GameState
     let isFromMe: Bool
     var onHeightChange: ((CGFloat) -> Void)? = nil
+    
     private var cards: [Card] { isFromMe ? gameState.senderHand : gameState.receiverHand }
 
     var body: some View {
-        VStack() {
+        VStack {
             
             TranscriptPlayerHandView(cards: cards)
                 .offset(y: 50)
