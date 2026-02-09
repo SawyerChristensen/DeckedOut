@@ -55,7 +55,7 @@ struct CaptionTextView: View { //this is currently working fine, but not as orig
     
     var body: some View {
         Group {
-            if isWaiting {
+            if isWaiting && altText != "I won in Gin!" {
                 ViewThatFits(in: .horizontal) {
                     singleLineView //try this first, if it doesnt...
                     

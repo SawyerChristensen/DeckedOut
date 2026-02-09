@@ -46,8 +46,8 @@ struct TranscriptPlayerHandView: View {
                     .rotationEffect(opponentWon ? -angle : angle)
                     .offset(y: opponentWon ? -yOffset : yOffset)
                     .shadow(color:  opponentWon ? .red.opacity(0.8) :
-                                    (playerWon ? .yellow.opacity(0.8) :
-                                    (cardFlipTrigger ? .white.opacity(0.5) : .black.opacity(0.15))),
+                                (cardFlipTrigger ? .white.opacity(0.5) :
+                                    (playerWon ? .yellow.opacity(0.8) : .black.opacity(0.15))), //a little too elaborate but it works
                             radius: 10) //figure out shadow compatibility with animation
                     .animation(
                         .spring(response: 0.6, dampingFraction: 0.7)
