@@ -33,13 +33,11 @@ struct Card: Equatable, Identifiable, Codable { //Codable: needed to encode with
     }
 }
 
+
 public enum Suit: Int, CaseIterable, Codable { /// CaseIterable lets us loop through all suits easily.
-    case spades = 0
-    case hearts = 1
-    case diamonds = 2
-    case clubs = 3
+    case spades, hearts, diamonds, clubs // 0, 1, 2, 3
     
-    var stringValue: String {
+    var stringValue: String { //used in the backend to fetch image names (see struct Card)
         switch self {
         case .spades: return "Spades"
         case .hearts: return "Hearts"
@@ -47,25 +45,23 @@ public enum Suit: Int, CaseIterable, Codable { /// CaseIterable lets us loop thr
         case .clubs: return "Clubs"
         }
     }
+    
+    var localizedName: String { //user facing text in message summaries
+        switch self {
+        case .spades:   return String(localized: "Spades", comment: "Card suit: Spades")
+        case .hearts:   return String(localized: "Hearts", comment: "Card suit: Hearts")
+        case .diamonds: return String(localized: "Diamonds", comment: "Card suit: Diamonds")
+        case .clubs:    return String(localized: "Clubs", comment: "Card suit: Clubs")
+        }
+    }
 }
+
 
 ///Ace is treated as a low card here! Might want to change later depending on game!
 public enum Rank: Int, CaseIterable, Codable { // note the values are 0 indexed! they do not match their english values!
-    case ace = 0
-    case two = 1
-    case three = 2
-    case four = 3
-    case five = 4
-    case six = 5
-    case seven = 6
-    case eight = 7
-    case nine = 8
-    case ten = 9
-    case jack = 10
-    case queen = 11
-    case king = 12
+    case ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king // ace = 0, two = 1, three = 2...
     
-    var stringValue: String {
+    var stringValue: String { //used in the backend to fetch image names (see struct Card)
         switch self {
         case .ace: return "ace"
         case .two: return "2"
@@ -82,7 +78,20 @@ public enum Rank: Int, CaseIterable, Codable { // note the values are 0 indexed!
         case .king: return "king"
         }
     }
+    
+    var localizedName: String { //user facing text in message summaries
+        switch self {
+        case .ace:   return String(localized: "Ace", comment: "Card rank: Ace")
+        case .jack:  return String(localized: "Jack", comment: "Card rank: Jack")
+        case .queen: return String(localized: "Queen", comment: "Card rank: Queen")
+        case .king:  return String(localized: "King", comment: "Card rank: King")
+        default:
+            // for 2-10, we just return the number. Numbers dont need to be translated
+            return String(self.rawValue + 1)
+        }
+    }
 }
+
 
 struct Deck {
     var cards: [Card]

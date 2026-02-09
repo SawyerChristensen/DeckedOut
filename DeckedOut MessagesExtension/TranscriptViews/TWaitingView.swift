@@ -12,16 +12,19 @@ struct TranscriptWaitingView: View {
     let isFromMe: Bool
     var onHeightChange: ((CGFloat) -> Void)? = nil
     
-    private var cards: [Card] { isFromMe ? gameState.senderHand : gameState.receiverHand }
-
+    private var playersHand: [Card] { isFromMe ? gameState.senderHand : gameState.receiverHand }
+    private var opponentsHand: [Card] { isFromMe ? gameState.receiverHand : gameState.senderHand }
+    private var playerWon: Bool { GinRummyValidator.canMeldAllCards(hand: playersHand) }
+    private var opponentWon: Bool { GinRummyValidator.canMeldAllCards(hand: opponentsHand) }
+    
     var body: some View {
         VStack {
             
-            TranscriptPlayerHandView(cards: cards)
-                .offset(y: 50)
+            TranscriptPlayerHandView(cards: opponentWon ? opponentsHand : playersHand, playerWon: playerWon, opponentWon: opponentWon)
+                .offset(y: opponentWon ? -30 : 50)
                 .frame(height: 150)
                 
-            CaptionTextView(isWaiting: isFromMe, altText: "Your turn in Gin!")
+            CaptionTextView(isWaiting: isFromMe, altText: opponentWon || playerWon ? "I won in Gin!" : "Your turn in Gin!")
             
         }
         .background( //for measuring & reporting the view height
@@ -40,6 +43,7 @@ struct TranscriptWaitingView: View {
             .aspectRatio(contentMode: .fill)
         )
     }
+        
 }
 
 

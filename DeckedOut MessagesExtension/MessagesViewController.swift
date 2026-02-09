@@ -104,14 +104,14 @@ class MessagesViewController: MSMessagesAppViewController {
     
     // MARK: - Helper functions
     private func presentTranscriptView(for state: GameState, isFromMe: Bool) {
-        let rootView = makeTranscriptView(for: state, isFromMe: isFromMe)
+        let rootView = decideTranscriptView(for: state, isFromMe: isFromMe)
         let transcriptViewController = UIHostingController(rootView: rootView)
         presentView(transcriptViewController)
     }
     
     @ViewBuilder
-    private func makeTranscriptView(for state: GameState, isFromMe: Bool) -> some View {
-        if state.turnNumber == 0 {
+    private func decideTranscriptView(for state: GameState, isFromMe: Bool) -> some View {
+        if state.turnNumber == 0 { //its a game invite
             TranscriptInviteView(
                 onHeightChange: { [weak self] height in
                     self?.transcriptHeight = height
@@ -230,11 +230,17 @@ class MessagesViewController: MSMessagesAppViewController {
         let templateLayout = MSMessageTemplateLayout()
         if gameManager.playerHasWon {
             templateLayout.image = UIImage(named: "GinGameWon")
-            templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "")
+            templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "iMessage layout win caption")
+            message.summaryText = NSLocalizedString("I won in Gin!", comment: "iMessage win message summary")
         } else {
             templateLayout.image = UIImage(named: "GinDefault")
             templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "iMessage layout caption")
-            message.summaryText = NSLocalizedString("Gin", comment: "1st iMessage summary text") } //change this to the card they discarded
+            if let discardedCard = gameManager.discardPile.last {
+                message.summaryText = String(localized: "Discarded \(discardedCard.rank.localizedName) of \(discardedCard.suit.localizedName)")
+            } else {
+                message.summaryText = NSLocalizedString("Gin", comment: "Fallback iMessage summary text") //should never execute
+            }
+        }
         
         let liveLayout = MSMessageLiveLayout(alternateLayout: templateLayout)
         message.layout = liveLayout

@@ -65,9 +65,13 @@ struct GinGameView: View {
                         }
                     }
                     .onTapGesture {
-                        game.drawFromDeck()
-                        drewFromDeck = true
-                        if game.phase == .drawPhase { SoundManager.instance.playCardDeal() } //maybe add an error noise/message in an else statement?
+                        if game.phase == .drawPhase {
+                            game.drawFromDeck()
+                            drewFromDeck = true
+                            SoundManager.instance.playCardDeal()
+                        } else {
+                            SoundManager.instance.playErrorFeedback()
+                        }
                     }
                     
                     Spacer()
@@ -89,12 +93,17 @@ struct GinGameView: View {
                         if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
                             CardView(frontImage: topCard.imageName)
                                 .onTapGesture {
-                                    game.drawFromDiscard()
-                                    drewFromDiscard = true
-                                    if game.phase == .drawPhase { SoundManager.instance.playCardDeal() }
+                                    if game.phase == .drawPhase {
+                                        game.drawFromDiscard()
+                                        drewFromDiscard = true
+                                        SoundManager.instance.playCardDeal()
+                                    } else {
+                                        SoundManager.instance.playErrorFeedback()
+                                    }
                                 }
-                                .shadow(color: isHoveringDiscard ? .white.opacity(1) : .black.opacity(0.2), radius: isHoveringDiscard ? 15 : 5)
-                                .scaleEffect(isHoveringDiscard ? 1.05 : 1.0)
+                                .shadow(color: game.phase == .discardPhase && isHoveringDiscard ? .white : .black.opacity(0.2),
+                                        radius: game.phase == .discardPhase && isHoveringDiscard ? 15 : 5)
+                                .scaleEffect(game.phase == .discardPhase && isHoveringDiscard ? 1.05 : 1.0)
                                 .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
                         } else { // display an outline of where a discarded card *should* go
                             RoundedRectangle(cornerRadius: 8)
@@ -193,14 +202,16 @@ struct GinGameView: View {
     }
 
     func handleDragEnded(card: Card, location: CGPoint) {
-        isHoveringDiscard = false
         if discardFrame.contains(location) {
-            withAnimation(.spring(response: 0.3)) {
+            if game.phase == .discardPhase {
                 game.discardCard(card: card)
+            } else {
+                SoundManager.instance.playErrorFeedback()
             }
         } else {
             //print("Drop → No zone, card returns")
         }
+        isHoveringDiscard = false
     }
-
+    
 }

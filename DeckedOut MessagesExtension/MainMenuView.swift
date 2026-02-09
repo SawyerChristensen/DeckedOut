@@ -13,7 +13,6 @@ struct MainMenuView: View {
     //@Environment(\.locale) var locale //for language detection
     @ObservedObject var viewModel: MenuViewModel
     var onStartGame: (Int) -> Void //triggers createGame in MessagesViewController
-    //can add win counts?
     @State private var cardsAnimatedAway = 0
     
     @State private var card7Image: String = ""
@@ -30,12 +29,12 @@ struct MainMenuView: View {
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
             
-            /*LinearGradient(
+            LinearGradient(
                 gradient: Gradient(colors: [Color.white.opacity(0.1), Color.black.opacity(0.1)]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()*/
+            .ignoresSafeArea()
 
             // Layout based on current presentation style
             if viewModel.presentationStyle == .expanded {
@@ -78,7 +77,7 @@ struct MainMenuView: View {
         ZStack {
             let winCount = WinTracker.shared.getWinCount()
             if winCount == 0 {
-                Text("Wins: \(winCount)\n\nBetter start!")
+                Text("Wins: \(winCount)\n\nGood luck!")
                     .font(.system(size: 20, weight: .semibold, design: .serif))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
@@ -130,7 +129,14 @@ struct MainMenuView: View {
                     }
                 )
                 .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 2))
-                //.shadow(color: .white.opacity(0.1), radius: 15)
+                /*.phaseAnimator([0, 1]) { content, phase in
+                    content
+                        .scaleEffect(phase == 1 ? 1.05 : 1.0)
+                        //.shadow(color: .white.opacity(phase == 1 ? 0.2 : 0), radius: 10)
+                } animation: { phase in
+                    .easeInOut(duration: 1) // 1 second
+                }*/
+                .shadow(color: .black.opacity(0.2), radius: 5, x: 5, y: 5)
         }
         .buttonStyle(PlainButtonStyle())
     }

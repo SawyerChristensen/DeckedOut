@@ -9,14 +9,17 @@ import Foundation
 import UIKit //only for haptics
 import AVFoundation
 
-class SoundManager {
+class SoundManager { //ALSO HANDLES HAPTICS (seperate later?)
     static let instance = SoundManager()
     private var cardDealPlayer: AVAudioPlayer?
     private var cardSlapPlayer: AVAudioPlayer?
     private var gameOverPlayer: AVAudioPlayer?
     
-    //private let lightImpact = UIImpactFeedbackGenerator(style: .light) //haptics
+    // Haptics
+    private let selectionFeedback = UISelectionFeedbackGenerator()
+    //private let softImpact = UIImpactFeedbackGenerator(style: .soft)
     private let mediumImpact = UIImpactFeedbackGenerator(style: .medium)
+    private let hapticNotificatoins = UINotificationFeedbackGenerator()
 
     private init() {
         if let dealUrl = Bundle.main.url(forResource: "CardDeal", withExtension: "wav") {
@@ -29,19 +32,30 @@ class SoundManager {
             cardSlapPlayer?.volume = 0.15
             cardSlapPlayer?.prepareToPlay()
         }
-        //lightImpact.prepare()
+        selectionFeedback.prepare()
+        //softImpact.prepare()
         mediumImpact.prepare()
+        hapticNotificatoins.prepare()
     }
 
     func playCardDeal() {
-        cardDealPlayer?.currentTime = 0
+        cardDealPlayer?.currentTime = 0 //is the redundant? doesnt it default to the start?
         cardDealPlayer?.play()
+        //softImpact.impactOccurred()
     }
     
     func playCardSlap() {
         cardSlapPlayer?.currentTime = 0
         cardSlapPlayer?.play()
         mediumImpact.impactOccurred()
+    }
+    
+    func playCardReorder() {
+        selectionFeedback.selectionChanged()
+    }
+    
+    func playErrorFeedback() {
+        hapticNotificatoins.notificationOccurred(.error)
     }
     
     func playGameWin(didWin: Bool) {

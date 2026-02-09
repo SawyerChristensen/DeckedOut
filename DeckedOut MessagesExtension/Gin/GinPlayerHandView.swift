@@ -155,8 +155,7 @@ struct PlayerHandView: View {
         
         if predictedDropIndex != newIndex {
             predictedDropIndex = newIndex
-            let impact = UIImpactFeedbackGenerator(style: .light) //haptic feedback
-            impact.impactOccurred()
+            SoundManager.instance.playCardReorder()
         }
     }
     

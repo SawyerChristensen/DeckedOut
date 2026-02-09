@@ -14,8 +14,8 @@ struct TranscriptInviteView: View {
         VStack() {
             
             TranscriptInviteHandView()
-                .offset(y: 33)
-                .frame(height: 133)
+                .offset(y: 40)
+                .frame(height: 150)
                 
             CaptionTextView(isWaiting: false, altText: "Let's Play Gin!") //technically the player IS waiting, but that bool is to display "waiting for opponent..." or not
             

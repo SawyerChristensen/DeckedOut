@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TranscriptPlayerHandView: View {
     let cards: [Card]
+    let playerWon: Bool
+    let opponentWon: Bool
     
     @State private var cardFlipTrigger: Bool = false
     @State private var cardsAreExpanded: Bool = false
@@ -26,6 +28,7 @@ struct TranscriptPlayerHandView: View {
             ForEach(Array(cards.enumerated()), id: \.offset) { index, card in
             
                 let angle = Angle.degrees(Double(index - cards.count/2) * fanningAngle)
+                let yOffset = abs(Double(index - cards.count / 2) * 5)
                 let cardFlipsCompletely = cards.count == 7 && (index == 1 || index == 3 || index == 5) //make one for 10 as well
                 let currentRotation = cardFlipTrigger ? (cardFlipsCompletely ? 180.0 : 90.0) : 0
                 let backLetter: String? = {
@@ -39,10 +42,13 @@ struct TranscriptPlayerHandView: View {
                 
                 CardView(frontImage: card.imageName, rotation: currentRotation, backLetter: backLetter)
                     .frame(width: cardWidth, height: cardHeight)
-                    .zIndex(Double(index))
-                    .rotationEffect(angle)
-                    .offset(y: abs(Double(index - cards.count / 2) * 5))
-                    .shadow(color: cardFlipTrigger ? .white.opacity(0.5) : .black.opacity(0.15), radius: 5) //figure out shadow compatibility with animation
+                    .zIndex(Double(opponentWon ? -index : index))
+                    .rotationEffect(opponentWon ? -angle : angle)
+                    .offset(y: opponentWon ? -yOffset : yOffset)
+                    .shadow(color:  opponentWon ? .red.opacity(0.8) :
+                                    (playerWon ? .yellow.opacity(0.8) :
+                                    (cardFlipTrigger ? .white.opacity(0.5) : .black.opacity(0.15))),
+                            radius: 10) //figure out shadow compatibility with animation
                     .animation(
                         .spring(response: 0.6, dampingFraction: 0.7)
                         .delay(Double(index) * 0.2), //or "dampingFraction: cardFlipTrigger ? 1 : 0.7)"
