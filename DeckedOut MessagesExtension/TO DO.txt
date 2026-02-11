@@ -1,3 +1,7 @@
+-fix game session switching without having to close iMessage
+
+-resolve out of order opponent game win flip animation (last card (the animated one) starts a little early)
+
 -resolve card differences between cards being size 140 or 145
 
 -make "start game" main menu text pulsate in scale?
@@ -7,6 +11,8 @@
 -see if discard animation actually works (proper animation to discard pile)
 
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
+
+-improve 10 card transcript view
 
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that...
 
@@ -59,9 +65,11 @@ QOL changes:
 -didCancelSending puts the card back on the deck? little easter egg. look into what didCancelSending actually does (low priority)
 -do we really need a gin root view or is initializing the game view good enough? (doesnt really matter now)
 -in present view do we need to dismiss any pop up windows? (doesnt really matter)
+-somehow clear a midturn save if the user resumed play on another device?
 
 
 Optimizations:
+-look into .constant binding thing in ginPlayerView?
 -look into background threating of logic vs main threading of UI
 -look into what variables in GameManager have to be @Published.
 -remove self in game manager when it isnt needed for clarity
@@ -69,7 +77,6 @@ Optimizations:
 -does isFaceUp need to be a passed variable?
 -init in player hand view should be in main body, not the extension
 -figure out audio session failure print statement
--is isExplicitTap really needed?
 
 
 Possible name for if other games are added:

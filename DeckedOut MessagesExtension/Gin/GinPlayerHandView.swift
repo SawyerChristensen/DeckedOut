@@ -12,11 +12,9 @@ struct PlayerHandView: View {
     
     //Passed Arguments
     @Binding var cards: [Card]
-    let isFaceUp: Bool
     var discardPileZone: CGRect? = nil
     var deckZone: CGRect? = nil
-    let drewFromDiscard: Bool
-    let drewFromDeck: Bool
+    let lastDrawSource: DrawSource
     
     // Callbacks for zoning
     var onDragChanged: ((Card, CGPoint) -> Void)? = nil
@@ -49,8 +47,9 @@ struct PlayerHandView: View {
                 let isAnimating = animatingCard == card
                 let index = cards.firstIndex(of: card)!
                 let visualIndex = calculateVisualIndex(for: index)
+                //let centerIndex = Double(cards.count - 1) / 2.0
                 
-                let angle = Angle.degrees(Double(visualIndex - cards.count/2) * fanningAngle)
+                let angle = Angle.degrees(Double(visualIndex - cards.count/2) * fanningAngle) //can maybe replace with centerIndex later
                 let yOffset = abs(Double(visualIndex - cards.count/2) * fanningOffset)
                 let stride = cardWidth + spacing
                 let xOffset = CGFloat(visualIndex - index) * stride
@@ -97,7 +96,12 @@ struct PlayerHandView: View {
                         )
                         .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
                             guard index == cards.count - 1 else { return }
-                            let sourceZone = drewFromDiscard ? discardPileZone : (drewFromDeck ? deckZone : nil) //they might default to nil anyway...
+                            let sourceZone: CGRect?
+                                switch lastDrawSource {
+                                case .deck: sourceZone = deckZone
+                                case .discard: sourceZone = discardPileZone
+                                case .none: sourceZone = nil
+                                }
                             if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
                                 animatingCard = card
                                 animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
@@ -121,9 +125,9 @@ struct PlayerHandView: View {
             height: drawZone.midY - cardFrame.midY
         )
         
-        if drewFromDeck {
+        if lastDrawSource == .deck {
             flipRotation = 180
-        } else {
+        } else { //assuming .discard
             flipRotation = 0
         }
         
@@ -134,7 +138,7 @@ struct PlayerHandView: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animationOffset = .zero
             animationRotationCorrection = fanAngle
-            if drewFromDeck {
+            if lastDrawSource == .deck {
                 flipRotation = 0
             }
         }
@@ -241,13 +245,11 @@ struct PlayerHandView: View {
 }
 
 extension PlayerHandView {
-    init(cards: [Card], isFaceUp: Bool, discardPileZone: CGRect, deckZone: CGRect, drewFromDiscard: Bool, drewFromDeck: Bool) {
+    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect, lastDrawSource: DrawSource) {
         self._cards = .constant(cards)  // Creates a constant binding
-        self.isFaceUp = isFaceUp
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
-        self.drewFromDiscard = drewFromDiscard
-        self.drewFromDeck = drewFromDeck
+        self.lastDrawSource = lastDrawSource
     }
 }
 

@@ -29,13 +29,18 @@ struct TranscriptPlayerHandView: View {
             
                 let angle = Angle.degrees(Double(index - cards.count/2) * fanningAngle)
                 let yOffset = abs(Double(index - cards.count / 2) * 5)
-                let cardFlipsCompletely = cards.count == 7 && (index == 1 || index == 3 || index == 5) //make one for 10 as well
+                let cardFlipsCompletely =   ([7, 8].contains(cards.count) && [1, 3, 5].contains(index)) ||
+                                            ([10, 11].contains(cards.count) && [2, 4, 6, 8].contains(index))
                 let currentRotation = cardFlipTrigger ? (cardFlipsCompletely ? 180.0 : 90.0) : 0
                 let backLetter: String? = {
                     switch index {
                     case 1: return "G"
+                    case 2: return "G"
                     case 3: return "I"
+                    case 4: return "I"
                     case 5: return "N"
+                    case 6: return "N"
+                    case 8: return "!"
                     default: return nil
                     }
                 }()

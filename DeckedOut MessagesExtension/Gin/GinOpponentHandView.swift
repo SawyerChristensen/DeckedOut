@@ -11,14 +11,12 @@ struct OpponentHandView: View {
     @EnvironmentObject var game: GameManager
     
     //Passed Arguments
-    @Binding var cards: [Card]
-    let isFaceUp: Bool
+    let cards: [Card]
     var discardPileZone: CGRect? = nil
     var deckZone: CGRect? = nil
     
-    init(cards: [Card], isFaceUp: Bool, discardPileZone: CGRect, deckZone: CGRect) {
-        self._cards = .constant(cards)  // Creates a constant binding
-        self.isFaceUp = isFaceUp
+    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect) {
+        self.cards = cards
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
     }
@@ -44,7 +42,7 @@ struct OpponentHandView: View {
                 let isAnimating = (animatingCard == card)
                 let index = cards.firstIndex(of: card)!
                 let angle = Angle.degrees(Double(index - cards.count/2) * -fanningAngle)
-                let revealRotation = game.opponentHasWon ? 360 : normalRotation
+                let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
                 
                 CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : revealRotation)
                     .zIndex(Double(index))
@@ -53,11 +51,8 @@ struct OpponentHandView: View {
                     .offset(y: -abs(Double(index - cards.count / 2) * 5))
                     .offset(isAnimating ? animationOffset : .zero)
                     .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20))
-                    .animation(
-                        game.opponentHasWon
-                            ? .spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1)
-                            : nil,
-                        value: game.opponentHasWon // Trigger when this value changes
+                    .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
+                        value: game.opponentHasWon || game.playerHasWon // trigger when this value changes
                     )
                     .background( // capture the global frame of this specific slot
                         GeometryReader { geo in
@@ -77,6 +72,7 @@ struct OpponentHandView: View {
         .onChange(of: cards) { oldHand, newHand in
             if newHand.count > oldHand.count,
                 let drawIndex = game.indexDrawnTo { //the opponent is drawing!
+                guard animatingCard == nil else { return }
                 
                 let card = newHand[drawIndex]
                 cardWaitingToAnimate = card

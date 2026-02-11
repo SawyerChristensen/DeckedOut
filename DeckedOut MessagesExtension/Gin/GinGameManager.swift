@@ -22,6 +22,8 @@ struct GameState: Codable {
 
 // MARK: The Game Engine
 class GameManager: ObservableObject {
+    static let shared = GameManager()
+    
     @Published var sessionID: UUID? = nil
     @Published var playerHand: [Card] = []
     @Published var opponentHand: [Card] = []
@@ -35,9 +37,9 @@ class GameManager: ObservableObject {
     @Published var opponentHasWon: Bool = false //stays local
     @Published var turnNumber: Int = 0
     
-    var hasPerformedInitialLoad: Bool = false //stays local
+    var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     
-    init() {} // values are already initialized here ^
+    private init() {} // values are already initialized here ^
     
     // The View Controller will listen to this to know when to send the message
     var onTurnCompleted: ((GameState) -> Void)?
@@ -105,9 +107,7 @@ class GameManager: ObservableObject {
     }
     
     func opponentDiscardCard(card: Card) { //pseudo discard
-        //print("opponent attempting to discard...")
         guard phase == .animationPhase else {
-            //print("not animation phase! skipping!")
             return }
         opponentHand.remove(at: indexDiscardedFrom!)
         discardPile.append(card)
@@ -116,7 +116,9 @@ class GameManager: ObservableObject {
         if opponentHasWon {
             SoundManager.instance.playGameWin(didWin: false)
             phase = .gameEndPhase
-        } else { phase = .drawPhase }
+        } else {
+            phase = .drawPhase
+        }
     }
     
     private func reshuffleDiscardIntoDeck() { //for when the deck count is 1 (could be refactored)
@@ -141,13 +143,13 @@ class GameManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
     }
     
-    func loadState(_ state: GameState, isPlayersTurn: Bool, isExplicitTap: Bool, conversationID: String) { //didRecieve, didSelect calls this upon sending as well!
+    func loadState(_ state: GameState, isPlayersTurn: Bool, conversationID: String) { //didRecieve, didSelect calls this upon sending as well!
         //self can technically be omitted in many places here, but is written for visual clarity when compared with state variables of the same name
         let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu and hasnt tapped a bubble yet)
         let isSameSession = (self.sessionID == state.sessionID) //is this the game we are already looking at?
         let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
         
-        guard isInitialLoad || isExplicitTap || (isSameSession && isNewTurn) else { //allow if: (We haven't loaded a session yet) OR (It is the same session AND theres progress in the session)
+        guard isInitialLoad || (isSameSession && isNewTurn) else { //(if any are true) allow if: (We haven't loaded a session yet) OR (It is the same session AND theres progress in the session)
             /*if !isSameSession && !isInitialLoad {
                 print("Action Blocked: User tried to load session \(state.sessionID) while active in \(self.sessionID!)")
             } else {
@@ -161,6 +163,7 @@ class GameManager: ObservableObject {
         }
         
         self.sessionID = state.sessionID
+        self.turnNumber = state.turnNumber
         self.deck = state.deck
         self.discardPile = state.discardPile
         

@@ -14,8 +14,7 @@ struct GinGameView: View {
     
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
-    @State private var drewFromDiscard: Bool = false
-    @State private var drewFromDeck: Bool = false
+    @State private var lastDrawSource: DrawSource = .none
     @State private var isHoveringDiscard: Bool = false
 
     var body: some View {
@@ -28,7 +27,7 @@ struct GinGameView: View {
             
             VStack {
                 // Opponent's Hand
-                OpponentHandView(cards: game.opponentHand, isFaceUp: false, discardPileZone: discardFrame, deckZone: deckFrame) //maybe replace isFaceUp here and in player hand...
+                OpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame) //maybe replace isFaceUp here and in player hand...
                 //.shadow(color: game.opponentHasWon ? .yellow : .yellow.opacity(0.0), radius: 20 )
                     .padding(.top, 30)
                     .zIndex(2)
@@ -67,7 +66,7 @@ struct GinGameView: View {
                     .onTapGesture {
                         if game.phase == .drawPhase {
                             game.drawFromDeck()
-                            drewFromDeck = true
+                            lastDrawSource = .deck
                             SoundManager.instance.playCardDeal()
                         } else {
                             SoundManager.instance.playErrorFeedback()
@@ -95,7 +94,7 @@ struct GinGameView: View {
                                 .onTapGesture {
                                     if game.phase == .drawPhase {
                                         game.drawFromDiscard()
-                                        drewFromDiscard = true
+                                        lastDrawSource = .discard
                                         SoundManager.instance.playCardDeal()
                                     } else {
                                         SoundManager.instance.playErrorFeedback()
@@ -124,11 +123,9 @@ struct GinGameView: View {
                 // Player's hand
                 PlayerHandView(
                     cards: $game.playerHand,
-                    isFaceUp: true,
                     discardPileZone: discardFrame,
                     deckZone: deckFrame,
-                    drewFromDiscard: drewFromDiscard,
-                    drewFromDeck: drewFromDeck,
+                    lastDrawSource: lastDrawSource,
                     onDragChanged: { card, location in
                         handleDragChanged(card: card, location: location)
                     },
@@ -153,20 +150,15 @@ struct GinGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
-        .task { //triggers every UI reinit and waits 0.5 (which is currently every move)
+        .task { //triggers every view reinit! our presentGameView currently blocks rebuilding if the game is already presented
             if !game.hasPerformedInitialLoad{
                 do {
                     try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                    animateOpponentsTurn()
                 } catch { }
-            } else {
-                animateOpponentsTurn() }
-        }
-        /*.onChange(of: game.phase) { _ , newPhase in //or "oldPhase" "newPhase"
-            if game.phase == .animationPhase {
-                animateOpponentsTurn()
             }
-        }*/
+            
+            animateOpponentsTurn()
+        }
     }
     
     //MARK: - Game View Helper functions (technically global scope)
@@ -212,6 +204,13 @@ struct GinGameView: View {
             //print("Drop → No zone, card returns")
         }
         isHoveringDiscard = false
+        
     }
     
+}
+
+enum DrawSource {
+    case deck
+    case discard
+    case none
 }

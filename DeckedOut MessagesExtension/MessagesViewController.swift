@@ -14,7 +14,7 @@ class MessagesViewController: MSMessagesAppViewController {
     
     private var menuViewModel: MenuViewModel? //what keeps track of if the menu is compact/extended
     private var transcriptHeight: CGFloat = 200 //default fallback transcript live layout height. should never be 200. if it does, be suspicious...
-    let gameManager = GameManager()//Le Game Engine
+    let gameManager = GameManager.shared //Le Game Engine
     
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
@@ -41,15 +41,15 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: - Conversation Handling
     override func willBecomeActive(with conversation: MSConversation) {
         super.willBecomeActive(with: conversation)
-        guard let message = conversation.selectedMessage, // If there's no message to select, the user is likely opening the main menu from the app drawer
-              let decodedState = extractState(from: message) else { return }
+        guard let message = conversation.selectedMessage, // Do we have a message? Can we decode it?
+              let decodedState = extractState(from: message) else { return } // If there's no message to select, the user is likely opening the main menu from the app drawer
         
         let isFromMe = !conversation.remoteParticipantIdentifiers.contains(message.senderParticipantIdentifier)
         
         if presentationStyle == .transcript {
             presentTranscriptView(for: decodedState, isFromMe: isFromMe)
         } else {
-            loadGameStateToMemory(from: message, conversation: conversation, isExplicitTap: true)
+            loadGameStateToMemory(from: message, conversation: conversation)
         }
     }
     
@@ -64,13 +64,13 @@ class MessagesViewController: MSMessagesAppViewController {
     
     override func didSelect(_ message: MSMessage, conversation: MSConversation) {
         super.didSelect(message, conversation: conversation)
-        loadGameStateToMemory(from: message, conversation: conversation, isExplicitTap: true) //is it actually always true here???
+        loadGameStateToMemory(from: message, conversation: conversation)
         presentGameView()
     }
    
     override func didReceive(_ message: MSMessage, conversation: MSConversation) {
         super.didReceive(message, conversation: conversation)
-        loadGameStateToMemory(from: message, conversation: conversation, isExplicitTap: false)
+        loadGameStateToMemory(from: message, conversation: conversation)
     }
     
     override func willTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
@@ -147,7 +147,7 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     private func presentGameView() {
-        //removeAllChildViewControllers()
+        if self.children.first is UIHostingController<GinRootView> { return}
         let gameRootView = GinRootView(game: self.gameManager)
         let gameViewController = UIHostingController(rootView: gameRootView)
         
@@ -262,7 +262,7 @@ class MessagesViewController: MSMessagesAppViewController {
         return try? JSONDecoder().decode(GameState.self, from: stateData)
     }
     
-    private func loadGameStateToMemory(from message: MSMessage, conversation: MSConversation, isExplicitTap: Bool) {
+    private func loadGameStateToMemory(from message: MSMessage, conversation: MSConversation) {
         guard let decodedState = extractState(from: message) else { return }
         
         let senderID = message.senderParticipantIdentifier
@@ -270,7 +270,6 @@ class MessagesViewController: MSMessagesAppViewController {
         gameManager.loadState(
             decodedState,
             isPlayersTurn: !isFromMe,
-            isExplicitTap: isExplicitTap,
             conversationID: conversation.localParticipantIdentifier.uuidString)
     }
 }

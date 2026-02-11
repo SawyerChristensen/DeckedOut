@@ -57,12 +57,12 @@ struct CaptionTextView: View { //this is currently working fine, but not as orig
         Group {
             if isWaiting && altText != "I won in Gin!" {
                 ViewThatFits(in: .horizontal) {
-                    singleLineView //try this first, if it doesnt...
+                    singleLineView //try this first, if it doesnt fit...
                     
                     multiLineView //switch to this
                 }
             } else {
-                Text(altText)
+                Text(LocalizedStringKey(altText)) //localize the altText
             }
         }
         .font(.body)
