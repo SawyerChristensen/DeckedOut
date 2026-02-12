@@ -79,7 +79,7 @@ class GameManager: ObservableObject {
         SoundManager.instance.playCardSlap()
         playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
         if playerHasWon {
-            SoundManager.instance.playGameWin(didWin: true)
+            SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
             WinTracker.shared.incrementWins()
         } else { phase = .idlePhase }
@@ -114,7 +114,7 @@ class GameManager: ObservableObject {
         SoundManager.instance.playCardSlap()
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
         if opponentHasWon {
-            SoundManager.instance.playGameWin(didWin: false)
+            SoundManager.instance.playGameEnd(didWin: false)
             phase = .gameEndPhase
         } else {
             phase = .drawPhase
@@ -189,7 +189,7 @@ class GameManager: ObservableObject {
                 checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
                 if playerHasWon || opponentHasWon {
                     phase = .gameEndPhase
-                    SoundManager.instance.playGameWin(didWin: self.playerHasWon)
+                    SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
                 } else {
                     phase = .drawPhase
                 }
@@ -201,7 +201,7 @@ class GameManager: ObservableObject {
             playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
             if playerHasWon {
                 phase = .gameEndPhase
-                SoundManager.instance.playGameWin(didWin: self.playerHasWon)
+                SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
             } else {
                 // only enter animation phase if it's our turn to watch the opponent move
                 phase = .idlePhase

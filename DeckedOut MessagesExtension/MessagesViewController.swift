@@ -57,7 +57,12 @@ class MessagesViewController: MSMessagesAppViewController {
         return CGSize(width: size.width, height: transcriptHeight)
     }
     
-    override func didResignActive(with conversation: MSConversation) {
+    override func willResignActive(with conversation: MSConversation) { //immediate closing changes
+        SoundManager.instance.stopBackgroundMusic()
+        super.willResignActive(with: conversation)
+    }
+    
+    override func didResignActive(with conversation: MSConversation) { //after closing animation
         gameManager.saveMidTurnState(conversationID: conversation.localParticipantIdentifier.uuidString)
         super.didResignActive(with: conversation)
     }
@@ -144,15 +149,17 @@ class MessagesViewController: MSMessagesAppViewController {
                 
         presentView(UIHostingController(rootView: menuView))
         requestPresentationStyle(.compact)
+        SoundManager.instance.stopBackgroundMusic()
     }
     
     private func presentGameView() {
-        if self.children.first is UIHostingController<GinRootView> { return}
+        if self.children.first is UIHostingController<GinRootView> { return }
         let gameRootView = GinRootView(game: self.gameManager)
         let gameViewController = UIHostingController(rootView: gameRootView)
         
         presentView(gameViewController)
         requestPresentationStyle(.expanded)
+        SoundManager.instance.startBackgroundMusic()
     }
     
     private func presentView(_ viewController: UIViewController) {
@@ -273,4 +280,3 @@ class MessagesViewController: MSMessagesAppViewController {
             conversationID: conversation.localParticipantIdentifier.uuidString)
     }
 }
-
