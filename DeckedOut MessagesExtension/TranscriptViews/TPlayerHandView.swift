@@ -20,25 +20,41 @@ struct TranscriptPlayerHandView: View {
     // Constants tuned for the small iMessage bubble
     private let cardWidth: CGFloat = 120 * 0.7
     private let cardHeight: CGFloat = 120
-    private let fanningAngle: Double = 4
-    
-    private var deckHorizontalOffset: CGFloat {
-        if cards.count == 10 && cardsAreExpanded {
-            return -14.0
+    private var spacing: CGFloat {
+        if cards.count == 7 {
+            if cardsAreExpanded {
+                return -55
+            }
+            return -60
+        } else if cards.count == 10 {
+            if cardsAreExpanded {
+                return -58
+            }
+            return -63
         }
+        return -60 //should never fire...
+    }
+    private let fanningAngle: Double = 5
+    
+    private var handHorizontalOffset: CGFloat {
+        if cards.count == 10 {
+            if cardsAreExpanded {
+                return -13.0 // <- left
+            }
+            return 2.0 // right ->
+        } //if cards.count == 7...
         return 0.0
     }
-    private var deckVerticalOffset: CGFloat {
-        if cards.count == 10 && cardsAreExpanded && !opponentWon {
-            return -10.0
-        } else if cards.count == 7 && cardsAreExpanded && !opponentWon {
-            return -5.0
-        }
-        return 0.0
+    private var handVerticalOffset: CGFloat {
+        guard !opponentWon && cardsAreExpanded else { return 0.0 }
+        if cards.count == 10 {
+            return -10.0 //negative goes up
+        } //if cards.count == 7...
+        return -5.0
     }
     
     var body: some View {
-        HStack(spacing: cardsAreExpanded ? -55 : -60) {
+        HStack(spacing: spacing) {
             ForEach(Array(cards.enumerated()), id: \.offset) { index, card in
                 
                 CardView(
@@ -58,7 +74,7 @@ struct TranscriptPlayerHandView: View {
                 )
             }
         }
-        .offset(x: deckHorizontalOffset, y: deckVerticalOffset)
+        .offset(x: handHorizontalOffset, y: handVerticalOffset)
         .animation(.spring(response: 0.8, dampingFraction: 1), value: cardsAreExpanded)
         .onReceive(timer) { _ in
             handleAnimationTriggers()

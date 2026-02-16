@@ -30,23 +30,20 @@ struct OpponentHandView: View {
     @State private var normalRotation: Double = 180 //default to face down
     @State private var cardWaitingToAnimate: Card?
     
-    // Constants
-    private let cardWidth: CGFloat = 145 * 0.7
-    private let cardHeight: CGFloat = 145
-    private let spacing: CGFloat = -67
+    // Card sizing
+    private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 }
+    private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
+    private var spacing: CGFloat { cards.count >= 10 ? -72 : -66 } 
+    private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
     private let fanningAngle: Double = 4
-    
-    private func centerOffset() -> Double {
-        return Double(cards.count - 1) / 2.0
-    }
     
     var body: some View {
         HStack(spacing: spacing) {
             ForEach(cards) { card in
                 let isAnimating = (animatingCard == card)
                 let index = cards.firstIndex(of: card)!
-                let angle = Angle.degrees((Double(index) - centerOffset()) * -fanningAngle)
-                let yOffset = -abs((Double(index) - centerOffset()) * 5)
+                let angle = Angle.degrees((Double(index) - centerOffset) * -fanningAngle)
+                let yOffset = -abs((Double(index) - centerOffset) * 5)
                 let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
                 
                 CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : revealRotation)

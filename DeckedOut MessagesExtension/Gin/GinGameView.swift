@@ -135,7 +135,6 @@ struct GinGameView: View {
                 )
                 .padding(.bottom, 40)
                 .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
-                .offset(x: 5)
                 .zIndex(1)
                 
             }

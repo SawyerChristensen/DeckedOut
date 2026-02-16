@@ -32,17 +32,12 @@ struct PlayerHandView: View {
     @State private var animationRotationCorrection: Angle = .zero
     @State private var flipRotation: Double = 0
     
-    // Constants
-    private let cardWidth: CGFloat = 140 * 0.7
-    private let cardHeight: CGFloat = 140
-    private let spacing: CGFloat = -67
-    private let fanningAngle: Double = 4
-    private let fanningOffset: Double = 5
-    
-    private func centerOffset() -> Double {
-        return Double(cards.count - 1) / 2.0
-    }
-    
+    // Card sizing
+    private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 } // 140 * 0.7 & 145 * 0.7
+    private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
+    private var spacing: CGFloat { cards.count >= 10 ? -72 : -66 }
+    private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
+
     var body: some View {
         HStack(spacing: spacing) {
             ForEach(cards) { card in
@@ -51,10 +46,9 @@ struct PlayerHandView: View {
                 let isAnimating = animatingCard == card
                 let index = cards.firstIndex(of: card)!
                 let visualIndex = calculateVisualIndex(for: index)
-                //let centerIndex = Double(cards.count - 1) / 2.0
                 
-                let angle = Angle.degrees((Double(visualIndex) - centerOffset()) * fanningAngle) //can maybe replace with centerIndex later
-                let yOffset = abs((Double(visualIndex) - centerOffset()) * fanningOffset)
+                let angle = Angle.degrees((Double(visualIndex) - centerOffset) * 4) // fanningAngle = 4
+                let yOffset = abs((Double(visualIndex) - centerOffset) * 5) //fanningOffset = 5
                 let stride = cardWidth + spacing
                 let xOffset = CGFloat(visualIndex - index) * stride
                     
