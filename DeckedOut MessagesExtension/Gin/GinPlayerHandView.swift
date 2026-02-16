@@ -39,6 +39,10 @@ struct PlayerHandView: View {
     private let fanningAngle: Double = 4
     private let fanningOffset: Double = 5
     
+    private func centerOffset() -> Double {
+        return Double(cards.count - 1) / 2.0
+    }
+    
     var body: some View {
         HStack(spacing: spacing) {
             ForEach(cards) { card in
@@ -49,8 +53,8 @@ struct PlayerHandView: View {
                 let visualIndex = calculateVisualIndex(for: index)
                 //let centerIndex = Double(cards.count - 1) / 2.0
                 
-                let angle = Angle.degrees(Double(visualIndex - cards.count/2) * fanningAngle) //can maybe replace with centerIndex later
-                let yOffset = abs(Double(visualIndex - cards.count/2) * fanningOffset)
+                let angle = Angle.degrees((Double(visualIndex) - centerOffset()) * fanningAngle) //can maybe replace with centerIndex later
+                let yOffset = abs((Double(visualIndex) - centerOffset()) * fanningOffset)
                 let stride = cardWidth + spacing
                 let xOffset = CGFloat(visualIndex - index) * stride
                     
@@ -67,7 +71,8 @@ struct PlayerHandView: View {
                 GeometryReader { geo in
                     let geoFrame = geo.frame(in: .global)
                     
-                    CardView(frontImage: card.imageName, rotation: isAnimating ? flipRotation : 0)
+                    CardView(frontImage: card.imageName,
+                             rotation: isAnimating ? flipRotation : 0)
                         .rotationEffect(finalRotation)
                         .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
                         .scaleEffect(isDragging ? 1.1 : 1.0)

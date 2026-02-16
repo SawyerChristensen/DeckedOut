@@ -36,19 +36,24 @@ struct OpponentHandView: View {
     private let spacing: CGFloat = -67
     private let fanningAngle: Double = 4
     
+    private func centerOffset() -> Double {
+        return Double(cards.count - 1) / 2.0
+    }
+    
     var body: some View {
         HStack(spacing: spacing) {
             ForEach(cards) { card in
                 let isAnimating = (animatingCard == card)
                 let index = cards.firstIndex(of: card)!
-                let angle = Angle.degrees(Double(index - cards.count/2) * -fanningAngle)
+                let angle = Angle.degrees((Double(index) - centerOffset()) * -fanningAngle)
+                let yOffset = -abs((Double(index) - centerOffset()) * 5)
                 let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
                 
                 CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : revealRotation)
                     .zIndex(Double(index))
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)
                     .rotationEffect(isAnimating ? animationRotationCorrection : angle)
-                    .offset(y: -abs(Double(index - cards.count / 2) * 5))
+                    .offset(y: yOffset)
                     .offset(isAnimating ? animationOffset : .zero)
                     .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20))
                     .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),

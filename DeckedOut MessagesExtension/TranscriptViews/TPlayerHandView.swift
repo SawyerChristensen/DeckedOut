@@ -20,51 +20,116 @@ struct TranscriptPlayerHandView: View {
     // Constants tuned for the small iMessage bubble
     private let cardWidth: CGFloat = 120 * 0.7
     private let cardHeight: CGFloat = 120
-    //private let cardSpacing: CGFloat = -60
     private let fanningAngle: Double = 4
+    
+    private var deckHorizontalOffset: CGFloat {
+        if cards.count == 10 && cardsAreExpanded {
+            return -14.0
+        }
+        return 0.0
+    }
+    private var deckVerticalOffset: CGFloat {
+        if cards.count == 10 && cardsAreExpanded && !opponentWon {
+            return -10.0
+        } else if cards.count == 7 && cardsAreExpanded && !opponentWon {
+            return -5.0
+        }
+        return 0.0
+    }
     
     var body: some View {
         HStack(spacing: cardsAreExpanded ? -55 : -60) {
             ForEach(Array(cards.enumerated()), id: \.offset) { index, card in
-            
-                let angle = Angle.degrees(Double(index - cards.count/2) * fanningAngle)
-                let yOffset = abs(Double(index - cards.count / 2) * 5)
-                let cardFlipsCompletely =   ([7, 8].contains(cards.count) && [1, 3, 5].contains(index)) ||
-                                            ([10, 11].contains(cards.count) && [2, 4, 6, 8].contains(index))
-                let currentRotation = cardFlipTrigger ? (cardFlipsCompletely ? 180.0 : 90.0) : 0
-                let backLetter: String? = {
-                    switch index {
-                    case 1: return "G"
-                    case 2: return "G"
-                    case 3: return "I"
-                    case 4: return "I"
-                    case 5: return "N"
-                    case 6: return "N"
-                    case 8: return "!"
-                    default: return nil
-                    }
-                }()
                 
-                CardView(frontImage: card.imageName, rotation: currentRotation, backLetter: backLetter)
-                    .frame(width: cardWidth, height: cardHeight)
-                    .zIndex(Double(opponentWon ? -index : index))
-                    .rotationEffect(opponentWon ? -angle : angle)
-                    .offset(y: opponentWon ? -yOffset : yOffset)
-                    .shadow(color:  opponentWon ? .red.opacity(0.8) :
-                                (cardFlipTrigger ? .white.opacity(0.5) :
-                                    (playerWon ? .yellow.opacity(0.8) : .black.opacity(0.15))), //a little too elaborate but it works
-                            radius: 10) //figure out shadow compatibility with animation
-                    .animation(
-                        .spring(response: 0.6, dampingFraction: 0.7)
-                        .delay(Double(index) * 0.2), //or "dampingFraction: cardFlipTrigger ? 1 : 0.7)"
-                        value: cardFlipTrigger
-                    )
+                CardView(
+                    frontImage: card.imageName,
+                    rotation: currentRotation(for: index),
+                    backLetter: backLetter(for: index)
+                )
+                .frame(width: cardWidth, height: cardHeight)
+                .zIndex(Double(opponentWon ? -index : index))
+                .rotationEffect(opponentWon ? -angle(for: index) : angle(for: index))
+                .offset(y: opponentWon ? -yOffset(for: index) : yOffset(for: index))
+                .shadow(color: shadowColor, radius: 10)
+                .animation(
+                    .spring(response: 0.6, dampingFraction: 0.7)
+                    .delay(Double(index) * 0.2),
+                    value: cardFlipTrigger
+                )
             }
         }
+        .offset(x: deckHorizontalOffset, y: deckVerticalOffset)
         .animation(.spring(response: 0.8, dampingFraction: 1), value: cardsAreExpanded)
         .onReceive(timer) { _ in
             handleAnimationTriggers()
         }
+    }
+    
+    // MARK: - Extracted Helper Methods
+    
+    private func centerOffset() -> Double {
+        return cards.count == 7 ? 3.0 : 5
+    }
+    
+    private func angle(for index: Int) -> Angle {
+        let multiplier = Double(index) - centerOffset()
+        return Angle.degrees(multiplier * fanningAngle)
+    }
+    
+    private func yOffset(for index: Int) -> CGFloat {
+        let multiplier = Double(index) - centerOffset()
+        return CGFloat(abs(multiplier * 5.0))
+    }
+    
+    private func isFullyFlippingCard(_ index: Int) -> Bool {
+        if cards.count == 7 {
+            return [1, 3, 5].contains(index)
+        } else if cards.count == 10 {
+            return [2, 4, 6, 8].contains(index)
+        }
+        return false
+    }
+    
+    private func currentRotation(for index: Int) -> Double {
+        guard cardFlipTrigger else { return 0.0 }
+        return isFullyFlippingCard(index) ? 180.0 : 90.0
+    }
+    
+    private func backLetter(for index: Int) -> String? {
+        if cards.count == 7 {
+            switch index {
+            case 1: return "G"
+            case 3: return "I"
+            case 5: return "N"
+            default: return nil
+            }
+        } else if cards.count == 10 {
+            switch index {
+            case 2: return "G"
+            case 4: return "I"
+            case 6: return "N"
+            case 8: return "!"
+            default: return nil
+            }
+        }
+        
+        return nil
+    }
+    
+    private var shadowColor: Color {
+        if opponentWon {
+            return .red.opacity(0.8)
+        } else if cardFlipTrigger {
+            return .white.opacity(0.5)
+        } else if playerWon {
+            return .yellow.opacity(0.8)
+        } else {
+            return .black.opacity(0.15)
+        }
+    }
+    
+    private func animationResponse(for index: Int) -> Double {
+        return isFullyFlippingCard(index) ? 0.6 : 0.6
     }
     
     private func handleAnimationTriggers() {
@@ -72,13 +137,14 @@ struct TranscriptPlayerHandView: View {
             cardFlipTrigger = true
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                cardsAreExpanded = true }
-            
+                cardsAreExpanded = true
+            }
         } else {
             cardsAreExpanded = false
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                cardFlipTrigger = false }
+                cardFlipTrigger = false
+            }
         }
     }
 }
