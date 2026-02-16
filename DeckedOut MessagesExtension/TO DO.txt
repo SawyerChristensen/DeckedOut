@@ -1,27 +1,17 @@
--perfect draw location animation origin
-
 -resolve out of order opponent game win flip animation (last card (the animated one) starts a little early)
 
-
--put a transcript view black bar south of text if accessibility settings are insane
-
--fan out the hand more on 7 card hands?
-
--make "start game" main menu text pulsate in scale?
 
 -see if discard animation actually works (proper animation to discard pile)
 
 -fix game session switching without having to close iMessage
 
+*----------* UPDATE 1.3 *----------*
+
 
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
-
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that?
-
 -better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)
-
 -better transcript win screen?
-
 -make card sizing dynamic and grow card size if accessibility settings are turned on?
 
 

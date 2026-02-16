@@ -14,7 +14,7 @@ struct MainMenuView: View {
     @ObservedObject var viewModel: MenuViewModel
     var onStartGame: (Int) -> Void //triggers createGame in MessagesViewController
     @State private var cardsAnimatedAway = 0
-    
+    @State private var isPulsating = false //for the "state game" text
     @State private var card7Image: String = ""
     @State private var card10Image: String = ""
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
@@ -120,6 +120,12 @@ struct MainMenuView: View {
             Text("Start Game!")
                 .font(.system(size: 28, weight: .bold, design: .serif))
                 .foregroundColor(.white)
+                .scaleEffect(isPulsating ? 1.03 : 1)
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                        isPulsating = true
+                    }
+                }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
                 .background(
@@ -129,13 +135,6 @@ struct MainMenuView: View {
                     }
                 )
                 .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 2))
-                /*.phaseAnimator([0, 1]) { content, phase in
-                    content
-                        .scaleEffect(phase == 1 ? 1.05 : 1.0)
-                        //.shadow(color: .white.opacity(phase == 1 ? 0.2 : 0), radius: 10)
-                } animation: { phase in
-                    .easeInOut(duration: 1) // 1 second
-                }*/
                 .shadow(color: .black.opacity(0.2), radius: 5, x: 5, y: 5)
         }
         .buttonStyle(PlainButtonStyle())
