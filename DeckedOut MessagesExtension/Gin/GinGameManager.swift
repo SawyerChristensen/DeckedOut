@@ -143,13 +143,13 @@ class GameManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
     }
     
-    func loadState(_ state: GameState, isPlayersTurn: Bool, conversationID: String) { //didRecieve, didSelect calls this upon sending as well!
+    func loadState(_ state: GameState, isPlayersTurn: Bool, conversationID: String, isExplicitChange: Bool = false) {
         //self can technically be omitted in many places here, but is written for visual clarity when compared with state variables of the same name
         let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu and hasnt tapped a bubble yet)
         let isSameSession = (self.sessionID == state.sessionID) //is this the game we are already looking at?
         let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
         
-        guard isInitialLoad || (isSameSession && isNewTurn) else { //(if any are true) allow if: (We haven't loaded a session yet) OR (It is the same session AND theres progress in the session)
+        guard isInitialLoad || (isSameSession && isNewTurn) || isExplicitChange else { //(if any are true) allow if: (We haven't loaded a session yet) OR (It is the same session AND theres progress in the session) OR (the user is explicitly changing the game session)
             /*if !isSameSession && !isInitialLoad {
                 print("Action Blocked: User tried to load session \(state.sessionID) while active in \(self.sessionID!)")
             } else {
@@ -158,8 +158,8 @@ class GameManager: ObservableObject {
             return
         }
         
-        if self.sessionID != nil && !isSameSession { //we are entering a different game session!
-            resetToInit() //not sure if this needed, but its good to be safe
+        if isExplicitChange {
+            resetToInit() //may not be neccesary, but better safe than sorry (this is open to review)
         }
         
         self.sessionID = state.sessionID

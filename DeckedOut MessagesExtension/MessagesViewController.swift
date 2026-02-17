@@ -49,7 +49,10 @@ class MessagesViewController: MSMessagesAppViewController {
         if presentationStyle == .transcript {
             presentTranscriptView(for: decodedState, isFromMe: isFromMe)
         } else {
-            loadGameStateToMemory(from: message, conversation: conversation)
+            gameManager.loadState(
+                decodedState,
+                isPlayersTurn: !isFromMe,
+                conversationID: conversation.localParticipantIdentifier.uuidString)
         }
     }
     
@@ -96,7 +99,10 @@ class MessagesViewController: MSMessagesAppViewController {
             if isGameLoaded {
                 if !isShowingGame { // A game IS loaded but game isn't on screen yet -> Show it.
                     presentGameView()
-                } else { // A game is loaded and is already on screen -> Do nothing! (to prevent erroneous view reinit
+                } else { // A game is already loaded, but we may be opening a new session. load just in case
+                    if let selectedMessage = conversation.selectedMessage {
+                        loadGameStateToMemory(from: selectedMessage, conversation: conversation, isExplicitChange: true)
+                    }
                     return
                 }
             } else {  // Expanded, but no game loaded -> Show Menu
@@ -269,7 +275,7 @@ class MessagesViewController: MSMessagesAppViewController {
         return try? JSONDecoder().decode(GameState.self, from: stateData)
     }
     
-    private func loadGameStateToMemory(from message: MSMessage, conversation: MSConversation) {
+    private func loadGameStateToMemory(from message: MSMessage, conversation: MSConversation, isExplicitChange: Bool = false) {
         guard let decodedState = extractState(from: message) else { return }
         
         let senderID = message.senderParticipantIdentifier
@@ -277,6 +283,7 @@ class MessagesViewController: MSMessagesAppViewController {
         gameManager.loadState(
             decodedState,
             isPlayersTurn: !isFromMe,
-            conversationID: conversation.localParticipantIdentifier.uuidString)
+            conversationID: conversation.localParticipantIdentifier.uuidString,
+            isExplicitChange: isExplicitChange)
     }
 }

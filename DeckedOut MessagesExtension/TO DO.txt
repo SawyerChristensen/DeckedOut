@@ -1,41 +1,13 @@
--resolve out of order opponent game win flip animation (last card (the animated one) starts a little early)
-
-
--see if discard animation actually works (proper animation to discard pile)
-
--fix game session switching without having to close iMessage
-
-*----------* UPDATE 1.3 *----------*
-
-
--discard pile should look a little more random rather than a perfectly straight stack of cards?
--Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that?
--better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)
--better transcript win screen?
--make card sizing dynamic and grow card size if accessibility settings are turned on?
-
-
-*----------* UPDATE 1.3 *----------* (The Aesthetic Update)
-
-
--be able to rearrange your cards, (but not draw) during the opponents turn
-
--be able to drag from the discard pile in Gin as well as tap?
-
--add auto-sorting capability?
-
-*----------* UPDATE 1.4 *----------* (The Functionality Update)
-
-
-
 --Add other card games? Rename app if other games are added (add whole version number to each. pefect previous game before moving on)
     -Crazy 8s
     -Golf
     -Hearts
     -Spades
+    
     -Yaniv
     -Scopa?
     -Cribage?
+
 
 -update card look? maybe extra deck look option?
 -multiple deck aesthetics? could have a menu where you drag your preferred aesthetic to a pile, the pile card goes back to hand. the hand is all of the same card, aces? jacks? and you select from there which one you like most
@@ -45,17 +17,22 @@
 
 
 
-*Possible* Bugs:
--lag between finishing the discard animation and backend finish turn operations. finish animation on main thread, everything else on background thread? (doesnt seem to be an issue most of the time) (only when simulating!)
--figure out why simulator crashes upon exiting conversation view
--simulator also doesnt recognize mid turn save, but devices do
 
+QOL changes / possible updates:
+-Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that
+-discard pile should look a little more random rather than a perfectly straight stack of cards?
+-better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)
+-better transcript win screen?
+-make card sizing dynamic and grow card size if accessibility settings are turned on?
+-be able to rearrange your cards, (but not draw) during the opponents turn
+-be able to drag from the discard pile in Gin as well as tap?
+-add auto-sorting capability?
 
-QOL changes:
--make invite view wait on GIN! ?
+-make invite view wait on "GIN!"?
 -restart button from within the win view?
 -refactor the deck reshuffling logic when it reaches 0 (animation?)
 -resume button if we exit to main menu in game view?
+-make discard animation better? (low priority), current is good if not preferrable due to immediate feedback
 -block against first turn wins, (1 in ~300,000, low priority)
 -didCancelSending puts the card back on the deck? little easter egg. look into what didCancelSending actually does (low priority)
 -do we really need a gin root view or is initializing the game view good enough? (doesnt really matter now)
@@ -75,7 +52,9 @@ Optimizations:
 
 
 Possible name for if other games are added:
+Card Games for iMessage
+
+For full app:
 DeckedOut
 CardVault
 PocketDeck
-Card Games

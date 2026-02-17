@@ -163,12 +163,10 @@ struct PlayerHandView: View {
     }
     
     private func handleDragEnd(card: Card, value: DragGesture.Value, exactCenter: CGPoint) {
-        // Check if card dropped on discard pile, if user is in discard phase
-        if let discardPileZone = discardPileZone,
+        // Check if card dropped on discard pile, if user is in discard phase, animate!
+        /*if let discardPileZone = discardPileZone,
             discardPileZone.contains(value.location),
             game.phase == .discardPhase { //is checking the phase a potential race condition?
-            
-            game.indexDiscardedFrom = cards.firstIndex(of: card) //this might be redundant
             
             // Calculate the offset needed to reach discard from card's START position
             let cardStartLocation = CGPoint(
@@ -186,14 +184,15 @@ struct PlayerHandView: View {
                 dragOffset = targetOffset
             }
             
-            // After animation, notify parent to actually move the card
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 draggedCard = nil
                 dragOffset = .zero
                 predictedDropIndex = nil
+                
+                //onDragEnded?(card, value.location) //send discard information to parent
             }
             return
-        }
+        }*/
         
         // Card going back to hand, reorder hand with new card position
         if let sourceIndex = cards.firstIndex(of: card),
