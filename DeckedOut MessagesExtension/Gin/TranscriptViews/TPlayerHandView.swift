@@ -59,8 +59,8 @@ struct TranscriptPlayerHandView: View {
                 
                 CardView(
                     frontImage: card.imageName,
-                    rotation: currentRotation(for: index),
-                    backLetter: backLetter(for: index)
+                    backLetter: backLetter(for: index),
+                    rotation: currentRotation(for: index)
                 )
                 .frame(width: cardWidth, height: cardHeight)
                 .zIndex(Double(opponentWon ? -index : index))

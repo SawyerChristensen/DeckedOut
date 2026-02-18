@@ -19,6 +19,7 @@
 
 
 QOL changes / possible updates:
+-Add rules section and a notice that Aces are not high cards in gin rummy!
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
 -better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)

@@ -9,8 +9,9 @@ import SwiftUI
 
 struct CardView: View {
     let frontImage: String
-    var rotation: Double = 0 //default to face up
     var backLetter: String?
+    var cardHeight : CGFloat = 145
+    var rotation: Double = 0 //default to face up
     
     private var backImageName: String {
         if let letter = backLetter { return "\(letter)Card" }
@@ -23,7 +24,7 @@ struct CardView: View {
             Image(backImageName)
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
-                .frame(height: 145)
+                .frame(height: cardHeight)
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0)) //correcting the "mirroring" effect that distorts the image
                 .modifier(FlipOpacity(rotation: rotation + 180))
             
@@ -32,7 +33,7 @@ struct CardView: View {
             Image(frontImage)
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
-                .frame(height: 145)
+                .frame(height: cardHeight)
                 .modifier(FlipOpacity(rotation: rotation))
         }
         .rotation3DEffect(

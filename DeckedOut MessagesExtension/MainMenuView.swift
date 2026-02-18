@@ -12,18 +12,62 @@ struct MainMenuView: View {
     @Environment(\.colorScheme) var colorScheme //for light/dark theme detection
     //@Environment(\.locale) var locale //for language detection
     @ObservedObject var viewModel: MenuViewModel
+    
     var onStartGame: (Int) -> Void //triggers createGame in MessagesViewController
+    
+    @State private var handSize = 7 //full game is normally 10, but 7 is quicker and better suited for mobile
     @State private var cardsAnimatedAway = 0
     @State private var isPulsating = false //for the "state game" text
     @State private var card7Image: String = ""
     @State private var card10Image: String = ""
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
     
-    @State private var handSize = 7 //full game is normally 10, but 7 is quicker and better suited for mobile
+    @State private var titleTransitionEdge: Edge = .trailing
+    @State private var selectedGameIndex: Int = 0
+    @State private var activeGameIndex: Int = 0
+    @State private var availableGames: [MenuGame] = [
+        MenuGame(title: "Gin Rummy", logoCard: "ginRummyCard"),
+        MenuGame(title: "Crazy 8s", logoCard: "crazy8sCard"),
+        MenuGame(title: "Golf", logoCard: "golfCard"),
+        MenuGame(title: "Spades", logoCard: "spadesCard")
+    ]
+  
     
     var body: some View {
+        VStack {
+            gameTitleBar
+            
+            Spacer()
+            Spacer()
+            
+            CardWheelMenu(
+                games: availableGames,
+                selectedIndex: $selectedGameIndex,
+                // handle real-time mid-swipes updates
+                onActiveIndexChange: { newIndex in
+                    if activeGameIndex != newIndex {
+                        titleTransitionEdge = newIndex > activeGameIndex ? .trailing : .leading
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            activeGameIndex = newIndex
+                        }
+                    }
+                },
+                // handle final resting index
+                onSelect: { newIndex in
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                        selectedGameIndex = newIndex
+                        activeGameIndex = newIndex
+                    }
+                }
+            )
+            .offset(y: 50)
+        }
+        .background(backgroundLayer)
+        .onAppear { activeGameIndex = selectedGameIndex }
+    }
+    
+    private var backgroundLayer: some View {
         ZStack {
-            // Shared Background (Felt & Shading)
             Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -35,15 +79,48 @@ struct MainMenuView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-
-            // Layout based on current presentation style
-            if viewModel.presentationStyle == .expanded {
-                expandedLayout
-            } else {
-                compactLayout
-            }
         }
     }
+    
+    private var gameTitleBar: some View {
+        VStack {
+            Text(availableGames[activeGameIndex].title)
+                //.font(.system(size: 20, weight: .semibold, design: .serif))
+                .font(.title)
+                .fontWeight(.semibold)
+                .fontDesign(.serif)
+                .foregroundColor(.primary)
+                .shadow(radius: 5)
+                .id(activeGameIndex)
+                .transition(.asymmetric(
+                    insertion: .move(edge: titleTransitionEdge).combined(with: .opacity),
+                    removal: .move(edge: titleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+                ))
+                .animation(.easeInOut, value: selectedGameIndex)
+            
+            Divider()
+                .opacity(0)
+            
+            Divider()
+                .opacity(0)
+            
+        }
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(uiColor: .systemBackground).opacity(1.0),
+                    //Color.black.opacity(0.5),
+                    Color(uiColor: .systemBackground).opacity(0.0)
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+        )
+    }
+    
+    
+    
     
     // MARK: - Presentation styles
     private var compactLayout: some View {
@@ -71,6 +148,7 @@ struct MainMenuView: View {
             Spacer()
         }
     }
+    
     
     // MARK: - Layout Components
     private var deckSection: some View {
