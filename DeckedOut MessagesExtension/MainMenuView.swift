@@ -63,7 +63,10 @@ struct MainMenuView: View {
             .offset(y: 50)
         }
         .background(backgroundLayer)
-        .onAppear { activeGameIndex = selectedGameIndex }
+        .onAppear {
+            preloadWins()
+            activeGameIndex = selectedGameIndex
+        }
     }
     
     private var backgroundLayer: some View {
@@ -83,7 +86,7 @@ struct MainMenuView: View {
     }
     
     private var gameTitleBar: some View {
-        VStack {
+        VStack(spacing: 4) {
             Text(availableGames[activeGameIndex].title)
                 //.font(.system(size: 20, weight: .semibold, design: .serif))
                 .font(.title)
@@ -98,6 +101,23 @@ struct MainMenuView: View {
                 ))
                 .animation(.easeInOut, value: selectedGameIndex)
             
+            HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
+                Image(systemName: "crown.fill")
+                    .foregroundStyle(LinearGradient(colors: [
+                        Color(red: 1.0, green: 1.0, blue: 0.33), // Bright Yellow at the top
+                            Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish/gold at the bottom
+                        ],
+                        startPoint: .top, //or topLeading
+                        endPoint: .bottom // & bottomTrailing
+                    ))
+                    .shadow(color: .orange, radius: 3)
+                
+                Text("\(availableGames[activeGameIndex].wins) Wins")
+            }
+            .font(.subheadline)
+            .fontWeight(.medium)
+            
+    
             Divider()
                 .opacity(0)
             
@@ -120,9 +140,16 @@ struct MainMenuView: View {
     }
     
     
+    // MARK: - Menu helper functins
+    private func preloadWins() {
+        for index in availableGames.indices {
+            let title = availableGames[index].title
+            availableGames[index].wins = WinTracker.shared.getWinCount(for: title)
+        }
+    }
     
     
-    // MARK: - Presentation styles
+    // MARK: - Legacy Presentation styles
     private var compactLayout: some View {
         HStack {
             Spacer()
@@ -153,7 +180,7 @@ struct MainMenuView: View {
     // MARK: - Layout Components
     private var deckSection: some View {
         ZStack {
-            let winCount = WinTracker.shared.getWinCount()
+            let winCount = WinTracker.shared.getWinCount(for: availableGames[selectedGameIndex].title)
             if winCount == 0 {
                 Text("Wins: \(winCount)\n\nGood luck!")
                     .font(.system(size: 20, weight: .semibold, design: .serif))
@@ -270,17 +297,41 @@ class MenuViewModel: ObservableObject { //only tracks presentation style
     }
 }
 
+struct MenuGame: Identifiable, Equatable {
+    let id = UUID()
+    let title: String
+    let logoCard: String // The front of the card
+    var wins: Int = 0
+}
+
 class WinTracker {
     static let shared = WinTracker()
-    private let winsKey = "ginWins"
+    private let legacyGinKey = "ginWins" // <- set for deprecation on a later update
+    
+    private func key(for gameTitle: String) -> String {
+        return "\(gameTitle.lowercased().replacingOccurrences(of: " ", with: "_"))_wins"
+    }
 
-    func getWinCount() -> Int {
-        return UserDefaults.standard.integer(forKey: winsKey)
+    func getWinCount(for gameTitle: String) -> Int {
+        //MIGRATING OLD GIN WIN KEY TO NEW GIN WIN KEY
+        let newKey = key(for: gameTitle)
+        let defaults = UserDefaults.standard
+        if gameTitle == "Gin Rummy" && defaults.object(forKey: newKey) == nil {
+            let legacyWins = defaults.integer(forKey: legacyGinKey)
+            if legacyWins > 0 {
+                // Move the data to the new key
+                defaults.set(legacyWins, forKey: newKey)
+                // Remove the old key so we don't migrate again
+                defaults.removeObject(forKey: legacyGinKey)
+                return legacyWins
+            }
+        }
+        
+        return UserDefaults.standard.integer(forKey: key(for: gameTitle)) //after migration replace with "return UserDefaults.standard.integer(forKey: key(for: gameTitle))"
     }
     
-    func incrementWins() {
-        var currentWins = getWinCount()
-        currentWins += 1
-        UserDefaults.standard.set(currentWins, forKey: winsKey)
+    func incrementWins(for gameTitle: String) {
+        let currentWins = getWinCount(for: gameTitle)
+        UserDefaults.standard.set(currentWins + 1, forKey: key(for: gameTitle))
     }
 }

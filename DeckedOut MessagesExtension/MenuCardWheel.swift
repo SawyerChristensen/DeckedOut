@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-struct MenuGame: Identifiable, Equatable {
-    let id = UUID()
-    let title: String
-    let logoCard: String // The front of the card
-}
-
 struct CardWheelMenu: View {
     let games: [MenuGame]
     @Binding var selectedIndex: Int

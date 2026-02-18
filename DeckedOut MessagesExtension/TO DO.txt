@@ -1,3 +1,17 @@
+Finish working main menu that enables users to select a game
+    -Hide win view if user has no wins
+    -Make win text better. Golden crown icon with a colon next to win? (looks better and simplfies localization)
+    -Pulsating “tap card to play” reminder text in the middle of the screen if looked at for too long
+
+Add those games (easier said that done)
+    -Add starter transcript views for each game (to be updated later)
+
+Add "how to" rules for each game with an icon on the main menu (on left?)
+
+Add 0 opacity, uninteractable customization hangar icon on right, settigns icon below rules icon on left
+
+
+
 --Add other card games? Rename app if other games are added (add whole version number to each. pefect previous game before moving on)
     -Crazy 8s
     -Golf
@@ -11,6 +25,7 @@
 
 -update card look? maybe extra deck look option?
 -multiple deck aesthetics? could have a menu where you drag your preferred aesthetic to a pile, the pile card goes back to hand. the hand is all of the same card, aces? jacks? and you select from there which one you like most
+
 
 
 --Look into getting featured on the App Store!
