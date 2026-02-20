@@ -1,19 +1,15 @@
 Finish working main menu that enables users to select a game
-    -fix initial entering of the subview bug. it teleports the first time, moves the second enter
-    -figure out if we want the cards to reveal them or pull them up from the bottom (start with this?) reveal can be done later in an update
     -figure out a transition for entering the subview while in expanded mode
-    -Hide win view if user has no wins?
     -Pulsating “tap card to play” reminder text in the middle of the screen if looked at for too long
     -add joker card under deck if user deals out all 5 in main menu
     -add hovering "handheld" effect to the top card? adding motion is always better
     -increase "start game" text movement in gin subview
+    -haptics for scrolling through the games
 
 Add those games (easier said that done)
     -Add starter transcript views for each game (to be updated later)
 
 Add "how to" rules for each game with an icon on the main menu (on left?)
-
-Add 0 opacity, uninteractable customization hangar icon on right, settigns icon below rules icon on left
 
 
 
@@ -55,6 +51,7 @@ QOL changes / possible updates:
 -resume button if we exit to main menu in game view?
 -make discard animation better? (low priority), current is good if not preferrable due to immediate feedback
 -block against first turn wins, (1 in ~300,000, low priority)
+-cards are revealed instead of pulled up by the main menu?
 -didCancelSending puts the card back on the deck? little easter egg. look into what didCancelSending actually does (low priority)
 -do we really need a gin root view or is initializing the game view good enough? (doesnt really matter now)
 -in present view do we need to dismiss any pop up windows? (doesnt really matter)

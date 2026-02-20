@@ -57,7 +57,7 @@ struct MenuCardWheel: View {
                 let isCenter = abs(distance) < 0.5 // If distance is between -0.5 and 0.5, it's the primary card right now
                 let yOffset = getCurrentYOffset(for: distance)
                 
-                CardView(frontImage: game.logoCard, cardHeight: cardHeight, rotation: isCenter ? 0 : -180)
+                CardView(frontImage: game.logoCard, cardHeight: cardHeight, rotation: isCenter ? 0 : 180)
                     .zIndex(Double(games.count) - abs(distance))
                     .rotationEffect(.degrees(distance * fanningAngle))
                     .offset(y: yOffset)
@@ -97,6 +97,21 @@ struct MenuCardWheel: View {
                 }
                 .onEnded { value in  // Predict where the scroll should land based on gesture speed and distance
                     isDragging = false
+                    
+                    let verticalMove = value.translation.height
+                    let horizontalMove = value.translation.width
+                    let verticalVelocity = value.predictedEndTranslation.height
+                    
+                    let isUpward = verticalMove < -50 || verticalVelocity < -150 // Check if the movement is strongly upward
+                    let isPrimarilyVertical = abs(verticalMove) > abs(horizontalMove) * 1.5 //Check if the gesture is PRIMARILY vertical (avoids diagonals)
+                    if isUpward && isPrimarilyVertical {
+                        withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                            hasSelectedGame = true
+                        }
+                        userSelectedGame(currentCenterIndex)
+                        return // Exit early if vertical selection swipe
+                    }
+                    
                     let predictedDrag = value.predictedEndTranslation.width
                     let indexShift = Int(round(-predictedDrag / stepWidth))
                     
@@ -108,9 +123,7 @@ struct MenuCardWheel: View {
                         }
                         onActiveIndexChange(newIndex) //tell parent immediately when drag ends
                     } else {
-                        // Edge case: If we drag a little bit but snap back to the same card,
-                        // ensure the title is correct (in case it drifted during the drag)
-                        onActiveIndexChange(newIndex)
+                        onActiveIndexChange(newIndex) //If we drag a little bit but snap back to the same card, ensure the title is correct (in case it drifted during the drag)
                     }
                 }
         )

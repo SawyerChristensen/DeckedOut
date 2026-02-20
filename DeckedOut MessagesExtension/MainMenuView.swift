@@ -19,8 +19,8 @@ struct MainMenuView: View {
     @State private var cardsAnimatedAway = 0
     @State private var hiddenAnimatedAwayCards = 0
     @State private var isPulsating = false //for the "state game" text
-    @State private var card7Image: String = ""
-    @State private var card10Image: String = ""
+    @State private var card7Image: String = "7Spades"
+    @State private var card10Image: String = "10Clubs"
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
     
     @State private var titleTransitionEdge: Edge = .trailing
@@ -38,15 +38,7 @@ struct MainMenuView: View {
     var body: some View {
         ZStack {
             if isInSubview {
-                Group {
-                    if viewModel.presentationStyle == .expanded {
-                        expandedLayout
-                    } else {
-                        compactLayout
-                    }
-                }
-                //.overlay(backButton, alignment: .topLeading)
-                .transition(.move(edge: .bottom))//.combined(with: .opacity))
+                submenuView
             }
             
             // MAIN MENU
@@ -54,33 +46,21 @@ struct MainMenuView: View {
                 gameTitleBar
                     .opacity(isTitleBarHidden ? 0 : 1)
                 
-                Spacer()
-                Spacer()
                 
-                MenuCardWheel(
-                    games: availableGames,
-                    onActiveIndexChange: { newIndex in // handle real-time mid-swipe updates
-                        if activeGameIndex != newIndex {
-                            titleTransitionEdge = newIndex > activeGameIndex ? .trailing : .leading
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                activeGameIndex = newIndex
-                            }
+                Spacer()
+                    .frame(maxWidth: .infinity)
+                    .overlay( //this is so we can keep the vertical spacing of the Spacer() while injecting an HStack of different vertical spacing
+                        HStack {
+                            rulesButton
+                            Spacer()
+                            customizationButton
                         }
-                    },
-                    userSelectedGame: { index in // handle selecting a game
-                        print("Open Game: \(availableGames[index].title)") //replace this with a meaninful subview call
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isInSubview = true
-                        }
-                        withAnimation(.linear(duration: 0.05).delay(0.15)) { //wait a bit then trigger a fast fade
-                            isTitleBarHidden = true
-                        }
-                    },
-                    hasSelectedGame: $isInSubview
-                )
-                //.zIndex(999) //keep the cards on top
-                .frame(maxWidth: UIScreen.main.bounds.width) //dont let them expand the zstack when they fan out
-                .offset(y: 50)
+                        .padding(.top, 30)
+                        .padding(.horizontal, 30)
+                        .opacity(isTitleBarHidden ? 0 : 1)
+                    )
+                
+                cardWheel
             }
         }
         //.animation(.easeInOut, value: isInSubview)
@@ -158,6 +138,81 @@ struct MainMenuView: View {
             )
             .ignoresSafeArea()
         )
+    }
+    
+    private var cardWheel: some View {
+        MenuCardWheel(
+            games: availableGames,
+            onActiveIndexChange: { newIndex in // handle real-time mid-swipe updates
+                if activeGameIndex != newIndex {
+                    titleTransitionEdge = newIndex > activeGameIndex ? .trailing : .leading
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        activeGameIndex = newIndex
+                    }
+                }
+            },
+            userSelectedGame: { index in // handle selecting a game
+                print("Open Game: \(availableGames[index].title)") //replace this with a meaninful subview call
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isInSubview = true
+                }
+                withAnimation(.linear(duration: 0.05).delay(0.12)) { //wait a bit then trigger a fast fade
+                    isTitleBarHidden = true
+                }
+            },
+            hasSelectedGame: $isInSubview
+        )
+        //.zIndex(999) //keep the cards on top
+        .frame(maxWidth: UIScreen.main.bounds.width) //dont let them expand the zstack when they fan out
+        .offset(y: 50)
+    }
+    
+    private var rulesButton: some View {
+        Button(action: {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            //action()
+        }) {
+            Image(systemName: "text.book.closed")
+                //.font(.system(size: 40, weight: .light))
+                .resizable()
+                .scaledToFit()
+                .scaledToFit()
+                //.padding(10)
+                .frame(width: 40, height: 40)
+                .foregroundStyle(.white)
+                //.background(.ultraThinMaterial)
+                //.clipShape(Circle())
+                .shadow(color: .white.opacity(0.5), radius: 5)
+        }
+    }
+    
+    private var customizationButton: some View {
+        Button(action: {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            //action()
+        }) {
+            Image("hanger")
+                //.font(.system(size: 30, weight: .bold)) // slightly smaller than a circle icon to visually balance
+                .resizable()
+                .scaledToFit()
+                .frame(width: 40, height: 40)
+                //.background(.ultraThinMaterial)
+                //.clipShape(Circle())
+                .shadow(color: .white.opacity(0.5), radius: 5)
+        }
+    }
+    
+    private var submenuView: some View {
+        Group {
+            if viewModel.presentationStyle == .expanded {
+                expandedLayout
+            } else {
+                compactLayout
+            }
+        }
+        .transition(.offset(y: UIScreen.main.bounds.height / 2))
     }
     
     
@@ -311,10 +366,8 @@ struct MainMenuView: View {
                 .foregroundColor(.white)
             
             HStack(spacing: 30) {
-                if !card7Image.isEmpty && !card10Image.isEmpty {
-                    cardOption(selectedHandSize: 7, imageName: card7Image, tilt: -8) //left card
-                    cardOption(selectedHandSize: 10, imageName: card10Image, tilt: 8) //right card
-                }
+                cardOption(selectedHandSize: 7, imageName: card7Image, tilt: -8) //left card
+                cardOption(selectedHandSize: 10, imageName: card10Image, tilt: 8) //right card
             }
         }
         .onAppear {
