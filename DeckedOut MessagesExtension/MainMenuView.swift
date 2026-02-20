@@ -17,13 +17,13 @@ struct MainMenuView: View {
     
     @State private var handSize = 7 //full game is normally 10, but 7 is quicker and better suited for mobile
     @State private var cardsAnimatedAway = 0
+    @State private var hiddenAnimatedAwayCards = 0
     @State private var isPulsating = false //for the "state game" text
     @State private var card7Image: String = ""
     @State private var card10Image: String = ""
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
     
     @State private var titleTransitionEdge: Edge = .trailing
-    @State private var selectedGameIndex: Int = 0
     @State private var activeGameIndex: Int = 0
     @State private var availableGames: [MenuGame] = [
         MenuGame(title: "Gin Rummy", logoCard: "ginRummyCard"),
@@ -31,41 +31,62 @@ struct MainMenuView: View {
         MenuGame(title: "Golf", logoCard: "golfCard"),
         MenuGame(title: "Spades", logoCard: "spadesCard")
     ]
+    @State private var isInSubview: Bool = false
+    @State private var isTitleBarHidden: Bool = false
   
     
     var body: some View {
-        VStack {
-            gameTitleBar
-            
-            Spacer()
-            Spacer()
-            
-            CardWheelMenu(
-                games: availableGames,
-                selectedIndex: $selectedGameIndex,
-                // handle real-time mid-swipes updates
-                onActiveIndexChange: { newIndex in
-                    if activeGameIndex != newIndex {
-                        titleTransitionEdge = newIndex > activeGameIndex ? .trailing : .leading
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            activeGameIndex = newIndex
-                        }
-                    }
-                },
-                // handle final resting index
-                onSelect: { newIndex in
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-                        selectedGameIndex = newIndex
-                        activeGameIndex = newIndex
+        ZStack {
+            if isInSubview {
+                Group {
+                    if viewModel.presentationStyle == .expanded {
+                        expandedLayout
+                    } else {
+                        compactLayout
                     }
                 }
-            )
-            .offset(y: 50)
+                //.overlay(backButton, alignment: .topLeading)
+                .transition(.move(edge: .bottom))//.combined(with: .opacity))
+            }
+            
+            // MAIN MENU
+            VStack {
+                gameTitleBar
+                    .opacity(isTitleBarHidden ? 0 : 1)
+                
+                Spacer()
+                Spacer()
+                
+                MenuCardWheel(
+                    games: availableGames,
+                    onActiveIndexChange: { newIndex in // handle real-time mid-swipe updates
+                        if activeGameIndex != newIndex {
+                            titleTransitionEdge = newIndex > activeGameIndex ? .trailing : .leading
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                activeGameIndex = newIndex
+                            }
+                        }
+                    },
+                    userSelectedGame: { index in // handle selecting a game
+                        print("Open Game: \(availableGames[index].title)") //replace this with a meaninful subview call
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isInSubview = true
+                        }
+                        withAnimation(.linear(duration: 0.05).delay(0.15)) { //wait a bit then trigger a fast fade
+                            isTitleBarHidden = true
+                        }
+                    },
+                    hasSelectedGame: $isInSubview
+                )
+                //.zIndex(999) //keep the cards on top
+                .frame(maxWidth: UIScreen.main.bounds.width) //dont let them expand the zstack when they fan out
+                .offset(y: 50)
+            }
         }
-        .background(backgroundLayer)
+        //.animation(.easeInOut, value: isInSubview)
+        .background(backgroundLayer) //THIS DOES NOT MESS IT UP
         .onAppear {
             preloadWins()
-            activeGameIndex = selectedGameIndex
         }
     }
     
@@ -73,15 +94,15 @@ struct MainMenuView: View {
         ZStack {
             Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight")
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .scaledToFill()
                 .ignoresSafeArea()
             
-            LinearGradient(
+            /*LinearGradient(
                 gradient: Gradient(colors: [Color.white.opacity(0.1), Color.black.opacity(0.1)]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
+            .ignoresSafeArea()*/
         }
     }
     
@@ -99,7 +120,7 @@ struct MainMenuView: View {
                     insertion: .move(edge: titleTransitionEdge).combined(with: .opacity),
                     removal: .move(edge: titleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
                 ))
-                .animation(.easeInOut, value: selectedGameIndex)
+                .animation(.easeInOut, value: activeGameIndex)
             
             HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
                 Image(systemName: "crown.fill")
@@ -107,7 +128,7 @@ struct MainMenuView: View {
                         Color(red: 1.0, green: 1.0, blue: 0.33), // Bright Yellow at the top
                             Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish/gold at the bottom
                         ],
-                        startPoint: .top, //or topLeading
+                        startPoint: .top, // or topLeading
                         endPoint: .bottom // & bottomTrailing
                     ))
                     .shadow(color: .orange, radius: 3)
@@ -148,19 +169,25 @@ struct MainMenuView: View {
         }
     }
     
-    
     // MARK: - Legacy Presentation styles
     private var compactLayout: some View {
-        HStack {
-            Spacer()
-            deckSection
-            Spacer()
-            VStack(spacing: 20) {
-                startButton
-                handSizePicker
+        ZStack(alignment: .topLeading) {
+            backButton
+                .padding(.leading, 14)
+                
+            HStack {
+                Spacer()
+                deckSection
+                    .zIndex(999)
+                    .padding(.top, 40)
+                Spacer()
+                
+                VStack(spacing: 20) {
+                    startButton
+                    handSizePicker
+                }
+                .padding(.trailing, 10)
             }
-            //Spacer()
-            .padding(.trailing, 10)
         }
     }
     
@@ -178,9 +205,34 @@ struct MainMenuView: View {
     
     
     // MARK: - Layout Components
+    private var backButton: some View {
+        Button(action: {
+            // Reverse the animations
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isInSubview = false
+            }
+            withAnimation(.linear(duration: 0.05).delay(0.1)) { // Bring the title back
+                isTitleBarHidden = false
+            }
+            Task {
+                try? await Task.sleep(nanoseconds: 200_000_000)
+                cardsAnimatedAway = 0
+            }
+        }) {
+            Image(systemName: "chevron.left")
+                .font(.title3.weight(.bold))
+                .foregroundColor(.primary)
+                .padding(14)
+                .background(.ultraThinMaterial, in: Circle()) // Liquid glass effect!
+                .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
+        }
+        .padding(.leading, 14)
+        //.padding(.top, 20)
+    }
+    
     private var deckSection: some View {
         ZStack {
-            let winCount = WinTracker.shared.getWinCount(for: availableGames[selectedGameIndex].title)
+            let winCount = WinTracker.shared.getWinCount(for: availableGames[activeGameIndex].title)
             if winCount == 0 {
                 Text("Wins: \(winCount)\n\nGood luck!")
                     .font(.system(size: 20, weight: .semibold, design: .serif))
@@ -204,6 +256,7 @@ struct MainMenuView: View {
                     .offset(x: i >= 5 - cardsAnimatedAway ? (isIpad ? 400 : 225) : CGFloat(-i) * 3,
                             y: i >= 5 - cardsAnimatedAway ? (isIpad ? 300 : -450) : CGFloat(-i) * 3)
                     .shadow(radius: i == 4 ? 1 : 8)
+                    .opacity(i >= 5 - hiddenAnimatedAwayCards ? 0 : 1)
             }
         }
     }
@@ -218,6 +271,12 @@ struct MainMenuView: View {
                     }
                     if cardsAnimatedAway <= 5 {
                         SoundManager.instance.playCardDeal()
+                    }
+                    Task { //wait exactly 0.7 seconds then hide the card instantly at the destination so we dont see it animating away
+                        try? await Task.sleep(nanoseconds: 700_000_000)
+                        await MainActor.run {
+                            hiddenAnimatedAwayCards += 1
+                        }
                     }
                 }
             }
