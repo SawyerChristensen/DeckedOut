@@ -46,7 +46,7 @@ struct MenuCardWheel: View {
         return baseOffset + dragTranslation
     }
     private func getCurrentYOffset(for distance: Double) -> CGFloat {
-        return hasSelectedGame ? -400 : abs(distance * 15)
+        return hasSelectedGame ? -500 : abs(distance * 15)
     }
     
     var body: some View {
@@ -89,6 +89,7 @@ struct MenuCardWheel: View {
                 onActiveIndexChange(newValue)
             }
         }
+        .sensoryFeedback(.selection, trigger: activeIndex)
         .gesture(
             DragGesture()
                 .updating($dragTranslation) { value, state, _ in // Update the translation while the drag is active

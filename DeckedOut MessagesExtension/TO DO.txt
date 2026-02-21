@@ -3,13 +3,13 @@ Finish working main menu that enables users to select a game
     -Pulsating “tap card to play” reminder text in the middle of the screen if looked at for too long
     -add joker card under deck if user deals out all 5 in main menu
     -add hovering "handheld" effect to the top card? adding motion is always better
-    -increase "start game" text movement in gin subview
-    -haptics for scrolling through the games
+    
+-add rules screen for every game
+
+-disable customization for now?
 
 Add those games (easier said that done)
     -Add starter transcript views for each game (to be updated later)
-
-Add "how to" rules for each game with an icon on the main menu (on left?)
 
 
 

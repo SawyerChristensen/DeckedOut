@@ -12,6 +12,7 @@ struct MainMenuView: View {
     @Environment(\.colorScheme) var colorScheme //for light/dark theme detection
     //@Environment(\.locale) var locale //for language detection
     @ObservedObject var viewModel: MenuViewModel
+    private var isExpanded: Bool { viewModel.presentationStyle == .expanded }
     
     var onStartGame: (Int) -> Void //triggers createGame in MessagesViewController
     
@@ -33,6 +34,8 @@ struct MainMenuView: View {
     ]
     @State private var isInSubview: Bool = false
     @State private var isTitleBarHidden: Bool = false
+    @State private var isCardWheelHidden: Bool = false
+    private var buttonSize: CGFloat { isExpanded ? 70 : 40 }
   
     
     var body: some View {
@@ -46,7 +49,6 @@ struct MainMenuView: View {
                 gameTitleBar
                     .opacity(isTitleBarHidden ? 0 : 1)
                 
-                
                 Spacer()
                     .frame(maxWidth: .infinity)
                     .overlay( //this is so we can keep the vertical spacing of the Spacer() while injecting an HStack of different vertical spacing
@@ -56,7 +58,7 @@ struct MainMenuView: View {
                             customizationButton
                         }
                         .padding(.top, 30)
-                        .padding(.horizontal, 30)
+                        .padding(.horizontal, 30) //or .padding(.horizontal, isExpanded ? 80 : 30)
                         .opacity(isTitleBarHidden ? 0 : 1)
                     )
                 
@@ -87,20 +89,22 @@ struct MainMenuView: View {
     }
     
     private var gameTitleBar: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: isExpanded ? 15 : 5) {
             Text(availableGames[activeGameIndex].title)
                 //.font(.system(size: 20, weight: .semibold, design: .serif))
-                .font(.title)
+                .font(.largeTitle)
                 .fontWeight(.semibold)
                 .fontDesign(.serif)
-                .foregroundColor(.primary)
-                .shadow(radius: 5)
+                .foregroundColor(.white)
+                .shadow(color: .white.opacity(0.33), radius: 5)
+                .padding(.top, isExpanded ? 15 : 0) //pretty sure spacing doesnt include safearea - first element
                 .id(activeGameIndex)
                 .transition(.asymmetric(
                     insertion: .move(edge: titleTransitionEdge).combined(with: .opacity),
                     removal: .move(edge: titleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
                 ))
                 .animation(.easeInOut, value: activeGameIndex)
+                .scaleEffect(isExpanded ? 1.2 : 1)
             
             HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
                 Image(systemName: "crown.fill")
@@ -111,12 +115,16 @@ struct MainMenuView: View {
                         startPoint: .top, // or topLeading
                         endPoint: .bottom // & bottomTrailing
                     ))
-                    .shadow(color: .orange, radius: 3)
+                    .shadow(color: .orange, radius: 5)
                 
                 Text("\(availableGames[activeGameIndex].wins) Wins")
+                    .foregroundColor(.white)
+                    .shadow(color: .white.opacity(0.33), radius: 5)
             }
             .font(.subheadline)
             .fontWeight(.medium)
+            .contentTransition(.interpolate)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isExpanded)
             
     
             Divider()
@@ -126,17 +134,18 @@ struct MainMenuView: View {
                 .opacity(0)
             
         }
+        .scaleEffect(isExpanded ? 1.2 : 1)
         .background(
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(uiColor: .systemBackground).opacity(1.0),
-                    //Color.black.opacity(0.5),
-                    Color(uiColor: .systemBackground).opacity(0.0)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .mask(
+                    LinearGradient(
+                        colors: [.black, .clear], //color doesnt matter here, only opacity
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .ignoresSafeArea()
         )
     }
     
@@ -152,19 +161,25 @@ struct MainMenuView: View {
                 }
             },
             userSelectedGame: { index in // handle selecting a game
-                print("Open Game: \(availableGames[index].title)") //replace this with a meaninful subview call
+                //print("Open Game: \(availableGames[index].title)") // <--replace this with a meaninful subview call!
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isInSubview = true
                 }
                 withAnimation(.linear(duration: 0.05).delay(0.12)) { //wait a bit then trigger a fast fade
                     isTitleBarHidden = true
                 }
+                Task {
+                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+                    isCardWheelHidden = true //hide AFTER the animation to render the cards invisible so they dont clip in when transitioning between compact and expanded in the subview
+                }
             },
             hasSelectedGame: $isInSubview
         )
         //.zIndex(999) //keep the cards on top
-        .frame(maxWidth: UIScreen.main.bounds.width) //dont let them expand the zstack when they fan out
-        .offset(y: 50)
+        .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
+        .scaleEffect(isExpanded ? 1.4 : 1)
+        .offset(y: isExpanded ? (isInSubview ? -175 : 5) : 50)
+        .opacity(isCardWheelHidden ? 0 : 1)
     }
     
     private var rulesButton: some View {
@@ -173,17 +188,27 @@ struct MainMenuView: View {
             impact.impactOccurred()
             //action()
         }) {
-            Image(systemName: "text.book.closed")
-                //.font(.system(size: 40, weight: .light))
-                .resizable()
-                .scaledToFit()
-                .scaledToFit()
-                //.padding(10)
-                .frame(width: 40, height: 40)
-                .foregroundStyle(.white)
-                //.background(.ultraThinMaterial)
-                //.clipShape(Circle())
-                .shadow(color: .white.opacity(0.5), radius: 5)
+            HStack(spacing: 12) { // Groups the icon and text
+                Image(systemName: "text.book.closed")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: buttonSize, height: buttonSize)
+                
+                if isExpanded {
+                    Text("Rules")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .leading).combined(with: .scale(scale: 0.5, anchor: .leading)).combined(with: .opacity),
+                            // Fades out and scales down instantly when going back to compact
+                            removal: .identity//.combined(with: .scale(scale: 0.5))
+                        ))
+                }
+            }
+            .foregroundStyle(.white)
+            .fixedSize(horizontal: true, vertical: false)
+            .shadow(color: .white.opacity(0.5), radius: 5)
+            .offset(x: isExpanded ? 40 : 0, y: isExpanded ? -125 : 0) //right and up in expanded
         }
     }
     
@@ -193,25 +218,38 @@ struct MainMenuView: View {
             impact.impactOccurred()
             //action()
         }) {
-            Image("hanger")
-                //.font(.system(size: 30, weight: .bold)) // slightly smaller than a circle icon to visually balance
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40, height: 40)
-                //.background(.ultraThinMaterial)
-                //.clipShape(Circle())
-                .shadow(color: .white.opacity(0.5), radius: 5)
+            HStack(spacing: 12) {
+                if isExpanded {
+                    Text("Themes")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .scale(scale: 0.5, anchor: .trailing)).combined(with: .opacity),
+                            // Same here, clean fade and shrink on exit
+                            removal: .identity//.combined(with: .scale(scale: 0.5))
+                        ))
+                }
+                
+                Image("hanger")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: buttonSize, height: buttonSize)
+            }
+            .foregroundStyle(.white)
+            .fixedSize(horizontal: true, vertical: false)
+            .shadow(color: .white.opacity(0.5), radius: 5)
+            .offset(x: isExpanded ? -40 : 0, y: isExpanded ? 25 : 0) //left and down in expanded
         }
     }
     
     private var submenuView: some View {
-        Group {
-            if viewModel.presentationStyle == .expanded {
-                expandedLayout
-            } else {
-                compactLayout
-            }
+        ZStack {
+            compactLayout
+                .opacity(isExpanded ? 0 : 1)
+            expandedLayout
+                .opacity(isExpanded ? 1 : 0)
         }
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
         .transition(.offset(y: UIScreen.main.bounds.height / 2))
     }
     
@@ -224,11 +262,11 @@ struct MainMenuView: View {
         }
     }
     
-    // MARK: - Legacy Presentation styles
+    // MARK: - Subview presentation styles
     private var compactLayout: some View {
         ZStack(alignment: .topLeading) {
             backButton
-                .padding(.leading, 14)
+                .padding(.leading, 30)
                 
             HStack {
                 Spacer()
@@ -248,7 +286,9 @@ struct MainMenuView: View {
     
     private var expandedLayout: some View {
         VStack {
-            Spacer()
+            backButton
+                .rotationEffect(.degrees(-90))
+                .padding(.vertical, 14)
             startButton
             Spacer()
             deckSection
@@ -258,11 +298,10 @@ struct MainMenuView: View {
         }
     }
     
-    
     // MARK: - Layout Components
     private var backButton: some View {
         Button(action: {
-            // Reverse the animations
+            isCardWheelHidden = false
             withAnimation(.easeInOut(duration: 0.2)) {
                 isInSubview = false
             }
@@ -281,8 +320,6 @@ struct MainMenuView: View {
                 .background(.ultraThinMaterial, in: Circle()) // Liquid glass effect!
                 .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
         }
-        .padding(.leading, 14)
-        //.padding(.top, 20)
     }
     
     private var deckSection: some View {
@@ -310,7 +347,7 @@ struct MainMenuView: View {
                     .rotationEffect(i >= 5 - cardsAnimatedAway ? Angle(degrees: 45) : Angle(degrees: 0))
                     .offset(x: i >= 5 - cardsAnimatedAway ? (isIpad ? 400 : 225) : CGFloat(-i) * 3,
                             y: i >= 5 - cardsAnimatedAway ? (isIpad ? 300 : -450) : CGFloat(-i) * 3)
-                    .shadow(radius: i == 4 ? 1 : 8)
+                    .shadow(radius: i == 0 ? 8 : 4, x: 2, y: 2) // 0 is the bottom card
                     .opacity(i >= 5 - hiddenAnimatedAwayCards ? 0 : 1)
             }
         }
@@ -337,13 +374,16 @@ struct MainMenuView: View {
             }
         }) {
             Text("Start Game!")
-                .font(.system(size: 28, weight: .bold, design: .serif))
+                .font(.system(size: isExpanded ? 40 : 28, weight: .bold, design: .serif))
                 .foregroundColor(.white)
-                .scaleEffect(isPulsating ? 1.03 : 1)
+                .scaleEffect(isPulsating ? 1.05 : 1)
                 .onAppear {
-                    withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
                         isPulsating = true
                     }
+                }
+                .onDisappear {
+                    isPulsating = false // resets the state so it can animate again next time!
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
@@ -362,7 +402,7 @@ struct MainMenuView: View {
     private var handSizePicker: some View {
         VStack(spacing: 40) {
             Text("Hand Size:")
-                .font(.system(size: 20, weight: .semibold, design: .serif))
+                .font(.system(size: isExpanded ? 30 : 20, weight: .semibold, design: .serif))
                 .foregroundColor(.white)
             
             HStack(spacing: 30) {
