@@ -19,7 +19,7 @@ struct GinTranscriptInviteHand: View {
     let timer = Timer.publish(every: 2.5, on: .main, in: .common).autoconnect()
     
     // Fanning Constants
-    private let cardWidth: CGFloat = 120 * 0.7
+    private let cardWidth: CGFloat = 84 //120 * 0.7
     private let cardHeight: CGFloat = 120
     private let fanningAngle: Double = 5
     
@@ -83,36 +83,5 @@ struct GinTranscriptInviteHand: View {
             return String(chars[index])
         }
         return " "
-    }
-}
-
-struct LetterCardView: View {
-    let frontChar: String
-    let backChar: String
-    let isFlipped: Bool
-    
-    var rotation: Double {
-        isFlipped ? 180 : 0
-    }
-    
-    var body: some View {
-        ZStack {
-            // BACK (Visible when rotation is > 90)
-            Image("\(backChar)Card")
-                .resizable()
-                .aspectRatio(0.7, contentMode: .fit)
-                .modifier(FlipOpacity(rotation: rotation + 180))
-                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0)) // Mirror correction
-            
-            // FRONT (Visible when rotation is < 90)
-            Image("\(frontChar)Card")
-                .resizable()
-                .aspectRatio(0.7, contentMode: .fit)
-                .modifier(FlipOpacity(rotation: rotation))
-        }
-        .rotation3DEffect(
-            .degrees(isFlipped ? 180 : 0),
-            axis: (x: 0.0, y: 1.0, z: 0.0)
-        )
     }
 }

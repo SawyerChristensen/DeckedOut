@@ -18,7 +18,7 @@ struct GinTranscriptPlayerHand: View {
     let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     
     // Constants tuned for the small iMessage bubble
-    private let cardWidth: CGFloat = 120 * 0.7
+    private let cardWidth: CGFloat = 84 //120 * 0.7
     private let cardHeight: CGFloat = 120
     private var spacing: CGFloat {
         if cards.count == 7 {
@@ -142,10 +142,6 @@ struct GinTranscriptPlayerHand: View {
         } else {
             return .black.opacity(0.15)
         }
-    }
-    
-    private func animationResponse(for index: Int) -> Double {
-        return isFullyFlippingCard(index) ? 0.6 : 0.6
     }
     
     private func handleAnimationTriggers() {

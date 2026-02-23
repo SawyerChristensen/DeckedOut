@@ -1,14 +1,14 @@
 //
-//  OpponentHandView.swift
+//  Crazy8sOpponentHandView.swift
 //  DeckedOut
 //
-//  Created by Sawyer Christensen on 1/4/26.
+//  Created by Sawyer Christensen on 2/23/26.
 //
 
 import SwiftUI
 
-struct OpponentHandView: View {
-    @EnvironmentObject var game: GinRummyManager
+struct Crazy8sOpponentHandView: View {
+    @EnvironmentObject var game: Crazy8sManager
     
     //Passed Arguments
     let cards: [Card]

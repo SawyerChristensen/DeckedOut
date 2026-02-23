@@ -1,14 +1,14 @@
 //
-//  FannedHandView.swift
+//  Crazy8sPlayerHandView.swift
 //  DeckedOut
 //
-//  Created by Sawyer Christensen on 11/17/25.
+//  Created by Sawyer Christensen on 2/23/26.
 //
 
 import SwiftUI
 
-struct PlayerHandView: View {
-    @EnvironmentObject var game: GinRummyManager
+struct Crazy8sPlayerHandView: View {
+    @EnvironmentObject var game: Crazy8sManager
     
     //Passed Arguments
     @Binding var cards: [Card]
@@ -242,33 +242,11 @@ struct PlayerHandView: View {
     }
 }
 
-extension PlayerHandView {
+extension Crazy8sPlayerHandView {
     init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect, lastDrawSource: DrawSource) {
         self._cards = .constant(cards)  // Creates a constant binding
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
         self.lastDrawSource = lastDrawSource
-    }
-}
-
-struct FlipOpacity: AnimatableModifier {
-    var rotation: Double
-    
-    // This tells SwiftUI: "Interpolate this number, and rebuild the view every time it changes"
-    var animatableData: Double {
-        get { rotation }
-        set { rotation = newValue }
-    }
-    
-    func body(content: Content) -> some View {
-        // Normalize angle to -180...180
-        let normalized = rotation.remainder(dividingBy: 360)
-        
-        // Hard cutoff: If within 90 degrees of "center", it's visible.
-        // Otherwise, instant 0 opacity.
-        let isVisible = abs(normalized) < 90
-        
-        content
-            .opacity(isVisible ? 1 : 0)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  GinRummy.swift
+//  GinGameView.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 11/17/25.
@@ -62,7 +62,7 @@ struct GinGameView: View {
     }
     
     private var opponentsHand: some View {
-        OpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame)
+        GinOpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame)
             .padding(.top, 30)
             .zIndex(2)
     }
@@ -166,7 +166,7 @@ struct GinGameView: View {
     }
     
     private var playersHand: some View {
-        PlayerHandView(
+        GinPlayerHandView(
             cards: $game.playerHand,
             discardPileZone: discardFrame,
             deckZone: deckFrame,
