@@ -1,5 +1,5 @@
 //
-//  TranscriptInviteHandView.swift
+//  GinTranscriptInviteHand.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 2/6/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TranscriptInviteHandView: View {
+struct GinTranscriptInviteHand: View {
     let words = ["LETS", "PLAY", "GIN!"]
     
     // State to track which word index we are on

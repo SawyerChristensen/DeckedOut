@@ -1,5 +1,5 @@
 //
-//  TranscriptView.swift
+//  GinTranscriptWaiting.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 2/1/26.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct TranscriptWaitingView: View {
-    let gameState: GameState
+struct GinTranscriptWaiting: View {
+    let gameState: GinRummyGameState
     let isFromMe: Bool
     var onHeightChange: ((CGFloat) -> Void)? = nil
     
@@ -20,7 +20,7 @@ struct TranscriptWaitingView: View {
     var body: some View {
         VStack {
             
-            TranscriptPlayerHandView(cards: opponentWon ? opponentsHand : playersHand, playerWon: playerWon, opponentWon: opponentWon)
+            GinTranscriptPlayerHand(cards: opponentWon ? opponentsHand : playersHand, playerWon: playerWon, opponentWon: opponentWon)
                 .offset(y: opponentWon ? -30 : 50)
                 .frame(height: 150)
                 

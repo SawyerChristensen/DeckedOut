@@ -8,7 +8,7 @@
 import Foundation
 
 // The game snapshot for sending the game over iMessage
-struct GameState: Codable {
+struct GinRummyGameState: Codable {
     let sessionID: UUID
     let deck: [Card]
     let discardPile: [Card]
@@ -21,8 +21,8 @@ struct GameState: Codable {
 }
 
 // MARK: The Game Engine
-class GameManager: ObservableObject {
-    static let shared = GameManager()
+class GinRummyManager: ObservableObject, GameEngine {
+    static let shared = GinRummyManager()
     
     @Published var sessionID: UUID? = nil
     @Published var playerHand: [Card] = []
@@ -42,7 +42,7 @@ class GameManager: ObservableObject {
     private init() {} // values are already initialized here ^
     
     // The View Controller will listen to this to know when to send the message
-    var onTurnCompleted: ((GameState) -> Void)?
+    var onTurnCompleted: ((Data, GameType) -> Void)?
     
     enum TurnPhase {
         case animationPhase // Animating the opponents turn before your own
@@ -143,8 +143,12 @@ class GameManager: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
     }
     
-    func loadState(_ state: GameState, isPlayersTurn: Bool, conversationID: String, isExplicitChange: Bool = false) {
-        //self can technically be omitted in many places here, but is written for visual clarity when compared with state variables of the same name
+    func loadState(from data: Data, isPlayersTurn: Bool, conversationID: String, isExplicitChange: Bool = false) {
+        guard let state = try? JSONDecoder().decode(GinRummyGameState.self, from: data) else {
+            print("Error: Failed to decode GinRummyGameState from data.")
+            return
+        }
+        
         let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu and hasnt tapped a bubble yet)
         let isSameSession = (self.sessionID == state.sessionID) //is this the game we are already looking at?
         let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
@@ -159,7 +163,7 @@ class GameManager: ObservableObject {
         }
         
         if isExplicitChange {
-            resetToInit() //may not be neccesary, but better safe than sorry (this is open to review)
+            resetToInit() //may not be neccesary, but better safe than sorry (this is open for review)
         }
         
         self.sessionID = state.sessionID
@@ -224,7 +228,7 @@ class GameManager: ObservableObject {
         self.turnNumber = 0
     }
     
-    private func applyOpponentTurnVisuals(state: GameState) -> Bool {
+    private func applyOpponentTurnVisuals(state: GinRummyGameState) -> Bool {
         guard let discardedIndex = state.indexSenderDiscardedFrom,
               let drawnIndex = state.indexSenderDrewTo else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
@@ -255,7 +259,7 @@ class GameManager: ObservableObject {
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
     }
     
-    func createNewGameState(withHandSize: Int) -> GameState {
+    func createNewGameState(withHandSize: Int) -> Data? {
         let newSessionID = UUID()
         var newDeck = Deck().cards
         var newPlayerHand: [Card] = []
@@ -267,7 +271,7 @@ class GameManager: ObservableObject {
         var newDiscardPile: [Card] = []
         newDiscardPile.append(newDeck.popLast()!)
         
-        let currentGameState = GameState(
+        let initialState = GinRummyGameState(
             sessionID: newSessionID,
             deck: newDeck,
             discardPile: newDiscardPile,
@@ -278,12 +282,13 @@ class GameManager: ObservableObject {
             indexSenderDiscardedFrom: nil,
             turnNumber: 0)
         
-        return currentGameState
+        return try? JSONEncoder().encode(initialState)
     }
     
     func sendGameState() {
         if deck.count == 1 { reshuffleDiscardIntoDeck() }
-        let currentGameState = GameState(
+        
+        let currentGameState = GinRummyGameState(
             sessionID: self.sessionID!,
             deck: self.deck,
             discardPile: self.discardPile,
@@ -295,7 +300,12 @@ class GameManager: ObservableObject {
             turnNumber: self.turnNumber + 1
         )
         
-        self.onTurnCompleted?(currentGameState) //send data to MessagesViewController
+        guard let stateData = try? JSONEncoder().encode(currentGameState) else {
+            print("Error: Failed to encode GinRummyGameState into Data.")
+            return
+        }
+        
+        self.onTurnCompleted?(stateData, .ginRummy) //send data to MessagesViewController
     }
     
 }

@@ -1,5 +1,5 @@
 //
-//  TranscriptHandView.swift
+//  GinTranscriptPlayerHand.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 2/1/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TranscriptPlayerHandView: View {
+struct GinTranscriptPlayerHand: View {
     let cards: [Card]
     let playerWon: Bool
     let opponentWon: Bool

@@ -1,7 +1,5 @@
 Finish working main menu that enables users to select a game
-    -figure out a transition for entering the subview while in expanded mode
-    -Pulsating “tap card to play” reminder text in the middle of the screen if looked at for too long
-    -add joker card under deck if user deals out all 5 in main menu
+    -Pulsating “tap card to play” reminder text in the middle of the screen if looked at main menu for too long
     -add hovering "handheld" effect to the top card? adding motion is always better
     
 -add rules screen for every game
@@ -10,7 +8,8 @@ Finish working main menu that enables users to select a game
 
 Add those games (easier said that done)
     -Add starter transcript views for each game (to be updated later)
-
+    -figure out summary text for golf and spades
+    -better win screen for each game?
 
 
 --Add other card games? Rename app if other games are added (add whole version number to each. pefect previous game before moving on)

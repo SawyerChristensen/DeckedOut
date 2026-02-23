@@ -1,5 +1,5 @@
 //
-//  TranscriptInviteView.swift
+//  GinTranscriptInvite.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 2/6/26.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct TranscriptInviteView: View {
+struct GinTranscriptInvite: View {
     var onHeightChange: ((CGFloat) -> Void)? = nil
 
     var body: some View {
         VStack() {
             
-            TranscriptInviteHandView()
+            GinTranscriptInviteHand()
                 .offset(y: 40)
                 .frame(height: 150)
                 

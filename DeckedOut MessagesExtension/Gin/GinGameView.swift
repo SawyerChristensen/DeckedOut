@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct GinGameView: View {
-    @EnvironmentObject var game: GameManager
+    @EnvironmentObject var game: GinRummyManager
     @Environment(\.colorScheme) var colorScheme
     
     @State private var deckFrame: CGRect = .zero
@@ -37,7 +37,7 @@ struct GinGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView()
+                WinScreenView(playerHasWon: game.playerHasWon, gameName: "Gin Rummy")
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }

@@ -14,12 +14,13 @@ struct MainMenuView: View {
     @ObservedObject var viewModel: MenuViewModel
     private var isExpanded: Bool { viewModel.presentationStyle == .expanded }
     
-    var onStartGame: (Int) -> Void //triggers createGame in MessagesViewController
+    var onStartGame: (GameType, Int) -> Void //triggers createGame in MessagesViewController
     
     @State private var handSize = 7 //full game is normally 10, but 7 is quicker and better suited for mobile
     @State private var cardsAnimatedAway = 0
     @State private var hiddenAnimatedAwayCards = 0
     @State private var isPulsating = false //for the "state game" text
+    @State private var isBubblePulsating = false //for the joker's reminder bubble
     @State private var card7Image: String = "7Spades"
     @State private var card10Image: String = "10Clubs"
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
@@ -27,10 +28,10 @@ struct MainMenuView: View {
     @State private var titleTransitionEdge: Edge = .trailing
     @State private var activeGameIndex: Int = 0
     @State private var availableGames: [MenuGame] = [
-        MenuGame(title: "Gin Rummy", logoCard: "ginRummyCard"),
-        MenuGame(title: "Crazy 8s", logoCard: "crazy8sCard"),
-        MenuGame(title: "Golf", logoCard: "golfCard"),
-        MenuGame(title: "Spades", logoCard: "spadesCard")
+        MenuGame(type: .ginRummy, title: "Gin Rummy", logoCard: "ginRummyCard"),
+        MenuGame(type: .crazy8s, title: "Crazy 8s", logoCard: "crazy8sCard"),
+        MenuGame(type: .golf, title: "Golf", logoCard: "golfCard"),
+        MenuGame(type: .spades, title: "Spades", logoCard: "spadesCard")
     ]
     @State private var isInSubview: Bool = false
     @State private var isTitleBarHidden: Bool = false
@@ -311,6 +312,7 @@ struct MainMenuView: View {
             Task {
                 try? await Task.sleep(nanoseconds: 200_000_000)
                 cardsAnimatedAway = 0
+                hiddenAnimatedAwayCards = 0
             }
         }) {
             Image(systemName: "chevron.left")
@@ -324,18 +326,35 @@ struct MainMenuView: View {
     
     private var deckSection: some View {
         ZStack {
-            let winCount = WinTracker.shared.getWinCount(for: availableGames[activeGameIndex].title)
-            if winCount == 0 {
-                Text("Wins: \(winCount)\n\nGood luck!")
-                    .font(.system(size: 20, weight: .semibold, design: .serif))
+            Image("JokerCard")
+                .resizable()
+                .aspectRatio(0.7, contentMode: .fit)
+                .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145)
+            
+            Group {
+                Image(systemName: "bubble.left.fill")
+                    .font(.system(size: 50))
+                    .offset(x: 40, y: -80)
                     .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .opacity(cardsAnimatedAway > 5 ? 1 : 0)
-            } else {
-                Text("Wins: \(winCount)")
-                    .font(.system(size: 20, weight: .semibold, design: .serif))
-                    .foregroundColor(.white)
-                    .opacity(cardsAnimatedAway > 5 ? 1 : 0)
+                    .shadow(radius: 5)
+                
+                Image(systemName: "arrow.up.circle.fill")
+                    .font(.system(size: 30))
+                    .offset(x: 40, y: -85)
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, Color(uiColor: .systemBlue))
+            }
+            .opacity(cardsAnimatedAway < 6 ? 0 : 1)
+            .scaleEffect(isBubblePulsating ? 1.05 : 1.0)
+            .onChange(of: cardsAnimatedAway) { _, newValue in
+                if newValue == 7 {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        isBubblePulsating = true
+                    }
+                }
+            }
+            .onDisappear {
+                isBubblePulsating = false // resets the state so it can animate again next time!
             }
             
             let isIpad = UIDevice.current.userInterfaceIdiom == .pad
@@ -356,7 +375,8 @@ struct MainMenuView: View {
     private var startButton: some View {
         Button(action: {
             DispatchQueue.global(qos: .userInitiated).async {
-                onStartGame(handSize)
+                let selectedGameType = availableGames[activeGameIndex].type
+                onStartGame(selectedGameType, handSize)
                 DispatchQueue.main.async {
                     withAnimation(.spring(duration: 0.7)) {
                         cardsAnimatedAway += 1
@@ -376,7 +396,7 @@ struct MainMenuView: View {
             Text("Start Game!")
                 .font(.system(size: isExpanded ? 40 : 28, weight: .bold, design: .serif))
                 .foregroundColor(.white)
-                .scaleEffect(isPulsating ? 1.05 : 1)
+                .scaleEffect(cardsAnimatedAway < 7 ? (isPulsating ? 1.05 : 1) : 1.0)
                 .onAppear {
                     withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
                         isPulsating = true
@@ -449,10 +469,11 @@ class MenuViewModel: ObservableObject { //only tracks presentation style
     }
 }
 
-struct MenuGame: Identifiable, Equatable {
+struct MenuGame: Identifiable {
     let id = UUID()
-    let title: String
-    let logoCard: String // The front of the card
+    var type: GameType
+    var title: String
+    var logoCard: String // The front of the card
     var wins: Int = 0
 }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OpponentHandView: View {
-    @EnvironmentObject var game: GameManager
+    @EnvironmentObject var game: GinRummyManager
     
     //Passed Arguments
     let cards: [Card]
