@@ -1,5 +1,5 @@
 //
-//  Crazys8TranscriptWaiting.swift
+//  Crazy8sTranscriptWaiting.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 2/23/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Crazys8TranscriptWaiting: View {
+struct Crazy8sTranscriptWaiting: View {
     let gameState: Crazy8sGameState
     let isFromMe: Bool
     var onHeightChange: ((CGFloat) -> Void)? = nil

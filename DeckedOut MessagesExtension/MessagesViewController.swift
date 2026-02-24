@@ -140,13 +140,41 @@ class MessagesViewController: MSMessagesAppViewController {
                     }
                 }
             } else {
+                Text("Error loading match data.") // Fallback UI in case the data is corrupted or decoding fails (should never trigger)
+                    .padding()
+            }
+            
+        case .crazy8s:
+            if let decodedState = try? JSONDecoder().decode(Crazy8sGameState.self, from: stateData) {
+                if decodedState.turnNumber == 0 { // Game invite
+                    Crazy8sTranscriptInvite(
+                        onHeightChange: { [weak self] height in
+                            self?.transcriptHeight = height
+                        }
+                    )
+                    .onTapGesture {
+                        self.requestPresentationStyle(.expanded)
+                    }
+                } else { // Default waiting view the user will see in all cases except an invite
+                    Crazy8sTranscriptWaiting(
+                        gameState: decodedState,
+                        isFromMe: isFromMe,
+                        onHeightChange: { [weak self] height in
+                            self?.transcriptHeight = height
+                        }
+                    )
+                    .onTapGesture {
+                        self.requestPresentationStyle(.expanded)
+                    }
+                }
+            } else {
                 // Fallback UI in case the data is corrupted or decoding fails
                 Text("Error loading match data.") //should never trigger!
                     .padding()
             }
             
-        case .crazy8s:
-            Text("Crazy 8s Transcript View") // Replace with Crazy8sTranscriptInvite/Waiting later
+            
+            
         case .golf:
             Text("Golf Transcript View")
         case .spades:
@@ -172,18 +200,17 @@ class MessagesViewController: MSMessagesAppViewController {
     
     private func presentGameView() {
         guard let engine = activeGameEngine else { return }
-        
         let gameViewController: UIViewController
         
         if let ginManager = engine as? GinRummyManager {
             if self.children.first is UIHostingController<GinRootView> { return }
             gameViewController = UIHostingController(rootView: GinRootView(game: ginManager))
             
-        } /* else if let crazy8sManager = engine as? Crazy8sManager {
+        } else if let crazy8sManager = engine as? Crazy8sManager {
             if self.children.first is UIHostingController<Crazy8sRootView> { return }
             gameViewController = UIHostingController(rootView: Crazy8sRootView(game: crazy8sManager))
-        }*/
-        else {
+            
+        } else {
             return
         }
         
@@ -232,7 +259,7 @@ class MessagesViewController: MSMessagesAppViewController {
             templateLayout.image = UIImage(named: "GinDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage layout caption")
         case .crazy8s:
-            // self.activeGameEngine = Crazy8sManager.shared
+            self.activeGameEngine = Crazy8sManager.shared
             templateLayout.image = UIImage(named: "CardGamesDefault")
             templateLayout.caption = "Let's Play Crazy 8s!"
         case .golf:
@@ -371,8 +398,7 @@ class MessagesViewController: MSMessagesAppViewController {
         case .ginRummy:
             self.activeGameEngine = GinRummyManager.shared
         case .crazy8s:
-            print("attempted to create crazy 8s game engine")
-            //self.activeGameEngine = Crazy8sManager.shared
+            self.activeGameEngine = Crazy8sManager.shared
         case .golf:
             print("attempted to create golf game engine")
             // self.activeGameEngine = GolfManager.shared

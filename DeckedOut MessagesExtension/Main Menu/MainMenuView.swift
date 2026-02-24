@@ -41,37 +41,24 @@ struct MainMenuView: View {
     
     var body: some View {
         ZStack {
-            if isInSubview {
+            if isInSubview { //Game-specific subview (...rn theres just one subview)
                 submenuView
             }
             
-            // MAIN MENU
-            VStack {
+            VStack {// Main view
                 gameTitleBar
-                    .opacity(isTitleBarHidden ? 0 : 1)
                 
-                Spacer()
-                    .frame(maxWidth: .infinity)
-                    .overlay( //this is so we can keep the vertical spacing of the Spacer() while injecting an HStack of different vertical spacing
-                        HStack {
-                            rulesButton
-                            Spacer()
-                            customizationButton
-                        }
-                        .padding(.top, 30)
-                        .padding(.horizontal, 30) //or .padding(.horizontal, isExpanded ? 80 : 30)
-                        .opacity(isTitleBarHidden ? 0 : 1)
-                    )
+                midSection
                 
                 cardWheel
             }
         }
-        //.animation(.easeInOut, value: isInSubview)
-        .background(backgroundLayer) //THIS DOES NOT MESS IT UP
+        .background(backgroundLayer)
         .onAppear {
             preloadWins()
         }
     }
+    
     
     private var backgroundLayer: some View {
         ZStack {
@@ -148,6 +135,22 @@ struct MainMenuView: View {
                 )
                 .ignoresSafeArea()
         )
+        .opacity(isTitleBarHidden ? 0 : 1)
+    }
+    
+    private var midSection: some View {
+        Spacer()
+            .frame(maxWidth: .infinity)
+            .overlay( //this is so we can keep the vertical spacing of the Spacer() while injecting an HStack of different vertical spacing
+                HStack {
+                    rulesButton
+                    Spacer()
+                    customizationButton
+                }
+                .padding(.top, 30)
+                .padding(.horizontal, 30) //or .padding(.horizontal, isExpanded ? 80 : 30)
+                .opacity(isTitleBarHidden ? 0 : 1)
+            )
     }
     
     private var cardWheel: some View {

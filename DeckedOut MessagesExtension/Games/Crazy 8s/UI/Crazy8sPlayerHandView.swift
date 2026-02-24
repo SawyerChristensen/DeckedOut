@@ -14,7 +14,6 @@ struct Crazy8sPlayerHandView: View {
     @Binding var cards: [Card]
     var discardPileZone: CGRect? = nil
     var deckZone: CGRect? = nil
-    let lastDrawSource: DrawSource
     
     // Callbacks for zoning
     var onDragChanged: ((Card, CGPoint) -> Void)? = nil
@@ -95,12 +94,7 @@ struct Crazy8sPlayerHandView: View {
                         )
                         .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
                             guard index == cards.count - 1 else { return }
-                            let sourceZone: CGRect?
-                                switch lastDrawSource {
-                                case .deck: sourceZone = deckZone
-                                case .discard: sourceZone = discardPileZone
-                                case .none: sourceZone = nil
-                                }
+                            let sourceZone: CGRect? = deckZone
                             if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
                                 animatingCard = card
                                 animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
@@ -124,11 +118,7 @@ struct Crazy8sPlayerHandView: View {
             height: drawZone.midY - cardFrame.midY
         )
         
-        if lastDrawSource == .deck {
-            flipRotation = 180
-        } else { //assuming .discard
-            flipRotation = 0
-        }
+        flipRotation = 180
         
         // initial state
         animationOffset = offsetToDraw
@@ -137,9 +127,7 @@ struct Crazy8sPlayerHandView: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animationOffset = .zero
             animationRotationCorrection = fanAngle
-            if lastDrawSource == .deck {
-                flipRotation = 0
-            }
+            flipRotation = 0
         }
             
         // Clear animation state after animation completes
@@ -243,10 +231,9 @@ struct Crazy8sPlayerHandView: View {
 }
 
 extension Crazy8sPlayerHandView {
-    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect, lastDrawSource: DrawSource) {
+    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect) {
         self._cards = .constant(cards)  // Creates a constant binding
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
-        self.lastDrawSource = lastDrawSource
     }
 }

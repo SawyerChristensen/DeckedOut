@@ -1,13 +1,13 @@
-Finish working main menu that enables users to select a game
-    -Pulsating “tap card to play” reminder text in the middle of the screen if looked at main menu for too long
-    -add hovering "handheld" effect to the top card? adding motion is always better
-    
 -Crazy 8s TO DO:
     -move init into main body from extension crazy8splayerhandview, same for ginplayerhandview
     -remove all references to gin
         -win & invite transcript view for crazy 8s
     -implement new rules/game engine
+        -add ui for choosing new suit when user discards an 8
     -make animations compatible with new rules
+    -add unique subview in main menu
+    
+-fix index drawn to/discarded from (in gin and maybeee crazy 8s)
 
 -add rules window for every game on main menu (also in game?)
 
@@ -21,6 +21,7 @@ Add new games (easier said that done)
     -better win screen for each game?
 
 
+
 GAMES TO ADD:
     -Crazy 8s (WIP)
     -Cribbage
@@ -29,11 +30,11 @@ GAMES TO ADD:
     -Golf
     -Hearts
     -Idiot
+    -Scopa
     -Spades (4 players)
     -Switch
-    -Yaniv
-    
-    -Scopa?
+    -Whot?
+    -Yaniv?
 
 
 -Customization menu similar to the main menu, where you drag to select your card, back button to the main menu once you select a card
@@ -46,6 +47,7 @@ GAMES TO ADD:
 
 
 QOL changes / possible updates:
+-“tap card to play” reminder text in the middle of the screen if user looked at main menu for too long, (repeating opacity animation?)
 -Add rules section and a notice that Aces are not high cards in gin rummy!
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that
 -discard pile should look a little more random rather than a perfectly straight stack of cards?

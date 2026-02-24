@@ -23,18 +23,14 @@ struct MenuCardWheel: View {
     private var cardWidth: CGFloat { hasSelectedGame ? 175 : 140 }
     private var cardHeight: CGFloat { hasSelectedGame ? 250 : 200 }
     private var spacing: CGFloat { hasSelectedGame ? -30 : -80 }
+    private var stepWidth: CGFloat { cardWidth + spacing }
     private var fanningAngle: Double { hasSelectedGame ? 16 : 12 }
     
     @State private var currentCenterIndex: Int = 0 //the default game that is shown when opening the main menu
     @State private var isDragging = false
     @GestureState private var dragTranslation: CGFloat = 0 //to track the drag amount while it's happening.
     
-    private var stepWidth: CGFloat {
-        cardWidth + spacing
-    }
-    private var continuousIndex: Double { // Calculate a fluid index that changes mid-swipe
-        Double(currentCenterIndex) - (Double(dragTranslation) / stepWidth)
-    }
+    private var continuousIndex: Double { Double(currentCenterIndex) - (Double(dragTranslation) / stepWidth) } //Calculate a fluid index that changes mid-swipe
     private var activeIndex: Int {
         let index = Int(round(continuousIndex))
         return max(0, min(games.count - 1, index))

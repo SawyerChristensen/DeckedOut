@@ -14,7 +14,6 @@ struct Crazy8sGameView: View {
     
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
-    @State private var lastDrawSource: DrawSource = .none
     @State private var isHoveringDiscard: Bool = false
 
     
@@ -37,18 +36,15 @@ struct Crazy8sGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView(playerHasWon: game.playerHasWon, gameName: "Gin Rummy")
+                WinScreenView(playerHasWon: game.playerHasWon, gameName: "Out!")
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
         .task { //triggers every view reinit! presentGameView currently blocks rebuilding if the game is already presented
             if !game.hasPerformedInitialLoad{
-                do {
-                    try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                } catch { }
+                do { try await Task.sleep(nanoseconds: 500_000_000) } catch { }  // 0.5s
             }
-            
-            animateOpponentsTurn()
+            await animateOpponentsTurn()
         }
     }
     
@@ -62,7 +58,7 @@ struct Crazy8sGameView: View {
     }
     
     private var opponentsHand: some View {
-        GinOpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame)
+        Crazy8sOpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame)
             .padding(.top, 30)
             .zIndex(2)
     }
@@ -115,9 +111,8 @@ struct Crazy8sGameView: View {
     }
     
     private func handleDeckTap() {
-        if game.phase == .drawPhase {
+        if game.phase == .playPhase {
             game.drawFromDeck()
-            lastDrawSource = .deck
             SoundManager.instance.playCardDeal()
         } else {
             SoundManager.instance.playErrorFeedback()
@@ -140,12 +135,9 @@ struct Crazy8sGameView: View {
             
             if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
                 CardView(frontImage: topCard.imageName)
-                    //.id(topCard.id) //for instant transitions
-                    //.transition(.identity) // /to get rid of fade
-                    .onTapGesture { handleDiscardTap() }
-                    .shadow(color: game.phase == .discardPhase && isHoveringDiscard ? .white : .black.opacity(0.2),
-                            radius: game.phase == .discardPhase && isHoveringDiscard ? 15 : 5)
-                    .scaleEffect(game.phase == .discardPhase && isHoveringDiscard ? 1.05 : 1.0)
+                    .shadow(color: game.canPlayCard && isHoveringDiscard ? .white : .black.opacity(0.2),
+                            radius: game.canPlayCard && isHoveringDiscard ? 15 : 5)
+                    .scaleEffect(game.canPlayCard && isHoveringDiscard ? 1.05 : 1.0)
                     .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
             } else { // display an outline of where a discarded card *should* go
                 RoundedRectangle(cornerRadius: 8)
@@ -155,22 +147,11 @@ struct Crazy8sGameView: View {
         }
     }
     
-    private func handleDiscardTap() {
-        if game.phase == .drawPhase {
-            game.drawFromDiscard()
-            lastDrawSource = .discard
-            SoundManager.instance.playCardDeal()
-        } else {
-            SoundManager.instance.playErrorFeedback()
-        }
-    }
-    
     private var playersHand: some View {
-        GinPlayerHandView(
+        Crazy8sPlayerHandView(
             cards: $game.playerHand,
             discardPileZone: discardFrame,
             deckZone: deckFrame,
-            lastDrawSource: lastDrawSource,
             onDragChanged: { card, location in
                 handleDragChanged(card: card, location: location)
             },
@@ -185,12 +166,25 @@ struct Crazy8sGameView: View {
     
     
     // MARK: - Helper functions
-    private func animateOpponentsTurn() { //modifies backend, which triggers animation in opponentHandView
-        if game.opponentDrewFromDeck {
-            game.opponentDrawFromDeck()
-        } else {
-            game.opponentDrawFromDiscard()
+    private func animateOpponentsTurn() async { //modifies backend, which triggers animation in opponentHandView
+        if game.cardsOpponentDrew > 0 {
+            for _ in 0..<game.cardsOpponentDrew {
+                game.opponentDrawFromDeck() 
+                
+                do { // Wait for the draw animation to finish before drawing the next one
+                    try await Task.sleep(nanoseconds: 800_000_000) // 0.8s
+                } catch { }
+            }
         }
+        
+        if let cardToDiscard = game.cardPendingDiscard {
+            game.cardAnimatingToDiscard = cardToDiscard
+            
+            do {
+                try await Task.sleep(nanoseconds: 600_000_000) // 0.6s for discard animation
+            } catch { }
+        }
+        
         game.hasPerformedInitialLoad = true
         //animating discard is automatically handled in opponents hand view
     }
@@ -218,7 +212,7 @@ struct Crazy8sGameView: View {
 
     private func handleDragEnded(card: Card, location: CGPoint) {
         if discardFrame.contains(location) {
-            if game.phase == .discardPhase {
+            if game.phase == .playPhase {
                 game.discardCard(card: card)
             } else {
                 SoundManager.instance.playErrorFeedback()

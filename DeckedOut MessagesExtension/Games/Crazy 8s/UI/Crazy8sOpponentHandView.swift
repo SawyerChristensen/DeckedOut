@@ -72,62 +72,52 @@ struct Crazy8sOpponentHandView: View {
         .frame(height: cardHeight) //technically should be adding the arch amount but this doesnt really matter...
         
         .onChange(of: cards) { oldHand, newHand in
-            if newHand.count > oldHand.count,
-                let drawIndex = game.indexDrawnTo { //the opponent is drawing!
+            if newHand.count > oldHand.count {
+                let drawIndex = newHand.count - 1 // Safely get the new card's index
                 guard animatingCard == nil else { return }
                 
                 let card = newHand[drawIndex]
                 cardWaitingToAnimate = card
                 
-                DispatchQueue.main.async { //wait so slot frames can update!
+                DispatchQueue.main.async {
                     guard let targetFrame = slotFrames[drawIndex],
-                          let zone = game.opponentDrewFromDeck ? deckZone : discardPileZone else {
+                          let zone = deckZone else {
                         cardWaitingToAnimate = nil
                         return
                     }
-                                  
                     
-                    let card = newHand[drawIndex]
-                    let finalAngle = Angle.degrees(Double(drawIndex - newHand.count/2) * -fanningAngle)
+                    let exactCenterOffset = Double(newHand.count - 1) / 2.0
+                    let finalAngle = Angle.degrees((Double(drawIndex) - exactCenterOffset) * -fanningAngle)
                     
                     self.animatingCard = card
-                    animateDraw(cardFrame: targetFrame, drawZone: zone, fanAngle: finalAngle) { //trigger this after animateDraw...
-                        
-                        if let discardedIndex = game.indexDiscardedFrom {
-                            if newHand.indices.contains(discardedIndex) {
-                                let discardCard = newHand[discardedIndex]
-                                let discardFrame = slotFrames[discardedIndex] ?? targetFrame
-                                let discardAngle = Angle.degrees(Double(discardedIndex - newHand.count/2) * -fanningAngle)
-                                
-                                self.animatingCard = discardCard
-                                animateDiscard(card: discardCard, cardFrame: discardFrame, fanAngle: discardAngle)
-                            }
-                        }
-                    }
+                    animateDraw(cardFrame: targetFrame, drawZone: zone, fanAngle: finalAngle)
                 }
+            }
+        }
+        
+        .onChange(of: game.cardAnimatingToDiscard) { _, pendingCard in
+            if let card = pendingCard, let discardedIndex = cards.firstIndex(of: card) {
+                let discardFrame = slotFrames[discardedIndex] ?? deckZone ?? .zero
+                
+                // Use exact centerOffset here too!
+                let exactCenterOffset = Double(cards.count - 1) / 2.0
+                let discardAngle = Angle.degrees((Double(discardedIndex) - exactCenterOffset) * -fanningAngle)
+                
+                self.animatingCard = card
+                animateDiscard(card: card, cardFrame: discardFrame, fanAngle: discardAngle)
             }
         }
     }
     
-    private func animateDraw(cardFrame: CGRect, drawZone: CGRect, fanAngle: Angle, completion: @escaping () -> Void) { //automatically calls the animateDiscard function as well...
+    private func animateDraw(cardFrame: CGRect, drawZone: CGRect, fanAngle: Angle) { //automatically calls the animateDiscard function as well...
         // Calculate offset from card's natural position to discard pile
-        let offsetToDraw: CGSize
-        if game.opponentDrewFromDeck {
-            offsetToDraw = CGSize(
+        let offsetToDraw = CGSize(
                 width: drawZone.midX - cardFrame.midX,
                 height: drawZone.midY - cardFrame.midY + cardHeight/4) //cardHeight/4 is offseting how the deck is built stack is construction and just so happens to match well. will need to change this once the deck starts getting slimmed down
-        } else {
-            offsetToDraw = CGSize(
-                width: drawZone.midX - cardFrame.midX,
-                height: drawZone.midY - cardFrame.midY)
-        }
-        
-        if !game.opponentDrewFromDeck {
-            animatingRotation = 0
-        } else { animatingRotation = 180 } //likely redundant but lets be safe
         
         // initial state
         animationOffset = offsetToDraw
+        animatingRotation = 0
         animationRotationCorrection = .degrees(0)
         self.cardWaitingToAnimate = nil
         
@@ -139,7 +129,7 @@ struct Crazy8sOpponentHandView: View {
             
         // Clear draw animation state and call discard animation
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-            completion()
+            self.animatingCard = nil
         }
     }
     
@@ -168,6 +158,7 @@ struct Crazy8sOpponentHandView: View {
             animatingCard = nil
             animationOffset = .zero
             game.opponentDiscardCard(card: card)
+            game.cardAnimatingToDiscard = nil
         }
     }
 }

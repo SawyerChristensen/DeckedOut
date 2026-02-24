@@ -14,9 +14,9 @@ struct Crazy8sGameState: Codable {
     let discardPile: [Card]
     let senderHand: [Card]
     let receiverHand: [Card]
-    let senderDrewFromDeck: Bool
-    let indexSenderDrewTo: Int?
-    let indexSenderDiscardedFrom: Int?
+    let cardsOpponentDrew: Int
+    let didDiscard: Bool
+    let activeSuitOverride: Suit?
     let turnNumber: Int
 }
 
@@ -25,18 +25,21 @@ class Crazy8sManager: ObservableObject, GameEngine {
     static let shared = Crazy8sManager()
     
     @Published var sessionID: UUID? = nil
-    @Published var playerHand: [Card] = []
-    @Published var opponentHand: [Card] = []
     @Published var deck: [Card] = []
     @Published var discardPile: [Card] = []
+    @Published var playerHand: [Card] = []
+    @Published var opponentHand: [Card] = []
+    @Published var cardsOpponentDrew: Int = 0
+    @Published var cardsDrawnThisTurn: Int = 0 //user version that replaces above int
+    @Published var userDidDiscard: Bool = false
+    @Published var activeSuitOverride: Suit?
+    @Published var turnNumber: Int = 0
     @Published var phase: TurnPhase = .animationPhase //stays local
-    @Published var opponentDrewFromDeck: Bool = false
-    @Published var indexDrawnTo: Int? = nil
-    @Published var indexDiscardedFrom: Int? = nil
+    @Published var canPlayCard: Bool = false //stays local
     @Published var playerHasWon: Bool = false //stays local
     @Published var opponentHasWon: Bool = false //stays local
-    @Published var turnNumber: Int = 0
-    
+    @Published var cardPendingDiscard: Card? = nil // Holds the card waiting in the wings
+    @Published var cardAnimatingToDiscard: Card? = nil       // The trigger the view actually watches
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     
     private init() {} // values are already initialized here ^
@@ -46,78 +49,90 @@ class Crazy8sManager: ObservableObject, GameEngine {
     
     enum TurnPhase {
         case animationPhase // Animating the opponents turn before your own
-        case drawPhase    // Waiting for user to pick from Deck or Discard
-        case discardPhase // Waiting for user to drag a card to discard pile
-        case idlePhase    // Opponent's turn
-        case gameEndPhase // Only unlocked upon winning
+        case playPhase      // Draw or discard!
+        case idlePhase      // Opponent's turn
+        case gameEndPhase   // Only unlocked upon a player winning
     }
     
+    func checkHandPlayability(){
+        guard let topCard = discardPile.last else {
+            canPlayCard = false
+            return
+        }
+        
+        canPlayCard = playerHand.contains { card in
+            if card.rank == .eight { //8s are wild! always playable!
+                return true
+            }
+            
+            if let requiredSuit = activeSuitOverride { //If the opponent played an 8, user must match their declared suit
+                return card.suit == requiredSuit
+            }
+            
+            return card.suit == topCard.suit || card.rank == topCard.rank
+        }
+    }
     
-    func drawFromDeck() {
-        guard phase == .drawPhase, !deck.isEmpty else { return }
+    func drawFromDeck() { //CHECK IF THE USER HAS DRAWN 3 TIMES THIS TURN, IF TRUE, SEND GAME STATE AND SWITCH GAME PHASE
+        guard phase == .playPhase, !deck.isEmpty, !canPlayCard else { return }
         let card = deck.popLast()! //maybe make this a guard statement? this does the samething in the earlier guard statement...
+        //add index drawn to (in the case the user reorders their hand?)
         playerHand.append(card)
-        indexDrawnTo = playerHand.count - 1 //check if we need this to be -1!!
-        opponentDrewFromDeck = true
-        phase = .discardPhase
+        checkHandPlayability() //CALL THIS IN LOAD!!
+        cardsDrawnThisTurn += 1
+        
+        if cardsDrawnThisTurn == 3 && !canPlayCard { //if youve drawn your 3rd card and still cannot play it, the user has to pass
+            phase = .idlePhase
+            sendGameState()
+        }
     }
     
-    func drawFromDiscard() {
-        guard phase == .drawPhase, !discardPile.isEmpty else { return }
-        let card = discardPile.popLast()!
-        playerHand.append(card)
-        indexDrawnTo = playerHand.count - 1
-        opponentDrewFromDeck = false
-        phase = .discardPhase
-    }
-    
-    func discardCard(card: Card) { //possible room for refactoring/removing discardCard
-        guard phase == .discardPhase, let index = playerHand.firstIndex(of: card) else { return }
-        indexDiscardedFrom = index
-        playerHand.remove(at: index) //we could also use indexDiscardedFrom...
+    func discardCard(card: Card, chosenSuit: Suit? = nil) { 
+        guard phase == .playPhase, canPlayCard, let index = playerHand.firstIndex(of: card) else { return }
+        playerHand.remove(at: index)
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
-        playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
+
+        if card.rank == .eight { //REVISIT THIS LATER BASED ON HOW WE IMPLEMENT THE ANIMATION
+            activeSuitOverride = chosenSuit // If it's an 8, apply the suit they picked from your UI prompt
+        } else {
+            activeSuitOverride = nil // If it's a standard card, clear any previous suit overrides
+        }
+
+        playerHasWon = playerHand.isEmpty
         if playerHasWon {
             SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
-            WinTracker.shared.incrementWins(for: "Gin Rummy")
+            WinTracker.shared.incrementWins(for: "Crazy 8s")
         } else { phase = .idlePhase }
+        
         sendGameState()
     }
     
     func opponentDrawFromDeck() {
         guard phase == .animationPhase,
-              !deck.isEmpty,
-              let drawIndex = indexDrawnTo else {
+              !deck.isEmpty else {
             return
         }
         let card = deck.popLast()!
-        opponentHand.insert(card, at: drawIndex)
-    }
-    
-    func opponentDrawFromDiscard() {
-        guard phase == .animationPhase,
-              !discardPile.isEmpty,
-              let drawIndex = indexDrawnTo else {
-            return
-        }
-        let card = discardPile.popLast()!
-        opponentHand.insert(card, at: drawIndex)
+        opponentHand.append(card)
     }
     
     func opponentDiscardCard(card: Card) { //pseudo discard
         guard phase == .animationPhase else {
             return }
-        opponentHand.remove(at: indexDiscardedFrom!)
+        opponentHand.removeLast()
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
-        opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
+        
+        opponentHasWon = opponentHand.isEmpty
         if opponentHasWon {
             SoundManager.instance.playGameEnd(didWin: false)
             phase = .gameEndPhase
         } else {
-            phase = .drawPhase
+            //ANIMATE THE OPPONENTS DECISION FOR WHAT SUIT THEY DECIDED IF CARD DISCARDED WAS AN 8
+            phase = .playPhase
+            checkHandPlayability()
         }
     }
     
@@ -130,22 +145,17 @@ class Crazy8sManager: ObservableObject, GameEngine {
         discardPile = [secondDiscard, topDiscard]
     }
     
-    func saveMidTurnState(conversationID: String) {
-        guard phase == .discardPhase, let sID = sessionID else { return } //only save if the user is currently in the middle of a turn
-        
-        if let encoded = try? JSONEncoder().encode(playerHand) {
-            UserDefaults.standard.set(encoded, forKey: "midTurn_\(sID.uuidString)")
-        }
+    func saveMidTurnState(conversationID: String) { //not needed in Crazy 8s, but needed to conform to our GameEngine protocol
+        return
     }
     
     func clearMidTurnState(conversationID: String) {
-        guard let sID = sessionID else { return }
-        UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
+        return
     }
     
     func loadState(from data: Data, isPlayersTurn: Bool, conversationID: String, isExplicitChange: Bool = false) {
-        guard let state = try? JSONDecoder().decode(GinRummyGameState.self, from: data) else {
-            print("Error: Failed to decode GinRummyGameState from data.")
+        guard let state = try? JSONDecoder().decode(Crazy8sGameState.self, from: data) else {
+            print("Error: Failed to decode Crazy8sGameState from data.")
             return
         }
         
@@ -171,43 +181,23 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.deck = state.deck
         self.discardPile = state.discardPile
         
-        if isPlayersTurn, //does not check if this is the same game session!! just the same conversation!!
-           let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
-           let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
-            self.playerHand = stashedHand
-            self.opponentHand = state.senderHand
-            if let topDeckCard = deck.last,
-               stashedHand.contains(where: { $0.id == topDeckCard.id }) { // the user previously drew from the deck
-                deck.removeLast()
-            } else { //the user drew from the discard pile instead
-                discardPile.removeLast()
-            }
-            phase = .discardPhase
-            
-        } else if isPlayersTurn { //the user is beginning their turn...
+        if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
             let hasVisualsToAnimate = applyOpponentTurnVisuals(state: state)
-            if hasVisualsToAnimate {//it is not the first turn...
+            if hasVisualsToAnimate { //it is NOT the first turn...
                 phase = .animationPhase
-            } else { //it is the first turn...
-                checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
-                if playerHasWon || opponentHasWon {
-                    phase = .gameEndPhase
-                    SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
-                } else {
-                    phase = .drawPhase
-                }
+            } else { //it IS the first turn...
+                phase = .playPhase
+                checkHandPlayability()
             }
-            
         } else { //it is not the players turn...
             self.playerHand = state.senderHand
             self.opponentHand = state.receiverHand
-            playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
+            playerHasWon = self.playerHand.isEmpty
             if playerHasWon {
                 phase = .gameEndPhase
                 SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
             } else {
-                // only enter animation phase if it's our turn to watch the opponent move
                 phase = .idlePhase
             }
         }
@@ -220,43 +210,41 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.deck = []
         self.discardPile = []
         self.phase = .animationPhase
-        self.opponentDrewFromDeck = false
-        self.indexDrawnTo = nil
-        self.indexDiscardedFrom = nil
+        self.canPlayCard = false
+        self.activeSuitOverride = nil
+        self.cardsDrawnThisTurn = 0
+        self.cardsOpponentDrew = 0
         self.playerHasWon = false
         self.opponentHasWon = false
         self.turnNumber = 0
     }
     
-    private func applyOpponentTurnVisuals(state: GinRummyGameState) -> Bool {
-        guard let discardedIndex = state.indexSenderDiscardedFrom,
-              let drawnIndex = state.indexSenderDrewTo else {
+    private func applyOpponentTurnVisuals(state: Crazy8sGameState) -> Bool {
+        guard turnNumber > 0 else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
             return false
         }
-        //print("Readying opponent turn visuals") //this seems to get triggered multiple times?
-        
-        self.opponentDrewFromDeck = state.senderDrewFromDeck
-        indexDrawnTo = drawnIndex
-        indexDiscardedFrom = discardedIndex
         
         var opponentsHandPreAnimation = state.senderHand
-        let cardTheyDiscarded = discardPile.popLast()! //we will animate it back later...
-        opponentsHandPreAnimation.insert(cardTheyDiscarded, at: discardedIndex)
-        let cardToReturn = opponentsHandPreAnimation.remove(at: drawnIndex)
-        if opponentDrewFromDeck {
-            deck.append(cardToReturn)
-        } else {
-            discardPile.append(cardToReturn)
-        }
-        opponentHand = opponentsHandPreAnimation
+        self.cardsOpponentDrew = state.cardsOpponentDrew
         
+        if state.didDiscard {
+            let cardTheyDiscarded = discardPile.popLast()! //we will animate it back later...
+            self.cardPendingDiscard = cardTheyDiscarded
+            opponentsHandPreAnimation.append(cardTheyDiscarded)
+        } else {
+            self.cardPendingDiscard = nil
+        }
+        
+        for _ in 0..<cardsOpponentDrew {
+            if !opponentsHandPreAnimation.isEmpty { //do we really need to check this? this might be pointless
+                let cardToReturn = opponentsHandPreAnimation.removeLast()
+                deck.append(cardToReturn)
+            }
+        }
+        
+        opponentHand = opponentsHandPreAnimation
         return true
-    }
-    
-    func checkWin() { //set for deprecation when we disallow first turn wins
-        playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
-        opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
     }
     
     func createNewGameState(withHandSize: Int) -> Data? {
@@ -271,15 +259,15 @@ class Crazy8sManager: ObservableObject, GameEngine {
         var newDiscardPile: [Card] = []
         newDiscardPile.append(newDeck.popLast()!)
         
-        let initialState = GinRummyGameState(
+        let initialState = Crazy8sGameState(
             sessionID: newSessionID,
             deck: newDeck,
             discardPile: newDiscardPile,
             senderHand: newPlayerHand,
             receiverHand: newOpponentHand,
-            senderDrewFromDeck: false, //defaults to user drawing from discard pile but shouldnt matter if these are also nil:
-            indexSenderDrewTo: nil,
-            indexSenderDiscardedFrom: nil,
+            cardsOpponentDrew: 0,
+            didDiscard: false,
+            activeSuitOverride: nil,
             turnNumber: 0)
         
         return try? JSONEncoder().encode(initialState)
@@ -288,24 +276,24 @@ class Crazy8sManager: ObservableObject, GameEngine {
     func sendGameState() {
         if deck.count == 1 { reshuffleDiscardIntoDeck() }
         
-        let currentGameState = GinRummyGameState(
+        let currentGameState = Crazy8sGameState(
             sessionID: self.sessionID!,
             deck: self.deck,
             discardPile: self.discardPile,
             senderHand: self.playerHand,
             receiverHand: self.opponentHand,
-            senderDrewFromDeck: self.opponentDrewFromDeck,
-            indexSenderDrewTo: self.indexDrawnTo,
-            indexSenderDiscardedFrom: self.indexDiscardedFrom,
+            cardsOpponentDrew: self.cardsDrawnThisTurn,
+            didDiscard: self.userDidDiscard,
+            activeSuitOverride: activeSuitOverride,
             turnNumber: self.turnNumber + 1
         )
         
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
-            print("Error: Failed to encode GinRummyGameState into Data.")
+            print("Error: Failed to encode Crazy8sGameState into Data.")
             return
         }
         
-        self.onTurnCompleted?(stateData, .ginRummy) //send data to MessagesViewController
+        self.onTurnCompleted?(stateData, .crazy8s) //send data to MessagesViewController
     }
     
 }

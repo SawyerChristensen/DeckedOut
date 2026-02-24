@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Crazy8sTranscriptInviteHand: View {
-    let words = ["LETS", "PLAY", "GIN!"] //FIX!!
+    let words = ["CRAZY", "EIGHT"]
     
     // State to track which word index we are on
     @State private var currentWordIndex = 0
@@ -16,7 +16,7 @@ struct Crazy8sTranscriptInviteHand: View {
     @State private var isFlipped = false
     
     // Timer
-    let timer = Timer.publish(every: 2.5, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 3.0, on: .main, in: .common).autoconnect()
     
     // Fanning Constants
     private let cardWidth: CGFloat = 84 //120 * 0.7
@@ -25,22 +25,22 @@ struct Crazy8sTranscriptInviteHand: View {
     
     var body: some View {
         HStack(spacing: -30) {
-            ForEach(0..<4, id: \.self) { index in
+            ForEach(0..<5, id: \.self) { index in
                 
                 // Calculate the Current Character (Front)
                 let currentWord = words[currentWordIndex]
                 let frontChar = getChar(from: currentWord, at: index)
                 
                 // Calculate the Next Character (Back)
-                let nextIndex = (currentWordIndex + 1) % 3
+                let nextIndex = (currentWordIndex + 1) % 2
                 let nextWord = words[nextIndex]
                 let backChar = getChar(from: nextWord, at: index)
                 
                 LetterCardView(frontChar: frontChar, backChar: backChar, isFlipped: isFlipped)
                     .frame(width: cardWidth, height: cardHeight)
                     .zIndex(Double(index))
-                    .rotationEffect(.degrees((Double(index) - 1.5) * fanningAngle))
-                    .offset(y: abs((Double(index) - 1.5) * 8))
+                    .rotationEffect(.degrees((Double(index) - 2.0) * fanningAngle)) //replace 1.5 with double(currentWord.length / 2)
+                    .offset(y: abs((Double(index) - 2.0) * 8))
                     .animation(
                         .spring(response: 0.6, dampingFraction: 0.7)
                         .delay(Double(index) * 0.2),
@@ -54,30 +54,23 @@ struct Crazy8sTranscriptInviteHand: View {
     }
     
     func cycleWords() {
-        // 1. Trigger the Flip Animation (Front -> Back)
+        // Trigger the Flip Animation (Front -> Back)
         isFlipped = true
         
-        // 2. Wait for animation to finish, then reset instantly
+        // Wait for animation to finish, then reset instantly
         // The delay here should match animation duration + stagger
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            
-            // Disable animation for the reset to make it instant
-            var transaction = Transaction()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.1) {
+            var transaction = Transaction()// Disable animation for the reset to make it instant
             transaction.disablesAnimations = true
             
             withTransaction(transaction) {
-                // RESET: Move to next word index
                 currentWordIndex = (currentWordIndex + 1) % words.count
-                
-                // RESET: Snap rotation back to 0
-                // Because we advanced the index, the "Front" is now what the "Back" used to be.
-                // The user sees no visual change, but the card is reset for the next flip.
                 isFlipped = false
             }
         }
     }
     
-    func getChar(from word: String, at index: Int) -> String { //do we really need this?
+    func getChar(from word: String, at index: Int) -> String {
         let chars = Array(word)
         if index < chars.count {
             return String(chars[index])
