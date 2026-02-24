@@ -95,7 +95,7 @@ struct Crazy8sOpponentHandView: View {
             }
         }
         
-        .onChange(of: game.cardAnimatingToDiscard) { _, pendingCard in
+        .onChange(of: game.opponentCardAnimatingToDiscard) { _, pendingCard in
             if let card = pendingCard, let discardedIndex = cards.firstIndex(of: card) {
                 let discardFrame = slotFrames[discardedIndex] ?? deckZone ?? .zero
                 
@@ -158,7 +158,7 @@ struct Crazy8sOpponentHandView: View {
             animatingCard = nil
             animationOffset = .zero
             game.opponentDiscardCard(card: card)
-            game.cardAnimatingToDiscard = nil
+            game.opponentCardAnimatingToDiscard = nil
         }
     }
 }

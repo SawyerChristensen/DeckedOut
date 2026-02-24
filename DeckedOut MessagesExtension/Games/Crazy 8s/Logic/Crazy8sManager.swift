@@ -35,11 +35,12 @@ class Crazy8sManager: ObservableObject, GameEngine {
     @Published var activeSuitOverride: Suit?
     @Published var turnNumber: Int = 0
     @Published var phase: TurnPhase = .animationPhase //stays local
-    @Published var canPlayCard: Bool = false //stays local
+    @Published var userCanDiscard: Bool = false //stays local
+    @Published var userNeedsToChooseSuit: Bool = false //stays local
     @Published var playerHasWon: Bool = false //stays local
     @Published var opponentHasWon: Bool = false //stays local
-    @Published var cardPendingDiscard: Card? = nil // Holds the card waiting in the wings
-    @Published var cardAnimatingToDiscard: Card? = nil       // The trigger the view actually watches
+    @Published var opponentCardPendingDiscard: Card? = nil // Holds the card waiting in the wings
+    @Published var opponentCardAnimatingToDiscard: Card? = nil       // The trigger the view actually watches
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     
     private init() {} // values are already initialized here ^
@@ -49,18 +50,18 @@ class Crazy8sManager: ObservableObject, GameEngine {
     
     enum TurnPhase {
         case animationPhase // Animating the opponents turn before your own
-        case playPhase      // Draw or discard!
+        case mainPhase      // Draw or discard!
         case idlePhase      // Opponent's turn
         case gameEndPhase   // Only unlocked upon a player winning
     }
     
     func checkHandPlayability(){
         guard let topCard = discardPile.last else {
-            canPlayCard = false
+            userCanDiscard = false
             return
         }
         
-        canPlayCard = playerHand.contains { card in
+        userCanDiscard = playerHand.contains { card in
             if card.rank == .eight { //8s are wild! always playable!
                 return true
             }
@@ -74,37 +75,59 @@ class Crazy8sManager: ObservableObject, GameEngine {
     }
     
     func drawFromDeck() { //CHECK IF THE USER HAS DRAWN 3 TIMES THIS TURN, IF TRUE, SEND GAME STATE AND SWITCH GAME PHASE
-        guard phase == .playPhase, !deck.isEmpty, !canPlayCard else { return }
+        guard phase == .mainPhase, !deck.isEmpty, !userCanDiscard else { return }
         let card = deck.popLast()! //maybe make this a guard statement? this does the samething in the earlier guard statement...
         //add index drawn to (in the case the user reorders their hand?)
         playerHand.append(card)
         checkHandPlayability() //CALL THIS IN LOAD!!
         cardsDrawnThisTurn += 1
         
-        if cardsDrawnThisTurn == 3 && !canPlayCard { //if youve drawn your 3rd card and still cannot play it, the user has to pass
+        if cardsDrawnThisTurn == 3 && !userCanDiscard { //if youve drawn your 3rd card and still cannot play it, the user has to pass
             phase = .idlePhase
             sendGameState()
         }
     }
     
-    func discardCard(card: Card, chosenSuit: Suit? = nil) { 
-        guard phase == .playPhase, canPlayCard, let index = playerHand.firstIndex(of: card) else { return }
+    func discardCard(card: Card) { // Removed chosenSuit from here, we'll handle it separately
+        guard let topCard = discardPile.last else { return }
+        
+        let isEight = card.rank == .eight
+        let matchesSuit = (activeSuitOverride != nil) ? (card.suit == activeSuitOverride) : (card.suit == topCard.suit)
+        let matchesRank = (card.rank == topCard.rank)
+        let isLegalPlay = isEight || matchesSuit || matchesRank
+        
+        guard phase == .mainPhase, isLegalPlay, let index = playerHand.firstIndex(of: card) else {
+            SoundManager.instance.playErrorFeedback()
+            return
+        }
+        
         playerHand.remove(at: index)
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
 
-        if card.rank == .eight { //REVISIT THIS LATER BASED ON HOW WE IMPLEMENT THE ANIMATION
-            activeSuitOverride = chosenSuit // If it's an 8, apply the suit they picked from your UI prompt
+        if card.rank == .eight {
+            userNeedsToChooseSuit = true //signals GameView to prompt the user for a new suit
         } else {
-            activeSuitOverride = nil // If it's a standard card, clear any previous suit overrides
+            activeSuitOverride = nil
+            completeTurn()
         }
-
+    }
+    
+    func submitChosenSuit(_ suit: Suit) {
+        activeSuitOverride = suit
+        userNeedsToChooseSuit = false
+        completeTurn()
+    }
+    
+    private func completeTurn() {
         playerHasWon = playerHand.isEmpty
         if playerHasWon {
             SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
             WinTracker.shared.incrementWins(for: "Crazy 8s")
-        } else { phase = .idlePhase }
+        } else {
+            phase = .idlePhase
+        }
         
         sendGameState()
     }
@@ -131,7 +154,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
             phase = .gameEndPhase
         } else {
             //ANIMATE THE OPPONENTS DECISION FOR WHAT SUIT THEY DECIDED IF CARD DISCARDED WAS AN 8
-            phase = .playPhase
+            phase = .mainPhase
             checkHandPlayability()
         }
     }
@@ -187,7 +210,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
             if hasVisualsToAnimate { //it is NOT the first turn...
                 phase = .animationPhase
             } else { //it IS the first turn...
-                phase = .playPhase
+                phase = .mainPhase
                 checkHandPlayability()
             }
         } else { //it is not the players turn...
@@ -210,7 +233,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.deck = []
         self.discardPile = []
         self.phase = .animationPhase
-        self.canPlayCard = false
+        self.userCanDiscard = false
         self.activeSuitOverride = nil
         self.cardsDrawnThisTurn = 0
         self.cardsOpponentDrew = 0
@@ -230,10 +253,10 @@ class Crazy8sManager: ObservableObject, GameEngine {
         
         if state.didDiscard {
             let cardTheyDiscarded = discardPile.popLast()! //we will animate it back later...
-            self.cardPendingDiscard = cardTheyDiscarded
+            self.opponentCardPendingDiscard = cardTheyDiscarded
             opponentsHandPreAnimation.append(cardTheyDiscarded)
         } else {
-            self.cardPendingDiscard = nil
+            self.opponentCardPendingDiscard = nil
         }
         
         for _ in 0..<cardsOpponentDrew {

@@ -95,8 +95,8 @@ struct GinPlayerHandView: View {
                         )
                         .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
                             guard index == cards.count - 1 else { return }
-                            let sourceZone: CGRect?
-                                switch lastDrawSource {
+                            let sourceZone: CGRect? //defaults to nil, does not animate a card being drawn
+                                switch lastDrawSource { //unless one IS drawn, in which case this value is set
                                 case .deck: sourceZone = deckZone
                                 case .discard: sourceZone = discardPileZone
                                 case .none: sourceZone = nil

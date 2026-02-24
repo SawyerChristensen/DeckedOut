@@ -1,19 +1,25 @@
 -Crazy 8s TO DO:
-    -move init into main body from extension crazy8splayerhandview, same for ginplayerhandview
-    -remove all references to gin
-        -win & invite transcript view for crazy 8s
+    -win transcript view
     -implement new rules/game engine
-        -add ui for choosing new suit when user discards an 8
-    -make animations compatible with new rules
+        -make animations compatible with new rules (might be done, check)
+    -refactor discard scale and highlight. userCanDiscard does not specify dragged card can be discarded
     -add unique subview in main menu
-    
--fix index drawn to/discarded from (in gin and maybeee crazy 8s)
 
 -add rules window for every game on main menu (also in game?)
 
--disable customization button for now?
+-disable customization button for now? ("rules string" next to book?)
 
-********************************************************************************************************
+-add repeating gin rummy/crazy8s cards to main menu so theres a full fan
+
+***----------*** UPDATE 2.0 ***----------***
+
+-fix index drawn to/discarded from (in gin and maybeee crazy 8s)
+
+-delete inits in the player hand extensions and test if fine?
+
+-fix invite transcript card jitter
+
+*----------* UPDATE 2.0.1 *----------*
 
 Add new games (easier said that done)
     -Add starter transcript views for each game (to be updated later)

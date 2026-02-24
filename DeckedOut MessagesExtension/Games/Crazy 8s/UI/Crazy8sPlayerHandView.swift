@@ -26,6 +26,7 @@ struct Crazy8sPlayerHandView: View {
     @State private var predictedDropIndex: Int?
     
     // For animating from deck/discard
+    @State private var hasInitialLoadCompleted = false
     @State private var animatingCard: Card?
     @State private var animationOffset: CGSize = .zero
     @State private var animationRotationCorrection: Angle = .zero
@@ -93,7 +94,7 @@ struct Crazy8sPlayerHandView: View {
                                 }
                         )
                         .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
-                            guard index == cards.count - 1 else { return }
+                            guard hasInitialLoadCompleted && index == cards.count - 1 else { return }
                             let sourceZone: CGRect? = deckZone
                             if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
                                 animatingCard = card
@@ -109,6 +110,11 @@ struct Crazy8sPlayerHandView: View {
             }
         }
         .frame(height: cardHeight)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { //kind of a bandaid solution but it works
+                hasInitialLoadCompleted = true
+            }
+        }
     }
     
     private func animateDraw(card: Card, cardFrame: CGRect, drawZone: CGRect, fanAngle: Angle) {

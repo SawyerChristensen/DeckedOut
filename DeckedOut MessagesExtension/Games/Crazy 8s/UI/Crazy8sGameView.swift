@@ -31,6 +31,12 @@ struct Crazy8sGameView: View {
             }
         }
         .overlay {
+            if game.userNeedsToChooseSuit {
+                SuitSelectionOverlay()
+            }
+        }
+        
+        .overlay {
             if game.phase == .idlePhase {
                 WaitingOverlayView()
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
@@ -111,7 +117,7 @@ struct Crazy8sGameView: View {
     }
     
     private func handleDeckTap() {
-        if game.phase == .playPhase {
+        if game.phase == .mainPhase {
             game.drawFromDeck()
             SoundManager.instance.playCardDeal()
         } else {
@@ -119,7 +125,7 @@ struct Crazy8sGameView: View {
         }
     }
     
-    private var discardPile: some View {
+    private var discardPile: some View { //Clear background probably not needed, but its guarantees safety. (open to review)
         ZStack {
             Color.clear // A ghost view reserves the space so Spacers don't collapse when discardPile.count == 0
                 .frame(width: 101.5, height: 145) // 101.5 = 145 * 0.7
@@ -133,16 +139,24 @@ struct Crazy8sGameView: View {
                     }
                 )
             
+            if let activeSuit = game.activeSuitOverride { //selected suit reminder text
+                Text("Selected: \(Image(systemName: activeSuit.sfSymbolName)) \(activeSuit.localizedName)")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    //.padding(.horizontal, 10)
+                    //.padding(.vertical, 6)
+                    //.background(Capsule().fill(.black.opacity(0.6)))
+                    .offset(y: -80) //7.5 pizels above the discard
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+            
             if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
                 CardView(frontImage: topCard.imageName)
-                    .shadow(color: game.canPlayCard && isHoveringDiscard ? .white : .black.opacity(0.2),
-                            radius: game.canPlayCard && isHoveringDiscard ? 15 : 5)
-                    .scaleEffect(game.canPlayCard && isHoveringDiscard ? 1.05 : 1.0)
+                    .shadow(color: game.userCanDiscard && isHoveringDiscard ? .white : .black.opacity(0.2),
+                            radius: game.userCanDiscard && isHoveringDiscard ? 15 : 5)
+                    .scaleEffect(game.userCanDiscard && isHoveringDiscard ? 1.05 : 1.0)
                     .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
-            } else { // display an outline of where a discarded card *should* go
-                RoundedRectangle(cornerRadius: 8)
-                    .strokeBorder(Color.white.opacity(0.2), lineWidth: 2)
-                    .frame(width: 101.5, height: 145)
             }
         }
     }
@@ -177,8 +191,8 @@ struct Crazy8sGameView: View {
             }
         }
         
-        if let cardToDiscard = game.cardPendingDiscard {
-            game.cardAnimatingToDiscard = cardToDiscard
+        if let cardToDiscard = game.opponentCardPendingDiscard {
+            game.opponentCardAnimatingToDiscard = cardToDiscard
             
             do {
                 try await Task.sleep(nanoseconds: 600_000_000) // 0.6s for discard animation
@@ -212,7 +226,7 @@ struct Crazy8sGameView: View {
 
     private func handleDragEnded(card: Card, location: CGPoint) {
         if discardFrame.contains(location) {
-            if game.phase == .playPhase {
+            if game.phase == .mainPhase {
                 game.discardCard(card: card)
             } else {
                 SoundManager.instance.playErrorFeedback()

@@ -307,11 +307,11 @@ class MessagesViewController: MSMessagesAppViewController {
         guard let conversation = activeConversation else { return }
         
         // Further package the game state
-        let jsonString = stateData.base64EncodedString()
+        let stateDataJSONString = stateData.base64EncodedString()
         var components = URLComponents()
         components.queryItems = [
-            URLQueryItem(name: "gameType", value: jsonString),
-            URLQueryItem(name: "gameState", value: jsonString)]
+            URLQueryItem(name: "gameType", value: gameType.rawValue),
+            URLQueryItem(name: "gameState", value: stateDataJSONString)]
         
         // Create the message & attach data
         let message = MSMessage(session: conversation.selectedMessage?.session ?? MSSession())

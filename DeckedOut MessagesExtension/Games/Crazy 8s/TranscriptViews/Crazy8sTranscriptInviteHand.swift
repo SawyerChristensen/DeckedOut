@@ -59,7 +59,7 @@ struct Crazy8sTranscriptInviteHand: View {
         
         // Wait for animation to finish, then reset instantly
         // The delay here should match animation duration + stagger
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.8) {
             var transaction = Transaction()// Disable animation for the reset to make it instant
             transaction.disablesAnimations = true
             

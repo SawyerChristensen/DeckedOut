@@ -35,14 +35,24 @@ struct Card: Equatable, Identifiable, Codable { //Codable: needed to encode with
 
 
 public enum Suit: Int, CaseIterable, Codable { /// CaseIterable lets us loop through all suits easily.
-    case spades, hearts, diamonds, clubs // 0, 1, 2, 3
+    //case spades, hearts, diamonds, clubs // 0, 1, 2, 3
+    case spades, hearts, clubs, diamonds // 0, 1, 2, 3 (uses reverse alternating colors order, not the official order)
     
     var stringValue: String { //used in the backend to fetch image names (see struct Card)
         switch self {
-        case .spades: return "Spades"
-        case .hearts: return "Hearts"
+        case .spades:   return "Spades"
+        case .hearts:   return "Hearts"
         case .diamonds: return "Diamonds"
-        case .clubs: return "Clubs"
+        case .clubs:    return "Clubs"
+        }
+    }
+    
+    var sfSymbolName: String {
+        switch self {
+        case .spades:   return "suit.spade.fill"
+        case .hearts:   return "suit.heart.fill"
+        case .diamonds: return "suit.diamond.fill"
+        case .clubs:    return "suit.club.fill"
         }
     }
     
