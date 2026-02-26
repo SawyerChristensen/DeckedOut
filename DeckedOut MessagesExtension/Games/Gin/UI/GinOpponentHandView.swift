@@ -122,9 +122,9 @@ struct GinOpponentHandView: View {
                 height: drawZone.midY - cardFrame.midY)
         }
         
-        if !game.opponentDrewFromDeck {
+        if !game.opponentDrewFromDeck { //they drew from discard, the card is face up
             animatingRotation = 0
-        } else { animatingRotation = 180 } //likely redundant but lets be safe
+        } else { animatingRotation = 180 } //they drew from the deck, the card is face down
         
         // initial state
         animationOffset = offsetToDraw
@@ -134,7 +134,7 @@ struct GinOpponentHandView: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animationOffset = .zero
             animationRotationCorrection = fanAngle
-            animatingRotation = 180
+            animatingRotation = 180 //make sure the card is face down at end of animation
         }
             
         // Clear draw animation state and call discard animation

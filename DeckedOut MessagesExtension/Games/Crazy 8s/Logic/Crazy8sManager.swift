@@ -33,6 +33,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
     @Published var cardsDrawnThisTurn: Int = 0 //user version that replaces above int
     @Published var userDidDiscard: Bool = false
     @Published var activeSuitOverride: Suit?
+    @Published var hiddenActiveSuitOverride: Suit? //for hiding the active suit override until after the opponents discard animation is complete
     @Published var turnNumber: Int = 0
     @Published var phase: TurnPhase = .animationPhase //stays local
     @Published var userCanDiscard: Bool = false //stays local
@@ -103,6 +104,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         
         playerHand.remove(at: index)
         discardPile.append(card)
+        userDidDiscard = true
         SoundManager.instance.playCardSlap()
 
         if card.rank == .eight {
@@ -133,17 +135,19 @@ class Crazy8sManager: ObservableObject, GameEngine {
     }
     
     func opponentDrawFromDeck() {
-        guard phase == .animationPhase,
-              !deck.isEmpty else {
-            return
-        }
+        guard phase == .animationPhase, !deck.isEmpty else { return }
+        
         let card = deck.popLast()!
         opponentHand.append(card)
+        
+        if cardsOpponentDrew == 3 {
+            phase = .mainPhase
+        }
     }
     
     func opponentDiscardCard(card: Card) { //pseudo discard
-        guard phase == .animationPhase else {
-            return }
+        guard phase == .animationPhase else { return }
+        
         opponentHand.removeLast()
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
@@ -153,7 +157,6 @@ class Crazy8sManager: ObservableObject, GameEngine {
             SoundManager.instance.playGameEnd(didWin: false)
             phase = .gameEndPhase
         } else {
-            //ANIMATE THE OPPONENTS DECISION FOR WHAT SUIT THEY DECIDED IF CARD DISCARDED WAS AN 8
             phase = .mainPhase
             checkHandPlayability()
         }
@@ -203,10 +206,17 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.turnNumber = state.turnNumber
         self.deck = state.deck
         self.discardPile = state.discardPile
+        if !state.didDiscard { //the opponent did not discard (they drew 3 cards)
+            self.activeSuitOverride = state.activeSuitOverride
+        } else { //they did discard, and if theres an active suit override, they discarded an 8. else, it goes away
+            hiddenActiveSuitOverride = state.activeSuitOverride
+        }
+        self.cardsDrawnThisTurn = 0
+        self.userDidDiscard = false
         
         if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
-            let hasVisualsToAnimate = applyOpponentTurnVisuals(state: state)
+            let hasVisualsToAnimate = prepareOpponentsTurnForAnimation(state: state)
             if hasVisualsToAnimate { //it is NOT the first turn...
                 phase = .animationPhase
             } else { //it IS the first turn...
@@ -242,7 +252,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.turnNumber = 0
     }
     
-    private func applyOpponentTurnVisuals(state: Crazy8sGameState) -> Bool {
+    private func prepareOpponentsTurnForAnimation(state: Crazy8sGameState) -> Bool {
         guard turnNumber > 0 else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
             return false

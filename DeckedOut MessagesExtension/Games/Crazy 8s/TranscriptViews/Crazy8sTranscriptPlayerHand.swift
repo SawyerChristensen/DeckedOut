@@ -22,10 +22,10 @@ struct Crazy8sTranscriptPlayerHand: View {
     private let cardWidth: CGFloat = 84 //120 * 0.7
     private let cardHeight: CGFloat = 120
     private var dynamicSpacing: CGFloat {
-        let baseSpacing: CGFloat = -60
+        let baseSpacing: CGFloat = -55
         if cards.count > 5 {
             let compression = CGFloat(cards.count - 5) * 2.0 ///Gradually tighten spacing as the hand grows
-            return cardsAreExpanded ? (baseSpacing + 5 - compression) : (baseSpacing - compression)
+            return cardsAreExpanded ? (baseSpacing + 25 - compression) : (baseSpacing - compression)
         }
         return baseSpacing
     }

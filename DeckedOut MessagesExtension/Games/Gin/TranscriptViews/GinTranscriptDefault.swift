@@ -1,5 +1,5 @@
 //
-//  GinTranscriptWaiting.swift
+//  GinTranscriptDefault.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 2/1/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GinTranscriptWaiting: View {
+struct GinTranscriptDefault: View {
     let gameState: GinRummyGameState
     let isFromMe: Bool
     var onHeightChange: ((CGFloat) -> Void)? = nil

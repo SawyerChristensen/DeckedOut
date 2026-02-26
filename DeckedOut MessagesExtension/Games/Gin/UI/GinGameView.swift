@@ -41,13 +41,17 @@ struct GinGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
-        .task { //triggers every view reinit! presentGameView currently blocks rebuilding if the game is already presented
+        .onChange(of: game.turnNumber) { lastTurn, newTurn in
+            if game.phase == .animationPhase {
+                animateOpponentsTurn()
+            }
+        }
+        .task { //triggers the first time the view is presented
             if !game.hasPerformedInitialLoad{
                 do {
                     try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
                 } catch { }
             }
-            
             animateOpponentsTurn()
         }
     }

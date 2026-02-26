@@ -117,7 +117,7 @@ struct Crazy8sOpponentHandView: View {
         
         // initial state
         animationOffset = offsetToDraw
-        animatingRotation = 0
+        animatingRotation = 180
         animationRotationCorrection = .degrees(0)
         self.cardWaitingToAnimate = nil
         
@@ -127,8 +127,8 @@ struct Crazy8sOpponentHandView: View {
             animatingRotation = 180
         }
             
-        // Clear draw animation state and call discard animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+        // Clear draw animation state
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.animatingCard = nil
         }
     }
@@ -151,6 +151,7 @@ struct Crazy8sOpponentHandView: View {
             animatingRotation = 0 //card gets discarded face up
             animationOffset = offsetToDiscard
             animationRotationCorrection = .degrees(0)
+            game.activeSuitOverride = game.hiddenActiveSuitOverride
         }
             
         // Resolve animation state

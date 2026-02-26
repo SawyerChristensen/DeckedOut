@@ -98,7 +98,7 @@ struct MainMenuView: View {
                 Image(systemName: "crown.fill")
                     .foregroundStyle(LinearGradient(colors: [
                         Color(red: 1.0, green: 1.0, blue: 0.33), // Bright Yellow at the top
-                            Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish/gold at the bottom
+                            Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish gold at the bottom
                         ],
                         startPoint: .top, // or topLeading
                         endPoint: .bottom // & bottomTrailing

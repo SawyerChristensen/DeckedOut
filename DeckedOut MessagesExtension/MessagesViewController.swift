@@ -42,7 +42,6 @@ class MessagesViewController: MSMessagesAppViewController {
         let isFromMe = !conversation.remoteParticipantIdentifiers.contains(message.senderParticipantIdentifier)
         
         if presentationStyle == .transcript {
-            print(gameInfo.data)
             presentTranscriptView(for: gameInfo.type, stateData: gameInfo.data, isFromMe: isFromMe)
         } else {
             loadGameStateToMemory(from: message, conversation: conversation)
@@ -66,11 +65,11 @@ class MessagesViewController: MSMessagesAppViewController {
     override func didSelect(_ message: MSMessage, conversation: MSConversation) {
         super.didSelect(message, conversation: conversation)
         loadGameStateToMemory(from: message, conversation: conversation)
-        presentGameView()
     }
    
     override func didReceive(_ message: MSMessage, conversation: MSConversation) {
         super.didReceive(message, conversation: conversation)
+        //check if from the same session before updating?
         loadGameStateToMemory(from: message, conversation: conversation)
     }
     
@@ -80,7 +79,9 @@ class MessagesViewController: MSMessagesAppViewController {
     
         let isGameLoaded = !(activeGameEngine?.playerHand.isEmpty ?? true)
         let isShowingMenu = children.first is UIHostingController<MainMenuView>
-        let isShowingGame = children.first is UIHostingController<GinRootView>
+        let isShowingGin = children.first is UIHostingController<GinRootView>
+        let isShowingCrazy8s = children.first is UIHostingController<Crazy8sRootView>
+        let isShowingGame = isShowingGin || isShowingCrazy8s
         
         if !isGameLoaded && isShowingMenu { // Menu resizing
             withAnimation(.easeInOut(duration: 0.3)) {
@@ -128,7 +129,7 @@ class MessagesViewController: MSMessagesAppViewController {
                         self.requestPresentationStyle(.expanded)
                     }
                 } else { // Default waiting view the user will see in all cases except an invite
-                    GinTranscriptWaiting(
+                    GinTranscriptDefault(
                         gameState: decodedState,
                         isFromMe: isFromMe,
                         onHeightChange: { [weak self] height in
@@ -156,7 +157,7 @@ class MessagesViewController: MSMessagesAppViewController {
                         self.requestPresentationStyle(.expanded)
                     }
                 } else { // Default waiting view the user will see in all cases except an invite
-                    Crazy8sTranscriptWaiting(
+                    Crazy8sTranscriptDefault(
                         gameState: decodedState,
                         isFromMe: isFromMe,
                         onHeightChange: { [weak self] height in
@@ -194,7 +195,6 @@ class MessagesViewController: MSMessagesAppViewController {
         }
                 
         presentView(UIHostingController(rootView: menuView))
-        requestPresentationStyle(.compact)
         SoundManager.instance.stopBackgroundMusic()
     }
     
@@ -215,7 +215,6 @@ class MessagesViewController: MSMessagesAppViewController {
         }
         
         presentView(gameViewController)
-        requestPresentationStyle(.expanded)
         SoundManager.instance.startBackgroundMusic()
     }
     

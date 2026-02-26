@@ -46,7 +46,14 @@ struct Crazy8sGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
-        .task { //triggers every view reinit! presentGameView currently blocks rebuilding if the game is already presented
+        .onChange(of: game.turnNumber) { lastTurn, newTurn in
+            Task {
+                if game.phase == .animationPhase {
+                    await animateOpponentsTurn()
+                }
+            }
+        }
+        .task { //triggers the first time the view is presented
             if !game.hasPerformedInitialLoad{
                 do { try await Task.sleep(nanoseconds: 500_000_000) } catch { }  // 0.5s
             }
@@ -117,7 +124,7 @@ struct Crazy8sGameView: View {
     }
     
     private func handleDeckTap() {
-        if game.phase == .mainPhase {
+        if game.phase == .mainPhase && !game.userCanDiscard {
             game.drawFromDeck()
             SoundManager.instance.playCardDeal()
         } else {
@@ -140,14 +147,15 @@ struct Crazy8sGameView: View {
                 )
             
             if let activeSuit = game.activeSuitOverride { //selected suit reminder text
-                Text("Selected: \(Image(systemName: activeSuit.sfSymbolName)) \(activeSuit.localizedName)")
-                    .font(.caption)
+                Text("Selected:\n\(Image(systemName: activeSuit.sfSymbolName)) \(activeSuit.localizedName)")
+                    .font(.body)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
                     //.padding(.horizontal, 10)
                     //.padding(.vertical, 6)
                     //.background(Capsule().fill(.black.opacity(0.6)))
-                    .offset(y: -80) //7.5 pizels above the discard
+                    .offset(y: -100) //7.5 pizels above the discard
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             
@@ -183,7 +191,7 @@ struct Crazy8sGameView: View {
     private func animateOpponentsTurn() async { //modifies backend, which triggers animation in opponentHandView
         if game.cardsOpponentDrew > 0 {
             for _ in 0..<game.cardsOpponentDrew {
-                game.opponentDrawFromDeck() 
+                game.opponentDrawFromDeck()
                 
                 do { // Wait for the draw animation to finish before drawing the next one
                     try await Task.sleep(nanoseconds: 800_000_000) // 0.8s
@@ -226,9 +234,10 @@ struct Crazy8sGameView: View {
 
     private func handleDragEnded(card: Card, location: CGPoint) {
         if discardFrame.contains(location) {
-            if game.phase == .mainPhase {
+            if game.phase == .mainPhase { //redudant, we check this twice, but it might be a split second faster
                 game.discardCard(card: card)
             } else {
+                print(game.phase)
                 SoundManager.instance.playErrorFeedback()
             }
         } else {

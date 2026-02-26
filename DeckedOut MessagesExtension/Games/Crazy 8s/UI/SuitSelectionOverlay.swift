@@ -26,7 +26,6 @@ struct SuitSelectionOverlay: View {
                 HStack(spacing: 12) {
                     ForEach(suits, id: \.self) { suit in
                         Button(action: {
-                            // Add a spring animation to the submission
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                 game.submitChosenSuit(suit)
                             }
@@ -37,13 +36,11 @@ struct SuitSelectionOverlay: View {
                                 .frame(width: 36, height: 36)
                                 .symbolRenderingMode(.multicolor)
                                 .padding(12)
-                                // 2. Button Glass Background
-                                .background(
+                                .background( //Symbol button glass background
                                     RoundedRectangle(cornerRadius: 16, style: .continuous)
                                         .fill(.thinMaterial)
                                 )
-                                // 3. Button Glass Edge Highlight
-                                .overlay(
+                                .overlay( //Symbol button edge highlight
                                     RoundedRectangle(cornerRadius: 16, style: .continuous)
                                         .stroke(
                                             LinearGradient(
@@ -78,7 +75,7 @@ struct SuitSelectionOverlay: View {
                     )
             )
             .shadow(color: .black.opacity(0.25), radius: 30, x: 5, y: 15)
-            .offset(y: -180)
+            .offset(y: -200)
         }
     }
 }
