@@ -15,6 +15,7 @@ struct Crazy8sGameView: View {
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
     @State private var isHoveringDiscard: Bool = false
+    @State private var isDraggedCardPlayable: Bool = false
 
     
     var body: some View {
@@ -161,9 +162,9 @@ struct Crazy8sGameView: View {
             
             if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
                 CardView(frontImage: topCard.imageName)
-                    .shadow(color: game.userCanDiscard && isHoveringDiscard ? .white : .black.opacity(0.2),
-                            radius: game.userCanDiscard && isHoveringDiscard ? 15 : 5)
-                    .scaleEffect(game.userCanDiscard && isHoveringDiscard ? 1.05 : 1.0)
+                    .shadow(color: isDraggedCardPlayable && isHoveringDiscard ? .white : .black.opacity(0.2),
+                            radius: isDraggedCardPlayable && isHoveringDiscard ? 15 : 5)
+                    .scaleEffect(isDraggedCardPlayable && isHoveringDiscard ? 1.05 : 1.0)
                     .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
             }
         }
@@ -225,10 +226,16 @@ struct Crazy8sGameView: View {
     }
     
     private func handleDragChanged(card: Card, location: CGPoint) {
-        if discardFrame.contains(location) {
-            isHoveringDiscard = true
-        } else {
-            isHoveringDiscard = false
+        let isNowHovering = discardFrame.contains(location)
+        
+        if isNowHovering != isHoveringDiscard { //a card has entered/exited the zone. calculate UI updates once instead of continuously
+            isHoveringDiscard = isNowHovering
+            
+            if isNowHovering { //the card just entered the discard zone. check if playable
+                isDraggedCardPlayable = game.isCardPlayable(card)
+            } else {
+                isDraggedCardPlayable = false
+            }
         }
     }
 

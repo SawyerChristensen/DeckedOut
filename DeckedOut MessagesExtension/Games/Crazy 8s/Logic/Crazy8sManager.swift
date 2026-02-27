@@ -32,6 +32,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
     @Published var cardsOpponentDrew: Int = 0
     @Published var cardsDrawnThisTurn: Int = 0 //user version that replaces above int
     @Published var userDidDiscard: Bool = false
+    @Published var opponentDidDiscard: Bool = false
     @Published var activeSuitOverride: Suit?
     @Published var hiddenActiveSuitOverride: Suit? //for hiding the active suit override until after the opponents discard animation is complete
     @Published var turnNumber: Int = 0
@@ -56,31 +57,31 @@ class Crazy8sManager: ObservableObject, GameEngine {
         case gameEndPhase   // Only unlocked upon a player winning
     }
     
-    func checkHandPlayability(){
+    func isCardPlayable(_ card: Card) -> Bool {
         guard let topCard = discardPile.last else {
-            userCanDiscard = false
-            return
+            return false
         }
         
-        userCanDiscard = playerHand.contains { card in
-            if card.rank == .eight { //8s are wild! always playable!
-                return true
-            }
-            
-            if let requiredSuit = activeSuitOverride { //If the opponent played an 8, user must match their declared suit
-                return card.suit == requiredSuit
-            }
-            
-            return card.suit == topCard.suit || card.rank == topCard.rank
+        if card.rank == .eight {
+            return true
         }
+        
+        if let requiredSuit = activeSuitOverride {
+            return card.suit == requiredSuit
+        }
+        
+        return card.suit == topCard.suit || card.rank == topCard.rank
     }
     
-    func drawFromDeck() { //CHECK IF THE USER HAS DRAWN 3 TIMES THIS TURN, IF TRUE, SEND GAME STATE AND SWITCH GAME PHASE
+    func checkHandPlayability(){
+        userCanDiscard = playerHand.contains { isCardPlayable($0) }
+    }
+    
+    func drawFromDeck() {
         guard phase == .mainPhase, !deck.isEmpty, !userCanDiscard else { return }
-        let card = deck.popLast()! //maybe make this a guard statement? this does the samething in the earlier guard statement...
-        //add index drawn to (in the case the user reorders their hand?)
+        let card = deck.popLast()! //does the same thing as in the guard statement but we have to unwrap it anway
         playerHand.append(card)
-        checkHandPlayability() //CALL THIS IN LOAD!!
+        checkHandPlayability()
         cardsDrawnThisTurn += 1
         
         if cardsDrawnThisTurn == 3 && !userCanDiscard { //if youve drawn your 3rd card and still cannot play it, the user has to pass
@@ -140,9 +141,9 @@ class Crazy8sManager: ObservableObject, GameEngine {
         let card = deck.popLast()!
         opponentHand.append(card)
         
-        if cardsOpponentDrew == 3 {
-            phase = .mainPhase
-        }
+        //if cardsOpponentDrew == 3 {
+            //phase = .mainPhase
+        //}
     }
     
     func opponentDiscardCard(card: Card) { //pseudo discard
@@ -206,13 +207,14 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.turnNumber = state.turnNumber
         self.deck = state.deck
         self.discardPile = state.discardPile
-        if !state.didDiscard { //the opponent did not discard (they drew 3 cards)
-            self.activeSuitOverride = state.activeSuitOverride
-        } else { //they did discard, and if theres an active suit override, they discarded an 8. else, it goes away
-            hiddenActiveSuitOverride = state.activeSuitOverride
-        }
         self.cardsDrawnThisTurn = 0
         self.userDidDiscard = false
+        self.opponentDidDiscard = state.didDiscard
+        if !opponentDidDiscard { //the opponent did not discard (they drew 3 cards)
+            self.activeSuitOverride = state.activeSuitOverride //nil or the value the user set a turn prior
+        } else { //they did discard, and if theres an active suit override, it gets displayed. else its nil and goes away
+            hiddenActiveSuitOverride = state.activeSuitOverride
+        }
         
         if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
@@ -261,7 +263,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         var opponentsHandPreAnimation = state.senderHand
         self.cardsOpponentDrew = state.cardsOpponentDrew
         
-        if state.didDiscard {
+        if opponentDidDiscard {
             let cardTheyDiscarded = discardPile.popLast()! //we will animate it back later...
             self.opponentCardPendingDiscard = cardTheyDiscarded
             opponentsHandPreAnimation.append(cardTheyDiscarded)

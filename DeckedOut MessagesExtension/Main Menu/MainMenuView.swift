@@ -145,7 +145,7 @@ struct MainMenuView: View {
                 HStack {
                     rulesButton
                     Spacer()
-                    customizationButton
+                    //customizationButton //add when we have skins to add!
                 }
                 .padding(.top, 30)
                 .padding(.horizontal, 30) //or .padding(.horizontal, isExpanded ? 80 : 30)

@@ -1,9 +1,8 @@
 -Crazy 8s TO DO:
-    -refactor discard scale and highlight. userCanDiscard does not specify dragged card can be discarded
-    -add unique subview in main menu
     -if you tap too fast it doesnt count as a card drawn in the backend and sends less cards drawn
-    -sometimes the user draws at the start of the turn when they didnt (i saw this once)?
+    -add unique subview in main menu
     -make sure recieving a game move from another kind of game does not replace what we currently have (problem with didRecieve and didSelect)
+    -be able to load seperate sessions like how gin rummy does
 
 -add rules window for every game on main menu (also in game?)
 

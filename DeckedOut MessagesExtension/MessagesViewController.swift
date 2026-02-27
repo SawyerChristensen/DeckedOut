@@ -318,7 +318,6 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Set basic template appearance
         let templateLayout = MSMessageTemplateLayout()
-        
         if activeGameEngine?.playerHasWon == true {
             // Dynamically set the win image and caption based on the game being played
             switch gameType {
@@ -371,8 +370,18 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // ...aaaand send!
         conversation.send(message) { error in
-            if let error = error { print(error) }
+            if let error = error {
+                let urlString = message.url?.absoluteString ?? "nil"
+                print("""
+                --- MESSAGE SEND FAILURE ---
+                Error: \(error.localizedDescription)
+                URL: \(urlString)
+                ----------------------------
+                """)
+            }
+            else { print("sent with no errors") }
         }
+        //MSMessageErrorCode
     }
     
     private func extractGameInfo(from message: MSMessage) -> (type: GameType, data: Data)? {
