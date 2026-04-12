@@ -117,7 +117,7 @@ class MessagesViewController: MSMessagesAppViewController {
     @ViewBuilder
     private func decideTranscriptView(for gameType: GameType?, stateData: Data, isFromMe: Bool) -> some View {
         switch gameType {
-        case .ginRummy, .none:
+        case .ginRummy, .none: //.none is for users recieving a game from pre-2.0 users
             if let decodedState = try? JSONDecoder().decode(GinRummyGameState.self, from: stateData) {
                 if decodedState.turnNumber == 0 { // Game invite
                     GinTranscriptInvite(
@@ -169,8 +169,7 @@ class MessagesViewController: MSMessagesAppViewController {
                     }
                 }
             } else {
-                // Fallback UI in case the data is corrupted or decoding fails
-                Text("Error loading match data.") //should never trigger!
+                Text("Error loading match data.")  // Fallback UI in case the data is corrupted or decoding fails (should never trigger)
                     .padding()
             }
             
@@ -180,9 +179,8 @@ class MessagesViewController: MSMessagesAppViewController {
             Text("Golf Transcript View")
         case .spades:
             Text("Spades Transcript View")
-        case .some(_):
-            // Catch-all for any future games you add to the enum but forget to add to this switch
-            Text("Game unsupported: Update your app to play!")
+        case .unknown:
+            Text("New game! Update your app to play!")
         }
     }
     
@@ -252,29 +250,30 @@ class MessagesViewController: MSMessagesAppViewController {
         let templateLayout = MSMessageTemplateLayout()
         
         //define template loadout view for non-iOS or iPadOS devices (macOS, visionOS, etc)
+        templateLayout.image = UIImage(named: "CardGamesDefault")
+        
         switch gameType {
         case .ginRummy:
             self.activeGameEngine = GinRummyManager.shared
             templateLayout.image = UIImage(named: "GinDefault")
-            templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "1st iMessage layout caption")
+            templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "Gin invite caption/summary") //need to use NSLocalizedString here because it is not in a SwiftUI view and therefore automatically included in the localizable catalog. this adds it manually
         case .crazy8s:
             self.activeGameEngine = Crazy8sManager.shared
-            templateLayout.image = UIImage(named: "CardGamesDefault")
-            templateLayout.caption = "Let's Play Crazy 8s!"
+            templateLayout.caption = NSLocalizedString("Let's Play Crazy 8s!", comment: "Crazy 8s invite caption/summary")
         case .golf:
             // self.activeGameEngine = GolfManager.shared
-            templateLayout.image = UIImage(named: "CardGamesDefault")
-            templateLayout.caption = "Let's Play Golf!"
+            templateLayout.caption = NSLocalizedString("Let's Play Golf!", comment: "Golf invite caption/summary")
         case .spades:
             // self.activeGameEngine = SpadesManager.shared
-            templateLayout.image = UIImage(named: "CardGamesDefault")
-            templateLayout.caption = "Let's Play Spades!"
+            templateLayout.caption = NSLocalizedString("Let's Play Spades!", comment: "Spades invite caption/summary")
+        case .unknown:
+            fatalError("Cannot create a game with an unknown type")
         }
-        
-        setupEngineListener()
         
         message.layout = templateLayout
         message.summaryText = templateLayout.caption
+        
+        setupEngineListener()
         
         //init and package initital game state
         guard let stateData = activeGameEngine?.createNewGameState(withHandSize: handSize) else {
@@ -317,69 +316,64 @@ class MessagesViewController: MSMessagesAppViewController {
         message.url = components.url
         
         // Set basic template appearance
-        let templateLayout = MSMessageTemplateLayout()
+        let templateLayout = MSMessageTemplateLayout() //this will be overridden later with transcript view, this is just for non-live-layout platforms
+        
         if activeGameEngine?.playerHasWon == true {
-            // Dynamically set the win image and caption based on the game being played
+            templateLayout.image = UIImage(named: "CardGameWon") //set as default here, override with game specific images later
+            
             switch gameType {
             case .ginRummy:
                 templateLayout.image = UIImage(named: "GinGameWon")
-                templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "iMessage layout win caption")
-                message.summaryText = NSLocalizedString("I won in Gin!", comment: "iMessage win message summary")
+                templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin win caption/summary")
             case .crazy8s:
-                templateLayout.image = UIImage(named: "CardGameWon")
-                templateLayout.caption = "I won in Crazy 8s!"
-                message.summaryText = "I won in Crazy 8s!"
+                templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s win caption/summary")
             case .golf:
-                templateLayout.image = UIImage(named: "CardGameWon")
-                templateLayout.caption = "I won in Golf!"
-                message.summaryText = "I won in Golf!"
+                templateLayout.caption = NSLocalizedString("I won in Golf!", comment: "Golf win caption/summary")
             case .spades:
-                templateLayout.image = UIImage(named: "CardGameWon")
-                templateLayout.caption = "I won in Spades!"
-                message.summaryText = "I won in Spades!"
+                templateLayout.caption = NSLocalizedString("I won in Spades!", comment: "Spades win caption/summary")
+            case .unknown:
+                templateLayout.caption = NSLocalizedString("I won!", comment: "Default message win caption/summary")
             }
-        } else {
+            
+            message.summaryText = templateLayout.caption //message summary always same as caption in win case
+            
+        } else { //its a normal non-winning game move
+            templateLayout.image = UIImage(named: "CardGamesDefault")  //set as default here, override with game-specific images later
+            
+            switch gameType {
+            case .ginRummy:
+                templateLayout.image = UIImage(named: "GinDefault")
+                templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "Gin Rummy message caption")
+            case .crazy8s:
+                templateLayout.caption =  NSLocalizedString("Your turn in Crazy 8s!", comment: "Crazy 8s message caption")
+            case .golf:
+                templateLayout.caption = NSLocalizedString("Your turn in Golf!", comment: "Golf message caption")
+            case .spades:
+                templateLayout.caption = NSLocalizedString("Your turn in Spades!", comment: "Spades message caption")
+            case .unknown:
+                templateLayout.caption = NSLocalizedString("Your turn!", comment: "Default message caption")
+            }
+            
             if let discardedCard = activeGameEngine?.discardPile.last {
                 message.summaryText = String(localized: "Discarded \(discardedCard.rank.localizedName) of \(discardedCard.suit.localizedName)")
             } else {
                 message.summaryText = templateLayout.caption
             }
-            
-            switch gameType {
-            case .ginRummy:
-                templateLayout.image = UIImage(named: "GinDefault")
-                templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "iMessage layout caption")
-            case .crazy8s:
-                templateLayout.image = UIImage(named: "CardGamesDefault")
-                templateLayout.caption = "Your turn in Crazy 8s!"
-            case .golf:
-                templateLayout.image = UIImage(named: "CardGamesDefault")
-                templateLayout.caption = "Your turn in Golf!"
-                message.summaryText = "Your turn in Golf!" //figure out what the summary text for golf should be
-            case .spades:
-                templateLayout.image = UIImage(named: "CardGamesDefault")
-                templateLayout.caption = "Your turn in Spades!"
-                message.summaryText = "Your turn in Spades!" //figure out what the summary text for golf should be
-            }
         }
         
+        // Override templateLayout with transcript view
         let liveLayout = MSMessageLiveLayout(alternateLayout: templateLayout)
         message.layout = liveLayout
-        
-        activeGameEngine?.clearMidTurnState(conversationID: conversation.localParticipantIdentifier.uuidString)
         
         // ...aaaand send!
         conversation.send(message) { error in
             if let error = error {
-                let urlString = message.url?.absoluteString ?? "nil"
-                print("""
-                --- MESSAGE SEND FAILURE ---
-                Error: \(error.localizedDescription)
-                URL: \(urlString)
-                ----------------------------
-                """)
+                print(error.localizedDescription)
             }
-            else { print("sent with no errors") }
+            else {
+                //sent with no errors
+                self.activeGameEngine?.clearMidTurnState(conversationID: conversation.localParticipantIdentifier.uuidString)
+            }
         }
         //MSMessageErrorCode
     }
@@ -394,7 +388,7 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Look for the game type. If it's missing or invalid, default to Gin Rummy for legacy support.
         let typeString = components.queryItems?.first(where: { $0.name == "gameType" })?.value
-        let gameType = GameType(rawValue: typeString ?? "") ?? .ginRummy
+        let gameType = GameType(rawValue: typeString ?? "") ?? .unknown
         
         return (type: gameType, data: stateData)
     }
@@ -410,11 +404,12 @@ class MessagesViewController: MSMessagesAppViewController {
         case .golf:
             print("attempted to create golf game engine")
             // self.activeGameEngine = GolfManager.shared
-            break
         case .spades:
             print("attempted to create spades game engine")
             // self.activeGameEngine = SpadesManager.shared
-            break
+        case .unknown:
+            print("Received unsupported or unknown game type")
+            return
         }
         
         setupEngineListener()
@@ -441,6 +436,7 @@ enum GameType: String, Codable {
     case crazy8s
     case golf
     case spades
+    case unknown
 }
 
 protocol GameEngine: AnyObject {

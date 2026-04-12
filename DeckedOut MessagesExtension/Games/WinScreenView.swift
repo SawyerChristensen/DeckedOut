@@ -10,7 +10,7 @@ import SwiftUI
 struct WinScreenView: View {
     //var onRestart: () -> Void
     let playerHasWon: Bool
-    let gameName: String
+    let winMessage: String
     
     @State private var animateIn = false
     
@@ -24,7 +24,7 @@ struct WinScreenView: View {
                     .scaleEffect(animateIn ? 1.0 : 0.5)
                 
                 VStack(spacing: 8) {
-                    Text(gameName.uppercased()) //change this
+                    Text(winMessage)
                         .font(.system(size: 40, weight: .black, design: .rounded))
                         .foregroundColor(.white)
                     

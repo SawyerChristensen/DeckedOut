@@ -37,7 +37,7 @@ struct GinGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView(playerHasWon: game.playerHasWon, gameName: "Gin Rummy")
+                WinScreenView(playerHasWon: game.playerHasWon, winMessage: "Gin Rummy")
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }

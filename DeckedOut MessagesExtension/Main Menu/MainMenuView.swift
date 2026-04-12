@@ -36,7 +36,9 @@ struct MainMenuView: View {
     @State private var isInSubview: Bool = false
     @State private var isTitleBarHidden: Bool = false
     @State private var isCardWheelHidden: Bool = false
-    private var buttonSize: CGFloat { isExpanded ? 70 : 40 }
+    @State private var showingRules: Bool = false
+    @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
+    private var buttonSize: CGFloat { isExpanded ? scaledButtonUnit * 7 : scaledButtonUnit * 4 }
   
     
     var body: some View {
@@ -51,6 +53,16 @@ struct MainMenuView: View {
                 midSection
                 
                 cardWheel
+            }
+        }
+        .overlay {
+            if showingRules {
+                RulesView(gameType: availableGames[activeGameIndex].type, isExpanded: isExpanded) {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showingRules = false
+                    }
+                }
+                .transition(.opacity)
             }
         }
         .background(backgroundLayer)
@@ -123,14 +135,14 @@ struct MainMenuView: View {
             
         }
         .scaleEffect(isExpanded ? 1.2 : 1)
-        .background(
+        .background( //the gradient at the top of the screen
             Rectangle()
                 .fill(.ultraThinMaterial)
                 .mask(
                     LinearGradient(
                         colors: [.black, .clear], //color doesnt matter here, only opacity
                         startPoint: .top,
-                        endPoint: .bottom
+                        endPoint: .bottom //UnitPoint(x: 0.5, y: 0.75) //<- alternative for shorter gradient
                     )
                 )
                 .ignoresSafeArea()
@@ -147,8 +159,8 @@ struct MainMenuView: View {
                     Spacer()
                     //customizationButton //add when we have skins to add!
                 }
-                .padding(.top, 30)
-                .padding(.horizontal, 30) //or .padding(.horizontal, isExpanded ? 80 : 30)
+                .padding(.top, isExpanded ? -95 : 30) //moves the button up in expanded mode
+                .padding(.horizontal, isExpanded ? 70 : 30) //moves the button right in expanded mode
                 .opacity(isTitleBarHidden ? 0 : 1)
             )
     }
@@ -190,7 +202,9 @@ struct MainMenuView: View {
         Button(action: {
             let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
-            //action()
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showingRules = true
+            }
         }) {
             HStack(spacing: 12) { // Groups the icon and text
                 Image(systemName: "text.book.closed")
@@ -212,7 +226,7 @@ struct MainMenuView: View {
             .foregroundStyle(.white)
             .fixedSize(horizontal: true, vertical: false)
             .shadow(color: .white.opacity(0.5), radius: 5)
-            .offset(x: isExpanded ? 40 : 0, y: isExpanded ? -125 : 0) //right and up in expanded
+            //.offset(x: isExpanded ? 40 : 0, y: isExpanded ? -125 : 0) //right and up in expanded
         }
     }
     

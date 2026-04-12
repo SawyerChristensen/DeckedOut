@@ -1,31 +1,54 @@
 -Crazy 8s TO DO:
-    -if you tap too fast it doesnt count as a card drawn in the backend and sends less cards drawn
+    FIX BUG: if you tap too fast it doesnt count as a card drawn in the backend and sends less cards drawn
+    -make sure recieving a game move from another kind of game does not replace what we currently have on screen (problem with didRecieve and didSelect)
     -add unique subview in main menu
-    -make sure recieving a game move from another kind of game does not replace what we currently have (problem with didRecieve and didSelect)
-    -be able to load seperate sessions like how gin rummy does
+    -be able to load separate sessions properly like how gin rummy does
 
--add rules window for every game on main menu (also in game?)
+-add rules window for every game on main menu (add rules for games we have yet to add!)
+    -add rules button in-game!
 
--disable customization button for now? ("rules string" next to book?)
+-add actual art for each card game
 
--add repeating gin rummy/crazy8s cards to main menu so theres a full fan
+-add repeating gin rummy/crazy8s cards to main menu so theres a full fan?
+-add another game? (switch)
+
+-verify localization works for every view
 
 ***----------*** UPDATE 2.0 ***----------***
 
+-new win/loss game sound effects
+
 -fix index drawn to/discarded from (in gin and maybeee crazy 8s)
 
--delete inits in the player hand extensions and test if fine?
+-delete inits in the player hand extensions and test if fine? (simple refactoring)
 
 -fix invite transcript card jitter
 
-*----------* UPDATE 2.0.1 *----------*
+*----------* UPDATE 2.1.0 *----------*
 
-Add new games (easier said that done)
-    -Add starter transcript views for each game (to be updated later)
-    -figure out summary text for golf? and spades?
-    -better win screen for each game?
+-figure out game resumption bug!
 
+***----------*** UPDATE 2.1.1 ***----------***
 
+-Add group chat compatibility! increases adoption rate!!
+
+***----------*** UPDATE 3.0.0 ***----------***
+
+-add 2 new games
+
+-better win screen for each game?
+
+-alphabetize game list depending on language, start in center with most popular game
+
+-look for regional differences in card game names (Switch is called “last card” in New Zealand)
+
+***----------*** UPDATE 4.0.0 ***----------***
+
+-Ads...
+
+-Customization menu similar to the main menu, where you drag to select your card, back button to the main menu once you select a card
+
+***----------*** UPDATE 5.0.0 ***----------***
 
 GAMES TO ADD:
     -Crazy 8s (WIP)
@@ -34,24 +57,44 @@ GAMES TO ADD:
     -Gin Rummy (DONE)
     -Golf
     -Hearts
-    -Idiot
+    -Idiot (high priority addition)
     -Scopa
     -Spades (4 players)
-    -Switch
+    -Switch (high priority addition)
     -Whot?
     -Yaniv?
-
-
--Customization menu similar to the main menu, where you drag to select your card, back button to the main menu once you select a card
-
-
+    
+Dice games:
+    Farkle
+    Yacht
+    
+Customizations to sell:
+    -Remove Ads ($0.99)
+    -Card backs ($1.99)
+        -cobweb
+        -lantern (makes letters glow?)
+        -team trees charity?
+        -honeycomb pattern for bee charity?
+        -some sort of looping animation?
+        -solid gold
+        -$2.99 Ultra custom photo upload?
+    -card fronts
+        -free tier:
+            -basic regional differences
+            -mobile friendly zoomed in cards
+        -paid tier:
+            -Queen Bee and other royaly for bee charity? (red becomes orange)
+    -avatars?
+    -table backgrounds/aesthetics? (matching card backs?)
+    -card deal animations/effects?
+    
 
 --Look into getting featured on the App Store!
 
 
 
-
 QOL changes / possible updates:
+-FIGURE OUT GAME RESUMPTION/CONTINUATION BUG!!!
 -“tap card to play” reminder text in the middle of the screen if user looked at main menu for too long, (repeating opacity animation?)
 -Add rules section and a notice that Aces are not high cards in gin rummy!
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that
@@ -85,12 +128,3 @@ Optimizations:
 -does isFaceUp need to be a passed variable?
 -init in player hand view should be in main body, not the extension
 -figure out audio session failure print statement
-
-
-Possible name for if other games are added:
-Card Games for iMessage
-
-For full app:
-DeckedOut
-CardVault
-PocketDeck
