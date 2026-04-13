@@ -5,7 +5,6 @@
     -be able to load separate sessions properly like how gin rummy does
 
 -add rules window for every game on main menu (add rules for games we have yet to add!)
-    -make rules padding accessibility friendly
     -add rules button in-game!
 
 -add actual art for each card game

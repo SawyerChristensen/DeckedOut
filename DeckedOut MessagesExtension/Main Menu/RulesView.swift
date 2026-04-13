@@ -129,16 +129,17 @@ private struct RulePage: View {
     var pageNumber: Int
     var totalPages: Int
     var isExpanded: Bool = false
+    @ScaledMetric(relativeTo: .body) private var scale: CGFloat = 1.0 //padding needs to shrink as text size increases. iOS does not do this automatically
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 16 / pow(scale, 3)) {
             Image(systemName: imageName)
                 .resizable()
                 .scaledToFit()
                 .frame(height: 50)
                 .foregroundStyle(.white.opacity(0.85))
-                .shadow(color: .white.opacity(0.3), radius: 5)
-                .padding(.top, isExpanded ? 24 : 8) //set to nullify padding for accessibility settings
+                .shadow(color: .white.opacity(0.3), radius: 3)
+                .padding(.top, (isExpanded ? 24 : 8) / pow(scale, 3))
             
             Text(title)
                 .font(.headline)
@@ -149,10 +150,10 @@ private struct RulePage: View {
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.8))
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 24 / pow(scale, 2))
             
             Spacer()
         }
-        .padding(.top)
+        .padding(.top, 16 / pow(scale, 3))
     }
 }
