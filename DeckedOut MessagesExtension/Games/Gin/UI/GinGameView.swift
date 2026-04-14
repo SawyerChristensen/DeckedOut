@@ -16,6 +16,9 @@ struct GinGameView: View {
     @State private var discardFrame: CGRect = .zero
     @State private var lastDrawSource: DrawSource = .none
     @State private var isHoveringDiscard: Bool = false
+    @State private var showRules: Bool = false
+    @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
+    private var buttonSize: CGFloat { scaledButtonUnit * 4 }
 
     
     var body: some View {
@@ -25,8 +28,9 @@ struct GinGameView: View {
             VStack {
                 opponentsHand
                 Spacer()
+                    .frame(maxWidth: UIScreen.main.bounds.width)
                 deckAndDiscard
-                Spacer()
+                rulesButtonAndSection
                 playersHand
                 
             }
@@ -39,6 +43,12 @@ struct GinGameView: View {
             else if game.phase == .gameEndPhase {
                 WinScreenView(playerHasWon: game.playerHasWon, winMessage: "Gin Rummy")
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+            }
+            
+            if showRules {
+                RulesView(gameType: .ginRummy, isExpanded: true, onDismiss: { showRules = false })
+                    .frame(maxWidth: UIScreen.main.bounds.width)
+                    .transition(.opacity.animation(.easeInOut(duration: 0.2)))
             }
         }
         .onChange(of: game.turnNumber) { lastTurn, newTurn in
@@ -167,6 +177,39 @@ struct GinGameView: View {
         } else {
             SoundManager.instance.playErrorFeedback()
         }
+    }
+    
+    private var rulesButtonAndSection: some View {
+        Spacer()
+            .frame(maxWidth: UIScreen.main.bounds.width)
+            .overlay(
+                HStack {
+                    Button(action: {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showRules = true
+                        }
+                    }) {
+                        //HStack {
+                            Image(systemName: "text.book.closed")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: buttonSize, height: buttonSize)
+                                .foregroundStyle(.white.opacity(0.5))
+                            
+                            //Text("Rules")
+                                //.font(.title3)
+                                //.fontWeight(.semibold)
+                        //}
+                        //.foregroundStyle(.white.opacity(0.5))
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.top, 15)
+                .padding(.horizontal, 30)
+            )
     }
     
     private var playersHand: some View {

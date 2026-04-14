@@ -5,7 +5,9 @@
     -be able to load separate sessions properly like how gin rummy does
 
 -add rules window for every game on main menu (add rules for games we have yet to add!)
-    -add rules button in-game!
+    -Gin Rummy (DONE)
+    -Crazy 8s (DONE)
+    -for Switch? Golf? Spades?
 
 -add actual art for each card game
 
@@ -18,6 +20,8 @@
 
 -new win/loss game sound effects
 
+-better refactoring of main menu submenu views? (currently relies on opacity toggles for compact/extended views)
+
 -fix index drawn to/discarded from (in gin and maybeee crazy 8s)
 
 -delete inits in the player hand extensions and test if fine? (simple refactoring)
@@ -25,6 +29,8 @@
 -fix invite transcript card jitter
 
 *----------* UPDATE 2.1.0 *----------*
+
+-colored crazy 8s deck
 
 -figure out game resumption bug!
 

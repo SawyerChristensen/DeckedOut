@@ -33,7 +33,8 @@ struct MainMenuView: View {
         MenuGame(type: .golf, title: "Golf", logoCard: "golfCard"),
         MenuGame(type: .spades, title: "Spades", logoCard: "spadesCard")
     ]
-    @State private var isInSubview: Bool = false
+    @State private var activeSubmenu: GameType? = nil
+    private var isInSubmenu: Bool { activeSubmenu != nil }
     @State private var isTitleBarHidden: Bool = false
     @State private var isCardWheelHidden: Bool = false
     @State private var showingRules: Bool = false
@@ -43,8 +44,13 @@ struct MainMenuView: View {
     
     var body: some View {
         ZStack {
-            if isInSubview { //Game-specific subview (...rn theres just one subview)
-                submenuView
+            switch activeSubmenu {
+            case .ginRummy:
+                ginSubmenuView
+            case .crazy8s:
+                crazy8sSubmenuView
+            default:
+                EmptyView()
             }
             
             VStack {// Main view
@@ -177,9 +183,8 @@ struct MainMenuView: View {
                 }
             },
             userSelectedGame: { index in // handle selecting a game
-                //print("Open Game: \(availableGames[index].title)") // <--replace this with a meaninful subview call!
                 withAnimation(.easeInOut(duration: 0.2)) {
-                    isInSubview = true
+                    activeSubmenu = availableGames[index].type
                 }
                 withAnimation(.linear(duration: 0.05).delay(0.12)) { //wait a bit then trigger a fast fade
                     isTitleBarHidden = true
@@ -189,12 +194,21 @@ struct MainMenuView: View {
                     isCardWheelHidden = true //hide AFTER the animation to render the cards invisible so they dont clip in when transitioning between compact and expanded in the subview
                 }
             },
-            hasSelectedGame: $isInSubview
+            hasSelectedGame: Binding(
+                get: { activeSubmenu != nil },
+                set: { newValue in
+                    if newValue {
+                        activeSubmenu = availableGames[activeGameIndex].type
+                    } else {
+                        activeSubmenu = nil
+                    }
+                }
+            )
         )
         //.zIndex(999) //keep the cards on top
         .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
         .scaleEffect(isExpanded ? 1.4 : 1)
-        .offset(y: isExpanded ? (isInSubview ? -175 : 5) : 50)
+        .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 50)
         .opacity(isCardWheelHidden ? 0 : 1)
     }
     
@@ -212,20 +226,20 @@ struct MainMenuView: View {
                     .scaledToFit()
                     .frame(width: buttonSize, height: buttonSize)
                 
-                if isExpanded {
+                //if isExpanded {
                     Text("Rules")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .leading).combined(with: .scale(scale: 0.5, anchor: .leading)).combined(with: .opacity),
+                        .font(isExpanded ? .title : .title3)
+                        .fontWeight(.semibold)
+                        //.transition(.asymmetric(
+                        //    insertion: .move(edge: .leading).combined(with: .scale(scale: 0.5, anchor: .leading)).combined(with: .opacity),
                             // Fades out and scales down instantly when going back to compact
-                            removal: .identity//.combined(with: .scale(scale: 0.5))
-                        ))
-                }
+                        //    removal: .identity//.combined(with: .scale(scale: 0.5))
+                        //))
+                //}
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(.white)//.opacity(0.95))
             .fixedSize(horizontal: true, vertical: false)
-            .shadow(color: .white.opacity(0.5), radius: 5)
+            //.shadow(color: .white.opacity(0.5), radius: 3)
             //.offset(x: isExpanded ? 40 : 0, y: isExpanded ? -125 : 0) //right and up in expanded
         }
     }
@@ -260,18 +274,6 @@ struct MainMenuView: View {
         }
     }
     
-    private var submenuView: some View {
-        ZStack {
-            compactLayout
-                .opacity(isExpanded ? 0 : 1)
-            expandedLayout
-                .opacity(isExpanded ? 1 : 0)
-        }
-        .animation(.easeInOut(duration: 0.25), value: isExpanded)
-        .transition(.offset(y: UIScreen.main.bounds.height / 2))
-    }
-    
-    
     // MARK: - Menu helper functins
     private func preloadWins() {
         for index in availableGames.indices {
@@ -280,8 +282,19 @@ struct MainMenuView: View {
         }
     }
     
-    // MARK: - Subview presentation styles
-    private var compactLayout: some View {
+    // MARK: - Gin Submenu
+    private var ginSubmenuView: some View {
+        ZStack {
+            ginCompactSubmenu
+                .opacity(isExpanded ? 0 : 1)
+            ginExpandedSubmenu
+                .opacity(isExpanded ? 1 : 0)
+        }
+        //.animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .transition(.offset(y: UIScreen.main.bounds.height / 2))
+    }
+    
+    private var ginCompactSubmenu: some View {
         ZStack(alignment: .topLeading) {
             backButton
                 .padding(.leading, 30)
@@ -302,7 +315,7 @@ struct MainMenuView: View {
         }
     }
     
-    private var expandedLayout: some View {
+    private var ginExpandedSubmenu: some View {
         VStack {
             backButton
                 .rotationEffect(.degrees(-90))
@@ -316,12 +329,63 @@ struct MainMenuView: View {
         }
     }
     
-    // MARK: - Layout Components
+    // MARK: - Crazy8s Submenu
+    private var crazy8sSubmenuView: some View {
+        ZStack {
+            crazy8sCompactSubmenu
+                .opacity(isExpanded ? 0 : 1)
+            crazy8sExpandedSubmenu
+                .opacity(isExpanded ? 1 : 0)
+            ginExpandedSubmenu
+                .hidden() //here to match crazy8sSubmenuView size to ginSubmenuView
+        }
+        //.animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .transition(.offset(y: UIScreen.main.bounds.height / 2))
+    }
+    
+    private var crazy8sCompactSubmenu: some View {
+        ZStack(alignment: .topLeading) {
+            backButton
+                .padding(.leading, 30)
+                
+            HStack {
+                Spacer()
+                deckSection
+                    .zIndex(999)
+                    .padding(.top, 40)
+                Spacer()
+                
+                VStack(spacing: 20) {
+                    startButton
+                        .offset(x: 0, y: 100) //offset moves the start button down, but doesnt affect the layout
+                    handSizePicker
+                        .hidden() //makes the handSizePicker here invisible and non-interactive, but it still affects spacing
+                }
+                .padding(.trailing, 10)
+            }
+        }
+    }
+    
+    private var crazy8sExpandedSubmenu: some View {
+        VStack {
+            backButton
+                .rotationEffect(.degrees(-90))
+                .padding(.vertical, 14)
+            Spacer()
+            startButton
+            Spacer()
+            deckSection
+            Spacer()
+        }
+    }
+    
+    
+    // MARK: - Submenu Layout Components
     private var backButton: some View {
         Button(action: {
             isCardWheelHidden = false
             withAnimation(.easeInOut(duration: 0.2)) {
-                isInSubview = false
+                activeSubmenu = nil
             }
             withAnimation(.linear(duration: 0.05).delay(0.1)) { // Bring the title back
                 isTitleBarHidden = false
@@ -478,6 +542,7 @@ struct MainMenuView: View {
     }
 }
 
+// MARK: - Init & Helper structs/classes
 class MenuViewModel: ObservableObject { //only tracks presentation style
     @Published var presentationStyle: MSMessagesAppPresentationStyle
 

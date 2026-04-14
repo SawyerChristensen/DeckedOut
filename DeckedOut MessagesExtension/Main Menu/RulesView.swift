@@ -115,7 +115,7 @@ struct RulesView: View {
             ]
         case .unknown:
             return [
-                ("questionmark.circle", "Unknown Game", "No rules available for this game.")
+                ("questionmark", "Unknown Game", "No rules available for this game.")
             ]
         }
     }
