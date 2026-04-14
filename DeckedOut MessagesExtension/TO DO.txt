@@ -1,7 +1,6 @@
 -Crazy 8s TO DO:
     FIX BUG: if you tap too fast it doesnt count as a card drawn in the backend and sends less cards drawn
     -make sure recieving a game move from another kind of game does not replace what we currently have on screen (problem with didRecieve and didSelect)
-    -add unique subview in main menu
     -be able to load separate sessions properly like how gin rummy does
 
 -add rules window for every game on main menu (add rules for games we have yet to add!)
