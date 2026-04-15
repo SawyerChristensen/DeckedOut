@@ -1,15 +1,7 @@
--Crazy 8s TO DO:
-    -make sure recieving a game move from another kind of game does not replace what we currently have on screen (problem with didRecieve and didSelect)
-    -be able to load separate sessions properly like how gin rummy does
+-add another game? (switch?)
+    -add rules window
 
--add rules window for every game
-    -Gin Rummy (DONE)
-    -Crazy 8s ...done?
-    -for Switch? Golf? Spades?
-
--add another game? (switch)
-
--add repeating gin rummy/crazy8s cards to main menu so theres a full fan?
+-add repeating game cards in main menu so theres a full circle fan?
 
 -verify localization works for every view
 

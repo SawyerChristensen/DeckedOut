@@ -83,9 +83,6 @@ class MessagesViewController: MSMessagesAppViewController {
     
         let isGameLoaded = !(activeGameEngine?.playerHand.isEmpty ?? true)
         let isShowingMenu = children.first is UIHostingController<MainMenuView>
-        let isShowingGin = children.first is UIHostingController<GinRootView>
-        let isShowingCrazy8s = children.first is UIHostingController<Crazy8sRootView>
-        let isShowingGame = isShowingGin || isShowingCrazy8s
         
         if !isGameLoaded && isShowingMenu { // Menu resizing
             withAnimation(.easeInOut(duration: 0.3)) {
@@ -94,15 +91,11 @@ class MessagesViewController: MSMessagesAppViewController {
         }
         
         if presentationStyle == .expanded {
-            if isGameLoaded {
-                if !isShowingGame { // A game IS loaded but game isn't on screen yet -> Show it.
-                    presentGameView()
-                } else { // A game is already loaded, but we may be opening a new session. load just in case
-                    if let selectedMessage = conversation.selectedMessage {
-                        loadGameStateToMemory(from: selectedMessage, conversation: conversation, isExplicitChange: true)
-                    }
-                    return
+            if isGameLoaded { // A game IS loaded but game isn't on screen yet -> Show it.
+                if let selectedMessage = conversation.selectedMessage { // Make sure it's the game the user tapped
+                    loadGameStateToMemory(from: selectedMessage, conversation: conversation, isExplicitChange: true)
                 }
+                presentGameView()
             } else {  // Expanded, but no game loaded -> Show Menu
                 presentMenuView(for: presentationStyle, with: conversation)
             }
