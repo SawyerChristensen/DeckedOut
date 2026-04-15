@@ -352,7 +352,9 @@ struct MainMenuView: View {
                 Spacer()
                 deckSection
                     .zIndex(999)
-                    .padding(.top, 40)
+                    .padding(.top, 60)
+                    .scaleEffect(1.1)
+                    .rotationEffect(.degrees(-10), anchor: .top)
                 Spacer()
                 
                 VStack(spacing: 20) {
@@ -361,12 +363,64 @@ struct MainMenuView: View {
                     handSizePicker
                         .hidden() //makes the handSizePicker here invisible and non-interactive, but it still affects spacing
                 }
-                .padding(.trailing, 10)
+                .padding(.trailing, 15)
             }
         }
     }
     
     private var crazy8sExpandedSubmenu: some View {
+        VStack {
+            backButton
+                .rotationEffect(.degrees(-90))
+                .padding(.vertical, 14)
+            Spacer()
+            startButton
+            Spacer()
+            deckSection
+            Spacer()
+        }
+    }
+    
+    // MARK: - Golf Submenu
+    private var golfSubmenuView: some View {
+        ZStack {
+            golfCompactSubmenu
+                .opacity(isExpanded ? 0 : 1)
+            golfExpandedSubmenu
+                .opacity(isExpanded ? 1 : 0)
+            ginExpandedSubmenu
+                .hidden() //here to match golfSubmenuView size to ginSubmenuView
+        }
+        //.animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .transition(.offset(y: UIScreen.main.bounds.height / 2))
+    }
+    
+    private var golfCompactSubmenu: some View {
+        ZStack(alignment: .topLeading) {
+            backButton
+                .padding(.leading, 30)
+                
+            HStack {
+                Spacer()
+                deckSection
+                    .zIndex(999)
+                    .padding(.top, 60)
+                    .scaleEffect(1.1)
+                    .rotationEffect(.degrees(-10), anchor: .top)
+                Spacer()
+                
+                VStack(spacing: 20) {
+                    startButton
+                        .offset(x: 0, y: 100) //offset moves the start button down, but doesnt affect the layout
+                    handSizePicker
+                        .hidden() //makes the handSizePicker here invisible and non-interactive, but it still affects spacing
+                }
+                .padding(.trailing, 15)
+            }
+        }
+    }
+    
+    private var golfExpandedSubmenu: some View {
         VStack {
             backButton
                 .rotationEffect(.degrees(-90))

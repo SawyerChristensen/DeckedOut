@@ -1,10 +1,14 @@
--add another game? (switch?)
-    -add rules window for switch
+-add Golf
+    -build internal logic for Golf
+    -build player and opponent hands for Golf
+    -add rules window for Golf
+    -build menu subview for Golf
+    -remove all references to GolfValidator
 
 -add repeating game cards in main menu so theres a full circle fan?
 
 -when opening a new game after a game that was won, the last discard of the old game gets animated before disappearing for some reason
-    -the likely culprit is the will transition player hand empty check
+    -the likely culprit is the willTransition player hand empty check. this is only a problem for Crazy 8s
 
 -verify localization works for every view
 
