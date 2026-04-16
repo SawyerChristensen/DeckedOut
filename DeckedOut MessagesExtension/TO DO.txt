@@ -23,6 +23,8 @@
 
 -make win transcript move/dynamic
 
+-tapping in and out and between games faster in the main menu increasses the fan's upwards animation speed somehow? <- fix
+
 -better refactoring of main menu submenu views? (currently relies on opacity toggles for compact/extended views)
 
 -fix index drawn to/discarded from (in gin and maybeee crazy 8s)
@@ -99,6 +101,7 @@ Customizations to sell:
 
 
 QOL changes / possible updates:
+-maybe rotate an hestack/vstack in the crazy 8s submenu for a more dynamic transition? rn everything works fine
 -keep an eye on the game resumption bug, but blocking didSelect/Recieve from processing transcript views seems to solve it
 -“tap card to play” reminder text in the middle of the screen if user looked at main menu for too long, (repeating opacity animation?)
 -Add rules section and a notice that Aces are not high cards in gin rummy!

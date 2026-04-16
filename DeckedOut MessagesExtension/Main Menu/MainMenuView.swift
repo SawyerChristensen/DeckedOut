@@ -30,8 +30,7 @@ struct MainMenuView: View {
     @State private var availableGames: [MenuGame] = [
         MenuGame(type: .ginRummy, title: "Gin Rummy", logoCard: "ginRummyCard"),
         MenuGame(type: .crazy8s, title: "Crazy 8s", logoCard: "crazy8sCard"),
-        MenuGame(type: .golf, title: "Golf", logoCard: "golfCard"),
-        MenuGame(type: .spades, title: "Spades", logoCard: "spadesCard")
+        MenuGame(type: .golf, title: "Golf", logoCard: "golfCard")
     ]
     @State private var activeSubmenu: GameType? = nil
     private var isInSubmenu: Bool { activeSubmenu != nil }
@@ -167,7 +166,7 @@ struct MainMenuView: View {
                     Spacer()
                     //customizationButton //add when we have skins to add!
                 }
-                .padding(.top, isExpanded ? -95 : 30) //moves the button up in expanded mode
+                .padding(.top, isExpanded ? -95 : 10) //moves the button up in expanded mode
                 .padding(.horizontal, isExpanded ? 70 : 30) //moves the button right in expanded mode
                 .opacity(isTitleBarHidden ? 0 : 1)
             )
@@ -176,9 +175,9 @@ struct MainMenuView: View {
     private var cardWheel: some View {
         MenuCardWheel(
             games: availableGames,
-            onActiveIndexChange: { newIndex in // handle real-time mid-swipe updates
+            onActiveIndexChange: { newIndex, direction in // handle real-time mid-swipe updates
                 if activeGameIndex != newIndex {
-                    titleTransitionEdge = newIndex > activeGameIndex ? .trailing : .leading
+                    titleTransitionEdge = direction
                     withAnimation(.easeInOut(duration: 0.2)) {
                         activeGameIndex = newIndex
                     }
@@ -209,8 +208,8 @@ struct MainMenuView: View {
         )
         //.zIndex(999) //keep the cards on top
         .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
-        .scaleEffect(isExpanded ? 1.4 : 1)
-        .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 50)
+        .scaleEffect(isExpanded ? 1.4 : 1.1)
+        .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 40) //40: in compact main menu
         .opacity(isCardWheelHidden ? 0 : 1)
     }
     
@@ -354,7 +353,7 @@ struct MainMenuView: View {
                 Spacer()
                 deckSection
                     .zIndex(999)
-                    .padding(.top, 60)
+                    .padding(.top, 50)
                     .rotationEffect(.degrees(-10), anchor: .top)
                 Spacer()
                 
@@ -364,7 +363,7 @@ struct MainMenuView: View {
                     handSizePicker
                         .hidden() //makes the handSizePicker here invisible and non-interactive, but it still affects spacing
                 }
-                .padding(.trailing, 15)
+                .padding(.trailing, 10)
             }
         }
     }
@@ -479,7 +478,7 @@ struct MainMenuView: View {
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.white, Color(uiColor: .systemBlue))
             }
-            .rotationEffect(.degrees(activeSubmenu == .crazy8s ? 10 : 0), anchor: .bottom)
+            .rotationEffect(.degrees(activeSubmenu == .crazy8s ? 10 : 0), anchor: .top)
             .opacity(cardsAnimatedAway < 6 ? 0 : 1)
             .scaleEffect(isBubblePulsating ? 1.05 : 1.0)
             .onChange(of: cardsAnimatedAway) { _, newValue in
@@ -567,8 +566,8 @@ struct MainMenuView: View {
             }
         }
         .onAppear {
-            card7Image = "7\(suits.randomElement() ?? "Spades")"
-            card10Image = "10\(suits.randomElement() ?? "Clubs")"
+            card7Image = "7\(suits.randomElement() ?? "Hearts")"
+            card10Image = "10\(suits.randomElement() ?? "Spades")"
         }
     }
     

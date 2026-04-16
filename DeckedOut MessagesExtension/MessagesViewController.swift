@@ -169,9 +169,7 @@ class MessagesViewController: MSMessagesAppViewController {
                 Text("Error loading match data.")  // Fallback UI in case the data is corrupted or decoding fails (should never trigger)
                     .padding()
             }
-            
-            
-            
+   
         case .golf:
             if let decodedState = try? JSONDecoder().decode(GolfGameState.self, from: stateData) {
                 if decodedState.turnNumber == 0 { // Game invite
@@ -199,8 +197,6 @@ class MessagesViewController: MSMessagesAppViewController {
                 Text("Error loading match data.")  // Fallback UI in case the data is corrupted or decoding fails (should never trigger)
                     .padding()
             }
-        case .spades:
-            Text("Spades Transcript View")
         case .unknown:
             Text("New game! \nUpdate your app to play!")
                 .font(.system(.headline, design: .serif, weight: .semibold))
@@ -299,9 +295,6 @@ class MessagesViewController: MSMessagesAppViewController {
         case .golf:
             self.activeGameEngine = GolfManager.shared
             templateLayout.caption = NSLocalizedString("Let's Play Golf!", comment: "Golf invite caption/summary")
-        case .spades:
-            // self.activeGameEngine = SpadesManager.shared
-            templateLayout.caption = NSLocalizedString("Let's Play Spades!", comment: "Spades invite caption/summary")
         case .unknown:
             fatalError("Cannot create a game with an unknown type")
         }
@@ -370,8 +363,6 @@ class MessagesViewController: MSMessagesAppViewController {
                 templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s win caption/summary")
             case .golf:
                 templateLayout.caption = NSLocalizedString("I won in Golf!", comment: "Golf win caption/summary")
-            case .spades:
-                templateLayout.caption = NSLocalizedString("I won in Spades!", comment: "Spades win caption/summary")
             case .unknown:
                 templateLayout.caption = NSLocalizedString("I won!", comment: "Default message win caption/summary")
             }
@@ -389,8 +380,6 @@ class MessagesViewController: MSMessagesAppViewController {
                 templateLayout.caption =  NSLocalizedString("Your turn in Crazy 8s!", comment: "Crazy 8s message caption")
             case .golf:
                 templateLayout.caption = NSLocalizedString("Your turn in Golf!", comment: "Golf message caption")
-            case .spades:
-                templateLayout.caption = NSLocalizedString("Your turn in Spades!", comment: "Spades message caption")
             case .unknown:
                 templateLayout.caption = NSLocalizedString("Your turn!", comment: "Default message caption")
             }
@@ -448,9 +437,6 @@ class MessagesViewController: MSMessagesAppViewController {
             self.activeGameEngine = Crazy8sManager.shared
         case .golf:
             self.activeGameEngine = GolfManager.shared
-        case .spades:
-            print("attempted to create spades game engine")
-            // self.activeGameEngine = SpadesManager.shared
         case .unknown:
             print("Received unsupported or unknown game type")
             return
@@ -479,7 +465,6 @@ enum GameType: String, Codable {
     case ginRummy
     case crazy8s
     case golf
-    case spades
     case unknown
 }
 

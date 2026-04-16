@@ -84,7 +84,6 @@ struct RulesView: View {
         case .ginRummy: return "Gin Rummy Rules"
         case .crazy8s:  return "Crazy 8s Rules"
         case .golf:     return "Golf Rules"
-        case .spades:   return "Spades Rules"
         case .unknown:  return "Rules"
         }
     }
@@ -109,10 +108,10 @@ struct RulesView: View {
             return [
                 ("figure.golf", "Coming Soon", "Golf rules will be added when the game is available.")
             ]
-        case .spades:
+        /*case .spades:
             return [
                 ("suit.spade.fill", "Coming Soon", "Spades rules will be added when the game is available.")
-            ]
+            ]*/
         case .unknown:
             return [
                 ("questionmark", "Unknown Game", "No rules available for this game.")
@@ -132,7 +131,7 @@ private struct RulePage: View {
     @ScaledMetric(relativeTo: .body) private var scale: CGFloat = 1.0 //padding needs to shrink as text size increases. iOS does not do this automatically
     
     var body: some View {
-        VStack(spacing: 16 / pow(scale, 3)) {
+        VStack(spacing: 12 / pow(scale, 3)) {
             Image(systemName: imageName)
                 .resizable()
                 .scaledToFit()
@@ -154,6 +153,6 @@ private struct RulePage: View {
             
             Spacer()
         }
-        .padding(.top, 16 / pow(scale, 3))
+        .padding(.top, 12 / pow(scale, 3))
     }
 }
