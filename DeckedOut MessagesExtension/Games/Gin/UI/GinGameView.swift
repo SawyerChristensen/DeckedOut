@@ -30,7 +30,7 @@ struct GinGameView: View {
                 Spacer()
                     .frame(maxWidth: UIScreen.main.bounds.width)
                 deckAndDiscard
-                rulesButtonAndSection
+                rulesButtonSection
                 playersHand
                 
             }
@@ -179,7 +179,7 @@ struct GinGameView: View {
         }
     }
     
-    private var rulesButtonAndSection: some View {
+    private var rulesButtonSection: some View {
         Spacer()
             .frame(maxWidth: UIScreen.main.bounds.width)
             .overlay(

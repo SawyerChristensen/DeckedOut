@@ -15,8 +15,7 @@ struct GolfGameState: Codable {
     let senderHand: [Card]
     let receiverHand: [Card]
     let senderDrewFromDeck: Bool
-    let indexSenderDrewTo: Int?
-    let indexSenderDiscardedFrom: Int?
+    let indexSenderReplaced: Int?
     let turnNumber: Int
 }
 
@@ -31,8 +30,8 @@ class GolfManager: ObservableObject, GameEngine {
     @Published var discardPile: [Card] = []
     @Published var phase: TurnPhase = .animationPhase //stays local
     @Published var opponentDrewFromDeck: Bool = false
-    @Published var indexDrawnTo: Int? = nil
-    @Published var indexDiscardedFrom: Int? = nil
+    @Published var hoveringCard: Card? = nil
+    @Published var indexReplaced: Int? = nil
     @Published var playerHasWon: Bool = false //stays local
     @Published var opponentHasWon: Bool = false //stays local
     @Published var turnNumber: Int = 0
@@ -46,36 +45,38 @@ class GolfManager: ObservableObject, GameEngine {
     
     enum TurnPhase {
         case animationPhase // Animating the opponents turn before your own
-        case drawPhase    // Waiting for user to pick from Deck or Discard
-        case discardPhase // Waiting for user to drag a card to discard pile
-        case idlePhase    // Opponent's turn
-        case gameEndPhase // Only unlocked upon winning
+        case drawPhase      // Waiting for user to pick from Deck or Discard
+        case placementPhase // Waiting for user to pick a card to replace (and send to the discard)
+        case idlePhase      // Opponent's turn
+        case gameEndPhase   // Only unlocked upon winning
     }
     
     
     func drawFromDeck() {
         guard phase == .drawPhase, !deck.isEmpty else { return }
         let card = deck.popLast()! //maybe make this a guard statement? this does the samething in the earlier guard statement...
-        playerHand.append(card)
-        indexDrawnTo = playerHand.count - 1 //check if we need this to be -1!!
+        hoveringCard = card
         opponentDrewFromDeck = true
-        phase = .discardPhase
+        phase = .placementPhase
     }
     
     func drawFromDiscard() {
         guard phase == .drawPhase, !discardPile.isEmpty else { return }
         let card = discardPile.popLast()!
-        playerHand.append(card)
-        indexDrawnTo = playerHand.count - 1
+        hoveringCard = card
         opponentDrewFromDeck = false
-        phase = .discardPhase
+        phase = .placementPhase
     }
     
-    func discardCard(card: Card) { //possible room for refactoring/removing discardCard
-        guard phase == .discardPhase, let index = playerHand.firstIndex(of: card) else { return }
-        indexDiscardedFrom = index
-        playerHand.remove(at: index) //we could also use indexDiscardedFrom...
-        discardPile.append(card)
+    func replaceCard(at index: Int) {
+        guard phase == .placementPhase,
+              playerHand.indices.contains(index),
+              let drawn = hoveringCard else { return }
+        let oldCard = playerHand[index]
+        indexReplaced = index
+        playerHand[index] = drawn
+        discardPile.append(oldCard)
+        hoveringCard = nil
         SoundManager.instance.playCardSlap()
         //playerHasWon = GolfValidator.canMeldAllCards(hand: playerHand)
         if playerHasWon {
@@ -86,31 +87,29 @@ class GolfManager: ObservableObject, GameEngine {
         sendGameState()
     }
     
-    func opponentDrawFromDeck() {
+    /// Animates the opponent's swap: draws a card from the appropriate source,
+    /// replaces the card at `indexReplaced` in the opponent's hand, and discards the replaced card.
+    func opponentReplaceCard() {
         guard phase == .animationPhase,
-              !deck.isEmpty,
-              let drawIndex = indexDrawnTo else {
+              let replaceIndex = indexReplaced else {
             return
         }
-        let card = deck.popLast()!
-        opponentHand.insert(card, at: drawIndex)
-    }
-    
-    func opponentDrawFromDiscard() {
-        guard phase == .animationPhase,
-              !discardPile.isEmpty,
-              let drawIndex = indexDrawnTo else {
-            return
+        
+        // Draw the new card from deck or discard
+        let drawnCard: Card
+        if opponentDrewFromDeck {
+            guard !deck.isEmpty else { return }
+            drawnCard = deck.popLast()!
+        } else {
+            guard !discardPile.isEmpty else { return }
+            drawnCard = discardPile.popLast()!
         }
-        let card = discardPile.popLast()!
-        opponentHand.insert(card, at: drawIndex)
-    }
-    
-    func opponentDiscardCard(card: Card) { //pseudo discard
-        guard phase == .animationPhase else {
-            return }
-        opponentHand.remove(at: indexDiscardedFrom!)
-        discardPile.append(card)
+        
+        // Swap: replace the card at the index, discard the old one
+        let replacedCard = opponentHand[replaceIndex]
+        opponentHand[replaceIndex] = drawnCard
+        discardPile.append(replacedCard)
+        
         SoundManager.instance.playCardSlap()
         //opponentHasWon = GolfValidator.canMeldAllCards(hand: opponentHand)
         if opponentHasWon {
@@ -131,9 +130,9 @@ class GolfManager: ObservableObject, GameEngine {
     }
     
     func saveMidTurnState(conversationID: String) {
-        guard phase == .discardPhase, let sID = sessionID else { return } //only save if the user is currently in the middle of a turn
+        guard phase == .placementPhase, let sID = sessionID else { return } //only save if the user is currently in the middle of a turn
         
-        if let encoded = try? JSONEncoder().encode(playerHand) {
+        if let encoded = try? JSONEncoder().encode(hoveringCard) {
             UserDefaults.standard.set(encoded, forKey: "midTurn_\(sID.uuidString)")
         }
     }
@@ -171,18 +170,18 @@ class GolfManager: ObservableObject, GameEngine {
         self.deck = state.deck
         self.discardPile = state.discardPile
         
-        if isPlayersTurn, //does not check if this is the same game session!! just the same conversation!!
+        if isPlayersTurn,
            let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
-           let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
-            self.playerHand = stashedHand
+           let stashedHoveringCard = try? JSONDecoder().decode(Card.self, from: data) { //the user is mid-turn...
+            self.hoveringCard = stashedHoveringCard
             self.opponentHand = state.senderHand
             if let topDeckCard = deck.last,
-               stashedHand.contains(where: { $0.id == topDeckCard.id }) { // the user previously drew from the deck
+               stashedHoveringCard.id == topDeckCard.id { // the user previously drew from the deck
                 deck.removeLast()
             } else { //the user drew from the discard pile instead
                 discardPile.removeLast()
             }
-            phase = .discardPhase
+            phase = .placementPhase
             
         } else if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
@@ -190,13 +189,7 @@ class GolfManager: ObservableObject, GameEngine {
             if hasVisualsToAnimate {//it is not the first turn...
                 phase = .animationPhase
             } else { //it is the first turn...
-                checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
-                if playerHasWon || opponentHasWon {
-                    phase = .gameEndPhase
-                    SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
-                } else {
-                    phase = .drawPhase
-                }
+                phase = .drawPhase
             }
             
         } else { //it is not the players turn...
@@ -221,33 +214,34 @@ class GolfManager: ObservableObject, GameEngine {
         self.discardPile = []
         self.phase = .animationPhase
         self.opponentDrewFromDeck = false
-        self.indexDrawnTo = nil
-        self.indexDiscardedFrom = nil
+        self.hoveringCard = nil
+        self.indexReplaced = nil
         self.playerHasWon = false
         self.opponentHasWon = false
         self.turnNumber = 0
     }
     
     private func applyOpponentTurnVisuals(state: GolfGameState) -> Bool {
-        guard let discardedIndex = state.indexSenderDiscardedFrom,
-              let drawnIndex = state.indexSenderDrewTo else {
+        guard let replacedIndex = state.indexSenderReplaced else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
             return false
         }
-        //print("Readying opponent turn visuals") //this seems to get triggered multiple times?
         
         self.opponentDrewFromDeck = state.senderDrewFromDeck
-        indexDrawnTo = drawnIndex
-        indexDiscardedFrom = discardedIndex
+        self.indexReplaced = replacedIndex
         
+        // The state contains the hand AFTER the swap. We need to undo it so we can animate it forward.
+        // After their turn: hand[replacedIndex] = drawnCard, and the old card is on top of discardPile.
         var opponentsHandPreAnimation = state.senderHand
-        let cardTheyDiscarded = discardPile.popLast()! //we will animate it back later...
-        opponentsHandPreAnimation.insert(cardTheyDiscarded, at: discardedIndex)
-        let cardToReturn = opponentsHandPreAnimation.remove(at: drawnIndex)
+        let cardTheyDiscarded = discardPile.popLast()! // the old card they replaced (top of discard)
+        let cardTheyDrew = opponentsHandPreAnimation[replacedIndex] // the new card they placed
+        
+        // Undo the swap: put the old card back, return the drawn card to its source
+        opponentsHandPreAnimation[replacedIndex] = cardTheyDiscarded
         if opponentDrewFromDeck {
-            deck.append(cardToReturn)
+            deck.append(cardTheyDrew)
         } else {
-            discardPile.append(cardToReturn)
+            discardPile.append(cardTheyDrew)
         }
         opponentHand = opponentsHandPreAnimation
         
@@ -259,12 +253,12 @@ class GolfManager: ObservableObject, GameEngine {
         //opponentHasWon = GolfValidator.canMeldAllCards(hand: opponentHand)
     }
     
-    func createNewGameState(withHandSize: Int) -> Data? {
+    func createNewGameState() -> Data? {
         let newSessionID = UUID()
         var newDeck = Deck().cards
         var newPlayerHand: [Card] = []
         var newOpponentHand: [Card] = []
-        for _ in 0..<withHandSize {
+        for _ in 0..<6 {
             newPlayerHand.append(newDeck.popLast()!) //see if removefirst, remove last is faster
             newOpponentHand.append(newDeck.popLast()!)
         }
@@ -277,9 +271,8 @@ class GolfManager: ObservableObject, GameEngine {
             discardPile: newDiscardPile,
             senderHand: newPlayerHand,
             receiverHand: newOpponentHand,
-            senderDrewFromDeck: false, //defaults to user drawing from discard pile but shouldnt matter if these are also nil:
-            indexSenderDrewTo: nil,
-            indexSenderDiscardedFrom: nil,
+            senderDrewFromDeck: false, //defaults to user drawing from discard pile but shouldnt matter if this is also nil:
+            indexSenderReplaced: nil,
             turnNumber: 0)
         
         return try? JSONEncoder().encode(initialState)
@@ -295,8 +288,7 @@ class GolfManager: ObservableObject, GameEngine {
             senderHand: self.playerHand,
             receiverHand: self.opponentHand,
             senderDrewFromDeck: self.opponentDrewFromDeck,
-            indexSenderDrewTo: self.indexDrawnTo,
-            indexSenderDiscardedFrom: self.indexDiscardedFrom,
+            indexSenderReplaced: self.indexReplaced,
             turnNumber: self.turnNumber + 1
         )
         

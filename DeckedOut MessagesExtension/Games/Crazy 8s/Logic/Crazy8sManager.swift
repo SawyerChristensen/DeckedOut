@@ -281,12 +281,12 @@ class Crazy8sManager: ObservableObject, GameEngine {
         return true
     }
     
-    func createNewGameState(withHandSize: Int) -> Data? {
+    func createNewGameState() -> Data? {
         let newSessionID = UUID()
         var newDeck = Deck().cards
         var newPlayerHand: [Card] = []
         var newOpponentHand: [Card] = []
-        for _ in 0..<withHandSize {
+        for _ in 0..<8 {
             newPlayerHand.append(newDeck.popLast()!) //see if removefirst, remove last is faster
             newOpponentHand.append(newDeck.popLast()!)
         }

@@ -38,6 +38,7 @@ class GinRummyManager: ObservableObject, GameEngine {
     @Published var turnNumber: Int = 0
     
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
+    var handSize: Int = 7 //configurable from the menu (7 or 10)
     
     private init() {} // values are already initialized here ^
     
@@ -46,10 +47,10 @@ class GinRummyManager: ObservableObject, GameEngine {
     
     enum TurnPhase {
         case animationPhase // Animating the opponents turn before your own
-        case drawPhase    // Waiting for user to pick from Deck or Discard
-        case discardPhase // Waiting for user to drag a card to discard pile
-        case idlePhase    // Opponent's turn
-        case gameEndPhase // Only unlocked upon winning
+        case drawPhase      // Waiting for user to pick from Deck or Discard
+        case discardPhase   // Waiting for user to drag a card to discard pile
+        case idlePhase      // Opponent's turn
+        case gameEndPhase   // Only unlocked upon winning
     }
     
     
@@ -259,12 +260,12 @@ class GinRummyManager: ObservableObject, GameEngine {
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
     }
     
-    func createNewGameState(withHandSize: Int) -> Data? {
+    func createNewGameState() -> Data? {
         let newSessionID = UUID()
         var newDeck = Deck().cards
         var newPlayerHand: [Card] = []
         var newOpponentHand: [Card] = []
-        for _ in 0..<withHandSize {
+        for _ in 0..<handSize {
             newPlayerHand.append(newDeck.popLast()!) //see if removefirst, remove last is faster
             newOpponentHand.append(newDeck.popLast()!)
         }

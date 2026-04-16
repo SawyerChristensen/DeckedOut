@@ -72,38 +72,32 @@ struct GolfOpponentHandView: View {
         .frame(height: cardHeight) //technically should be adding the arch amount but this doesnt really matter...
         
         .onChange(of: cards) { oldHand, newHand in
-            if newHand.count > oldHand.count,
-                let drawIndex = game.indexDrawnTo { //the opponent is drawing!
-                guard animatingCard == nil else { return }
+            // In Golf, the hand size stays the same — detect a swap by finding where the card identity changed
+            guard let replaceIndex = game.indexReplaced,
+                  oldHand.count == newHand.count,
+                  replaceIndex < oldHand.count,
+                  oldHand[replaceIndex].id != newHand[replaceIndex].id else { return }
+            guard animatingCard == nil else { return }
+            
+            let oldCard = oldHand[replaceIndex] // the card being discarded
+            let newCard = newHand[replaceIndex] // the card that was drawn
+            
+            // First: animate the old card flying out to the discard pile
+            cardWaitingToAnimate = nil
+            
+            DispatchQueue.main.async {
+                guard let slotFrame = slotFrames[replaceIndex] else { return }
+                let fanAngle = Angle.degrees(Double(replaceIndex - newHand.count/2) * -fanningAngle)
                 
-                let card = newHand[drawIndex]
-                cardWaitingToAnimate = card
-                
-                DispatchQueue.main.async { //wait so slot frames can update!
-                    guard let targetFrame = slotFrames[drawIndex],
-                          let zone = game.opponentDrewFromDeck ? deckZone : discardPileZone else {
-                        cardWaitingToAnimate = nil
-                        return
-                    }
-                                  
+                self.animatingCard = oldCard
+                animateDiscard(card: oldCard, cardFrame: slotFrame, fanAngle: fanAngle) {
+                    // Then: animate the new card flying in from deck/discard
+                    guard let zone = game.opponentDrewFromDeck ? deckZone : discardPileZone,
+                          let targetFrame = slotFrames[replaceIndex] else { return }
+                    let finalAngle = Angle.degrees(Double(replaceIndex - newHand.count/2) * -fanningAngle)
                     
-                    let card = newHand[drawIndex]
-                    let finalAngle = Angle.degrees(Double(drawIndex - newHand.count/2) * -fanningAngle)
-                    
-                    self.animatingCard = card
-                    animateDraw(cardFrame: targetFrame, drawZone: zone, fanAngle: finalAngle) { //trigger this after animateDraw...
-                        
-                        if let discardedIndex = game.indexDiscardedFrom {
-                            if newHand.indices.contains(discardedIndex) {
-                                let discardCard = newHand[discardedIndex]
-                                let discardFrame = slotFrames[discardedIndex] ?? targetFrame
-                                let discardAngle = Angle.degrees(Double(discardedIndex - newHand.count/2) * -fanningAngle)
-                                
-                                self.animatingCard = discardCard
-                                animateDiscard(card: discardCard, cardFrame: discardFrame, fanAngle: discardAngle)
-                            }
-                        }
-                    }
+                    self.animatingCard = newCard
+                    animateDraw(cardFrame: targetFrame, drawZone: zone, fanAngle: finalAngle) {}
                 }
             }
         }
@@ -143,10 +137,10 @@ struct GolfOpponentHandView: View {
         }
     }
     
-    private func animateDiscard(card: Card, cardFrame: CGRect, fanAngle: Angle) {
+    private func animateDiscard(card: Card, cardFrame: CGRect, fanAngle: Angle, completion: @escaping () -> Void = {}) {
         // Calculate offset from card's natural position to discard pile
-        let cardIndex = cards.firstIndex(of: card)
-        let yArcOffset = abs(Double(cardIndex! - cards.count / 2) * 5)
+        let cardIndex = game.indexReplaced ?? 0
+        let yArcOffset = abs(Double(cardIndex - cards.count / 2) * 5)
         let offsetToDiscard = CGSize(
             width: discardPileZone!.midX - cardFrame.midX,
             height: discardPileZone!.midY - cardFrame.midY + yArcOffset
@@ -167,7 +161,7 @@ struct GolfOpponentHandView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             animatingCard = nil
             animationOffset = .zero
-            game.opponentDiscardCard(card: card)
+            completion()
         }
     }
 }

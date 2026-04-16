@@ -26,12 +26,18 @@ struct GolfGameView: View {
             backgroundView
             
             VStack {
-                opponentsHand
+                //opponentsHand
+                playersHand
+                    .rotationEffect(.degrees(180))
+                    .padding(.top, 15)
                 Spacer()
                     .frame(maxWidth: UIScreen.main.bounds.width)
                 deckAndDiscard
-                rulesButtonAndSection
+                //rulesButtonSection
+                Spacer()
+                    .frame(maxWidth: UIScreen.main.bounds.width)
                 playersHand
+                    .padding(.bottom, 20)
                 
             }
         }
@@ -77,7 +83,7 @@ struct GolfGameView: View {
     
     private var opponentsHand: some View {
         GolfOpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame)
-            .padding(.top, 30)
+            //.padding(.top, 30)
             .zIndex(2)
     }
     
@@ -85,19 +91,18 @@ struct GolfGameView: View {
         HStack {
             Spacer()
             Spacer()
-            Spacer()
-            
             theDeck
                 .onTapGesture { handleDeckTap() }
-            
-            Spacer()
-            Spacer()
+
+            rulesButtonSection
+                .padding(.horizontal)
             
             discardPile
-            
             Spacer()
+            //rulesButtonSection
+                //.padding(.horizontal)
             Spacer()
-            Spacer()
+            //Spacer()
         }
         .zIndex(1)
     }
@@ -108,7 +113,7 @@ struct GolfGameView: View {
                 Image("cardBackRed")
                     .resizable()
                     .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: 145)
+                    .frame(height: 130)
                     .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
                     .shadow(radius: i == 4 ? 1 : 8)
                     .background {
@@ -141,7 +146,7 @@ struct GolfGameView: View {
     private var discardPile: some View {
         ZStack {
             Color.clear // A ghost view reserves the space so Spacers don't collapse when discardPile.count == 0
-                .frame(width: 101.5, height: 145) // 101.5 = 145 * 0.7
+                .frame(width: 91, height: 130) // 91 = 130 * 0.7
                 .background(
                     GeometryReader { geo in
                         Color.clear
@@ -154,17 +159,13 @@ struct GolfGameView: View {
             
             if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
                 CardView(frontImage: topCard.imageName)
-                    //.id(topCard.id) //for instant transitions
-                    //.transition(.identity) // /to get rid of fade
+                    .aspectRatio(0.7, contentMode: .fit)
+                    .frame(width: 91, height: 130)
                     .onTapGesture { handleDiscardTap() }
-                    .shadow(color: game.phase == .discardPhase && isHoveringDiscard ? .white : .black.opacity(0.2),
-                            radius: game.phase == .discardPhase && isHoveringDiscard ? 15 : 5)
-                    .scaleEffect(game.phase == .discardPhase && isHoveringDiscard ? 1.05 : 1.0)
-                    .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
             } else { // display an outline of where a discarded card *should* go
                 RoundedRectangle(cornerRadius: 8)
                     .strokeBorder(Color.white.opacity(0.2), lineWidth: 2)
-                    .frame(width: 101.5, height: 145)
+                    .frame(width: 91, height: 130)
             }
         }
     }
@@ -179,37 +180,24 @@ struct GolfGameView: View {
         }
     }
     
-    private var rulesButtonAndSection: some View {
-        Spacer()
-            .frame(maxWidth: UIScreen.main.bounds.width)
-            .overlay(
-                HStack {
-                    Button(action: {
-                        let impact = UIImpactFeedbackGenerator(style: .light)
-                        impact.impactOccurred()
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            showRules = true
-                        }
-                    }) {
-                        //HStack {
-                            Image(systemName: "text.book.closed")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: buttonSize, height: buttonSize)
-                                .foregroundStyle(.white.opacity(0.5))
-                            
-                            //Text("Rules")
-                                //.font(.title3)
-                                //.fontWeight(.semibold)
-                        //}
-                        //.foregroundStyle(.white.opacity(0.5))
-                    }
-                    
-                    Spacer()
+    private var rulesButtonSection: some View {
+        ZStack(alignment: .bottom) {
+            Button(action: {
+                let impact = UIImpactFeedbackGenerator(style: .light)
+                impact.impactOccurred()
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    showRules = true
                 }
-                .padding(.top, 15)
-                .padding(.horizontal, 30)
-            )
+            }) {
+                Image(systemName: "text.book.closed")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: buttonSize, height: buttonSize)
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+            .padding(.top, 60)
+        }
+        .frame(height: 130)
     }
     
     private var playersHand: some View {
@@ -225,7 +213,7 @@ struct GolfGameView: View {
                 handleDragEnded(card: card, location: location)
             }
         )
-        .padding(.bottom, 40)
+        //.padding(.bottom, 40)
         .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
         .zIndex(1)
     }
@@ -233,13 +221,8 @@ struct GolfGameView: View {
     
     // MARK: - Helper functions
     private func animateOpponentsTurn() { //modifies backend, which triggers animation in opponentHandView
-        if game.opponentDrewFromDeck {
-            game.opponentDrawFromDeck()
-        } else {
-            game.opponentDrawFromDiscard()
-        }
+        game.opponentReplaceCard()
         game.hasPerformedInitialLoad = true
-        //animating discard is automatically handled in opponents hand view
     }
     
     private func calculateProperDeckZone(from frame: CGRect) -> CGRect {
@@ -254,27 +237,26 @@ struct GolfGameView: View {
         
         return newFrame
     }
-    
+ 
     private func handleDragChanged(card: Card, location: CGPoint) {
-        if discardFrame.contains(location) {
+        /*if discardFrame.contains(location) {
             isHoveringDiscard = true
         } else {
             isHoveringDiscard = false
-        }
+        }*/
     }
 
-    private func handleDragEnded(card: Card, location: CGPoint) {
+    private func handleDragEnded(card: Card, location: CGPoint) { //change to handle a drag from the deck or discard to a specific zone in the players hand
         if discardFrame.contains(location) {
-            if game.phase == .discardPhase {
-                game.discardCard(card: card)
+            if game.phase == .placementPhase,
+               let index = game.playerHand.firstIndex(of: card) {
+                game.replaceCard(at: index)
             } else {
                 SoundManager.instance.playErrorFeedback()
             }
         } else {
             //print("Drop → No zone, card returns")
         }
-        isHoveringDiscard = false
-        
     }
     
 }

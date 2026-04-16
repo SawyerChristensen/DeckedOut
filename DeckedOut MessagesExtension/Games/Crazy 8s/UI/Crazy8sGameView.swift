@@ -29,7 +29,7 @@ struct Crazy8sGameView: View {
                 Spacer()
                     .frame(maxWidth: UIScreen.main.bounds.width)
                 deckAndDiscard
-                rulesButtonAndSection
+                rulesButtonSection
                 playersHand
                 
             }
@@ -179,7 +179,7 @@ struct Crazy8sGameView: View {
         }
     }
     
-    private var rulesButtonAndSection: some View {
+    private var rulesButtonSection: some View {
         Spacer()
             .frame(maxWidth: UIScreen.main.bounds.width)
             .overlay(

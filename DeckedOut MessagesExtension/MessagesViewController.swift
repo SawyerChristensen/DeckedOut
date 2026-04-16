@@ -173,7 +173,32 @@ class MessagesViewController: MSMessagesAppViewController {
             
             
         case .golf:
-            Text("Golf Transcript View")
+            if let decodedState = try? JSONDecoder().decode(GolfGameState.self, from: stateData) {
+                if decodedState.turnNumber == 0 { // Game invite
+                    GolfTranscriptInvite(
+                        onHeightChange: { [weak self] height in
+                            self?.transcriptHeight = height
+                        }
+                    )
+                    .onTapGesture {
+                        self.requestPresentationStyle(.expanded)
+                    }
+                } else { // Default waiting view the user will see in all cases except an invite
+                    GolfTranscriptDefault(
+                        gameState: decodedState,
+                        isFromMe: isFromMe,
+                        onHeightChange: { [weak self] height in
+                            self?.transcriptHeight = height
+                        }
+                    )
+                    .onTapGesture {
+                        self.requestPresentationStyle(.expanded)
+                    }
+                }
+            } else {
+                Text("Error loading match data.")  // Fallback UI in case the data is corrupted or decoding fails (should never trigger)
+                    .padding()
+            }
         case .spades:
             Text("Spades Transcript View")
         case .unknown:
@@ -214,6 +239,10 @@ class MessagesViewController: MSMessagesAppViewController {
             if self.children.first is UIHostingController<Crazy8sRootView> { return }
             gameViewController = UIHostingController(rootView: Crazy8sRootView(game: crazy8sManager))
             
+        } else if let golfManager = engine as? GolfManager {
+            if self.children.first is UIHostingController<GolfRootView> { return }
+            gameViewController = UIHostingController(rootView: GolfRootView(game: golfManager))
+            
         } else {
             return
         }
@@ -250,7 +279,7 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func createGame(conversation: MSConversation, gameType: GameType, handSize: Int) {
+    private func createGame(conversation: MSConversation, gameType: GameType, handSize: Int = 7) {
         let session = MSSession()
         let message = MSMessage(session: session)
         let templateLayout = MSMessageTemplateLayout()
@@ -260,6 +289,7 @@ class MessagesViewController: MSMessagesAppViewController {
         
         switch gameType {
         case .ginRummy:
+            GinRummyManager.shared.handSize = handSize
             self.activeGameEngine = GinRummyManager.shared
             templateLayout.image = UIImage(named: "GinDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "Gin invite caption/summary") //need to use NSLocalizedString here because it is not in a SwiftUI view and therefore automatically included in the localizable catalog. this adds it manually
@@ -267,7 +297,7 @@ class MessagesViewController: MSMessagesAppViewController {
             self.activeGameEngine = Crazy8sManager.shared
             templateLayout.caption = NSLocalizedString("Let's Play Crazy 8s!", comment: "Crazy 8s invite caption/summary")
         case .golf:
-            // self.activeGameEngine = GolfManager.shared
+            self.activeGameEngine = GolfManager.shared
             templateLayout.caption = NSLocalizedString("Let's Play Golf!", comment: "Golf invite caption/summary")
         case .spades:
             // self.activeGameEngine = SpadesManager.shared
@@ -282,7 +312,7 @@ class MessagesViewController: MSMessagesAppViewController {
         setupEngineListener()
         
         //init and package initital game state
-        guard let stateData = activeGameEngine?.createNewGameState(withHandSize: handSize) else {
+        guard let stateData = activeGameEngine?.createNewGameState() else {
             print("Error: Could not generate starting game state for \(gameType)")
             return
         }
@@ -417,8 +447,7 @@ class MessagesViewController: MSMessagesAppViewController {
         case .crazy8s:
             self.activeGameEngine = Crazy8sManager.shared
         case .golf:
-            print("attempted to create golf game engine")
-            // self.activeGameEngine = GolfManager.shared
+            self.activeGameEngine = GolfManager.shared
         case .spades:
             print("attempted to create spades game engine")
             // self.activeGameEngine = SpadesManager.shared
@@ -460,7 +489,7 @@ protocol GameEngine: AnyObject {
     var playerHasWon: Bool { get } // Used for setting iMessage captions
     var discardPile: [Card] { get } // Used for setting iMessage summary text
     
-    func createNewGameState(withHandSize: Int) -> Data?
+    func createNewGameState() -> Data?
     func loadState(from data: Data, isPlayersTurn: Bool, conversationID: String, isExplicitChange: Bool)
     func saveMidTurnState(conversationID: String)
     func clearMidTurnState(conversationID: String)

@@ -1,20 +1,27 @@
 -add Golf
     -build internal logic for Golf
+        -user should not be able to discard the hover card if it originate from the discard pile
+        -build winning criteria (and remove all references to GolfValidator)
     -build player and opponent hands for Golf
+    -hover card place and animation
     -add rules window for Golf
+        -in-game rules button in sensible place, probably in the center bottom
     -build menu subview for Golf
-    -remove all references to GolfValidator
+
+-remove all references to spades
 
 -add repeating game cards in main menu so theres a full circle fan?
 
 -when opening a new game after a game that was won, the last discard of the old game gets animated before disappearing for some reason
     -the likely culprit is the willTransition player hand empty check. this is only a problem for Crazy 8s
 
+-new win/loss game sound effects
+
 -verify localization works for every view
 
 ***----------*** UPDATE 2.0 ***----------***
 
--new win/loss game sound effects
+-make win transcript move/dynamic
 
 -better refactoring of main menu submenu views? (currently relies on opacity toggles for compact/extended views)
 
@@ -24,13 +31,9 @@
 
 -fix invite transcript card jitter
 
-*----------* UPDATE 2.1.0 *----------*
+-colored crazy 8s deck?
 
--colored crazy 8s deck
-
--figure out game resumption bug!
-
-***----------*** UPDATE 2.1.1 ***----------***
+***----------*** UPDATE 2.1.0 ***----------***
 
 -Add group chat compatibility! increases adoption rate!!
 

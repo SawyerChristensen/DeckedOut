@@ -49,6 +49,8 @@ struct MainMenuView: View {
                 ginSubmenuView
             case .crazy8s:
                 crazy8sSubmenuView
+            case .golf:
+                golfSubmenuView
             default:
                 EmptyView()
             }
@@ -353,7 +355,6 @@ struct MainMenuView: View {
                 deckSection
                     .zIndex(999)
                     .padding(.top, 60)
-                    .scaleEffect(1.1)
                     .rotationEffect(.degrees(-10), anchor: .top)
                 Spacer()
                 
@@ -405,7 +406,6 @@ struct MainMenuView: View {
                 deckSection
                     .zIndex(999)
                     .padding(.top, 60)
-                    .scaleEffect(1.1)
                     .rotationEffect(.degrees(-10), anchor: .top)
                 Spacer()
                 
@@ -479,6 +479,7 @@ struct MainMenuView: View {
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.white, Color(uiColor: .systemBlue))
             }
+            .rotationEffect(.degrees(activeSubmenu == .crazy8s ? 10 : 0), anchor: .bottom)
             .opacity(cardsAnimatedAway < 6 ? 0 : 1)
             .scaleEffect(isBubblePulsating ? 1.05 : 1.0)
             .onChange(of: cardsAnimatedAway) { _, newValue in

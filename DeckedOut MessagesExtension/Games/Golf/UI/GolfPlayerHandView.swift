@@ -33,92 +33,74 @@ struct GolfPlayerHandView: View {
     @State private var flipRotation: Double = 0
     
     // Card sizing
-    private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 } // 140 * 0.7 & 145 * 0.7
-    private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
-    private var spacing: CGFloat { cards.count >= 10 ? -72 : -66 }
-    private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
+    private let columns = 3
+    private let rows = 2
+    private let cardWidth: CGFloat = 91
+    private let cardHeight: CGFloat = 130
+    private let gridSpacingH: CGFloat = 24
+    private let gridSpacingV: CGFloat = 12
 
     var body: some View {
-        HStack(spacing: spacing) {
-            ForEach(cards) { card in
-                    
-                let isDragging = draggedCard == card
-                let isAnimating = animatingCard == card
-                let index = cards.firstIndex(of: card)!
-                let visualIndex = calculateVisualIndex(for: index)
-                
-                let angle = Angle.degrees((Double(visualIndex) - centerOffset) * 4) // fanningAngle = 4
-                let yOffset = abs((Double(visualIndex) - centerOffset) * 5) //fanningOffset = 5
-                let stride = cardWidth + spacing
-                let xOffset = CGFloat(visualIndex - index) * stride
-                    
-                var finalRotation: Angle {
-                    if isDragging {
-                        return calculateDragRotation(height: dragOffset.height, angle: angle)
-                    } else if isAnimating {
-                        return animationRotationCorrection
-                    } else {
-                        return angle
+        VStack(spacing: gridSpacingV) {
+            ForEach(0..<rows, id: \.self) { row in
+                HStack(spacing: gridSpacingH) {
+                    ForEach(0..<columns, id: \.self) { col in
+                        let index = row * columns + col
+                        
+                        if index < cards.count {
+                            let card = cards[index]
+                            let isDragging = draggedCard == card
+                            let isAnimating = animatingCard == card
+                            
+                            GeometryReader { geo in
+                                let geoFrame = geo.frame(in: .global)
+                                
+                                CardView(frontImage: card.imageName,
+                                         rotation: isAnimating ? flipRotation : 0)
+                                    .rotationEffect(isAnimating ? animationRotationCorrection : .zero)
+                                    .scaleEffect(isDragging ? 1.1 : 1.0)
+                                    .offset(isDragging ? dragOffset : .zero)
+                                    .offset(isAnimating ? animationOffset : .zero)
+                                    .gesture(
+                                        DragGesture(coordinateSpace: .global)
+                                            .onChanged { value in
+                                                if draggedCard == nil {
+                                                    draggedCard = card
+                                                }
+                                                dragOffset = value.translation
+                                                onDragChanged?(card, value.location)
+                                            }
+                                            .onEnded { value in
+                                                onDragEnded?(card, value.location)
+                                                draggedCard = nil
+                                                dragOffset = .zero
+                                            }
+                                    )
+                                    .onAppear {
+                                        guard index == cards.count - 1 else { return }
+                                        let sourceZone: CGRect?
+                                        switch lastDrawSource {
+                                        case .deck: sourceZone = deckZone
+                                        case .discard: sourceZone = discardPileZone
+                                        case .none: sourceZone = nil
+                                        }
+                                        if let zone = sourceZone {
+                                            animatingCard = card
+                                            animateDraw(card: card, cardFrame: geoFrame, drawZone: zone)
+                                        }
+                                    }
+                            }
+                            .frame(width: cardWidth, height: cardHeight)
+                            .zIndex(isDragging ? 100 : 0)
+                        }
                     }
                 }
-                
-                GeometryReader { geo in
-                    let geoFrame = geo.frame(in: .global)
-                    
-                    CardView(frontImage: card.imageName,
-                             rotation: isAnimating ? flipRotation : 0)
-                        .rotationEffect(finalRotation)
-                        .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
-                        .scaleEffect(isDragging ? 1.1 : 1.0)
-                        .offset(isDragging ? dragOffset : .zero) //for dragging
-                        //.rotationEffect(isAnimating ? animationRotationCorrection : .degrees(0))
-                        .offset(isAnimating ? animationOffset : .zero)
-                        .gesture(
-                            DragGesture(coordinateSpace: .global)
-                                .onChanged { value in
-                                    if draggedCard == nil {
-                                        draggedCard = card
-                                        predictedDropIndex = index
-                                    }
-                                    dragOffset = value.translation
-                                    handleDragChange(card: card, value: value) //internal change
-                                    onDragChanged?(card, value.location) //external change
-                                }
-                                .onEnded { value in
-                                    let cardCenter = CGPoint(
-                                        x: geoFrame.midX + value.translation.width,
-                                        y: geoFrame.midY + value.translation.height
-                                                                                )
-                                    handleDragEnd(card: card, value: value, exactCenter: cardCenter) //internal change
-                                    onDragEnded?(card, value.location) //external change
-                                }
-                        )
-                        .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
-                            guard index == cards.count - 1 else { return }
-                            let sourceZone: CGRect? //defaults to nil, does not animate a card being drawn
-                                switch lastDrawSource { //unless one IS drawn, in which case this value is set
-                                case .deck: sourceZone = deckZone
-                                case .discard: sourceZone = discardPileZone
-                                case .none: sourceZone = nil
-                                }
-                            if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
-                                animatingCard = card
-                                animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
-                            }
-                        }
-                            
-                }
-                .frame(width: cardWidth, height: cardHeight)
-                .zIndex(isDragging ? 100 : Double(visualIndex))
-                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: predictedDropIndex)
-                .animation(.spring(response: 0.4, dampingFraction: 0.75), value: cards.count)
             }
         }
-        .frame(height: cardHeight)
+        .frame(height: cardHeight * CGFloat(rows) + gridSpacingV)
     }
     
-    private func animateDraw(card: Card, cardFrame: CGRect, drawZone: CGRect, fanAngle: Angle) {
-        // Calculate offset from card's natural position to discard pile
+    private func animateDraw(card: Card, cardFrame: CGRect, drawZone: CGRect) {
         let offsetToDraw = CGSize(
             width: drawZone.midX - cardFrame.midX,
             height: drawZone.midY - cardFrame.midY
@@ -126,119 +108,24 @@ struct GolfPlayerHandView: View {
         
         if lastDrawSource == .deck {
             flipRotation = 180
-        } else { //assuming .discard
+        } else {
             flipRotation = 0
         }
         
-        // initial state
         animationOffset = offsetToDraw
-        animationRotationCorrection = .degrees(0)
+        animationRotationCorrection = .zero
         
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animationOffset = .zero
-            animationRotationCorrection = fanAngle
             if lastDrawSource == .deck {
                 flipRotation = 0
             }
         }
-            
-        // Clear animation state after animation completes
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             animatingCard = nil
             flipRotation = 0
         }
-    }
-    
-    private func handleDragChange(card: Card, value: DragGesture.Value) {
-        guard let startIndex = cards.firstIndex(of: card) else { return }
-        let effectiveCardWidth = cardWidth + spacing
-        let stepsMoved = Int(round(dragOffset.width / effectiveCardWidth))
-        var newIndex = startIndex + stepsMoved
-        newIndex = max(0, min(cards.count - 1, newIndex))
-        
-        if predictedDropIndex != newIndex {
-            predictedDropIndex = newIndex
-            SoundManager.instance.playCardReorder()
-        }
-    }
-    
-    private func handleDragEnd(card: Card, value: DragGesture.Value, exactCenter: CGPoint) {
-        // Check if card dropped on discard pile, if user is in discard phase, animate!
-        /*if let discardPileZone = discardPileZone,
-            discardPileZone.contains(value.location),
-            game.phase == .discardPhase { //is checking the phase a potential race condition?
-            
-            // Calculate the offset needed to reach discard from card's START position
-            let cardStartLocation = CGPoint(
-                x: exactCenter.x - dragOffset.width,
-                y: exactCenter.y - dragOffset.height
-            )
-            
-            let targetOffset = CGSize(
-                width: discardPileZone.midX - cardStartLocation.x,
-                height: discardPileZone.midY - cardStartLocation.y
-            )
-            
-            // Animate to discard pile
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                dragOffset = targetOffset
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                draggedCard = nil
-                dragOffset = .zero
-                predictedDropIndex = nil
-                
-                //onDragEnded?(card, value.location) //send discard information to parent
-            }
-            return
-        }*/
-        
-        // Card going back to hand, reorder hand with new card position
-        if let sourceIndex = cards.firstIndex(of: card),
-           let targetIndex = predictedDropIndex {
-            if sourceIndex != targetIndex {
-                withAnimation(.spring()) {
-                    cards.move(fromOffsets: IndexSet(integer: sourceIndex),
-                        toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
-                }
-            }
-        }
-        
-        draggedCard = nil
-        dragOffset = .zero
-        predictedDropIndex = nil
-    }
-    
-    private func calculateVisualIndex(for realIndex: Int) -> Int {
-        guard let draggedCard,
-              let sourceIndex = cards.firstIndex(of: draggedCard),
-              let targetIndex = predictedDropIndex else {
-            return realIndex
-        }
-        if realIndex == sourceIndex { return targetIndex }
-        if sourceIndex < targetIndex {
-            if realIndex > sourceIndex && realIndex <= targetIndex { return realIndex - 1 }
-        } else if sourceIndex > targetIndex {
-            if realIndex >= targetIndex && realIndex < sourceIndex { return realIndex + 1 }
-        }
-        return realIndex
-    }
-    
-    private func calculateDragRotation(height: CGFloat, angle: Angle) -> Angle {
-        // 1. The height at which the card should be fully straight (0 degrees)
-        let rotationStopThreshold: CGFloat = 250.0
-        
-        // 2. Calculate progress from 0.0 to 1.0 based on the height
-        let progress = min(max(0, abs(height)) / rotationStopThreshold, 1)
-        
-        // 3. Invert the progress:
-        // At height 0, factor is 1.0 (Full rotation effect)
-        // At height 250, factor is 0.0 (No rotation)
-        let rotationFactor = 1.0 - progress
-        
-        // 4. Apply the factor to the original angle
-        return Angle.degrees(angle.degrees * rotationFactor)
     }
 }
 
