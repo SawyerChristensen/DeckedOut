@@ -1,9 +1,9 @@
 -add Golf
     -build internal logic for Golf
         -user should not be able to discard the hover card if it originate from the discard pile
+        -user SHOULD be able to discard if drawing a card from the deck
         -build winning criteria (and remove all references to GolfValidator)
     -build player and opponent hands for Golf
-    -hover card place and animation
     -add rules window for Golf
         -in-game rules button in sensible place, probably in the center bottom
     -build menu subview for Golf

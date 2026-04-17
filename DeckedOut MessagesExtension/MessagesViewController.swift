@@ -81,7 +81,7 @@ class MessagesViewController: MSMessagesAppViewController {
         super.willTransition(to: presentationStyle)
         guard let conversation = activeConversation else { return }
     
-        let isGameLoaded = !(activeGameEngine?.playerHand.isEmpty ?? true)
+        let isGameLoaded = activeGameEngine != nil
         let isShowingMenu = children.first is UIHostingController<MainMenuView>
         
         if !isGameLoaded && isShowingMenu { // Menu resizing

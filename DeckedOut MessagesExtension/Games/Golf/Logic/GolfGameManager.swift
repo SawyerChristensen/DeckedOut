@@ -174,6 +174,7 @@ class GolfManager: ObservableObject, GameEngine {
            let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
            let stashedHoveringCard = try? JSONDecoder().decode(Card.self, from: data) { //the user is mid-turn...
             self.hoveringCard = stashedHoveringCard
+            self.playerHand = state.receiverHand
             self.opponentHand = state.senderHand
             if let topDeckCard = deck.last,
                stashedHoveringCard.id == topDeckCard.id { // the user previously drew from the deck

@@ -16,9 +16,15 @@ struct GolfPlayerHandView: View {
     var deckZone: CGRect? = nil
     let lastDrawSource: DrawSource
     
-    // Callbacks for zoning
+    // Departing card animation (driven by parent)
+    var departingIndex: Int? = nil
+    var departingOffset: CGSize = .zero
+
+    // Callbacks
     var onDragChanged: ((Card, CGPoint) -> Void)? = nil
     var onDragEnded: ((Card, CGPoint) -> Void)? = nil
+    var onCardTapped: ((Int) -> Void)? = nil
+    var onSlotFrameChanged: ((Int, CGRect) -> Void)? = nil
     
     // For dragging
     @State var draggedCard: Card?
@@ -51,6 +57,7 @@ struct GolfPlayerHandView: View {
                             let card = cards[index]
                             let isDragging = draggedCard == card
                             let isAnimating = animatingCard == card
+                            let isDeparting = departingIndex == index
                             
                             GeometryReader { geo in
                                 let geoFrame = geo.frame(in: .global)
@@ -59,8 +66,11 @@ struct GolfPlayerHandView: View {
                                          rotation: isAnimating ? flipRotation : 0)
                                     .rotationEffect(isAnimating ? animationRotationCorrection : .zero)
                                     .scaleEffect(isDragging ? 1.1 : 1.0)
-                                    .offset(isDragging ? dragOffset : .zero)
+                                    .offset(isDeparting ? departingOffset : (isDragging ? dragOffset : .zero))
                                     .offset(isAnimating ? animationOffset : .zero)
+                                    .onTapGesture {
+                                        onCardTapped?(index)
+                                    }
                                     .gesture(
                                         DragGesture(coordinateSpace: .global)
                                             .onChanged { value in
@@ -75,6 +85,15 @@ struct GolfPlayerHandView: View {
                                                 draggedCard = nil
                                                 dragOffset = .zero
                                             }
+                                    )
+                                    .background(
+                                        GeometryReader { slotGeo in
+                                            Color.clear
+                                                .onAppear { onSlotFrameChanged?(index, slotGeo.frame(in: .global)) }
+                                                .onChange(of: slotGeo.frame(in: .global)) { _, newFrame in
+                                                    onSlotFrameChanged?(index, newFrame)
+                                                }
+                                        }
                                     )
                                     .onAppear {
                                         guard index == cards.count - 1 else { return }
@@ -131,10 +150,14 @@ struct GolfPlayerHandView: View {
 
 extension GolfPlayerHandView {
     init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect, lastDrawSource: DrawSource) {
-        self._cards = .constant(cards)  // Creates a constant binding
+        self._cards = .constant(cards)
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
         self.lastDrawSource = lastDrawSource
+        self.departingIndex = nil
+        self.departingOffset = .zero
+        self.onCardTapped = nil
+        self.onSlotFrameChanged = nil
     }
 }
 
