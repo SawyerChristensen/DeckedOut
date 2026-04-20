@@ -12,156 +12,136 @@ struct GolfOpponentHandView: View {
     
     //Passed Arguments
     let cards: [Card]
+    var faceUpIndices: Set<Int> = []
     var discardPileZone: CGRect? = nil
     var deckZone: CGRect? = nil
     
-    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect) {
+    init(cards: [Card], faceUpIndices: Set<Int>, discardPileZone: CGRect, deckZone: CGRect) {
         self.cards = cards
+        self.faceUpIndices = faceUpIndices
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
     }
     
-    // For animating from deck/discard
+    // For animating departure and arrival
     @State private var slotFrames: [Int: CGRect] = [:]
-    @State private var animatingCard: Card?
-    @State private var animationOffset: CGSize = .zero
-    @State private var animationRotationCorrection: Angle = .zero
-    @State private var animatingRotation: Double = 0 //for when the card is being animated
-    @State private var normalRotation: Double = 180 //default to face down
-    @State private var cardWaitingToAnimate: Card?
+    @State private var departingIndex: Int? = nil
+    @State private var departingOffset: CGSize = .zero
+    @State private var departingRotation: Double = 0
+    @State private var arrivingCard: Card? = nil
+    @State private var arrivingTargetIndex: Int? = nil
+    @State private var arrivingOffset: CGSize = .zero
+    @State private var arrivingRotation: Double = 0
     
-    // Card sizing
-    private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 }
-    private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
-    private var spacing: CGFloat { cards.count >= 10 ? -72 : -66 } 
-    private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
-    private let fanningAngle: Double = 4
+    // Grid sizing (matches player hand)
+    private let columns = 3
+    private let rows = 2
+    private let cardWidth: CGFloat = 91
+    private let cardHeight: CGFloat = 130
+    private let gridSpacingH: CGFloat = 24
+    private let gridSpacingV: CGFloat = 12
     
     var body: some View {
-        HStack(spacing: spacing) {
-            ForEach(cards) { card in
-                let isAnimating = (animatingCard == card)
-                let index = cards.firstIndex(of: card)!
-                let angle = Angle.degrees((Double(index) - centerOffset) * -fanningAngle)
-                let yOffset = -abs((Double(index) - centerOffset) * 5)
-                let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
-                
-                CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : revealRotation)
-                    .zIndex(Double(index))
-                    .opacity(cardWaitingToAnimate == card ? 0 : 1)
-                    .rotationEffect(isAnimating ? animationRotationCorrection : angle)
-                    .offset(y: yOffset)
-                    .offset(isAnimating ? animationOffset : .zero)
-                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20))
-                    .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
-                        value: game.opponentHasWon || game.playerHasWon // trigger when this value changes
-                    )
-                    .background( // capture the global frame of this specific slot
-                        GeometryReader { geo in
-                            Color.clear
-                                .onAppear { slotFrames[index] = geo.frame(in: .global) }
-                                .onChange(of: geo.frame(in: .global)) { _, newFrame in
-                                    slotFrames[index] = newFrame
+        VStack(spacing: gridSpacingV) {
+            ForEach(0..<rows, id: \.self) { row in
+                HStack(spacing: gridSpacingH) {
+                    ForEach(0..<columns, id: \.self) { col in
+                        let index = row * columns + col
+                        
+                        if index < cards.count {
+                            let card = cards[index]
+                            let isDeparting = (departingIndex == index)
+                            let isArriving = (arrivingTargetIndex == index)
+                            let isFaceUp = faceUpIndices.contains(index)
+                            let revealAll = game.opponentHasWon || game.playerHasWon
+                            
+                            ZStack {
+                                // Main card (departs to discard during animation)
+                                CardView(frontImage: card.imageName,
+                                         rotation: isDeparting ? departingRotation : (revealAll || isFaceUp ? 0 : -180))
+                                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25),
+                                            radius: game.opponentHasWon ? 10 : 5)
+                                    .offset(isDeparting ? departingOffset : .zero)
+                                
+                                // Arriving card overlay (animates in from source)
+                                if isArriving, let newCard = arrivingCard {
+                                    CardView(frontImage: newCard.imageName, rotation: arrivingRotation)
+                                        .shadow(color: .black.opacity(0.25), radius: 5)
+                                        .offset(arrivingOffset)
                                 }
+                            }
+                            .background(
+                                GeometryReader { geo in
+                                    Color.clear
+                                        .onAppear { slotFrames[index] = geo.frame(in: .global) }
+                                        .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                                            slotFrames[index] = newFrame
+                                        }
+                                }
+                            )
+                            .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
+                                value: revealAll
+                            )
+                            .frame(width: cardWidth, height: cardHeight)
+                            .zIndex(isDeparting || isArriving ? 100 : 0)
                         }
-                    )
-            }
-            .frame(width: cardWidth, height: cardHeight)
-            .animation(.spring(response: 0.5, dampingFraction: 0.7), value: cards.count)
-        }
-        .frame(height: cardHeight) //technically should be adding the arch amount but this doesnt really matter...
-        
-        .onChange(of: cards) { oldHand, newHand in
-            // In Golf, the hand size stays the same — detect a swap by finding where the card identity changed
-            guard let replaceIndex = game.indexReplaced,
-                  oldHand.count == newHand.count,
-                  replaceIndex < oldHand.count,
-                  oldHand[replaceIndex].id != newHand[replaceIndex].id else { return }
-            guard animatingCard == nil else { return }
-            
-            let oldCard = oldHand[replaceIndex] // the card being discarded
-            let newCard = newHand[replaceIndex] // the card that was drawn
-            
-            // First: animate the old card flying out to the discard pile
-            cardWaitingToAnimate = nil
-            
-            DispatchQueue.main.async {
-                guard let slotFrame = slotFrames[replaceIndex] else { return }
-                let fanAngle = Angle.degrees(Double(replaceIndex - newHand.count/2) * -fanningAngle)
-                
-                self.animatingCard = oldCard
-                animateDiscard(card: oldCard, cardFrame: slotFrame, fanAngle: fanAngle) {
-                    // Then: animate the new card flying in from deck/discard
-                    guard let zone = game.opponentDrewFromDeck ? deckZone : discardPileZone,
-                          let targetFrame = slotFrames[replaceIndex] else { return }
-                    let finalAngle = Angle.degrees(Double(replaceIndex - newHand.count/2) * -fanningAngle)
-                    
-                    self.animatingCard = newCard
-                    animateDraw(cardFrame: targetFrame, drawZone: zone, fanAngle: finalAngle) {}
+                    }
                 }
             }
         }
-    }
-    
-    private func animateDraw(cardFrame: CGRect, drawZone: CGRect, fanAngle: Angle, completion: @escaping () -> Void) { //automatically calls the animateDiscard function as well...
-        // Calculate offset from card's natural position to discard pile
-        let offsetToDraw: CGSize
-        if game.opponentDrewFromDeck {
-            offsetToDraw = CGSize(
-                width: drawZone.midX - cardFrame.midX,
-                height: drawZone.midY - cardFrame.midY + cardHeight/4) //cardHeight/4 is offseting how the deck is built stack is construction and just so happens to match well. will need to change this once the deck starts getting slimmed down
-        } else {
-            offsetToDraw = CGSize(
-                width: drawZone.midX - cardFrame.midX,
-                height: drawZone.midY - cardFrame.midY)
-        }
+        .frame(height: cardHeight * CGFloat(rows) + gridSpacingV)
         
-        if !game.opponentDrewFromDeck { //they drew from discard, the card is face up
-            animatingRotation = 0
-        } else { animatingRotation = 180 } //they drew from the deck, the card is face down
-        
-        // initial state
-        animationOffset = offsetToDraw
-        animationRotationCorrection = .degrees(0)
-        self.cardWaitingToAnimate = nil
-        
-        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-            animationOffset = .zero
-            animationRotationCorrection = fanAngle
-            animatingRotation = 180 //make sure the card is face down at end of animation
-        }
+        // Simultaneous departure + arrival animation
+        .onChange(of: game.opponentDepartingFromIndex) { _, index in
+            guard let index = index,
+                  let slotFrame = slotFrames[index],
+                  let discardZone = discardPileZone else { return }
             
-        // Clear draw animation state and call discard animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-            completion()
-        }
-    }
-    
-    private func animateDiscard(card: Card, cardFrame: CGRect, fanAngle: Angle, completion: @escaping () -> Void = {}) {
-        // Calculate offset from card's natural position to discard pile
-        let cardIndex = game.indexReplaced ?? 0
-        let yArcOffset = abs(Double(cardIndex - cards.count / 2) * 5)
-        let offsetToDiscard = CGSize(
-            width: discardPileZone!.midX - cardFrame.midX,
-            height: discardPileZone!.midY - cardFrame.midY + yArcOffset
-        )
-        
-        // initial state
-        animatingRotation = -180 //card is face down
-        animationOffset = .zero
-        animationRotationCorrection = fanAngle
-        
-        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-            animatingRotation = 0 //card gets discarded face up
-            animationOffset = offsetToDiscard
-            animationRotationCorrection = .degrees(0)
-        }
+            let source = game.opponentDrewFromDeck ? deckZone : discardPileZone
+            guard let sourceZone = source else { return }
             
-        // Resolve animation state
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            animatingCard = nil
-            animationOffset = .zero
-            completion()
+            // Peek at the arriving card before committing the swap
+            let incomingCard = game.opponentDrewFromDeck ? game.deck.last : game.discardPile.last
+            guard let newCard = incomingCard else { return }
+            
+            // Set initial states without animation
+            let isFaceUp = faceUpIndices.contains(index)
+            departingRotation = isFaceUp ? 0 : -180
+            departingIndex = index
+            arrivingCard = newCard
+            arrivingTargetIndex = index
+            arrivingRotation = game.opponentDrewFromDeck ? -180 : 0
+            // Negate offsets because parent applies .rotationEffect(.degrees(180))
+            arrivingOffset = CGSize(
+                width: -(sourceZone.midX - slotFrame.midX),
+                height: -(sourceZone.midY - slotFrame.midY)
+            )
+            
+            // Animate both simultaneously on next run loop (ensures initial state renders first)
+            DispatchQueue.main.async {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                    departingOffset = CGSize(
+                        width: -(discardZone.midX - slotFrame.midX),
+                        height: -(discardZone.midY - slotFrame.midY)
+                    )
+                    departingRotation = 0
+                    arrivingOffset = .zero
+                    arrivingRotation = 0
+                }
+            }
+            
+            // Commit the swap after animations complete
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
+                game.opponentReplaceCard()
+                game.opponentDepartingFromIndex = nil
+                departingIndex = nil
+                departingOffset = .zero
+                departingRotation = 0
+                arrivingCard = nil
+                arrivingTargetIndex = nil
+                arrivingOffset = .zero
+                arrivingRotation = 0
+            }
         }
     }
 }

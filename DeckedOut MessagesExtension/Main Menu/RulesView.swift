@@ -79,7 +79,7 @@ struct RulesView: View {
     }
     
     // MARK: - Per-game content
-    private var title: String {
+    private var title: LocalizedStringKey {
         switch gameType {
         case .ginRummy: return "Gin Rummy Rules"
         case .crazy8s:  return "Crazy 8s Rules"
@@ -88,30 +88,29 @@ struct RulesView: View {
         }
     }
     
-    private var pages: [(image: String, title: String, description: String)] {
+    private var pages: [(image: String, title: LocalizedStringKey, description: LocalizedStringKey)] {
         switch gameType {
         case .ginRummy:
             return [
-                ("rectangle.stack", "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),
+                ("square.stack.3d.up", "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),
                 ("arrow.2.circlepath", "Your Turn", "Draw one card from either the deck or the discard pile, then discard one card from your hand."),
                 ("rectangle.3.group", "Melds", "Arrange your cards into sets (same rank) or runs (consecutive cards of the same suit) of 3 or more."),
                 ("crown.fill", "How to Win", "Once all your cards form valid melds, you win! The fewer turns it takes, the better.")
             ]
         case .crazy8s:
             return [
-                ("rectangle.stack", "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),
+                ("square.stack.3d.up", "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),
                 ("arrow.2.circlepath", "Your Turn", "Discard a card that matches the top discard's rank or suit. If you can't, draw from the deck. If you draw three cards and still can't discard, your turn is skipped."),
                 ("8.circle.fill", "Crazy 8s!", "Eights are wild! Play an 8 at any time and choose the suit for the next player to follow."),
                 ("crown.fill", "How to Win", "Be the first player to get rid of all your cards!")
             ]
         case .golf:
             return [
-                ("figure.golf", "Coming Soon", "Golf rules will be added when the game is available.")
+                ("rectangle.3.group", "The Layout", "Each player gets 6 cards arranged in a grid. Most start face down, with 2 cards randomly revealed."),
+                ("arrow.2.circlepath", "Your Turn", "Draw a card from the deck or the discard pile, then swap it with any card in your grid. The swapped card is discarded."),
+                ("figure.golf", "Scoring", "Aces are 1 point, number cards are face value, Jacks and Queens are 10, and Kings are 0. Matching pairs in the same column cancel out!"),
+                ("crown.fill", "How to Win", "The player with the lowest total score wins. Low cards are good — aim to swap out your high cards!")
             ]
-        /*case .spades:
-            return [
-                ("suit.spade.fill", "Coming Soon", "Spades rules will be added when the game is available.")
-            ]*/
         case .unknown:
             return [
                 ("questionmark", "Unknown Game", "No rules available for this game.")
@@ -123,8 +122,8 @@ struct RulesView: View {
 // MARK: - Rule Page
 private struct RulePage: View {
     var imageName: String
-    var title: String
-    var description: String
+    var title: LocalizedStringKey
+    var description: LocalizedStringKey
     var pageNumber: Int
     var totalPages: Int
     var isExpanded: Bool = false
@@ -153,6 +152,6 @@ private struct RulePage: View {
             
             Spacer()
         }
-        .padding(.top, 12 / pow(scale, 3))
+        .padding(.top, 8 / pow(scale, 3))
     }
 }

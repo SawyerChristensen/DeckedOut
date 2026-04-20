@@ -36,7 +36,6 @@ struct GolfGameView: View {
             backgroundView
             
             VStack {
-                //opponentsHand
                 opponentDisplayHand
                     .rotationEffect(.degrees(180))
                     .padding(.top, 15)
@@ -104,12 +103,6 @@ struct GolfGameView: View {
             .resizable()
             .aspectRatio(contentMode: .fill)
             .ignoresSafeArea()
-    }
-    
-    private var opponentsHand: some View {
-        GolfOpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame)
-            //.padding(.top, 30)
-            .zIndex(2)
     }
     
     private var deckAndDiscard: some View {
@@ -284,7 +277,7 @@ struct GolfGameView: View {
                         : CGSize(width: hoveringCardOffset.width, height: hoveringCardOffset.height + (isHovering ? -75 : 0))
                 )
                 .animation(.spring(response: 0.35, dampingFraction: 0.85), value: isAnimatingPlacement)
-                .zIndex(50)
+                .zIndex(3)
                 .transition(.scale(scale: 0.8).combined(with: .opacity))
                 .onAppear {
                     wobblePhase = true
@@ -296,16 +289,15 @@ struct GolfGameView: View {
     }
 
     private var opponentDisplayHand: some View {
-        GolfPlayerHandView(
+        GolfOpponentHandView(
             cards: game.opponentHand,
             faceUpIndices: game.opponentFaceUpIndices,
             discardPileZone: discardFrame,
-            deckZone: deckFrame,
-            lastDrawSource: .none
+            deckZone: deckFrame
         )
         .allowsHitTesting(false)
         .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.1), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
-        .zIndex(1)
+        .zIndex(2)
     }
 
     private var interactivePlayerHand: some View {
@@ -331,13 +323,17 @@ struct GolfGameView: View {
             }
         )
         .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.1), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
-        .zIndex(1)
+        .zIndex(2)
     }
     
     
     // MARK: - Helper functions
-    private func animateOpponentsTurn() { //modifies backend, which triggers animation in opponentHandView
-        game.opponentReplaceCard()
+    private func animateOpponentsTurn() { //sets trigger, animation is handled in opponentHandView
+        if let replaceIndex = game.indexReplaced, game.phase == .animationPhase {
+            game.opponentDepartingFromIndex = replaceIndex
+        } else {
+            game.opponentReplaceCard()
+        }
         game.hasPerformedInitialLoad = true
     }
     

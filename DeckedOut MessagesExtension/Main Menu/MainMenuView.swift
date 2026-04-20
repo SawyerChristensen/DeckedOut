@@ -97,7 +97,7 @@ struct MainMenuView: View {
     
     private var gameTitleBar: some View {
         VStack(spacing: isExpanded ? 15 : 5) {
-            Text(availableGames[activeGameIndex].title)
+            Text(LocalizedStringKey(availableGames[activeGameIndex].title))
                 //.font(.system(size: 20, weight: .semibold, design: .serif))
                 .font(.largeTitle)
                 .fontWeight(.semibold)

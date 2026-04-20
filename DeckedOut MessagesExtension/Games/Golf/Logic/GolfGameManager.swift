@@ -39,7 +39,9 @@ class GolfManager: ObservableObject, GameEngine {
     @Published var turnNumber: Int = 0
     @Published var playerFaceUpIndices: Set<Int> = []
     @Published var opponentFaceUpIndices: Set<Int> = []
+    @Published var opponentDepartingFromIndex: Int? = nil // Animation trigger for opponent view
 
+    private var preTurnFaceUpIndices: Set<Int> = [] //captured before replaceCard modifies playerFaceUpIndices
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     
     private init() {} // values are already initialized here ^
@@ -78,6 +80,7 @@ class GolfManager: ObservableObject, GameEngine {
               let drawn = hoveringCard else { return }
         let oldCard = playerHand[index]
         indexReplaced = index
+        preTurnFaceUpIndices = playerFaceUpIndices //save before modifying
         playerHand[index] = drawn
         playerFaceUpIndices.insert(index)
         discardPile.append(oldCard)
@@ -176,6 +179,9 @@ class GolfManager: ObservableObject, GameEngine {
         self.deck = state.deck
         self.discardPile = state.discardPile
         
+        // senderFaceUpIndices is the PRE-TURN state (before the sender replaced a card).
+        // For animation, this is correct as-is. For non-animation cases, reconstruct the post-turn state.
+        
         if isPlayersTurn,
            let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
            let stashedHoveringCard = try? JSONDecoder().decode(Card.self, from: data) { //the user is mid-turn...
@@ -183,7 +189,10 @@ class GolfManager: ObservableObject, GameEngine {
             self.playerHand = state.receiverHand
             self.opponentHand = state.senderHand
             self.playerFaceUpIndices = state.receiverFaceUpIndices
-            self.opponentFaceUpIndices = state.senderFaceUpIndices
+            // Opponent already completed their turn; reconstruct post-turn face-up
+            var opponentFaceUp = state.senderFaceUpIndices
+            if let idx = state.indexSenderReplaced { opponentFaceUp.insert(idx) }
+            self.opponentFaceUpIndices = opponentFaceUp
             if let topDeckCard = deck.last,
                stashedHoveringCard.id == topDeckCard.id { // the user previously drew from the deck
                 deck.removeLast()
@@ -195,7 +204,7 @@ class GolfManager: ObservableObject, GameEngine {
         } else if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
             self.playerFaceUpIndices = state.receiverFaceUpIndices
-            self.opponentFaceUpIndices = state.senderFaceUpIndices
+            self.opponentFaceUpIndices = state.senderFaceUpIndices //pre-turn: correct for animation
             let hasVisualsToAnimate = applyOpponentTurnVisuals(state: state)
             if hasVisualsToAnimate {//it is not the first turn...
                 phase = .animationPhase
@@ -206,7 +215,10 @@ class GolfManager: ObservableObject, GameEngine {
         } else { //it is not the players turn...
             self.playerHand = state.senderHand
             self.opponentHand = state.receiverHand
-            self.playerFaceUpIndices = state.senderFaceUpIndices
+            // Reconstruct the sender's post-turn face-up (sender = this player when not their turn)
+            var senderFaceUp = state.senderFaceUpIndices
+            if let idx = state.indexSenderReplaced { senderFaceUp.insert(idx) }
+            self.playerFaceUpIndices = senderFaceUp
             self.opponentFaceUpIndices = state.receiverFaceUpIndices
             //playerHasWon = GolfValidator.canMeldAllCards(hand: self.playerHand)
             if playerHasWon {
@@ -234,6 +246,8 @@ class GolfManager: ObservableObject, GameEngine {
         self.turnNumber = 0
         self.playerFaceUpIndices = []
         self.opponentFaceUpIndices = []
+        self.opponentDepartingFromIndex = nil
+        self.preTurnFaceUpIndices = []
     }
     
     private func applyOpponentTurnVisuals(state: GolfGameState) -> Bool {
@@ -312,7 +326,7 @@ class GolfManager: ObservableObject, GameEngine {
             senderDrewFromDeck: self.opponentDrewFromDeck,
             indexSenderReplaced: self.indexReplaced,
             turnNumber: self.turnNumber + 1,
-            senderFaceUpIndices: self.playerFaceUpIndices,
+            senderFaceUpIndices: self.preTurnFaceUpIndices,
             receiverFaceUpIndices: self.opponentFaceUpIndices
         )
         
