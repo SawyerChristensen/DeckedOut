@@ -3,7 +3,7 @@
         -user should not be able to discard the hover card if it originate from the discard pile
         -user SHOULD be able to discard if drawing a card from the deck
         -build winning criteria (and remove all references to GolfValidator)
-    -build menu subview for Golf
+    -build expanded menu subview for Golf
     -when a card is drawn from the discard pile, it gets duplicated. one is sent, and one is also second
     
 -when opening a new game after a game that was won, the last discard of the old game gets animated before disappearing for some reason
@@ -18,6 +18,8 @@
 ***----------*** UPDATE 2.0 ***----------***
 
 -make win transcript move/dynamic
+
+-after tapping start game and then trying to go to expanded, it enters game view instead of main menu expanded
 
 -tapping in and out and between games faster in the main menu increasses the fan's upwards animation speed somehow? <- fix
 

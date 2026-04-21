@@ -18,6 +18,7 @@ struct MainMenuView: View {
     
     @State private var handSize = 7 //full game is normally 10, but 7 is quicker and better suited for mobile
     @State private var cardsAnimatedAway = 0
+    @State private var golfAnimationOrder: [Int] = [0, 1, 2, 3, 5].shuffled() + [4]
     @State private var hiddenAnimatedAwayCards = 0
     @State private var isPulsating = false //for the "state game" text
     @State private var isBubblePulsating = false //for the joker's reminder bubble
@@ -404,7 +405,7 @@ struct MainMenuView: View {
                 Spacer()
                 deckSection
                     .zIndex(999)
-                    .padding(.top, 60)
+                    .padding(.top, 50)
                     .rotationEffect(.degrees(-10), anchor: .top)
                 Spacer()
                 
@@ -414,7 +415,17 @@ struct MainMenuView: View {
                     handSizePicker
                         .hidden() //makes the handSizePicker here invisible and non-interactive, but it still affects spacing
                 }
-                .padding(.trailing, 15)
+                .padding(.trailing, 10)
+            }
+            .hidden() //just for reserving space
+            .overlay(alignment: .top) {
+                
+                ZStack(alignment: .top) {
+                    golfDeckGrid
+                        .padding(.top, 80)
+                    
+                    startButton
+                }
             }
         }
     }
@@ -429,6 +440,89 @@ struct MainMenuView: View {
             Spacer()
             deckSection
             Spacer()
+        }
+    }
+    
+    private var golfDeckGrid: some View {
+        let isIpad = UIDevice.current.userInterfaceIdiom == .pad
+        
+        let verticalSpacing: CGFloat = 20
+        let horizontalSpacing: CGFloat = 25
+        
+        return VStack(spacing: verticalSpacing) {
+            ForEach(0..<2, id: \.self) { row in
+                HStack(spacing: horizontalSpacing) {
+                    ForEach(0..<3, id: \.self) { col in
+                        
+                        let i = (row * 3) + col
+                        let animationRank = golfAnimationOrder.firstIndex(of: i) ?? 0
+                        let isAnimated = animationRank < cardsAnimatedAway
+                        let isHidden = animationRank < hiddenAnimatedAwayCards
+                        
+                        ZStack {
+                            if animationRank == 5 {
+                                Image("JokerCard")
+                                    .resizable()
+                                    .aspectRatio(0.7, contentMode: .fit)
+                                    .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145)
+                                
+                                Group {
+                                    Image(systemName: "bubble.left.fill")
+                                        .font(.system(size: 50))
+                                        .offset(x: 40, y: -80)
+                                        .foregroundColor(.white)
+                                        .shadow(radius: 5)
+                                    
+                                    Image(systemName: "arrow.up.circle.fill")
+                                        .font(.system(size: 30))
+                                        .offset(x: 40, y: -85)
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundStyle(.white, Color(uiColor: .systemBlue))
+                                }
+                                .opacity(cardsAnimatedAway < 7 ? 0 : 1)
+                                .scaleEffect(isBubblePulsating ? 1.05 : 1.0)
+                                .onChange(of: cardsAnimatedAway) { _, newValue in
+                                    if newValue == 8 {
+                                        if (activeSubmenu == .golf) {
+                                            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                                                isBubblePulsating = true
+                                            }
+                                        }
+                                    }
+                                }
+                                .onDisappear {
+                                    isBubblePulsating = false // resets the state so it can animate again next time!
+                                }
+                            }
+                            
+                            let cardHeight: CGFloat = viewModel.presentationStyle == .expanded ? 200 : 145
+                            let cardWidth: CGFloat = cardHeight * 0.7
+
+                            // Math to collapse the 3x2 grid inward to a single central point
+                            // Col 0 moves right, Col 2 moves left. Row 0 moves down, Row 1 moves up.
+                            let convergeX = CGFloat(1 - col) * (cardWidth + horizontalSpacing)
+                            let convergeY = CGFloat(0.5 - Double(row)) * (cardHeight + verticalSpacing)
+
+                            // Calculate the general upward shift to hit the middle of the screen
+                            let verticalShiftToCenter = -(UIScreen.main.bounds.height / 2)
+                            let targetRotation = Double(col - 1) * -45.0
+                            
+                            // The animating Red back card
+                            Image("cardBackRed")
+                                .resizable()
+                                .aspectRatio(0.7, contentMode: .fit)
+                                .frame(height: cardHeight)
+                                .rotationEffect(isAnimated ? Angle(degrees: targetRotation) : Angle(degrees: 0))
+                                .offset(
+                                    x: isAnimated ? (isIpad ? 400 : convergeX) : 0,
+                                    y: isAnimated ? (isIpad ? 300 : verticalShiftToCenter + convergeY) : 0
+                                )
+                                .shadow(radius: 4, x: 2, y: 2)
+                                .opacity(isHidden ? 0 : 1)
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -447,6 +541,7 @@ struct MainMenuView: View {
                 try? await Task.sleep(nanoseconds: 200_000_000)
                 cardsAnimatedAway = 0
                 hiddenAnimatedAwayCards = 0
+                golfAnimationOrder = [0, 1, 2, 3, 5].shuffled() + [4]
             }
         }) {
             Image(systemName: "chevron.left")
@@ -483,8 +578,10 @@ struct MainMenuView: View {
             .scaleEffect(isBubblePulsating ? 1.05 : 1.0)
             .onChange(of: cardsAnimatedAway) { _, newValue in
                 if newValue == 7 {
-                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
-                        isBubblePulsating = true
+                    if (activeSubmenu == .ginRummy || activeSubmenu == .crazy8s) {
+                        withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                            isBubblePulsating = true
+                        }
                     }
                 }
             }
@@ -517,6 +614,9 @@ struct MainMenuView: View {
                         cardsAnimatedAway += 1
                     }
                     if cardsAnimatedAway <= 5 {
+                        SoundManager.instance.playCardDeal()
+                    }
+                    if (activeSubmenu == .golf && cardsAnimatedAway == 6) {
                         SoundManager.instance.playCardDeal()
                     }
                     Task { //wait exactly 0.7 seconds then hide the card instantly at the destination so we dont see it animating away
