@@ -358,13 +358,13 @@ class MessagesViewController: MSMessagesAppViewController {
             switch gameType {
             case .ginRummy:
                 templateLayout.image = UIImage(named: "GinGameWon")
-                templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin win caption/summary")
+                templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin template win caption/summary")
             case .crazy8s:
-                templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s win caption/summary")
+                templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s template win caption/summary")
             case .golf:
-                templateLayout.caption = NSLocalizedString("I won in Golf!", comment: "Golf win caption/summary")
+                templateLayout.caption = NSLocalizedString("I won in Golf!", comment: "Golf template win caption/summary")
             case .unknown:
-                templateLayout.caption = NSLocalizedString("I won!", comment: "Default message win caption/summary")
+                templateLayout.caption = NSLocalizedString("I won!", comment: "Default template win caption/summary")
             }
             
             message.summaryText = templateLayout.caption //message summary always same as caption in win case
@@ -375,13 +375,13 @@ class MessagesViewController: MSMessagesAppViewController {
             switch gameType {
             case .ginRummy:
                 templateLayout.image = UIImage(named: "GinDefault")
-                templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "Gin Rummy message caption")
+                templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "Gin Rummy template message caption")
             case .crazy8s:
-                templateLayout.caption =  NSLocalizedString("Your turn in Crazy 8s!", comment: "Crazy 8s message caption")
+                templateLayout.caption =  NSLocalizedString("Your turn in Crazy 8s!", comment: "Crazy 8s template message caption")
             case .golf:
-                templateLayout.caption = NSLocalizedString("Your turn in Golf!", comment: "Golf message caption")
+                templateLayout.caption = NSLocalizedString("Your turn in Golf!", comment: "Golf template message caption")
             case .unknown:
-                templateLayout.caption = NSLocalizedString("Your turn!", comment: "Default message caption")
+                templateLayout.caption = NSLocalizedString("Your turn!", comment: "Default template message caption (never gets shown)")
             }
             
             if let discardedCard = activeGameEngine?.discardPile.last {

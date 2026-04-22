@@ -15,7 +15,7 @@ struct CaptionTextView: View { //this is currently but not as originally designe
     
     var body: some View {
         Group {
-            if isWaiting && !altText.hasPrefix("I won in") {
+            if isWaiting && !altText.contains("won") {
                 ViewThatFits(in: .horizontal) {
                     singleLineView //try this first, if it doesnt fit...
                     

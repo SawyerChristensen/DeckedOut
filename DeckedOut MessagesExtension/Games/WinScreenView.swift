@@ -20,13 +20,14 @@ struct WinScreenView: View {
                 Image(systemName: "trophy.fill") //or "xmark" for loss, but it should be bolder
                     .font(.system(size: 80))
                     .foregroundColor(playerHasWon ? .yellow : .red)
-                    .shadow(color: playerHasWon ? .orange : .red, radius: 10)
+                    .shadow(color: playerHasWon ? .yellow : .red, radius: 10)
                     .scaleEffect(animateIn ? 1.0 : 0.5)
                 
                 VStack(spacing: 8) {
                     Text(winMessage)
-                        .font(.system(size: 40, weight: .black, design: .rounded))
+                        .font(.system(size: 36, weight: .black))
                         .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
                     
                     if playerHasWon {
                         Text("You won!")

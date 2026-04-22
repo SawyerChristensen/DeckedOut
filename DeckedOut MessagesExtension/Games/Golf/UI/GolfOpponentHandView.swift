@@ -97,11 +97,11 @@ struct GolfOpponentHandView: View {
                   let slotFrame = slotFrames[index],
                   let discardZone = discardPileZone else { return }
             
-            let source = game.opponentDrewFromDeck ? deckZone : discardPileZone
+            let source = game.drewFromDeck ? deckZone : discardPileZone
             guard let sourceZone = source else { return }
             
             // Peek at the arriving card before committing the swap
-            let incomingCard = game.opponentDrewFromDeck ? game.deck.last : game.discardPile.last
+            let incomingCard = game.drewFromDeck ? game.deck.last : game.discardPile.last
             guard let newCard = incomingCard else { return }
             
             // Set initial states without animation
@@ -110,7 +110,7 @@ struct GolfOpponentHandView: View {
             departingIndex = index
             arrivingCard = newCard
             arrivingTargetIndex = index
-            arrivingRotation = game.opponentDrewFromDeck ? -180 : 0
+            arrivingRotation = game.drewFromDeck ? -180 : 0
             // Negate offsets because parent applies .rotationEffect(.degrees(180))
             arrivingOffset = CGSize(
                 width: -(sourceZone.midX - slotFrame.midX),

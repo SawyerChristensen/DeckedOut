@@ -71,7 +71,7 @@ struct GolfGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView(playerHasWon: game.playerHasWon, winMessage: "Golf")
+                WinScreenView(playerHasWon: game.playerHasWon, winMessage: "You: \(game.playerScore)\nOpponent: \(game.opponentScore)")
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             
@@ -233,8 +233,29 @@ struct GolfGameView: View {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 hoveringCardOffset = .zero
             }
+        } else if game.phase == .placementPhase && game.drewFromDeck {
+            animateDiscard()
         } else {
             SoundManager.instance.playErrorFeedback()
+        }
+    }
+    
+    private func animateDiscard() {
+        guard !isAnimatingPlacement else { return }
+        isAnimatingPlacement = true
+        
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+            hoveringCardOffset = CGSize(
+                width: discardFrame.midX - overlayCenter.x,
+                height: discardFrame.midY - overlayCenter.y
+            )
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            game.discardDrawnCard()
+            hoveringCardOffset = .zero
+            hoveringFlipRotation = 0
+            isAnimatingPlacement = false
         }
     }
     
@@ -440,6 +461,12 @@ struct GolfGameView: View {
             height: location.y - overlayCenter.y
         )
         isDraggingFromSource = false
+
+        // Check if dropped on the discard pile (only if drew from deck)
+        if discardFrame.contains(location) && game.drewFromDeck {
+            animateDiscard()
+            return
+        }
 
         // Check if dropped on a player hand slot
         for (index, frame) in playerSlotFrames {

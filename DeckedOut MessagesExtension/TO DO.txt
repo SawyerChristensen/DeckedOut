@@ -1,23 +1,21 @@
--add Golf
-    -build internal logic for Golf
-        -user should not be able to discard the hover card if it originate from the discard pile
-        -user SHOULD be able to discard if drawing a card from the deck
-        -build winning criteria (and remove all references to GolfValidator)
-    -build expanded menu subview for Golf
-    -when a card is drawn from the discard pile, it gets duplicated. one is sent, and one is also second
-    
--when opening a new game after a game that was won, the last discard of the old game gets animated before disappearing for some reason
-    -the likely culprit is the willTransition player hand empty check. this is only a problem for Crazy 8s
-    
--fix the waiting when reopening a message from the menu view. there should always be a delay when entering a game view, and none when the game is already being played
-
--new win/loss game sound effects
+-Golf
+    -when the final turn is discarding the deck card, it doesnt check if game over
+    -the golf transcript view only updates when the opponent send you the game state, and not when you send one. it still displays, but not the most recent faceUpIndices
+    -animate the opponent draw to discard in golf
+    -when a card is drawn from the discard pile, it gets "duplicated". one copy is animated towards the hand, one copy stays as the top card.
 
 -verify localization works for every view
 
-***----------*** UPDATE 2.0 ***----------***
+***----------*** UPDATE 2.0.0 ***----------***
+
+-fix the waiting when reopening a message from the menu view. there should always be a delay when entering a game view, and none when the game is already being played
+
+-when opening a new game after a game that was won, the last discard of the old game gets animated before disappearing for some reason
+    -the likely culprit is the willTransition player hand empty check. this is only a problem for Crazy 8s
 
 -make win transcript move/dynamic
+
+-remove outdated win/loss transcript code in transcript default files
 
 -fix rules view for ipad
 

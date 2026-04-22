@@ -31,7 +31,7 @@ class GolfManager: ObservableObject, GameEngine {
     @Published var deck: [Card] = []
     @Published var discardPile: [Card] = []
     @Published var phase: TurnPhase = .animationPhase //stays local
-    @Published var opponentDrewFromDeck: Bool = false
+    @Published var drewFromDeck: Bool = false //tracks both what the opponent did and what the user does
     @Published var hoveringCard: Card? = nil
     @Published var indexReplaced: Int? = nil
     @Published var playerHasWon: Bool = false //stays local
@@ -40,7 +40,9 @@ class GolfManager: ObservableObject, GameEngine {
     @Published var playerFaceUpIndices: Set<Int> = []
     @Published var opponentFaceUpIndices: Set<Int> = []
     @Published var opponentDepartingFromIndex: Int? = nil // Animation trigger for opponent view
-
+    @Published var playerScore: Int = 0
+    @Published var opponentScore: Int = 0
+    
     private var preTurnFaceUpIndices: Set<Int> = [] //captured before replaceCard modifies playerFaceUpIndices
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     
@@ -62,7 +64,7 @@ class GolfManager: ObservableObject, GameEngine {
         guard phase == .drawPhase, !deck.isEmpty else { return }
         let card = deck.popLast()! //maybe make this a guard statement? this does the samething in the earlier guard statement...
         hoveringCard = card
-        opponentDrewFromDeck = true
+        drewFromDeck = true
         phase = .placementPhase
     }
     
@@ -70,7 +72,7 @@ class GolfManager: ObservableObject, GameEngine {
         guard phase == .drawPhase, !discardPile.isEmpty else { return }
         let card = discardPile.popLast()!
         hoveringCard = card
-        opponentDrewFromDeck = false
+        drewFromDeck = false
         phase = .placementPhase
     }
     
@@ -86,12 +88,32 @@ class GolfManager: ObservableObject, GameEngine {
         discardPile.append(oldCard)
         hoveringCard = nil
         SoundManager.instance.playCardSlap()
-        //playerHasWon = GolfValidator.canMeldAllCards(hand: playerHand)
-        if playerHasWon {
-            SoundManager.instance.playGameEnd(didWin: true)
-            phase = .gameEndPhase
-            WinTracker.shared.incrementWins(for: "Golf")
-        } else { phase = .idlePhase }
+        
+        if opponentFaceUpIndices.count == 6 {
+            // Opponent went out last turn — this was our final turn. Score!
+            resolveGameEnd()
+        } else {
+            phase = .idlePhase
+        }
+        sendGameState()
+    }
+    
+    /// Discards the hovering card without replacing anything. Only allowed if the player drew from the deck.
+    func discardDrawnCard() {
+        guard phase == .placementPhase,
+              drewFromDeck,
+              let drawn = hoveringCard else { return }
+        preTurnFaceUpIndices = playerFaceUpIndices // unchanged — no card was replaced
+        indexReplaced = nil
+        discardPile.append(drawn)
+        hoveringCard = nil
+        SoundManager.instance.playCardSlap()
+        
+        if opponentFaceUpIndices.count == 6 {
+            resolveGameEnd()
+        } else {
+            phase = .idlePhase
+        }
         sendGameState()
     }
     
@@ -105,7 +127,7 @@ class GolfManager: ObservableObject, GameEngine {
         
         // Draw the new card from deck or discard
         let drawnCard: Card
-        if opponentDrewFromDeck {
+        if drewFromDeck {
             guard !deck.isEmpty else { return }
             drawnCard = deck.popLast()!
         } else {
@@ -120,10 +142,9 @@ class GolfManager: ObservableObject, GameEngine {
         discardPile.append(replacedCard)
         
         SoundManager.instance.playCardSlap()
-        //opponentHasWon = GolfValidator.canMeldAllCards(hand: opponentHand)
-        if opponentHasWon {
-            SoundManager.instance.playGameEnd(didWin: false)
-            phase = .gameEndPhase
+        if playerFaceUpIndices.count == 6 {
+            // I went out previously, opponent just took their final turn — score!
+            resolveGameEnd()
         } else {
             phase = .drawPhase
         }
@@ -220,10 +241,8 @@ class GolfManager: ObservableObject, GameEngine {
             if let idx = state.indexSenderReplaced { senderFaceUp.insert(idx) }
             self.playerFaceUpIndices = senderFaceUp
             self.opponentFaceUpIndices = state.receiverFaceUpIndices
-            //playerHasWon = GolfValidator.canMeldAllCards(hand: self.playerHand)
-            if playerHasWon {
-                phase = .gameEndPhase
-                SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
+            if opponentFaceUpIndices.count == 6 {
+                resolveGameEnd()
             } else {
                 // only enter animation phase if it's our turn to watch the opponent move
                 phase = .idlePhase
@@ -238,7 +257,7 @@ class GolfManager: ObservableObject, GameEngine {
         self.deck = []
         self.discardPile = []
         self.phase = .animationPhase
-        self.opponentDrewFromDeck = false
+        self.drewFromDeck = false
         self.hoveringCard = nil
         self.indexReplaced = nil
         self.playerHasWon = false
@@ -247,6 +266,8 @@ class GolfManager: ObservableObject, GameEngine {
         self.playerFaceUpIndices = []
         self.opponentFaceUpIndices = []
         self.opponentDepartingFromIndex = nil
+        self.playerScore = 0
+        self.opponentScore = 0
         self.preTurnFaceUpIndices = []
     }
     
@@ -256,7 +277,7 @@ class GolfManager: ObservableObject, GameEngine {
             return false
         }
         
-        self.opponentDrewFromDeck = state.senderDrewFromDeck
+        self.drewFromDeck = state.senderDrewFromDeck
         self.indexReplaced = replacedIndex
         
         // The state contains the hand AFTER the swap. We need to undo it so we can animate it forward.
@@ -267,7 +288,7 @@ class GolfManager: ObservableObject, GameEngine {
         
         // Undo the swap: put the old card back, return the drawn card to its source
         opponentsHandPreAnimation[replacedIndex] = cardTheyDiscarded
-        if opponentDrewFromDeck {
+        if drewFromDeck {
             deck.append(cardTheyDrew)
         } else {
             discardPile.append(cardTheyDrew)
@@ -277,9 +298,46 @@ class GolfManager: ObservableObject, GameEngine {
         return true
     }
     
-    func checkWin() { //set for deprecation when we disallow first turn wins
-        //playerHasWon = GolfValidator.canMeldAllCards(hand: playerHand)
-        //opponentHasWon = GolfValidator.canMeldAllCards(hand: opponentHand)
+    /// Standard 6-card golf scoring. Column pairs (0,3), (1,4), (2,5) cancel to 0 if ranks match.
+    /// King=0, Ace=1, 2-10=face value, Jack/Queen=10. Lowest score wins.
+    static func calculateScore(hand: [Card]) -> Int {
+        let columnPairs = [(0, 3), (1, 4), (2, 5)]
+        var score = 0
+        var cancelledIndices: Set<Int> = []
+        
+        for (top, bottom) in columnPairs {
+            if hand[top].rank == hand[bottom].rank {
+                cancelledIndices.insert(top)
+                cancelledIndices.insert(bottom)
+            }
+        }
+        
+        for (index, card) in hand.enumerated() {
+            if cancelledIndices.contains(index) { continue }
+            score += GolfManager.cardValue(card)
+        }
+        return score
+    }
+    
+    private static func cardValue(_ card: Card) -> Int {
+        switch card.rank {
+        case .king:  return 0
+        case .ace:   return 1
+        case .jack, .queen: return 10
+        default:     return card.rank.rawValue + 1 // rawValue is 0-indexed: two=1 → value 2, etc.
+        }
+    }
+    
+    private func resolveGameEnd() {
+        playerFaceUpIndices = Set(0..<6)
+        opponentFaceUpIndices = Set(0..<6)
+        playerScore = GolfManager.calculateScore(hand: playerHand)
+        opponentScore = GolfManager.calculateScore(hand: opponentHand)
+        playerHasWon = playerScore <= opponentScore
+        opponentHasWon = !playerHasWon
+        SoundManager.instance.playGameEnd(didWin: playerHasWon)
+        if playerHasWon { WinTracker.shared.incrementWins(for: "Golf") }
+        phase = .gameEndPhase
     }
     
     func createNewGameState() -> Data? {
@@ -323,7 +381,7 @@ class GolfManager: ObservableObject, GameEngine {
             discardPile: self.discardPile,
             senderHand: self.playerHand,
             receiverHand: self.opponentHand,
-            senderDrewFromDeck: self.opponentDrewFromDeck,
+            senderDrewFromDeck: self.drewFromDeck,
             indexSenderReplaced: self.indexReplaced,
             turnNumber: self.turnNumber + 1,
             senderFaceUpIndices: self.preTurnFaceUpIndices,
