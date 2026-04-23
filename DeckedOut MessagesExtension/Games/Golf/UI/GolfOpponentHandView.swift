@@ -79,7 +79,8 @@ struct GolfOpponentHandView: View {
                                         }
                                 }
                             )
-                            .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
+                            .animation(
+                                isDeparting ? nil : .spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
                                 value: revealAll
                             )
                             .frame(width: cardWidth, height: cardHeight)
@@ -134,13 +135,17 @@ struct GolfOpponentHandView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
                 game.opponentReplaceCard()
                 game.opponentDepartingFromIndex = nil
-                departingIndex = nil
-                departingOffset = .zero
-                departingRotation = 0
-                arrivingCard = nil
-                arrivingTargetIndex = nil
-                arrivingOffset = .zero
-                arrivingRotation = 0
+                
+                // Clean up animation state in the next run loop cycle.
+                DispatchQueue.main.async {
+                    departingIndex = nil
+                    departingOffset = .zero
+                    departingRotation = 0
+                    arrivingCard = nil
+                    arrivingTargetIndex = nil
+                    arrivingOffset = .zero
+                    arrivingRotation = 0
+                }
             }
         }
     }

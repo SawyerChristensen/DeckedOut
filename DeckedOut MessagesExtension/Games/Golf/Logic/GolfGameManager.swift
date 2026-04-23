@@ -88,14 +88,7 @@ class GolfManager: ObservableObject, GameEngine {
         discardPile.append(oldCard)
         hoveringCard = nil
         SoundManager.instance.playCardSlap()
-        
-        if opponentFaceUpIndices.count == 6 {
-            // Opponent went out last turn — this was our final turn. Score!
-            resolveGameEnd()
-        } else {
-            phase = .idlePhase
-        }
-        sendGameState()
+        endTurn()
     }
     
     /// Discards the hovering card without replacing anything. Only allowed if the player drew from the deck.
@@ -108,9 +101,12 @@ class GolfManager: ObservableObject, GameEngine {
         discardPile.append(drawn)
         hoveringCard = nil
         SoundManager.instance.playCardSlap()
-        
+        endTurn()
+    }
+    
+    func endTurn() {
         if opponentFaceUpIndices.count == 6 {
-            resolveGameEnd()
+            resolveGameEnd()  // Opponent went out last turn — this was our final turn. Score!
         } else {
             phase = .idlePhase
         }
@@ -120,8 +116,7 @@ class GolfManager: ObservableObject, GameEngine {
     /// Animates the opponent's swap: draws a card from the appropriate source,
     /// replaces the card at `indexReplaced` in the opponent's hand, and discards the replaced card.
     func opponentReplaceCard() {
-        guard phase == .animationPhase,
-              let replaceIndex = indexReplaced else {
+        guard phase == .animationPhase else {
             return
         }
         
@@ -134,14 +129,20 @@ class GolfManager: ObservableObject, GameEngine {
             guard !discardPile.isEmpty else { return }
             drawnCard = discardPile.popLast()!
         }
+        let cardToDiscard: Card
         
-        // Swap: replace the card at the index, discard the old one
-        let replacedCard = opponentHand[replaceIndex]
-        opponentHand[replaceIndex] = drawnCard
-        opponentFaceUpIndices.insert(replaceIndex)
-        discardPile.append(replacedCard)
+        if let replaceIndex = indexReplaced { //theyre swapping from hand
+            // Swap: replace the card at the index, discard the old one
+            cardToDiscard = opponentHand[replaceIndex]
+            opponentHand[replaceIndex] = drawnCard
+            opponentFaceUpIndices.insert(replaceIndex)
+        } else { //theyre drawing from deck and discarding
+            cardToDiscard = drawnCard
+        }
         
+        discardPile.append(cardToDiscard)
         SoundManager.instance.playCardSlap()
+        
         if playerFaceUpIndices.count == 6 {
             // I went out previously, opponent just took their final turn — score!
             resolveGameEnd()
@@ -272,28 +273,35 @@ class GolfManager: ObservableObject, GameEngine {
     }
     
     private func applyOpponentTurnVisuals(state: GolfGameState) -> Bool {
-        guard let replacedIndex = state.indexSenderReplaced else {
+        guard state.turnNumber > 0 else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
             return false
         }
-        
         self.drewFromDeck = state.senderDrewFromDeck
-        self.indexReplaced = replacedIndex
+        var cardTheyDrew: Card
         
-        // The state contains the hand AFTER the swap. We need to undo it so we can animate it forward.
-        // After their turn: hand[replacedIndex] = drawnCard, and the old card is on top of discardPile.
-        var opponentsHandPreAnimation = state.senderHand
-        let cardTheyDiscarded = discardPile.popLast()! // the old card they replaced (top of discard)
-        let cardTheyDrew = opponentsHandPreAnimation[replacedIndex] // the new card they placed
+        if let replacedIndex = state.indexSenderReplaced { //the opponent replaced a card
+            self.indexReplaced = replacedIndex
+            
+            // The state contains the hand AFTER the swap. We need to undo it so we can animate it forward.
+            // After their turn: hand[replacedIndex] = drawnCard, and the old card is on top of discardPile.
+            var opponentsHandPreAnimation = state.senderHand
+            let cardTheyDiscarded = discardPile.popLast()! // the old card they replaced (top of discard)
+            cardTheyDrew = opponentsHandPreAnimation[replacedIndex] // the new card they placed
+            // Undo the swap: put the old card back, return the drawn card to its source
+            opponentsHandPreAnimation[replacedIndex] = cardTheyDiscarded
+            opponentHand = opponentsHandPreAnimation
+            
+        } else { //they just discarded from deck
+            cardTheyDrew = discardPile.popLast()!
+            opponentHand = state.senderHand
+        }
         
-        // Undo the swap: put the old card back, return the drawn card to its source
-        opponentsHandPreAnimation[replacedIndex] = cardTheyDiscarded
         if drewFromDeck {
             deck.append(cardTheyDrew)
         } else {
             discardPile.append(cardTheyDrew)
         }
-        opponentHand = opponentsHandPreAnimation
         
         return true
     }

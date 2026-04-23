@@ -27,8 +27,20 @@ struct GolfGameView: View {
     @State private var isAnimatingPlacement: Bool = false
     @State private var overlayCenter: CGPoint = .zero
     @State private var hoveringFlipRotation: Double = 0
+    @State private var deckToDiscardCard: Card? = nil
+    @State private var deckToDiscardOffset: CGSize = .zero
+    @State private var deckToDiscardRotation: Double = 0
+    @State private var hideTopDiscard: Bool = false
     @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
     private var buttonSize: CGFloat { scaledButtonUnit * 4 }
+    
+    /// During the opponent draw-from-discard animation, show the card underneath instead of the top
+    private var visibleDiscardCard: Card? {
+        if hideTopDiscard && game.discardPile.count >= 2 {
+            return game.discardPile[game.discardPile.count - 2]
+        }
+        return game.discardPile.last
+    }
 
     
     var body: some View {
@@ -52,6 +64,15 @@ struct GolfGameView: View {
 
             // Hovering card overlay
             hoveringCardOverlay
+            
+            // Opponent deck-to-discard animation overlay
+            if let card = deckToDiscardCard {
+                CardView(frontImage: card.imageName, rotation: deckToDiscardRotation)
+                    .frame(width: 91, height: 130)
+                    .shadow(color: .black.opacity(0.25), radius: 10)
+                    .offset(deckToDiscardOffset)
+                    .zIndex(4)
+            }
         }
         .background(
             GeometryReader { geo in
@@ -85,6 +106,9 @@ struct GolfGameView: View {
             if game.phase == .animationPhase {
                 animateOpponentsTurn()
             }
+        }
+        .onChange(of: game.opponentDepartingFromIndex) { _, newValue in
+            if newValue == nil { hideTopDiscard = false }
         }
         .task { //triggers the first time the view is presented
             if !game.hasPerformedInitialLoad{
@@ -207,7 +231,7 @@ struct GolfGameView: View {
                     }
                 )
             
-            if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
+            if let topCard = visibleDiscardCard { // we have cards in the discard pile; display the top one
                 CardView(frontImage: topCard.imageName)
                     .aspectRatio(0.7, contentMode: .fit)
                     .frame(width: 91, height: 130)
@@ -350,12 +374,46 @@ struct GolfGameView: View {
     
     // MARK: - Helper functions
     private func animateOpponentsTurn() { //sets trigger, animation is handled in opponentHandView
-        if let replaceIndex = game.indexReplaced, game.phase == .animationPhase {
-            game.opponentDepartingFromIndex = replaceIndex
+        if game.phase == .animationPhase {
+            if let replaceIndex = game.indexReplaced {
+                if !game.drewFromDeck { hideTopDiscard = true }
+                game.opponentDepartingFromIndex = replaceIndex
+            } else if let card = game.deck.last {
+                // Opponent drew from deck and discarded — animate deck → discard
+                animateDeckToDiscard(card: card)
+            } else {
+                game.opponentReplaceCard()
+            }
         } else {
             game.opponentReplaceCard()
         }
         game.hasPerformedInitialLoad = true
+    }
+    
+    private func animateDeckToDiscard(card: Card) {
+        deckToDiscardCard = card
+        deckToDiscardRotation = -180 // face down at start
+        deckToDiscardOffset = CGSize(
+            width: deckFrame.midX - overlayCenter.x,
+            height: deckFrame.midY - overlayCenter.y
+        )
+        
+        DispatchQueue.main.async {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                deckToDiscardOffset = CGSize(
+                    width: discardFrame.midX - overlayCenter.x,
+                    height: discardFrame.midY - overlayCenter.y
+                )
+                deckToDiscardRotation = 0 // flip to face up
+            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
+            game.opponentReplaceCard()
+            deckToDiscardCard = nil
+            deckToDiscardOffset = .zero
+            deckToDiscardRotation = 0
+        }
     }
     
     private func calculateProperDeckZone(from frame: CGRect) -> CGRect {

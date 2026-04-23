@@ -14,7 +14,15 @@ struct GolfTranscriptDefault: View {
     
     private var playersHand: [Card] { isFromMe ? gameState.senderHand : gameState.receiverHand }
     private var opponentsHand: [Card] { isFromMe ? gameState.receiverHand : gameState.senderHand }
-    private var playerFaceUpIndices: Set<Int> { isFromMe ? gameState.senderFaceUpIndices : gameState.receiverFaceUpIndices }
+    private var playerFaceUpIndices: Set<Int> {
+        if isFromMe {
+            var faceUp = gameState.senderFaceUpIndices
+            if let idx = gameState.indexSenderReplaced { faceUp.insert(idx) }
+            return faceUp
+        } else {
+            return gameState.receiverFaceUpIndices
+        }
+    }
     
     /// The sender's actual face-up count after their turn (pre-turn set + the replaced index)
     private var senderAllFaceUp: Bool {

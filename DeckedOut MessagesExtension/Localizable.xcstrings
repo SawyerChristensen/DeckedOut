@@ -924,7 +924,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Regeln für Verrückte Achten"
+            "value" : "Regeln für Achten"
           }
         },
         "es" : {
@@ -2742,7 +2742,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ich habe in Verrückte Achten gewonnen!"
+            "value" : "Ich habe in Achten gewonnen!"
           }
         },
         "es" : {
@@ -5981,7 +5981,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist am Zug bei Verrückte Achten!"
+            "value" : "Du bist am Zug bei Achten!"
           }
         },
         "es" : {

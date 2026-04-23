@@ -1,14 +1,8 @@
--Golf
-    -when the final turn is discarding the deck card, it doesnt check if game over
-    -the golf transcript view only updates when the opponent send you the game state, and not when you send one. it still displays, but not the most recent faceUpIndices
-    -animate the opponent draw to discard in golf
-    -when a card is drawn from the discard pile, it gets "duplicated". one copy is animated towards the hand, one copy stays as the top card.
-
--verify localization works for every view
-
-***----------*** UPDATE 2.0.0 ***----------***
+-when the opponent wins they instantly get a yellow shadow instead of the shadow being animated in. this also happens during the opponent draw and discard animation. shadow appear/disappear is instant but it would look better if it was gradual
 
 -fix the waiting when reopening a message from the menu view. there should always be a delay when entering a game view, and none when the game is already being played
+
+-when dragging out of the game view it shrinks diagonally for a bit
 
 -when opening a new game after a game that was won, the last discard of the old game gets animated before disappearing for some reason
     -the likely culprit is the willTransition player hand empty check. this is only a problem for Crazy 8s
