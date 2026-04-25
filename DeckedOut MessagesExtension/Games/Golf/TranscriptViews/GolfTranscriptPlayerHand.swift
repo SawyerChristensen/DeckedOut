@@ -10,8 +10,6 @@ import SwiftUI
 struct GolfTranscriptPlayerHand: View {
     let cards: [Card]
     let faceUpIndices: Set<Int>
-    let playerWon: Bool
-    let opponentWon: Bool
     
     @State private var cardFlipTrigger: Bool = false
     

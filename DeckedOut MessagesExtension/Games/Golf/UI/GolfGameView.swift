@@ -48,16 +48,15 @@ struct GolfGameView: View {
             backgroundView
             
             VStack {
-                opponentDisplayHand
+                opponentHand
                     .rotationEffect(.degrees(180))
                     .padding(.top, 15)
                 Spacer()
                     .frame(maxWidth: UIScreen.main.bounds.width)
                 deckAndDiscard
-                //rulesButtonSection
                 Spacer()
                     .frame(maxWidth: UIScreen.main.bounds.width)
-                interactivePlayerHand
+                playerHand
                     .padding(.bottom, 20)
 
             }
@@ -333,7 +332,7 @@ struct GolfGameView: View {
         }
     }
 
-    private var opponentDisplayHand: some View {
+    private var opponentHand: some View {
         GolfOpponentHandView(
             cards: game.opponentHand,
             faceUpIndices: game.opponentFaceUpIndices,
@@ -345,7 +344,7 @@ struct GolfGameView: View {
         .zIndex(2)
     }
 
-    private var interactivePlayerHand: some View {
+    private var playerHand: some View {
         GolfPlayerHandView(
             cards: $game.playerHand,
             faceUpIndices: game.playerFaceUpIndices,

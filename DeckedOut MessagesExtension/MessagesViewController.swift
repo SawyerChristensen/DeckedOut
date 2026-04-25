@@ -287,13 +287,16 @@ class MessagesViewController: MSMessagesAppViewController {
         case .ginRummy:
             GinRummyManager.shared.handSize = handSize
             self.activeGameEngine = GinRummyManager.shared
-            templateLayout.image = UIImage(named: "GinDefault")
+            let ginImage = Locale.current.language.languageCode == "zh" ? "GinDefaultChinese" : "GinDefault"
+            templateLayout.image = UIImage(named: ginImage)
             templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "Gin invite caption/summary") //need to use NSLocalizedString here because it is not in a SwiftUI view and therefore automatically included in the localizable catalog. this adds it manually
         case .crazy8s:
             self.activeGameEngine = Crazy8sManager.shared
+            templateLayout.image = UIImage(named: "Crazy8sDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Crazy 8s!", comment: "Crazy 8s invite caption/summary")
         case .golf:
             self.activeGameEngine = GolfManager.shared
+            templateLayout.image = UIImage(named: "GolfDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Golf!", comment: "Golf invite caption/summary")
         case .unknown:
             fatalError("Cannot create a game with an unknown type")
@@ -357,7 +360,8 @@ class MessagesViewController: MSMessagesAppViewController {
             
             switch gameType {
             case .ginRummy:
-                templateLayout.image = UIImage(named: "GinGameWon")
+                let ginWonImage = Locale.current.language.languageCode == "zh" ? "GinGameWonChinese" : "GinGameWon"
+                templateLayout.image = UIImage(named: ginWonImage)
                 templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin template win caption/summary")
             case .crazy8s:
                 templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s template win caption/summary")
@@ -374,11 +378,14 @@ class MessagesViewController: MSMessagesAppViewController {
             
             switch gameType {
             case .ginRummy:
-                templateLayout.image = UIImage(named: "GinDefault")
+                let ginImage = Locale.current.language.languageCode == "zh" ? "GinDefaultChinese" : "GinDefault"
+                templateLayout.image = UIImage(named: ginImage)
                 templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "Gin Rummy template message caption")
             case .crazy8s:
+                templateLayout.image = UIImage(named: "Crazy8sDefault")
                 templateLayout.caption =  NSLocalizedString("Your turn in Crazy 8s!", comment: "Crazy 8s template message caption")
             case .golf:
+                templateLayout.image = UIImage(named: "GolfDefault")
                 templateLayout.caption = NSLocalizedString("Your turn in Golf!", comment: "Golf template message caption")
             case .unknown:
                 templateLayout.caption = NSLocalizedString("Your turn!", comment: "Default template message caption (never gets shown)")

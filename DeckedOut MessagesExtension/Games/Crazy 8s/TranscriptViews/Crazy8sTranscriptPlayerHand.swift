@@ -9,8 +9,6 @@ import SwiftUI
 
 struct Crazy8sTranscriptPlayerHand: View {
     let cards: [Card]
-    let playerWon: Bool
-    let opponentWon: Bool
     
     @State private var cardFlipTrigger: Bool = false
     @State private var cardsAreExpanded: Bool = false
