@@ -28,10 +28,12 @@ struct GolfOpponentHandView: View {
     @State private var departingIndex: Int? = nil
     @State private var departingOffset: CGSize = .zero
     @State private var departingRotation: Double = 0
+    @State private var departingCardImage: String? = nil //not completely sure why this is here
     @State private var arrivingCard: Card? = nil
     @State private var arrivingTargetIndex: Int? = nil
     @State private var arrivingOffset: CGSize = .zero
     @State private var arrivingRotation: Double = 0
+    @State private var winGlowRadius: CGFloat = 0
     
     // Grid sizing (matches player hand)
     private let columns = 3
@@ -57,10 +59,10 @@ struct GolfOpponentHandView: View {
                             
                             ZStack {
                                 // Main card (departs to discard during animation)
-                                CardView(frontImage: card.imageName,
+                                CardView(frontImage: isDeparting ? (departingCardImage ?? card.imageName) : card.imageName,
                                          rotation: isDeparting ? departingRotation : (revealAll || isFaceUp ? 0 : -180))
                                     .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25),
-                                            radius: game.opponentHasWon ? 10 : 5)
+                                            radius: game.opponentHasWon ? winGlowRadius : 5)
                                     .offset(isDeparting ? departingOffset : .zero)
                                 
                                 // Arriving card overlay (animates in from source)
@@ -91,7 +93,18 @@ struct GolfOpponentHandView: View {
             }
         }
         .frame(height: cardHeight * CGFloat(rows) + gridSpacingV)
-        
+        .onAppear {
+            if game.opponentHasWon { winGlowRadius = 15 }
+        }
+        .onChange(of: game.opponentHasWon) { _, hasWon in
+            if hasWon {
+                withAnimation(.easeIn(duration: 0.25)) {
+                    winGlowRadius = 15
+                }
+            } else { //is this else necessary? its initialized to 0 anyway
+                winGlowRadius = 0
+            }
+        }
         // Simultaneous departure + arrival animation
         .onChange(of: game.opponentDepartingFromIndex) { _, index in
             guard let index = index,
@@ -107,6 +120,7 @@ struct GolfOpponentHandView: View {
             
             // Set initial states without animation
             let isFaceUp = faceUpIndices.contains(index)
+            departingCardImage = cards[index].imageName
             departingRotation = isFaceUp ? 0 : -180
             departingIndex = index
             arrivingCard = newCard
@@ -141,6 +155,7 @@ struct GolfOpponentHandView: View {
                     departingIndex = nil
                     departingOffset = .zero
                     departingRotation = 0
+                    departingCardImage = nil
                     arrivingCard = nil
                     arrivingTargetIndex = nil
                     arrivingOffset = .zero

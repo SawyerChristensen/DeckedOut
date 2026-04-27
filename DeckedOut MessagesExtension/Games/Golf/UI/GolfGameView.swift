@@ -31,13 +31,18 @@ struct GolfGameView: View {
     @State private var deckToDiscardOffset: CGSize = .zero
     @State private var deckToDiscardRotation: Double = 0
     @State private var hideTopDiscard: Bool = false
+    @State private var winGlowRadius: CGFloat = 0
     @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
     private var buttonSize: CGFloat { scaledButtonUnit * 4 }
     
     /// During the opponent draw-from-discard animation, show the card underneath instead of the top
     private var visibleDiscardCard: Card? {
-        if hideTopDiscard && game.discardPile.count >= 2 {
-            return game.discardPile[game.discardPile.count - 2]
+        if hideTopDiscard {
+            if game.discardPile.count >= 2 {
+                return game.discardPile[game.discardPile.count - 2]
+            } else if game.discardPile.count == 1 { //(could also just be "else {", this should be the only other possibility)
+                return nil
+            }
         }
         return game.discardPile.last
     }
@@ -346,7 +351,7 @@ struct GolfGameView: View {
             deckZone: deckFrame
         )
         .allowsHitTesting(false)
-        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.1), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
+        //.shadow(color: .black.opacity(0.1), radius: 5)
         .zIndex(2)
     }
 
@@ -372,7 +377,16 @@ struct GolfGameView: View {
                 playerSlotFrames[index] = frame
             }
         )
-        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.1), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
+        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.1), radius: game.playerHasWon ? winGlowRadius : 5)
+        .onChange(of: game.playerHasWon) { _, hasWon in
+            if hasWon {
+                withAnimation(.easeIn(duration: 0.25)) {
+                    winGlowRadius = 15
+                }
+            } else { //is this else necessary? its initialized to 0 anyway
+                winGlowRadius = 0
+            }
+        }
         .zIndex(2)
     }
     

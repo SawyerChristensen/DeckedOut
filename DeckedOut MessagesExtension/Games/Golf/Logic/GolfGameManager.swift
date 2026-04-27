@@ -294,6 +294,7 @@ class GolfManager: ObservableObject, GameEngine {
             opponentHand = opponentsHandPreAnimation
             
         } else { //they just discarded from deck
+            self.indexReplaced = nil
             cardTheyDrew = discardPile.popLast()!
             opponentHand = state.senderHand
         }
@@ -345,8 +346,13 @@ class GolfManager: ObservableObject, GameEngine {
         playerHasWon = playerScore <= opponentScore
         opponentHasWon = !playerHasWon
         SoundManager.instance.playGameEnd(didWin: playerHasWon)
-        if playerHasWon { WinTracker.shared.incrementWins(for: "Golf") }
+        if playerHasWon { recordWinOnce() }
         phase = .gameEndPhase
+    }
+
+    private func recordWinOnce() {
+        guard let sID = sessionID else { return }
+        WinTracker.shared.recordWinOnce(for: "Golf", sessionID: sID)
     }
     
     func createNewGameState() -> Data? {

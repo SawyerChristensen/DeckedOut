@@ -1,6 +1,8 @@
--ask for a review upon user win
+-resolve ties in golf
 
 -fix rules view for ipad
+
+***----------*** UPDATE 2.1.2 ***----------***
 
 -Add Accessibility features
     -Larger Text (mostly complete, add scrollable rules view for truly massive text)
@@ -22,7 +24,7 @@
 
 -alphabetize game list depending on language, start in center with most popular game
 
--look for regional differences in card game names (Switch is called “last card” in New Zealand)
+-look for regional (not just language!) differences in card game names (Switch is called “last card” in New Zealand)
 
 ***----------*** UPDATE 4.0.0 ***----------***
 
@@ -76,10 +78,10 @@ Customizations to sell:
 
 
 QOL changes / possible updates:
+-yellow shadows should animate in upon game win in gin and crazy 8s
 -“tap card to play” reminder text in the middle of the screen if user looked at main menu for too long, (repeating opacity animation?)
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that
 -fix index drawn to/discarded from (in gin and maybeee crazy 8s)
--yellow shadows animate in upon game win
 -tapping in and out and between games faster in the main menu increasses the fan's upwards animation speed somehow?
 -fix invite transcript card jitter
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
@@ -93,10 +95,11 @@ QOL changes / possible updates:
 -add auto-sorting capability?
 
 -delete inits in the player hand extensions and test if fine? (simple refactoring)
+-shadow modifiers for golf player hand are in game view, for opponent in opponenenthandview. refactor/consolidate for consistency?
 -Add a notice that Aces are not high cards in gin rummy?
 -make invite view wait on "GIN!"?
 -restart button from within the win view?
--refactor the deck reshuffling logic when it reaches 0 (animation?)
+-animate the deck reshuffling when it reaches 0
 -resume button if we exit to main menu in game view?
 -make discard animation better? (low priority), current is good if not preferrable due to immediate feedback
 -block against first turn wins, (1 in ~300,000, low priority)

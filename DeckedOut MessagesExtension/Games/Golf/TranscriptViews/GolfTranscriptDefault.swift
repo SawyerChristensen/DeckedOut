@@ -56,6 +56,11 @@ struct GolfTranscriptDefault: View {
             CaptionTextView(isWaiting: isFromMe, altText: gameOver ? "You won in Golf!" : (senderAllFaceUp ? "Last turn in Golf!" : "Your turn in Golf!"))
             
         }
+        .onAppear {
+            if playerWon {
+                WinTracker.shared.recordWinOnce(for: "Golf", sessionID: gameState.sessionID)
+            }
+        }
         .background( //for measuring & reporting the view height
             GeometryReader { geometry in
                 Color.clear

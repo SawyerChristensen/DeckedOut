@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct WinScreenView: View {
     //var onRestart: () -> Void
     let playerHasWon: Bool
     let winMessage: String
     
+    @Environment(\.requestReview) private var requestReview
     @State private var animateIn = false
     
     var body: some View {
@@ -19,7 +21,19 @@ struct WinScreenView: View {
             VStack(spacing: 25) {
                 Image(systemName: "trophy.fill") //or "xmark" for loss, but it should be bolder
                     .font(.system(size: 80))
-                    .foregroundColor(playerHasWon ? .yellow : .red)
+                    .foregroundStyle(playerHasWon ? LinearGradient(colors: [
+                        Color(red: 1.0, green: 1.0, blue: 0.6),
+                        Color(red: 1.0, green: 0.8, blue: 0.33)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                    ) : LinearGradient(colors: [
+                        Color(red: 1.0, green: 0.0, blue: 0.0),
+                        Color(red: 1.0, green: 0.0, blue: 0.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                    ))
                     .shadow(color: playerHasWon ? .yellow : .red, radius: 10)
                     .scaleEffect(animateIn ? 1.0 : 0.5)
                 
@@ -63,8 +77,14 @@ struct WinScreenView: View {
             .opacity(animateIn ? 1.0 : 0.0)
         }
         .onAppear {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            withAnimation(.spring(response: 1, dampingFraction: 0.7)) {
                 animateIn = true
+            }
+            if playerHasWon && WinTracker.shared.totalWins >= 3 {
+                Task {
+                    try? await Task.sleep(for: .seconds(2))
+                    await MainActor.run { requestReview() }
+                }
             }
         }
     }
