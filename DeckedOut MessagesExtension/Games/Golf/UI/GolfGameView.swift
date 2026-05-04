@@ -95,7 +95,7 @@ struct GolfGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView(playerHasWon: game.playerHasWon, winMessage: "You: \(game.playerScore)\nOpponent: \(game.opponentScore)")
+                WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "You: \(game.playerScore)\nOpponent: \(game.opponentScore)", comment: "Win screen message for Golf"))
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             

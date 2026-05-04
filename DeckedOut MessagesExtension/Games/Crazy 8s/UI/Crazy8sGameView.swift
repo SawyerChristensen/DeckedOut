@@ -52,7 +52,7 @@ struct Crazy8sGameView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView(playerHasWon: game.playerHasWon, winMessage: "Out!")
+                WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "Out!", comment: "Win screen message for Crazy 8s"))
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
         }
