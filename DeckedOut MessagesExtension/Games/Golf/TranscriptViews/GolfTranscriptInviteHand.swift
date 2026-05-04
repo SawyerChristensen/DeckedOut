@@ -67,7 +67,7 @@ struct GolfTranscriptInviteHand: View {
                     .rotationEffect(.degrees((Double(index) - center) * fanningAngle))
                     .offset(y: abs((Double(index) - center) * 8))
                     .animation(
-                        .spring(response: 0.6, dampingFraction: 0.7)
+                        .spring(response: 0.6, dampingFraction: 0.88)
                         .delay(Double(index) * 0.2),
                         value: isFlipped
                     )

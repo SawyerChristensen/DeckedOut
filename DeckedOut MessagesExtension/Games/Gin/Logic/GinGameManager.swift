@@ -33,6 +33,7 @@ class GinRummyManager: ObservableObject, GameEngine {
     @Published var opponentDrewFromDeck: Bool = false
     @Published var indexDrawnTo: Int? = nil
     @Published var indexDiscardedFrom: Int? = nil
+    var drawnCard: Card? = nil
     @Published var playerHasWon: Bool = false //stays local
     @Published var opponentHasWon: Bool = false //stays local
     @Published var turnNumber: Int = 0
@@ -56,17 +57,19 @@ class GinRummyManager: ObservableObject, GameEngine {
     
     func drawFromDeck() {
         guard phase == .drawPhase, !deck.isEmpty else { return }
-        let card = deck.popLast()! //maybe make this a guard statement? this does the samething in the earlier guard statement...
+        let card = deck.popLast()!
         playerHand.append(card)
-        indexDrawnTo = playerHand.count - 1 //check if we need this to be -1!!
+        drawnCard = card
+        indexDrawnTo = playerHand.count - 1
         opponentDrewFromDeck = true
         phase = .discardPhase
     }
-    
+
     func drawFromDiscard() {
         guard phase == .drawPhase, !discardPile.isEmpty else { return }
         let card = discardPile.popLast()!
         playerHand.append(card)
+        drawnCard = card
         indexDrawnTo = playerHand.count - 1
         opponentDrewFromDeck = false
         phase = .discardPhase
@@ -74,6 +77,9 @@ class GinRummyManager: ObservableObject, GameEngine {
     
     func discardCard(card: Card) { //possible room for refactoring/removing discardCard
         guard phase == .discardPhase, let index = playerHand.firstIndex(of: card) else { return }
+        if let drawn = drawnCard, let drawnIndex = playerHand.firstIndex(of: drawn) {
+            indexDrawnTo = drawnIndex
+        }
         indexDiscardedFrom = index
         playerHand.remove(at: index) //we could also use indexDiscardedFrom...
         discardPile.append(card)
@@ -224,6 +230,7 @@ class GinRummyManager: ObservableObject, GameEngine {
         self.opponentDrewFromDeck = false
         self.indexDrawnTo = nil
         self.indexDiscardedFrom = nil
+        self.drawnCard = nil
         self.playerHasWon = false
         self.opponentHasWon = false
         self.hasPerformedInitialLoad = false

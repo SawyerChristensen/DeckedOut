@@ -287,12 +287,13 @@ class MessagesViewController: MSMessagesAppViewController {
         case .ginRummy:
             GinRummyManager.shared.handSize = handSize
             self.activeGameEngine = GinRummyManager.shared
-            let ginImage = Locale.current.language.languageCode == "zh" ? "GinDefaultChinese" : "GinDefault"
+            let ginImage = Locale.current.language.languageCode == "zh" ? "GinDefaultChinese" : "GinDefault" //graphic is for both simplified and traditional chinese
             templateLayout.image = UIImage(named: ginImage)
             templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "Gin invite caption/summary") //need to use NSLocalizedString here because it is not in a SwiftUI view and therefore automatically included in the localizable catalog. this adds it manually
         case .crazy8s:
             self.activeGameEngine = Crazy8sManager.shared
-            templateLayout.image = UIImage(named: "Crazy8sDefault")
+            let crazy8sImage = Locale.preferredLanguages.first!.hasPrefix("zh-Hans") ? "Crazy8sDefaultChinese" : "Crazy8sDefault" //graphic is just for simplified chinese
+            templateLayout.image = UIImage(named: crazy8sImage)
             templateLayout.caption = NSLocalizedString("Let's Play Crazy 8s!", comment: "Crazy 8s invite caption/summary")
         case .golf:
             self.activeGameEngine = GolfManager.shared

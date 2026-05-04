@@ -57,7 +57,7 @@ struct RulesView: View {
                 .tabViewStyle(.page(indexDisplayMode: .always))
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
             }
-            .frame(maxWidth: .infinity, maxHeight: 350)
+            .frame(maxWidth: 350, maxHeight: 350)
             .background(
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
                     .fill(.ultraThinMaterial)

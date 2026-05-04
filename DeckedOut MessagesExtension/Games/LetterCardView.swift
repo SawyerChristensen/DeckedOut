@@ -58,7 +58,7 @@ struct LetterCardImage: View {
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
         } else {
-            Image("cardBackLetterBase")
+            Image("cardBackRedBase")
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
                 .overlay(

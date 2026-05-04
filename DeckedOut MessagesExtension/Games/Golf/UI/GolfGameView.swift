@@ -31,6 +31,7 @@ struct GolfGameView: View {
     @State private var deckToDiscardOffset: CGSize = .zero
     @State private var deckToDiscardRotation: Double = 0
     @State private var hideTopDiscard: Bool = false
+    @State private var hoveringShadowRadius: CGFloat = 20
     @State private var winGlowRadius: CGFloat = 0
     @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
     private var buttonSize: CGFloat { scaledButtonUnit * 4 }
@@ -277,18 +278,20 @@ struct GolfGameView: View {
     private func animateDiscard() {
         guard !isAnimatingPlacement else { return }
         isAnimatingPlacement = true
-        
+
         withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
             hoveringCardOffset = CGSize(
                 width: discardFrame.midX - overlayCenter.x,
                 height: discardFrame.midY - overlayCenter.y
             )
+            hoveringShadowRadius = 0
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
             game.discardDrawnCard()
             hoveringCardOffset = .zero
             hoveringFlipRotation = 0
+            hoveringShadowRadius = 20
             isAnimatingPlacement = false
         }
     }
@@ -322,7 +325,7 @@ struct GolfGameView: View {
         if let hoveringCard = game.hoveringCard {
             CardView(frontImage: hoveringCard.imageName, rotation: hoveringFlipRotation)
                 .frame(width: 91, height: 130)
-                .shadow(color: .black.opacity(0.5), radius: 20)
+                .shadow(color: .black.opacity(0.6), radius: hoveringShadowRadius)
                 .scaleEffect(isHovering ? 1.1 : 1.0)
                 .rotationEffect(.degrees(isHovering ? (wobblePhase ? 2 : -2) : 0))
                 .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: wobblePhase)
@@ -377,11 +380,12 @@ struct GolfGameView: View {
                 playerSlotFrames[index] = frame
             }
         )
-        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.1), radius: game.playerHasWon ? winGlowRadius : 5)
+        .shadow(color: game.playerHasWon ? .yellow : .clear, radius: winGlowRadius)
+        .shadow(color: game.playerHasWon ? .yellow.opacity(0.75) : .clear, radius: 3) //to increase the yellow's intensity
         .onChange(of: game.playerHasWon) { _, hasWon in
             if hasWon {
                 withAnimation(.easeIn(duration: 0.25)) {
-                    winGlowRadius = 15
+                    winGlowRadius = 10
                 }
             } else { //is this else necessary? its initialized to 0 anyway
                 winGlowRadius = 0
@@ -483,6 +487,7 @@ struct GolfGameView: View {
                     width: slotFrame.midX - overlayCenter.x,
                     height: slotFrame.midY - overlayCenter.y
                 )
+                hoveringShadowRadius = 0
             }
         }
 
@@ -504,6 +509,7 @@ struct GolfGameView: View {
             departingOffset = .zero
             hoveringCardOffset = .zero
             hoveringFlipRotation = 0
+            hoveringShadowRadius = 20
             isAnimatingPlacement = false
         }
     }

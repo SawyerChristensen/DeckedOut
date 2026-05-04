@@ -53,11 +53,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		BE944AB22ECB918C0003F673 /* DeckedOutTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = DeckedOutTests;
-			sourceTree = "<group>";
-		};
 		BECF99A22E04746E007B89C0 /* DeckedOut */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DeckedOut;
@@ -97,7 +92,6 @@
 			children = (
 				BECF99A22E04746E007B89C0 /* DeckedOut */,
 				BECF99B02E04746F007B89C0 /* DeckedOut MessagesExtension */,
-				BE944AB22ECB918C0003F673 /* DeckedOutTests */,
 				BECF99AD2E04746F007B89C0 /* Frameworks */,
 				BECF99A12E04746E007B89C0 /* Products */,
 			);
@@ -135,9 +129,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				BE944AB22ECB918C0003F673 /* DeckedOutTests */,
 			);
 			name = DeckedOutTests;
 			packageProductDependencies = (
@@ -233,6 +224,7 @@
 				sv,
 				da,
 				nb,
+				vi,
 			);
 			mainGroup = BECF99992E04746E007B89C0;
 			minimizedProjectReferenceProxies = 1;
@@ -355,7 +347,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -386,7 +378,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -540,7 +532,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -562,7 +554,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Sawyer.DeckedOut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

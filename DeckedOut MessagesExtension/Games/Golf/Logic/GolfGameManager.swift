@@ -45,6 +45,26 @@ class GolfManager: ObservableObject, GameEngine {
     
     private var preTurnFaceUpIndices: Set<Int> = [] //captured before replaceCard modifies playerFaceUpIndices
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
+
+    var playerCancelledIndices: Set<Int> {
+        cancelledIndices(hand: playerHand, faceUp: playerFaceUpIndices)
+    }
+
+    var opponentCancelledIndices: Set<Int> {
+        cancelledIndices(hand: opponentHand, faceUp: opponentFaceUpIndices)
+    }
+
+    private func cancelledIndices(hand: [Card], faceUp: Set<Int>) -> Set<Int> {
+        guard hand.count == 6 else { return [] }
+        var cancelled: Set<Int> = []
+        for (top, bottom) in [(0, 3), (1, 4), (2, 5)] {
+            if faceUp.contains(top) && faceUp.contains(bottom) && hand[top].rank == hand[bottom].rank {
+                cancelled.insert(top)
+                cancelled.insert(bottom)
+            }
+        }
+        return cancelled
+    }
     
     private init() {} // values are already initialized here ^
     

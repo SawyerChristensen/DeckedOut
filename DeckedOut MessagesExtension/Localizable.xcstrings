@@ -89,6 +89,12 @@
             "value" : "…"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -191,6 +197,12 @@
             "value" : "%lld Galibiyet"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Thắng"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -290,6 +302,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "As"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Át"
           }
         },
         "zh-Hans" : {
@@ -394,6 +412,12 @@
             "value" : "Aslar 1 puan, sayı kartları kendi değerinde, Valeler ve Kızlar 10 ve Papazlar 0 puandır. Aynı sütundaki eşleşen çiftler birbirini götürür!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Át tính 1 điểm, các lá số tính theo mệnh giá, J và Q tính 10, và K tính 0. Các cặp giống nhau ở cùng một cột sẽ triệt tiêu lẫn nhau!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -494,6 +518,12 @@
             "value" : "Kartlarınızı 3 veya daha fazla set (aynı değer) veya seri (aynı gruptan ardışık kartlar) halinde düzenleyin."
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sắp xếp các lá bài của bạn thành các bộ (cùng hạng) hoặc sảnh (các lá bài liên tiếp cùng chất) từ 3 lá trở lên."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -592,6 +622,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tüm kartlarından kurtulan ilk oyuncu ol!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy là người chơi đầu tiên đánh hết bài của bạn!"
           }
         },
         "zh-Hans" : {
@@ -696,6 +732,12 @@
             "value" : "Bir Grup Seç"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn một chất"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -795,6 +837,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sinek"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chuồn"
           }
         },
         "zh-Hans" : {
@@ -899,6 +947,12 @@
             "value" : "Çılgın 8’li"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tám Quậy"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -999,6 +1053,12 @@
             "value" : "Çılgın 8’li Kuralları"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luật Chơi Tám Quậy"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1014,6 +1074,7 @@
       }
     },
     "Crazy 8s!" : {
+      "comment" : "The title of the rules section about the power of the 8 rank",
       "localizations" : {
         "da" : {
           "stringUnit" : {
@@ -1097,6 +1158,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sekizliler!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Số 8!"
           }
         },
         "zh-Hans" : {
@@ -1200,6 +1267,12 @@
             "value" : "Karo"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rô"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1298,6 +1371,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En üstteki atılan kartın değeri veya grubuyla eşleşen bir kart atın. Yapamazsanız desteden çekin. Üç kart çekip hala atamıyorsanız sıranız atlanır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đánh một lá bài cùng hạng hoặc cùng chất với lá bài trên cùng của xấp bài bỏ. Nếu không có, rút một lá từ xấp bài. Nếu bạn rút ba lá mà vẫn không thể đánh, bạn sẽ bị mất lượt."
           }
         },
         "zh-Hans" : {
@@ -1407,6 +1486,12 @@
             "value" : "%2$@ %1$@ atıldı"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã bỏ %1$@ trong số %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1505,6 +1590,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desteden veya ıskarta destesinden bir kart çekin, ardından bunu tablonuzdaki herhangi bir kartla değiştirin. Değiştirilen kart atılır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rút một lá bài từ xấp bài hoặc xấp bài bỏ, sau đó hoán đổi nó với bất kỳ lá bài nào trong lưới của bạn. Lá bài được hoán đổi sẽ bị bỏ đi."
           }
         },
         "zh-Hans" : {
@@ -1607,6 +1698,12 @@
             "value" : "Desteden veya ıskarta destesinden bir kart çekin, ardından elinizden bir kart atın."
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rút một lá bài từ xấp bài hoặc xấp bài bỏ, sau đó đánh một lá bài từ tay bạn."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1705,6 +1802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Her oyuncuya bir ızgara şeklinde düzenlenmiş 6 kart verilir. Çoğu kapalı başlar, 2 kart rastgele açılır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mỗi người chơi nhận được 6 lá bài sắp xếp thành một lưới. Hầu hết đều úp xuống, với 2 lá bài được lật ngẫu nhiên."
           }
         },
         "zh-Hans" : {
@@ -1807,6 +1910,12 @@
             "value" : "Her oyuncuya bir el kart dağıtılır. Kalan kartlar çekme destesini oluşturur ve en üstteki kart ıskarta destesini başlatır."
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mỗi người chơi được chia một tay bài. Các lá bài còn lại tạo thành xấp bài rút, và lá bài trên cùng bắt đầu xấp bài bỏ."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1905,6 +2014,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sekizliler jokerdir! İstediğiniz zaman bir 8'li oynayın ve bir sonraki oyuncunun takip edeceği grubu seçin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Số 8 là bài vạn năng! Đánh một lá 8 vào bất cứ lúc nào và chọn chất để người chơi tiếp theo phải đánh theo."
           }
         },
         "zh-Hans" : {
@@ -2009,6 +2124,12 @@
             "value" : "Maç verileri yüklenirken hata oluştu."
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lỗi tải dữ liệu trận đấu."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2106,6 +2227,12 @@
           }
         },
         "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gin Rummy"
+          }
+        },
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gin Rummy"
@@ -2211,6 +2338,12 @@
             "value" : "Gin Rummy Kuralları"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luật Chơi Gin Rummy"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2313,6 +2446,12 @@
             "value" : "Golf"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bài Golf"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2411,6 +2550,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Golf Kuralları"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luật Chơi Bài Golf"
           }
         },
         "zh-Hans" : {
@@ -2515,6 +2660,12 @@
             "value" : "El Boyutu:"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Số Lượng Bài:"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2616,6 +2767,12 @@
             "value" : "Kupa"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cơ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2714,6 +2871,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nasıl Kazanılır"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cách Giành Chiến Thắng"
           }
         },
         "zh-Hans" : {
@@ -2817,6 +2980,12 @@
             "value" : "Çılgın 8’li'de kazandım!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tôi đã thắng Tám Quậy!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2916,6 +3085,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gin'de kazandım!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tôi đã thắng Gin Rummy!"
           }
         },
         "zh-Hans" : {
@@ -3019,6 +3194,12 @@
             "value" : "Golf'te kazandım!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tôi đã thắng Bài Golf!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3118,6 +3299,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kazandım!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tôi đã thắng!"
           }
         },
         "zh-Hans" : {
@@ -3221,6 +3408,12 @@
             "value" : "Vale"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bồi"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3320,6 +3513,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Papaz"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Già"
           }
         },
         "zh-Hans" : {
@@ -3423,6 +3622,12 @@
             "value" : "Golf'te son tur!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lượt cuối trong Bài Golf!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3522,6 +3727,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Haydi Çılgın 8’li Oynayalım!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cùng chơi Tám Quậy nào!"
           }
         },
         "zh-Hans" : {
@@ -3625,6 +3836,12 @@
             "value" : "Haydi Gin Oynayalım!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cùng chơi Gin Rummy nào!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3724,6 +3941,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Haydi Golf Oynayalım!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cùng chơi Bài Golf nào!"
           }
         },
         "zh-Hans" : {
@@ -3826,6 +4049,12 @@
             "value" : "Eşleşmeler"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bộ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3924,6 +4153,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yeni oyun!\nOynamak için uygulamanı güncelle!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trò chơi mới!\nCập nhật ứng dụng của bạn để chơi!"
           }
         },
         "zh-Hans" : {
@@ -4026,6 +4261,12 @@
             "value" : "Bu oyun için kural bulunmamaktadır."
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có luật chơi cho trò chơi này."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4124,6 +4365,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tüm kartlarınız geçerli eşleşmeler oluşturduğunda kazanırsınız! Ne kadar az tur sürerse o kadar iyi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Khi tất cả các lá bài của bạn tạo thành các bộ hợp lệ, bạn sẽ thắng! Càng mất ít lượt càng tốt."
           }
         },
         "zh-Hans" : {
@@ -4225,6 +4472,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kız"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đầm"
           }
         },
         "zh-Hans" : {
@@ -4329,6 +4582,12 @@
             "value" : "Kurallar"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luật Chơi"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4429,6 +4688,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Puanlama"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cách Tính Điểm"
           }
         },
         "zh-Hans" : {
@@ -4538,6 +4803,12 @@
             "value" : "Seçildi:\n%1$@ %2$@"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã chọn:\n%1$@ %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4637,6 +4908,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maça"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bích"
           }
         },
         "zh-Hans" : {
@@ -4741,6 +5018,12 @@
             "value" : "Oyunu Başlat!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bắt Đầu Trò Chơi!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4839,6 +5122,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dağıtma"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chia Bài"
           }
         },
         "zh-Hans" : {
@@ -4941,6 +5230,12 @@
             "value" : "Düzen"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cách Bố Trí"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5039,6 +5334,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En düşük toplam puana sahip olan oyuncu kazanır. Düşük kartlar iyidir — yüksek kartlarınızı elden çıkarmaya çalışın!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Người chơi có tổng điểm thấp nhất sẽ thắng. Bài thấp là tốt — hãy cố gắng hoán đổi các lá bài cao của bạn!"
           }
         },
         "zh-Hans" : {
@@ -5143,6 +5444,12 @@
             "value" : "Temalar"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chủ Đề"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5241,6 +5548,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bilinmeyen Oyun"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trò Chơi Không Xác Định"
           }
         },
         "zh-Hans" : {
@@ -5345,6 +5658,12 @@
             "value" : "Rakip bekleniyor"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chờ đối thủ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5445,6 +5764,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rakip bekleniyor..."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chờ đối thủ..."
           }
         },
         "zh-Hans" : {
@@ -5549,6 +5874,12 @@
             "value" : "Rakip bekleniyor%@"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chờ đối thủ%@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5648,6 +5979,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Golf'te sen kazandın!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bạn đã thắng Bài Golf!"
           }
         },
         "zh-Hans" : {
@@ -5752,6 +6089,12 @@
             "value" : "Kazandın!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bạn đã thắng!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5852,6 +6195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rakibin kazandı!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đối thủ của bạn đã thắng!"
           }
         },
         "zh-Hans" : {
@@ -5955,6 +6304,12 @@
             "value" : "Senin Sıran"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đến Lượt Bạn"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6054,6 +6409,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Çılgın 8’li'de sıra sende!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đến lượt bạn trong Tám Quậy!"
           }
         },
         "zh-Hans" : {
@@ -6157,6 +6518,12 @@
             "value" : "Gin'de sıra sende!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đến lượt bạn trong Gin Rummy!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6258,6 +6625,12 @@
             "value" : "Golf'te sıra sende!"
           }
         },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đến lượt bạn trong Bài Golf!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6357,6 +6730,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sıra sende!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đến lượt bạn!"
           }
         },
         "zh-Hans" : {

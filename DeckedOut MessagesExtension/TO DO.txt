@@ -1,7 +1,5 @@
 -resolve ties in golf?
 
--fix rules view for ipad
-
 -review localized "start game" button sizes
 
 -Add Accessibility features
@@ -78,12 +76,11 @@ Customizations to sell:
 
 
 QOL changes / possible updates:
+-fix invite transcript card jitter
 -yellow shadows should animate in upon game win in gin and crazy 8s
 -“tap card to play” reminder text in the middle of the screen if user looked at main menu for too long, (repeating opacity animation?)
 -Deck UI # should change based on how many cards there are left in the deck. when we get down to the final 5 cards, it should reflect that
--fix index drawn to/discarded from (in gin and maybeee crazy 8s)
 -tapping in and out and between games faster in the main menu increasses the fan's upwards animation speed somehow?
--fix invite transcript card jitter
 -discard pile should look a little more random rather than a perfectly straight stack of cards?
 -be able to rearrange your cards, (but not draw) during the opponents turn
 -better win screen? (maybe make it a joker card!) (happy or sad joker with its own colored shadow)

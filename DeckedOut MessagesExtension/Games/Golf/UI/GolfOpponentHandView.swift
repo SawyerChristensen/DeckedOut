@@ -56,13 +56,16 @@ struct GolfOpponentHandView: View {
                             let isArriving = (arrivingTargetIndex == index)
                             let isFaceUp = faceUpIndices.contains(index)
                             let revealAll = game.opponentHasWon || game.playerHasWon
+                            let isCancelled = game.opponentCancelledIndices.contains(index)
                             
                             ZStack {
                                 // Main card (departs to discard during animation)
                                 CardView(frontImage: isDeparting ? (departingCardImage ?? card.imageName) : card.imageName,
                                          rotation: isDeparting ? departingRotation : (revealAll || isFaceUp ? 0 : -180))
-                                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25),
-                                            radius: game.opponentHasWon ? winGlowRadius : 5)
+                                    .shadow(color: game.opponentHasWon ? .red : .clear, radius: winGlowRadius)
+                                    .shadow(color: game.opponentHasWon ? .red : .clear, radius: winGlowRadius) //for extra red intensity
+                                    .opacity(isCancelled ? 0.8 : 1.0)
+                                    .animation(.easeInOut(duration: 0.3), value: isCancelled)
                                     .offset(isDeparting ? departingOffset : .zero)
                                 
                                 // Arriving card overlay (animates in from source)
@@ -94,12 +97,12 @@ struct GolfOpponentHandView: View {
         }
         .frame(height: cardHeight * CGFloat(rows) + gridSpacingV)
         .onAppear {
-            if game.opponentHasWon { winGlowRadius = 15 }
+            if game.opponentHasWon { winGlowRadius = 10 }
         }
         .onChange(of: game.opponentHasWon) { _, hasWon in
             if hasWon {
                 withAnimation(.easeIn(duration: 0.25)) {
-                    winGlowRadius = 15
+                    winGlowRadius = 10
                 }
             } else { //is this else necessary? its initialized to 0 anyway
                 winGlowRadius = 0

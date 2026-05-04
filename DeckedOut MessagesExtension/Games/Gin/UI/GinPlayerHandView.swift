@@ -163,48 +163,21 @@ struct GinPlayerHandView: View {
     }
     
     private func handleDragEnd(card: Card, value: DragGesture.Value, exactCenter: CGPoint) {
-        // Check if card dropped on discard pile, if user is in discard phase, animate!
-        /*if let discardPileZone = discardPileZone,
-            discardPileZone.contains(value.location),
-            game.phase == .discardPhase { //is checking the phase a potential race condition?
-            
-            // Calculate the offset needed to reach discard from card's START position
-            let cardStartLocation = CGPoint(
-                x: exactCenter.x - dragOffset.width,
-                y: exactCenter.y - dragOffset.height
-            )
-            
-            let targetOffset = CGSize(
-                width: discardPileZone.midX - cardStartLocation.x,
-                height: discardPileZone.midY - cardStartLocation.y
-            )
-            
-            // Animate to discard pile
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                dragOffset = targetOffset
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                draggedCard = nil
-                dragOffset = .zero
-                predictedDropIndex = nil
-                
-                //onDragEnded?(card, value.location) //send discard information to parent
-            }
-            return
-        }*/
-        
-        // Card going back to hand, reorder hand with new card position
-        if let sourceIndex = cards.firstIndex(of: card),
-           let targetIndex = predictedDropIndex {
-            if sourceIndex != targetIndex {
-                withAnimation(.spring()) {
-                    cards.move(fromOffsets: IndexSet(integer: sourceIndex),
-                        toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
+        let isDiscarding = discardPileZone?.contains(value.location) == true
+
+        if !isDiscarding {
+            // Card going back to hand, reorder hand with new card position
+            if let sourceIndex = cards.firstIndex(of: card),
+               let targetIndex = predictedDropIndex {
+                if sourceIndex != targetIndex {
+                    withAnimation(.spring()) {
+                        cards.move(fromOffsets: IndexSet(integer: sourceIndex),
+                            toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
+                    }
                 }
             }
         }
-        
+
         draggedCard = nil
         dragOffset = .zero
         predictedDropIndex = nil

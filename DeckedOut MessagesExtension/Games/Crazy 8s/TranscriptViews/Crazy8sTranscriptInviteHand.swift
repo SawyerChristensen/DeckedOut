@@ -67,7 +67,7 @@ struct Crazy8sTranscriptInviteHand: View {
                     .rotationEffect(.degrees((Double(index) - center) * fanningAngle)) //replace 1.5 with double(currentWord.length / 2)
                     .offset(y: abs((Double(index) - center) * 8))
                     .animation(
-                        .spring(response: 0.6, dampingFraction: 0.7)
+                        .spring(response: 0.6, dampingFraction: 0.88)
                         .delay(Double(index) * 0.2),
                         value: isFlipped
                     )

@@ -60,6 +60,7 @@ struct GolfPlayerHandView: View {
                             let isAnimating = animatingCard == card
                             let isDeparting = departingIndex == index
                             let isFaceUp = faceUpIndices.contains(index)
+                            let isCancelled = game.playerCancelledIndices.contains(index)
 
                             GeometryReader { geo in
                                 let geoFrame = geo.frame(in: .global)
@@ -68,6 +69,8 @@ struct GolfPlayerHandView: View {
                                          rotation: isAnimating ? flipRotation : (isDeparting || isFaceUp ? 0 : -180))
                                     .rotationEffect(isAnimating ? animationRotationCorrection : .zero)
                                     .scaleEffect(isDragging ? 1.1 : 1.0)
+                                    .opacity(isCancelled ? 0.8 : 1.0)
+                                    .animation(.easeInOut(duration: 0.3), value: isCancelled)
                                     .offset(isDeparting ? departingOffset : (isDragging ? dragOffset : .zero))
                                     .offset(isAnimating ? animationOffset : .zero)
                                     .onTapGesture {
