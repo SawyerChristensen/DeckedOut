@@ -41,6 +41,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
     @Published var userNeedsToChooseSuit: Bool = false //stays local
     @Published var playerHasWon: Bool = false //stays local
     @Published var opponentHasWon: Bool = false //stays local
+    @Published var isGameOver: Bool = false //stays local
     @Published var opponentCardPendingDiscard: Card? = nil // Holds the card waiting in the wings
     @Published var opponentCardAnimatingToDiscard: Card? = nil       // The trigger the view actually watches
     @Published var opponentCardAnimatingFromDeck: Card? = nil        // The trigger for draw animations
@@ -128,6 +129,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         if playerHasWon {
             SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
+            isGameOver = true
             WinTracker.shared.incrementWins(for: "Crazy 8s")
         } else {
             phase = .idlePhase
@@ -155,6 +157,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         if opponentHasWon {
             SoundManager.instance.playGameEnd(didWin: false)
             phase = .gameEndPhase
+            isGameOver = true
         } else {
             phase = .mainPhase
             checkHandPlayability()
@@ -230,6 +233,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
             if playerHasWon {
                 phase = .gameEndPhase
                 SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
+                isGameOver = true
             } else {
                 phase = .idlePhase
             }
@@ -253,6 +257,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.opponentDidDiscard = false
         self.playerHasWon = false
         self.opponentHasWon = false
+        self.isGameOver = false
         self.opponentCardPendingDiscard = nil
         self.opponentCardAnimatingToDiscard = nil
         self.opponentCardAnimatingFromDeck = nil

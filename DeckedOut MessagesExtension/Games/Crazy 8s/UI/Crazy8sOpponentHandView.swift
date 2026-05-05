@@ -53,7 +53,7 @@ struct Crazy8sOpponentHandView: View {
                     .rotationEffect(isAnimating ? animationRotationCorrection : angle)
                     .offset(y: yOffset)
                     .offset(isAnimating ? animationOffset : .zero)
-                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? animatingShadowRadius : 20))
+                    .shadow(color: .black.opacity(0.25), radius: isAnimating ? animatingShadowRadius : 20)
                     .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
                         value: game.opponentHasWon || game.playerHasWon // trigger when this value changes
                     )

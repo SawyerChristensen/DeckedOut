@@ -109,7 +109,7 @@ struct RulesView: View {
                 ("rectangle.3.group", "The Layout", "Each player gets 6 cards arranged in a grid. Most start face down, with 2 cards randomly revealed."),
                 ("arrow.2.circlepath", "Your Turn", "Draw a card from the deck or the discard pile, then swap it with any card in your grid. The swapped card is discarded."),
                 ("figure.golf", "Scoring", "Aces are 1 point, number cards are face value, Jacks and Queens are 10, and Kings are 0. Matching pairs in the same column cancel out!"),
-                ("crown.fill", "How to Win", "The player with the lowest total score wins. Low cards are good — aim to swap out your high cards!")
+                ("crown.fill", "How to Win", "The player with the lowest total score wins. If there is a tie, the player who went out first loses.")
             ]
         case .unknown:
             return [

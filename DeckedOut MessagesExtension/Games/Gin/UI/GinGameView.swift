@@ -19,7 +19,7 @@ struct GinGameView: View {
     @State private var showRules: Bool = false
     @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
     private var buttonSize: CGFloat { scaledButtonUnit * 4 }
-
+    @State private var handShadowRadius: CGFloat = 5
     
     var body: some View {
         ZStack {
@@ -57,12 +57,17 @@ struct GinGameView: View {
             }
         }
         .task { //triggers the first time the view is presented
-            if !game.hasPerformedInitialLoad{
+            if !game.hasPerformedInitialLoad {
                 do {
                     try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                } catch { }
+                }
+                catch {
+                    return
+                }
             }
-            animateOpponentsTurn()
+            if !game.hasPerformedInitialLoad && game.phase == .animationPhase { //if we're still waiting to load, load. this is just to make sure we avoid a race condition with the onChange modifier somehow
+                animateOpponentsTurn()
+            }
         }
     }
     
@@ -226,7 +231,23 @@ struct GinGameView: View {
             }
         )
         .padding(.bottom, 40)
-        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
+        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: handShadowRadius, x: (handShadowRadius - 5) / 2) //when handShadowRadius is 15 or 5 it results in offsets of 5 and 0
+        .onAppear {
+            if game.playerHasWon {
+                withAnimation(.linear(duration: 1)) {
+                    handShadowRadius = 15
+                }
+            }
+        }
+        .onChange(of: game.playerHasWon) { _, hasWon in
+            if hasWon {
+                withAnimation(.linear(duration: 0.33)) {
+                    handShadowRadius = 15
+                }
+            } else { //is this else necessary? its initialized to 0 anyway
+                handShadowRadius = 5
+            }
+        }
         .zIndex(1)
     }
     

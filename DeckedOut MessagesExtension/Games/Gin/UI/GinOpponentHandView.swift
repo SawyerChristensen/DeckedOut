@@ -29,6 +29,7 @@ struct GinOpponentHandView: View {
     @State private var animatingRotation: Double = 0 //for when the card is being animated
     @State private var normalRotation: Double = 180 //default to face down
     @State private var cardWaitingToAnimate: Card?
+    @State private var winGlowRadius: CGFloat = 0
     
     // Card sizing
     private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 }
@@ -52,7 +53,7 @@ struct GinOpponentHandView: View {
                     .rotationEffect(isAnimating ? animationRotationCorrection : angle)
                     .offset(y: yOffset)
                     .offset(isAnimating ? animationOffset : .zero)
-                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? 10 : (isAnimating ? 0 : 20))
+                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? winGlowRadius : (isAnimating ? 0 : 20))
                     .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
                         value: game.opponentHasWon || game.playerHasWon // trigger when this value changes
                     )
@@ -70,12 +71,28 @@ struct GinOpponentHandView: View {
             .animation(.spring(response: 0.5, dampingFraction: 0.7), value: cards.count)
         }
         .frame(height: cardHeight) //technically should be adding the arch amount but this doesnt really matter...
-        
+        .onAppear {
+            if game.opponentHasWon {
+                withAnimation(.linear(duration: 1)) {
+                    winGlowRadius = 10
+                }
+            }
+        }
+        .onChange(of: game.opponentHasWon) { _, hasWon in
+            if hasWon {
+                withAnimation(.linear(duration: 0.33)) {
+                    winGlowRadius = 10
+                }
+            } else { //is this else necessary? its initialized to 0 anyway
+                winGlowRadius = 0
+            }
+        }
         .onChange(of: cards) { oldHand, newHand in
             if newHand.count > oldHand.count,
-                let drawIndex = game.indexDrawnTo { //the opponent is drawing!
+                let drawIndex = game.indexDrawnTo,
+                drawIndex < newHand.count { //the opponent is drawing!
                 guard animatingCard == nil else { return }
-                
+
                 let card = newHand[drawIndex]
                 cardWaitingToAnimate = card
                 

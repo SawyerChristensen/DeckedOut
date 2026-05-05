@@ -381,10 +381,17 @@ struct GolfGameView: View {
             }
         )
         .shadow(color: game.playerHasWon ? .yellow : .clear, radius: winGlowRadius)
-        .shadow(color: game.playerHasWon ? .yellow.opacity(0.75) : .clear, radius: 3) //to increase the yellow's intensity
+        .shadow(color: game.playerHasWon ? .yellow.opacity(0.5) : .clear, radius: winGlowRadius) //to increase the yellow's intensity
+        .onAppear {
+            if game.playerHasWon {
+                withAnimation(.linear(duration: 0.67)) {
+                    winGlowRadius = 10
+                }
+            }
+        }
         .onChange(of: game.playerHasWon) { _, hasWon in
             if hasWon {
-                withAnimation(.easeIn(duration: 0.25)) {
+                withAnimation(.linear(duration: 0.33)) {
                     winGlowRadius = 10
                 }
             } else { //is this else necessary? its initialized to 0 anyway

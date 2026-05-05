@@ -357,7 +357,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // Set basic template appearance
         let templateLayout = MSMessageTemplateLayout() //this will be overridden later with transcript view, this is just for non-live-layout platforms
         
-        if activeGameEngine?.playerHasWon == true {
+        if activeGameEngine?.isGameOver == true {
             templateLayout.image = UIImage(named: "CardGameWon") //set as default here, override with game specific images later
             
             switch gameType {
@@ -368,7 +368,11 @@ class MessagesViewController: MSMessagesAppViewController {
             case .crazy8s:
                 templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s template win caption/summary")
             case .golf:
-                templateLayout.caption = NSLocalizedString("I won in Golf!", comment: "Golf template win caption/summary")
+                if activeGameEngine?.playerHasWon == true {
+                    templateLayout.caption = NSLocalizedString("I won in Golf!", comment: "Golf template win caption/summary")
+                } else {
+                    templateLayout.caption = NSLocalizedString("You won in Golf!", comment: "Golf template win caption/summary")
+                }
             case .unknown:
                 templateLayout.caption = NSLocalizedString("I won!", comment: "Default template win caption/summary")
             }
@@ -479,8 +483,9 @@ enum GameType: String, Codable {
 
 protocol GameEngine: AnyObject {
     var onTurnCompleted: ((Data, GameType) -> Void)? { get set }
-    var playerHand: [Card] { get } // Used to check if a game is loaded
-    var playerHasWon: Bool { get } // Used for setting iMessage captions
+    var playerHand: [Card] { get }  // Used to check if a game is loaded
+    var isGameOver: Bool { get }    // Used for setting iMessage captions
+    var playerHasWon: Bool { get }  // Used for setting iMessage captions
     var discardPile: [Card] { get } // Used for setting iMessage summary text
     
     func createNewGameState() -> Data?

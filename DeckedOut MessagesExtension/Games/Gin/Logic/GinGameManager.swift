@@ -36,6 +36,7 @@ class GinRummyManager: ObservableObject, GameEngine {
     var drawnCard: Card? = nil
     @Published var playerHasWon: Bool = false //stays local
     @Published var opponentHasWon: Bool = false //stays local
+    @Published var isGameOver: Bool = false //stays local
     @Published var turnNumber: Int = 0
     
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
@@ -96,27 +97,32 @@ class GinRummyManager: ObservableObject, GameEngine {
     func opponentDrawFromDeck() {
         guard phase == .animationPhase,
               !deck.isEmpty,
-              let drawIndex = indexDrawnTo else {
+              let drawIndex = indexDrawnTo,
+              drawIndex <= opponentHand.count else {
             return
         }
         let card = deck.popLast()!
         opponentHand.insert(card, at: drawIndex)
     }
-    
+
     func opponentDrawFromDiscard() {
         guard phase == .animationPhase,
               !discardPile.isEmpty,
-              let drawIndex = indexDrawnTo else {
+              let drawIndex = indexDrawnTo,
+              drawIndex <= opponentHand.count else {
             return
         }
         let card = discardPile.popLast()!
         opponentHand.insert(card, at: drawIndex)
     }
-    
-    func opponentDiscardCard(card: Card) { //pseudo discard
-        guard phase == .animationPhase else {
-            return }
-        opponentHand.remove(at: indexDiscardedFrom!)
+
+    func opponentDiscardCard(card: Card) {
+        guard phase == .animationPhase,
+              let discardIndex = indexDiscardedFrom,
+              discardIndex < opponentHand.count else {
+            return
+        }
+        opponentHand.remove(at: discardIndex)
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
@@ -198,7 +204,7 @@ class GinRummyManager: ObservableObject, GameEngine {
                 phase = .animationPhase
             } else { //it is the first turn...
                 checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
-                if playerHasWon || opponentHasWon {
+                if isGameOver {
                     phase = .gameEndPhase
                     SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
                 } else {
@@ -233,6 +239,7 @@ class GinRummyManager: ObservableObject, GameEngine {
         self.drawnCard = nil
         self.playerHasWon = false
         self.opponentHasWon = false
+        self.isGameOver = false
         self.hasPerformedInitialLoad = false
         self.turnNumber = 0
     }
@@ -266,6 +273,7 @@ class GinRummyManager: ObservableObject, GameEngine {
     func checkWin() { //set for deprecation when we disallow first turn wins
         playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
+        isGameOver = playerHasWon || opponentHasWon
     }
     
     func createNewGameState() -> Data? {

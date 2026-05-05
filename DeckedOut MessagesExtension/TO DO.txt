@@ -1,28 +1,21 @@
--resolve ties in golf?
+-golf cards instantly rotate upon hitting discard pile due to the opponents hand being rotated 180 degrees. Unrotate the opponents hand
 
--review localized "start game" button sizes
+-Add group chat compatibility! Increases adoption rate!!
+
+***----------*** UPDATE 3.0.0 ***----------***
 
 -Add Accessibility features
     -Larger Text (mostly complete, add scrollable rules view for truly massive text)
     -Reduced Motion (all animations turned off/instant)
-    -VoiceOver / Voice Control
     -Differentiate without color alone (pretty sure this is already done)
-    -Dark Interface??
-    -Sufficient Contrast??
-
-***----------*** UPDATE 2.3.0 ***----------***
-
--Add group chat compatibility! increases adoption rate!!
-
-***----------*** UPDATE 3.0.0 ***----------***
+    
+***----------*** UPDATE 3.1.0 ***----------***
 
 -add 2 new games
 
+-review localized "start game" button sizes
+
 -better win screen for each game?
-
--alphabetize game list depending on language, start in center with most popular game
-
--look for regional (not just language!) differences in card game names (Switch is called “last card” in New Zealand)
 
 ***----------*** UPDATE 4.0.0 ***----------***
 
@@ -76,6 +69,8 @@ Customizations to sell:
 
 
 QOL changes / possible updates:
+-alphabetize game list depending on language, start in center with most popular game?
+-look for regional (not just language!) differences in card game names? (Switch is called “last card” in New Zealand)
 -fix invite transcript card jitter
 -yellow shadows should animate in upon game win in gin and crazy 8s
 -“tap card to play” reminder text in the middle of the screen if user looked at main menu for too long, (repeating opacity animation?)

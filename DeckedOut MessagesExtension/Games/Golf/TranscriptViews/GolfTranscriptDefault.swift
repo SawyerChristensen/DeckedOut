@@ -36,23 +36,34 @@ struct GolfTranscriptDefault: View {
     
     private var playerWon: Bool {
         guard gameOver else { return false }
-        return GolfManager.calculateScore(hand: playersHand) <= GolfManager.calculateScore(hand: opponentsHand)
+        
+        let playerScore = GolfManager.calculateScore(hand: playersHand)
+        let opponentScore = GolfManager.calculateScore(hand: opponentsHand)
+        if isFromMe {
+            return playerScore <= opponentScore
+        } else {
+            return playerScore < opponentScore
+        }
     }
-    private var opponentWon: Bool { gameOver && !playerWon }
     
+    private var winMessage: String {
+        return isFromMe == playerWon ? "I won in Golf!" : "You won in Golf!"
+    }
+    
+    // MARK: - The Transcript View
     var body: some View {
         VStack {
             
-            if playerWon || opponentWon {
+            if gameOver {
                 GameOverTranscriptView(playerWon: playerWon)
                 
             } else {
-                GolfTranscriptPlayerHand(cards: opponentWon ? opponentsHand : playersHand, faceUpIndices: playerFaceUpIndices)
+                GolfTranscriptPlayerHand(cards: playersHand, faceUpIndices: playerFaceUpIndices)
                     .offset(y: 6)
                     .frame(height: 150)
             }
             
-            CaptionTextView(isWaiting: isFromMe, altText: gameOver ? "You won in Golf!" : (senderAllFaceUp ? "Last turn in Golf!" : "Your turn in Golf!"))
+            CaptionTextView(isWaiting: isFromMe, altText: gameOver ? winMessage : (senderAllFaceUp ? "Last turn in Golf!" : "Your turn in Golf!"))
             
         }
         .onAppear {

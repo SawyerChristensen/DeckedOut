@@ -63,7 +63,7 @@ struct GolfOpponentHandView: View {
                                 CardView(frontImage: isDeparting ? (departingCardImage ?? card.imageName) : card.imageName,
                                          rotation: isDeparting ? departingRotation : (revealAll || isFaceUp ? 0 : -180))
                                     .shadow(color: game.opponentHasWon ? .red : .clear, radius: winGlowRadius)
-                                    .shadow(color: game.opponentHasWon ? .red : .clear, radius: winGlowRadius) //for extra red intensity
+                                    .shadow(color: game.opponentHasWon ? .red.opacity(0.5) : .clear, radius: winGlowRadius) //for extra red intensity
                                     .opacity(isCancelled ? 0.8 : 1.0)
                                     .animation(.easeInOut(duration: 0.3), value: isCancelled)
                                     .offset(isDeparting ? departingOffset : .zero)
@@ -97,11 +97,15 @@ struct GolfOpponentHandView: View {
         }
         .frame(height: cardHeight * CGFloat(rows) + gridSpacingV)
         .onAppear {
-            if game.opponentHasWon { winGlowRadius = 10 }
+            if game.opponentHasWon {
+                withAnimation(.linear(duration: 0.67)) {
+                    winGlowRadius = 10
+                }
+            }
         }
         .onChange(of: game.opponentHasWon) { _, hasWon in
             if hasWon {
-                withAnimation(.easeIn(duration: 0.25)) {
+                withAnimation(.linear(duration: 0.33)) {
                     winGlowRadius = 10
                 }
             } else { //is this else necessary? its initialized to 0 anyway

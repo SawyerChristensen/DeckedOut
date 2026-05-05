@@ -26,14 +26,14 @@ struct WinScreenView: View {
                 VStack(spacing: 25) {
                     Image(systemName: "trophy.fill")
                         .font(.system(size: 80))
-                        .foregroundStyle(playerHasWon ? LinearGradient(colors: [
+                        .foregroundStyle(playerHasWon ? LinearGradient(colors: [ //the golden win color scheme
                             Color(red: 1.0, green: 1.0, blue: 0.6),
                             Color(red: 1.0, green: 0.8, blue: 0.33)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
-                        ) : LinearGradient(colors: [
-                            Color(red: 1.0, green: 0.0, blue: 0.0),
+                        ) : LinearGradient(colors: [ //the red loss color scheme
+                            Color(red: 1.0, green: 0.4, blue: 0.4),
                             Color(red: 1.0, green: 0.0, blue: 0.0)
                         ],
                         startPoint: .top,

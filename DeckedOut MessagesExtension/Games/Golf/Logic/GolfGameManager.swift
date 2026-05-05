@@ -36,6 +36,7 @@ class GolfManager: ObservableObject, GameEngine {
     @Published var indexReplaced: Int? = nil
     @Published var playerHasWon: Bool = false //stays local
     @Published var opponentHasWon: Bool = false //stays local
+    @Published var isGameOver: Bool = false //stays local
     @Published var turnNumber: Int = 0
     @Published var playerFaceUpIndices: Set<Int> = []
     @Published var opponentFaceUpIndices: Set<Int> = []
@@ -126,7 +127,7 @@ class GolfManager: ObservableObject, GameEngine {
     
     func endTurn() {
         if opponentFaceUpIndices.count == 6 {
-            resolveGameEnd()  // Opponent went out last turn — this was our final turn. Score!
+            resolveGameEnd(playerLastToMove: true)  // Opponent went out last turn — this was our final turn. Score!
         } else {
             phase = .idlePhase
         }
@@ -165,7 +166,7 @@ class GolfManager: ObservableObject, GameEngine {
         
         if playerFaceUpIndices.count == 6 {
             // I went out previously, opponent just took their final turn — score!
-            resolveGameEnd()
+            resolveGameEnd(playerLastToMove: false) //from the perspective of the player 2nd to last to move
         } else {
             phase = .drawPhase
         }
@@ -263,7 +264,7 @@ class GolfManager: ObservableObject, GameEngine {
             self.playerFaceUpIndices = senderFaceUp
             self.opponentFaceUpIndices = state.receiverFaceUpIndices
             if opponentFaceUpIndices.count == 6 {
-                resolveGameEnd()
+                resolveGameEnd(playerLastToMove: true) //from the perspective of the player last to move
             } else {
                 // only enter animation phase if it's our turn to watch the opponent move
                 phase = .idlePhase
@@ -283,6 +284,7 @@ class GolfManager: ObservableObject, GameEngine {
         self.indexReplaced = nil
         self.playerHasWon = false
         self.opponentHasWon = false
+        self.isGameOver = false
         self.hasPerformedInitialLoad = false
         self.turnNumber = 0
         self.playerFaceUpIndices = []
@@ -358,16 +360,21 @@ class GolfManager: ObservableObject, GameEngine {
         }
     }
     
-    private func resolveGameEnd() {
+    private func resolveGameEnd(playerLastToMove: Bool) {
         playerFaceUpIndices = Set(0..<6)
         opponentFaceUpIndices = Set(0..<6)
         playerScore = GolfManager.calculateScore(hand: playerHand)
         opponentScore = GolfManager.calculateScore(hand: opponentHand)
-        playerHasWon = playerScore <= opponentScore
+        if playerLastToMove {
+            playerHasWon = playerScore <= opponentScore
+        } else {
+            playerHasWon = playerScore < opponentScore
+        }
         opponentHasWon = !playerHasWon
         SoundManager.instance.playGameEnd(didWin: playerHasWon)
         if playerHasWon { recordWinOnce() }
         phase = .gameEndPhase
+        isGameOver = true
     }
 
     private func recordWinOnce() {

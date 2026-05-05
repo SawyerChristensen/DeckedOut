@@ -225,7 +225,7 @@ struct Crazy8sGameView: View {
             }
         )
         .padding(.bottom, 40)
-        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: game.playerHasWon ? 15 : 5, x: game.playerHasWon ? 5 : 0)
+        .shadow(color: .black.opacity(0.25), radius: 5) //no yellow glow because if the player has won, they have no more cards in hand!
         .zIndex(1)
     }
     
