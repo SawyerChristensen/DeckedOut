@@ -15,12 +15,16 @@ struct GolfOpponentHandView: View {
     var faceUpIndices: Set<Int> = []
     var discardPileZone: CGRect? = nil
     var deckZone: CGRect? = nil
-    
-    init(cards: [Card], faceUpIndices: Set<Int>, discardPileZone: CGRect, deckZone: CGRect) {
+    var sizeScale: CGFloat = 1.0
+    var handRotation: Double = 0 // parent rotation in degrees (z-axis); used to correct animation offsets
+
+    init(cards: [Card], faceUpIndices: Set<Int>, discardPileZone: CGRect, deckZone: CGRect, sizeScale: CGFloat = 1.0, handRotation: Double = 0) {
         self.cards = cards
         self.faceUpIndices = faceUpIndices
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
+        self.sizeScale = sizeScale
+        self.handRotation = handRotation
     }
     
     // For animating departure and arrival
@@ -28,20 +32,22 @@ struct GolfOpponentHandView: View {
     @State private var departingIndex: Int? = nil
     @State private var departingOffset: CGSize = .zero
     @State private var departingRotation: Double = 0
+    @State private var departingScale: CGFloat = 1.0
     @State private var departingCardImage: String? = nil //not completely sure why this is here
     @State private var arrivingCard: Card? = nil
     @State private var arrivingTargetIndex: Int? = nil
     @State private var arrivingOffset: CGSize = .zero
     @State private var arrivingRotation: Double = 0
+    @State private var arrivingScale: CGFloat = 1.0
     @State private var winGlowRadius: CGFloat = 0
     
     // Grid sizing (matches player hand)
     private let columns = 3
     private let rows = 2
-    private let cardWidth: CGFloat = 91
-    private let cardHeight: CGFloat = 130
-    private let gridSpacingH: CGFloat = 24
-    private let gridSpacingV: CGFloat = 12
+    private var cardWidth: CGFloat { 91 * sizeScale }
+    private var cardHeight: CGFloat { 130 * sizeScale }
+    private var gridSpacingH: CGFloat { 24 * sizeScale }
+    private var gridSpacingV: CGFloat { 12 * sizeScale }
     
     var body: some View {
         VStack(spacing: gridSpacingV) {
@@ -66,12 +72,14 @@ struct GolfOpponentHandView: View {
                                     .shadow(color: game.opponentHasWon ? .red.opacity(0.5) : .clear, radius: winGlowRadius) //for extra red intensity
                                     .opacity(isCancelled ? 0.8 : 1.0)
                                     .animation(.easeInOut(duration: 0.3), value: isCancelled)
+                                    .scaleEffect(isDeparting ? departingScale : 1.0)
                                     .offset(isDeparting ? departingOffset : .zero)
                                 
                                 // Arriving card overlay (animates in from source)
                                 if isArriving, let newCard = arrivingCard {
                                     CardView(frontImage: newCard.imageName, rotation: arrivingRotation)
                                         .shadow(color: .black.opacity(0.25), radius: 5)
+                                        .scaleEffect(arrivingScale)
                                         .offset(arrivingOffset)
                                 }
                             }
@@ -130,25 +138,31 @@ struct GolfOpponentHandView: View {
             departingCardImage = cards[index].imageName
             departingRotation = isFaceUp ? 0 : -180
             departingIndex = index
+            departingScale = 1.0 // starts at hand size
             arrivingCard = newCard
             arrivingTargetIndex = index
             arrivingRotation = game.drewFromDeck ? -180 : 0
-            // Negate offsets because parent applies .rotationEffect(.degrees(180))
-            arrivingOffset = CGSize(
-                width: -(sourceZone.midX - slotFrame.midX),
-                height: -(sourceZone.midY - slotFrame.midY)
+            arrivingScale = 1.0 / sizeScale // starts at deck/discard (canonical) size
+            let screenDeltaArriving = CGSize(
+                width: sourceZone.midX - slotFrame.midX,
+                height: sourceZone.midY - slotFrame.midY
             )
+
+            let screenDeltaDeparting = CGSize(
+                width: discardZone.midX - slotFrame.midX,
+                height: discardZone.midY - slotFrame.midY
+            )
+            arrivingOffset = toLocalOffset(screenDeltaArriving)
             
             // Animate both simultaneously on next run loop (ensures initial state renders first)
             DispatchQueue.main.async {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-                    departingOffset = CGSize(
-                        width: -(discardZone.midX - slotFrame.midX),
-                        height: -(discardZone.midY - slotFrame.midY)
-                    )
+                    departingOffset = toLocalOffset(screenDeltaDeparting)
                     departingRotation = 0
+                    departingScale = 1.0 / sizeScale // grows to discard (canonical) size
                     arrivingOffset = .zero
                     arrivingRotation = 0
+                    arrivingScale = 1.0 // shrinks to hand size
                 }
             }
             
@@ -162,13 +176,29 @@ struct GolfOpponentHandView: View {
                     departingIndex = nil
                     departingOffset = .zero
                     departingRotation = 0
+                    departingScale = 1.0
                     departingCardImage = nil
                     arrivingCard = nil
                     arrivingTargetIndex = nil
                     arrivingOffset = .zero
                     arrivingRotation = 0
+                    arrivingScale = 1.0
                 }
             }
         }
+    }
+    
+    // Convert a screen-space delta into this view's pre-rotation local space.
+    // .offset() is applied before .rotationEffect, so the local delta rotated by `handRotation`
+    // must equal the desired screen-space delta. With handRotation = 0 (the golf grid case)
+    // this reduces to the identity.
+    private func toLocalOffset(_ screenDelta: CGSize) -> CGSize {
+        let radians = handRotation * .pi / 180
+        let c = cos(radians)
+        let s = sin(radians)
+        return CGSize(
+            width: screenDelta.width * c + screenDelta.height * s,
+            height: -screenDelta.width * s + screenDelta.height * c
+        )
     }
 }

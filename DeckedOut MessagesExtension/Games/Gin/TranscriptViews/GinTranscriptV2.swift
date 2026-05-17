@@ -1,14 +1,14 @@
 //
-//  Crazy8sTranscriptV2.swift
+//  GinTranscriptV2.swift
 //  DeckedOut
 //
-//  Created by Sawyer Christensen on 2/23/26.
+//  Created by Sawyer Christensen on 2/1/26.
 //
 
 import SwiftUI
 
-struct Crazy8sTranscriptV2: View {
-    let gameState: Crazy8sV2GameState
+struct GinTranscriptV2: View {
+    let gameState: GinRummyV2GameState
     let localParticipantID: UUID
     var onHeightChange: ((CGFloat) -> Void)? = nil
 
@@ -22,29 +22,26 @@ struct Crazy8sTranscriptV2: View {
         return gameState.currentSeatIndex == idx
     }
 
-    private var playerWon: Bool { playersHand.isEmpty }
+    private var playerWon: Bool { GinRummyValidator.canMeldAllCards(hand: playersHand) }
     private var opponentWon: Bool {
-        gameState.hands.enumerated().contains { i, hand in i != mySeatIndex && hand.isEmpty }
+        gameState.hands.enumerated().contains { i, hand in i != mySeatIndex && GinRummyValidator.canMeldAllCards(hand: hand) }
     }
-    
+    private var winningOpponentHand: [Card] {
+        gameState.hands.enumerated().first { i, hand in i != mySeatIndex && GinRummyValidator.canMeldAllCards(hand: hand) }?.element ?? []
+    }
+
     var body: some View {
         VStack {
-
-            if playerWon || opponentWon { //replace with isGameOver? and down below in the alt text?
-                GameOverTranscriptView(playerWon: playerWon)
-                
-            } else {
-                Color.clear
-                    .frame(height: 150)
-                    .overlay { //the crazy 8s player hand expands. making it an overlay means its width expansion does not bubble up and effect the VStacks width
-                        if playersHand != [] {
-                            Crazy8sTranscriptPlayerHand(cards: playersHand)
-                                .offset(y: opponentWon ? -30 : 50)
-                        }
+            Color.clear
+                .frame(height: 150)
+                .overlay {
+                    if playersHand != [] {
+                        GinTranscriptPlayerHand(cards: opponentWon ? winningOpponentHand : playersHand, playerWon: playerWon, opponentWon: opponentWon)
+                            .offset(y: opponentWon ? -30 : 50)
                     }
-            }
-                
-            CaptionTextView(isWaiting: !isMyTurn, altText: opponentWon || playerWon ? "I won in Crazy 8s!" : "Your turn in Crazy 8s!")
+                }
+
+            CaptionTextView(isWaiting: !isMyTurn, altText: opponentWon || playerWon ? "I won in Gin!" : "Your turn in Gin!")
             
         }
         .background( //for measuring & reporting the view height
@@ -62,6 +59,6 @@ struct Crazy8sTranscriptV2: View {
             Image("feltBackgroundLight")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-        )
+            )
     }
 }

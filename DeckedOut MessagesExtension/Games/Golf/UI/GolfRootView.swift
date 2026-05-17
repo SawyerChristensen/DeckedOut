@@ -8,16 +8,26 @@
 import Foundation
 import SwiftUI
 
-//Establishes GameManager as a single source of truth
 struct GolfRootView: View {
     @ObservedObject var game: GolfManager
-    
+
     init(game: GolfManager) {
         self.game = game
     }
 
     var body: some View {
-        GolfGameView()
-            .environmentObject(game)
+        if game.needsToJoin || game.isSettlingAfterJoin {
+            JoinGameView(
+                game: game,
+                needsToJoin: game.needsToJoin,
+                currentPlayers: game.seats.filter { $0 != GolfManager.unclaimedSeat }.count,
+                maxPlayers: game.seats.count
+            )
+
+        } else {
+            GolfGameView()
+                .environmentObject(game)
+        }
     }
 }
+

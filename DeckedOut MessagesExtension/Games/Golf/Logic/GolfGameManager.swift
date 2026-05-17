@@ -7,7 +7,7 @@
 
 import Foundation
 
-// The game snapshot for sending the game over iMessage
+// V1: Legacy 2-player game snapshot
 struct GolfGameState: Codable, BasicGameState {
     let sessionID: UUID
     let deck: [Card]
@@ -21,10 +21,26 @@ struct GolfGameState: Codable, BasicGameState {
     let receiverFaceUpIndices: Set<Int>
 }
 
+// V2: Seat-based groupchat multiplayer game snapshot
+struct GolfV2GameState: Codable, V2GameState {
+    let sessionID: UUID
+    let deck: [Card]
+    let discardPile: [Card]
+    let seats: [UUID]
+    let hands: [[Card]]
+    let currentSeatIndex: Int
+    let turnNumber: Int
+    let lastPlayerDrewFromDeck: Bool
+    let lastPlayerIndexReplaced: Int?
+    let faceUpIndices: [Set<Int>]
+    let goingOutSeat: Int?
+}
+
 // MARK: The Game Engine
-class GolfManager: ObservableObject, GameEngine {
+class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
     static let shared = GolfManager()
-    
+    static let unclaimedSeat = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
+
     @Published var extensionWidth: CGFloat = 375
     @Published var sessionID: UUID? = nil
     @Published var playerHand: [Card] = []
@@ -44,10 +60,30 @@ class GolfManager: ObservableObject, GameEngine {
     @Published var opponentDepartingFromIndex: Int? = nil // Animation trigger for opponent view
     @Published var playerScore: Int = 0
     @Published var opponentScore: Int = 0
-    
+
     private var preTurnFaceUpIndices: Set<Int> = [] //captured before replaceCard modifies playerFaceUpIndices
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     var isSinglePlayer: Bool = true
+
+    // Multiplayer (V2) properties
+    var seats: [UUID] = []
+    var mySeatIndex: Int = 0
+    @Published var allHands: [[Card]] = []
+    @Published var allFaceUpIndices: [Set<Int>] = []
+    var animatingOpponentSeat: Int = 0
+    var isSpectating: Bool = false
+    @Published var isAnimatingOpponentTurn: Bool = false
+    @Published var isJoiningPhase: Bool = false
+    @Published var isSettlingAfterJoin: Bool = false
+    @Published var joinWasOverwritten: Bool = false
+    var pendingJoinState: GolfV2GameState? = nil
+    var localParticipantID: UUID? = nil
+    var goingOutSeat: Int? = nil
+
+    var needsToJoin: Bool {
+        guard isJoiningPhase, let lpID = localParticipantID else { return false }
+        return !seats.contains(lpID)
+    }
 
     var playerCancelledIndices: Set<Int> {
         cancelledIndices(hand: playerHand, faceUp: playerFaceUpIndices)
@@ -71,9 +107,10 @@ class GolfManager: ObservableObject, GameEngine {
 
     private init() {} // values are already initialized here ^
 
-    // The View Controller will listen to this to know when to send the message
+    // The View Controller will listen to these to know when to send the message
     var onTurnCompleted: ((Data, GameType) -> Void)?
-    
+    var onJoinCompleted: ((Data, GameType) -> Void)?
+
     enum TurnPhase {
         case animationPhase // Animating the opponents turn before your own
         case drawPhase      // Waiting for user to pick from Deck or Discard
@@ -81,16 +118,16 @@ class GolfManager: ObservableObject, GameEngine {
         case idlePhase      // Opponent's turn
         case gameEndPhase   // Only unlocked upon winning
     }
-    
-    
+
+
     func drawFromDeck() {
         guard phase == .drawPhase, !deck.isEmpty else { return }
-        let card = deck.popLast()! //maybe make this a guard statement? this does the samething in the earlier guard statement...
+        let card = deck.popLast()!
         hoveringCard = card
         drewFromDeck = true
         phase = .placementPhase
     }
-    
+
     func drawFromDiscard() {
         guard phase == .drawPhase, !discardPile.isEmpty else { return }
         let card = discardPile.popLast()!
@@ -98,7 +135,7 @@ class GolfManager: ObservableObject, GameEngine {
         drewFromDeck = false
         phase = .placementPhase
     }
-    
+
     func replaceCard(at index: Int) {
         guard phase == .placementPhase,
               playerHand.indices.contains(index),
@@ -113,7 +150,7 @@ class GolfManager: ObservableObject, GameEngine {
         SoundManager.instance.playCardSlap()
         endTurn()
     }
-    
+
     /// Discards the hovering card without replacing anything. Only allowed if the player drew from the deck.
     func discardDrawnCard() {
         guard phase == .placementPhase,
@@ -126,23 +163,38 @@ class GolfManager: ObservableObject, GameEngine {
         SoundManager.instance.playCardSlap()
         endTurn()
     }
-    
+
     func endTurn() {
-        if opponentFaceUpIndices.count == 6 {
-            resolveGameEnd(playerLastToMove: true)  // Opponent went out last turn — this was our final turn. Score!
+        if deck.count == 1 { reshuffleDiscardIntoDeck() }
+
+        if isSinglePlayer {
+            if opponentFaceUpIndices.count == 6 {
+                resolveGameEnd(playerLastToMove: true)
+            } else {
+                phase = .idlePhase
+            }
+            sendLegacyGameState()
         } else {
-            phase = .idlePhase
+            if playerFaceUpIndices.count == 6 && goingOutSeat == nil {
+                goingOutSeat = mySeatIndex
+            }
+            let nextSeat = (mySeatIndex + 1) % seats.count
+            if let goSeat = goingOutSeat, nextSeat == goSeat {
+                resolveGameEndV2()
+            } else {
+                phase = .idlePhase
+            }
+            sendV2GameState()
         }
-        sendGameState()
     }
-    
+
     /// Animates the opponent's swap: draws a card from the appropriate source,
     /// replaces the card at `indexReplaced` in the opponent's hand, and discards the replaced card.
     func opponentReplaceCard() {
-        guard phase == .animationPhase else {
+        guard phase == .animationPhase || isAnimatingOpponentTurn else {
             return
         }
-        
+
         // Draw the new card from deck or discard
         let drawnCard: Card
         if drewFromDeck {
@@ -153,7 +205,7 @@ class GolfManager: ObservableObject, GameEngine {
             drawnCard = discardPile.popLast()!
         }
         let cardToDiscard: Card
-        
+
         if let replaceIndex = indexReplaced { //theyre swapping from hand
             // Swap: replace the card at the index, discard the old one
             cardToDiscard = opponentHand[replaceIndex]
@@ -162,18 +214,41 @@ class GolfManager: ObservableObject, GameEngine {
         } else { //theyre drawing from deck and discarding
             cardToDiscard = drawnCard
         }
-        
+
+        // Keep the V2 multi-opponent grid in sync. The network state ships the sender's
+        // face-up indices as PRE-turn (so the next player can animate), which means
+        // allFaceUpIndices[animatingOpponentSeat] is missing the just-replaced index.
+        // Without this, the static view that takes over from the animated view would
+        // render the new card face-down until the next turn arrives.
+        if !isSinglePlayer,
+           allHands.indices.contains(animatingOpponentSeat),
+           allFaceUpIndices.indices.contains(animatingOpponentSeat) {
+            allHands[animatingOpponentSeat] = opponentHand
+            allFaceUpIndices[animatingOpponentSeat] = opponentFaceUpIndices
+        }
+
         discardPile.append(cardToDiscard)
         SoundManager.instance.playCardSlap()
-        
-        if playerFaceUpIndices.count == 6 {
-            // I went out previously, opponent just took their final turn — score!
-            resolveGameEnd(playerLastToMove: false) //from the perspective of the player 2nd to last to move
+
+        if isSinglePlayer {
+            if playerFaceUpIndices.count == 6 {
+                resolveGameEnd(playerLastToMove: false)
+            } else {
+                phase = .drawPhase
+            }
+        } else if isAnimatingOpponentTurn {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isAnimatingOpponentTurn = false
+            }
         } else {
-            phase = .drawPhase
+            if goingOutSeat == mySeatIndex {
+                resolveGameEndV2()
+            } else {
+                phase = .drawPhase
+            }
         }
     }
-    
+
     private func reshuffleDiscardIntoDeck() { //for when the deck count is 1 (could be refactored)
         let topDeck = deck.popLast()!
         let topDiscard = discardPile.popLast()! //this is the card the user discarded
@@ -182,51 +257,50 @@ class GolfManager: ObservableObject, GameEngine {
         deck.append(topDeck)
         discardPile = [secondDiscard, topDiscard]
     }
-    
+
     func saveMidTurnState(conversationID: String) {
         guard phase == .placementPhase, let sID = sessionID else { return } //only save if the user is currently in the middle of a turn
-        
+
         if let encoded = try? JSONEncoder().encode(hoveringCard) {
             UserDefaults.standard.set(encoded, forKey: "midTurn_\(sID.uuidString)")
         }
     }
-    
+
     func clearMidTurnState(conversationID: String) {
         guard let sID = sessionID else { return }
         UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
     }
-    
+
     func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), isSinglePlayer: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
-        guard let state = try? JSONDecoder().decode(GolfGameState.self, from: data) else {
+        if isSinglePlayer == false, let v2State = try? JSONDecoder().decode(GolfV2GameState.self, from: data) {
+            loadV2State(state: v2State, localParticipantID: localParticipantID, conversationID: conversationID, isExplicitChange: isExplicitChange)
+        } else if let state = try? JSONDecoder().decode(GolfGameState.self, from: data) {
+            loadLegacyState(state: state, isPlayersTurn: isPlayersTurn, conversationID: conversationID, isExplicitChange: isExplicitChange)
+        } else {
             print("Error: Failed to decode GolfGameState from data.")
-            return
         }
-        
+    }
+
+    private func loadLegacyState(state: GolfGameState, isPlayersTurn: Bool, conversationID: String, isExplicitChange: Bool) {
         let isInitialLoad = (self.sessionID == nil) //is the game manager currently empty? (user is on main menu and hasnt tapped a bubble yet)
         let isSameSession = (self.sessionID == state.sessionID) //is this the game we are already looking at?
         let isNewTurn = state.turnNumber > self.turnNumber //is it a newer turn than what we have in memory?
-        
-        guard isInitialLoad || (isSameSession && isNewTurn) || isExplicitChange else { //(if any are true) allow if: (We haven't loaded a session yet) OR (It is the same session AND theres progress in the session) OR (the user is explicitly changing the game session)
-            /*if !isSameSession && !isInitialLoad {
-                print("Action Blocked: User tried to load session \(state.sessionID) while active in \(self.sessionID!)")
-            } else {
-                print("Action Blocked: Turn \(state.turnNumber) is not newer than \(self.turnNumber)")
-            }*/
-            return
-        }
-        
+
+        guard isInitialLoad || (isSameSession && isNewTurn) || isExplicitChange else { return }
+
         if isExplicitChange {
-            resetToInit() //may not be neccesary, but better safe than sorry (this is open for review)
+            resetToInit()
         }
-        
+
+        self.isSinglePlayer = true
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.deck = state.deck
         self.discardPile = state.discardPile
-        
+
         // senderFaceUpIndices is the PRE-TURN state (before the sender replaced a card).
         // For animation, this is correct as-is. For non-animation cases, reconstruct the post-turn state.
-        
+
         if isPlayersTurn,
            let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
            let stashedHoveringCard = try? JSONDecoder().decode(Card.self, from: data) { //the user is mid-turn...
@@ -273,7 +347,145 @@ class GolfManager: ObservableObject, GameEngine {
             }
         }
     }
-    
+
+    private func loadV2State(state: GolfV2GameState, localParticipantID: UUID, conversationID: String, isExplicitChange: Bool) {
+        let isInitialLoad = (self.sessionID == nil)
+        let isSameSession = (self.sessionID == state.sessionID)
+        let isNewTurn = state.turnNumber > self.turnNumber
+        let isConcurrentWinner = isSameSession &&
+                                    (state.turnNumber == self.turnNumber) &&
+                                    (state.seats.map { $0.uuidString }.joined() > self.seats.map { $0.uuidString }.joined())
+
+        guard isExplicitChange || isInitialLoad || (isSameSession && isNewTurn) || isConcurrentWinner else {
+            return
+        }
+        if isExplicitChange { resetToInit() }
+        
+        let isMissingUserID = !state.seats.contains(localParticipantID)
+        if isMissingUserID { //if the user is missing from seats...
+            let joinRecord = "golf_joined_\(state.sessionID.uuidString)"
+            if UserDefaults.standard.data(forKey: joinRecord) != nil { //but we have a record of them joining
+                self.localParticipantID = localParticipantID
+                self.pendingJoinState = state
+                self.seats = state.seats
+                self.turnNumber = state.turnNumber
+                self.isJoiningPhase = true
+                self.joinWasOverwritten = true
+                return
+            }
+        }
+
+        self.localParticipantID = localParticipantID
+        self.isSinglePlayer = false
+        self.sessionID = state.sessionID
+        self.turnNumber = state.turnNumber
+        self.seats = state.seats
+        self.deck = state.deck
+        self.discardPile = state.discardPile
+        self.allHands = state.hands
+        self.allFaceUpIndices = state.faceUpIndices
+        self.goingOutSeat = state.goingOutSeat
+
+        // Joining phase: unclaimed seats remain
+        if state.seats.contains(Self.unclaimedSeat) {
+            self.isJoiningPhase = true
+            self.pendingJoinState = state
+            let emptySeatCount = state.seats.filter { $0 == Self.unclaimedSeat }.count
+
+            if let seatIndex = state.seats.firstIndex(of: localParticipantID) {
+                // User already has a seat — set up the board
+                self.mySeatIndex = seatIndex
+                self.playerHand = state.hands[seatIndex]
+                self.playerFaceUpIndices = state.faceUpIndices[seatIndex]
+            } else if emptySeatCount == 1 {
+                // User hasn't joined and there is exactly one seat left
+                Task { @MainActor in
+                    self.joinGame(shouldBroadcast: false)
+                }
+                return
+            }
+
+            // user already joined, OR user hasn't joined but seats != 1
+            self.phase = .idlePhase
+            return
+            
+        } // else...
+
+        // The game has started!
+        self.isJoiningPhase = false
+
+        guard let seatIndex = state.seats.firstIndex(of: localParticipantID) else {
+            self.playerHand = []
+            self.isSpectating = true
+            self.phase = .idlePhase
+            return
+        }
+
+        self.mySeatIndex = seatIndex
+        let isMyTurn = (state.currentSeatIndex == seatIndex)
+        self.playerHand = state.hands[seatIndex]
+        let playerBeforeUser = (seatIndex - 1 + state.seats.count) % state.seats.count
+        self.animatingOpponentSeat = playerBeforeUser
+
+        if isMyTurn,
+           let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
+           let stashedHoveringCard = try? JSONDecoder().decode(Card.self, from: data) {
+            // Mid-turn recovery
+            self.isSpectating = false
+            self.hoveringCard = stashedHoveringCard
+            self.playerFaceUpIndices = state.faceUpIndices[seatIndex]
+            self.opponentHand = state.hands[playerBeforeUser]
+            var opponentFaceUp = state.faceUpIndices[playerBeforeUser]
+            if let idx = state.lastPlayerIndexReplaced { opponentFaceUp.insert(idx) }
+            self.opponentFaceUpIndices = opponentFaceUp
+            if let topDeckCard = deck.last,
+               stashedHoveringCard.id == topDeckCard.id {
+                deck.removeLast()
+            } else {
+                discardPile.removeLast()
+            }
+            phase = .placementPhase
+
+        } else if isMyTurn {
+            self.isSpectating = false
+            self.playerFaceUpIndices = state.faceUpIndices[seatIndex]
+            self.opponentFaceUpIndices = state.faceUpIndices[playerBeforeUser] // pre-turn for animation
+            let hasVisualsToAnimate = applyOpponentTurnVisualsV2(state: state, previousSeat: playerBeforeUser)
+            if hasVisualsToAnimate {
+                phase = .animationPhase
+            } else {
+                if goingOutSeat == mySeatIndex {
+                    resolveGameEndV2()
+                } else {
+                    phase = .drawPhase
+                }
+            }
+
+        } else {
+            self.isSpectating = true
+            let lastMover = (state.currentSeatIndex - 1 + state.seats.count) % state.seats.count
+            if seatIndex == lastMover {
+                var myFaceUp = state.faceUpIndices[seatIndex]
+                if let idx = state.lastPlayerIndexReplaced { myFaceUp.insert(idx) }
+                self.playerFaceUpIndices = myFaceUp
+            } else {
+                self.playerFaceUpIndices = state.faceUpIndices[seatIndex]
+            }
+            self.opponentFaceUpIndices = state.faceUpIndices[playerBeforeUser]
+
+            if let goSeat = goingOutSeat, state.currentSeatIndex == goSeat {
+                resolveGameEndV2()
+            } else {
+                let lastPlayerSeat = (state.currentSeatIndex - 1 + state.seats.count) % state.seats.count
+                self.animatingOpponentSeat = lastPlayerSeat
+                self.opponentFaceUpIndices = state.faceUpIndices[lastPlayerSeat]
+                let hasVisualsToAnimate = applyOpponentTurnVisualsV2(state: state, previousSeat: lastPlayerSeat)
+                phase = .idlePhase
+                isAnimatingOpponentTurn = hasVisualsToAnimate
+            }
+        }
+    }
+
     private func resetToInit() {
         self.sessionID = nil
         self.playerHand = []
@@ -295,8 +507,21 @@ class GolfManager: ObservableObject, GameEngine {
         self.playerScore = 0
         self.opponentScore = 0
         self.preTurnFaceUpIndices = []
+        self.seats = []
+        self.mySeatIndex = 0
+        self.allHands = []
+        self.allFaceUpIndices = []
+        self.animatingOpponentSeat = 0
+        self.isSpectating = false
+        self.isAnimatingOpponentTurn = false
+        self.isSinglePlayer = true
+        self.isJoiningPhase = false
+        self.isSettlingAfterJoin = false
+        self.joinWasOverwritten = false
+        self.pendingJoinState = nil
+        self.goingOutSeat = nil
     }
-    
+
     private func applyOpponentTurnVisuals(state: GolfGameState) -> Bool {
         guard state.turnNumber > 0 else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
@@ -304,10 +529,10 @@ class GolfManager: ObservableObject, GameEngine {
         }
         self.drewFromDeck = state.senderDrewFromDeck
         var cardTheyDrew: Card
-        
+
         if let replacedIndex = state.indexSenderReplaced { //the opponent replaced a card
             self.indexReplaced = replacedIndex
-            
+
             // The state contains the hand AFTER the swap. We need to undo it so we can animate it forward.
             // After their turn: hand[replacedIndex] = drawnCard, and the old card is on top of discardPile.
             var opponentsHandPreAnimation = state.senderHand
@@ -316,43 +541,73 @@ class GolfManager: ObservableObject, GameEngine {
             // Undo the swap: put the old card back, return the drawn card to its source
             opponentsHandPreAnimation[replacedIndex] = cardTheyDiscarded
             opponentHand = opponentsHandPreAnimation
-            
+
         } else { //they just discarded from deck
             self.indexReplaced = nil
             cardTheyDrew = discardPile.popLast()!
             opponentHand = state.senderHand
         }
-        
+
         if drewFromDeck {
             deck.append(cardTheyDrew)
         } else {
             discardPile.append(cardTheyDrew)
         }
-        
+
         return true
     }
-    
+
+    private func applyOpponentTurnVisualsV2(state: GolfV2GameState, previousSeat: Int) -> Bool {
+        guard state.turnNumber > 0 else {
+            self.opponentHand = state.hands[previousSeat]
+            return false
+        }
+        self.drewFromDeck = state.lastPlayerDrewFromDeck
+        var cardTheyDrew: Card
+
+        if let replacedIndex = state.lastPlayerIndexReplaced {
+            self.indexReplaced = replacedIndex
+            var opponentsHandPreAnimation = state.hands[previousSeat]
+            let cardTheyDiscarded = discardPile.popLast()!
+            cardTheyDrew = opponentsHandPreAnimation[replacedIndex]
+            opponentsHandPreAnimation[replacedIndex] = cardTheyDiscarded
+            opponentHand = opponentsHandPreAnimation
+        } else {
+            self.indexReplaced = nil
+            cardTheyDrew = discardPile.popLast()!
+            opponentHand = state.hands[previousSeat]
+        }
+
+        if drewFromDeck {
+            deck.append(cardTheyDrew)
+        } else {
+            discardPile.append(cardTheyDrew)
+        }
+
+        return true
+    }
+
     /// Standard 6-card golf scoring. Column pairs (0,3), (1,4), (2,5) cancel to 0 if ranks match.
     /// King=0, Ace=1, 2-10=face value, Jack/Queen=10. Lowest score wins.
     static func calculateScore(hand: [Card]) -> Int {
         let columnPairs = [(0, 3), (1, 4), (2, 5)]
         var score = 0
         var cancelledIndices: Set<Int> = []
-        
+
         for (top, bottom) in columnPairs {
             if hand[top].rank == hand[bottom].rank {
                 cancelledIndices.insert(top)
                 cancelledIndices.insert(bottom)
             }
         }
-        
+
         for (index, card) in hand.enumerated() {
             if cancelledIndices.contains(index) { continue }
             score += GolfManager.cardValue(card)
         }
         return score
     }
-    
+
     private static func cardValue(_ card: Card) -> Int {
         switch card.rank {
         case .king:  return 0
@@ -361,7 +616,7 @@ class GolfManager: ObservableObject, GameEngine {
         default:     return card.rank.rawValue + 1 // rawValue is 0-indexed: two=1 → value 2, etc.
         }
     }
-    
+
     private func resolveGameEnd(playerLastToMove: Bool) {
         playerFaceUpIndices = Set(0..<6)
         opponentFaceUpIndices = Set(0..<6)
@@ -379,46 +634,153 @@ class GolfManager: ObservableObject, GameEngine {
         isGameOver = true
     }
 
+    private func resolveGameEndV2() {
+        playerFaceUpIndices = Set(0..<6)
+        opponentFaceUpIndices = Set(0..<6)
+        for i in 0..<allFaceUpIndices.count {
+            allFaceUpIndices[i] = Set(0..<6)
+        }
+
+        allHands[mySeatIndex] = playerHand
+        playerScore = GolfManager.calculateScore(hand: playerHand)
+
+        let otherScores = allHands.enumerated()
+            .filter { $0.offset != mySeatIndex }
+            .map { GolfManager.calculateScore(hand: $0.element) }
+        let bestOtherScore = otherScores.min() ?? Int.max
+        opponentScore = bestOtherScore
+
+        if mySeatIndex == goingOutSeat {
+            playerHasWon = playerScore < bestOtherScore
+        } else {
+            playerHasWon = playerScore <= bestOtherScore
+        }
+        opponentHasWon = !playerHasWon
+
+        SoundManager.instance.playGameEnd(didWin: playerHasWon)
+        if playerHasWon { recordWinOnce() }
+        phase = .gameEndPhase
+        isGameOver = true
+    }
+
     private func recordWinOnce() {
         guard let sID = sessionID else { return }
         WinTracker.shared.recordWinOnce(for: "Golf", sessionID: sID)
     }
-    
+
     func createNewGameState(seats: [UUID]) -> Data? {
         let newSessionID = UUID()
-        var newDeck = Deck().cards
-        var newPlayerHand: [Card] = []
-        var newOpponentHand: [Card] = []
+        let playerCount = seats.count
+        
+        let decksNeeded = max(1, (playerCount - 1) / 5 + 1)
+        var newDeck = (0..<decksNeeded)
+            .flatMap { _ in Deck().cards }
+            .shuffled()
+
+        var newHands: [[Card]] = Array(repeating: [], count: playerCount)
         for _ in 0..<6 {
-            newPlayerHand.append(newDeck.popLast()!) //see if removefirst, remove last is faster
-            newOpponentHand.append(newDeck.popLast()!)
+            for i in 0..<playerCount {
+                newHands[i].append(newDeck.popLast()!)
+            }
         }
         var newDiscardPile: [Card] = []
         newDiscardPile.append(newDeck.popLast()!)
 
         // Randomly choose 2 cards to start face up for each player
         let allIndices = Array(0..<6)
-        let senderFaceUp = Set(allIndices.shuffled().prefix(2))
-        let receiverFaceUp = Set(allIndices.shuffled().prefix(2))
+        var newFaceUpIndices: [Set<Int>] = []
+        for _ in 0..<playerCount {
+            newFaceUpIndices.append(Set(allIndices.shuffled().prefix(2)))
+        }
 
-        let initialState = GolfGameState(
-            sessionID: newSessionID,
-            deck: newDeck,
-            discardPile: newDiscardPile,
-            senderHand: newPlayerHand,
-            receiverHand: newOpponentHand,
-            senderDrewFromDeck: false, //defaults to user drawing from discard pile but shouldnt matter if this is also nil:
-            indexSenderReplaced: nil,
-            turnNumber: 0,
-            senderFaceUpIndices: senderFaceUp,
-            receiverFaceUpIndices: receiverFaceUp)
+        if seats.count == 2 { //1v1 game mode, create legacy game state
+            let initialState = GolfGameState(
+                sessionID: newSessionID,
+                deck: newDeck,
+                discardPile: newDiscardPile,
+                senderHand: newHands[0],
+                receiverHand: newHands[1],
+                senderDrewFromDeck: false,
+                indexSenderReplaced: nil,
+                turnNumber: 0,
+                senderFaceUpIndices: newFaceUpIndices[0],
+                receiverFaceUpIndices: newFaceUpIndices[1])
+            self.isSinglePlayer = true
+            return try? JSONEncoder().encode(initialState)
+
+        } else { //we have a groupchat
+            // Only seat 0 belongs to the creator; remaining seats are unclaimed until players join
+            var seatList = [seats[0]]
+            for _ in 1..<playerCount {
+                seatList.append(Self.unclaimedSeat)
+            }
+
+            let initialState = GolfV2GameState(
+                sessionID: newSessionID,
+                deck: newDeck,
+                discardPile: newDiscardPile,
+                seats: seatList,
+                hands: newHands,
+                currentSeatIndex: 1 % playerCount,
+                turnNumber: 0,
+                lastPlayerDrewFromDeck: false,
+                lastPlayerIndexReplaced: nil,
+                faceUpIndices: newFaceUpIndices,
+                goingOutSeat: nil)
+            self.isSinglePlayer = false
+            return try? JSONEncoder().encode(initialState)
+        }
+    }
+
+    func joinGame(shouldBroadcast: Bool = true) {
+        guard let state = pendingJoinState,
+              let lpID = localParticipantID,
+              let joinData = getJoinData(state: state, localParticipantID: lpID) else { return }
+
+        joinWasOverwritten = false
+        pendingJoinState = nil
+        UserDefaults.standard.set(joinData, forKey: "golf_joined_\(state.sessionID.uuidString)")
+        if shouldBroadcast {
+            onJoinCompleted?(joinData, .golf)
+        }
+        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, isSinglePlayer: false, conversationID: "")
         
-        return try? JSONEncoder().encode(initialState)
+        if isJoiningPhase {
+            isSettlingAfterJoin = true
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
+                self.isSettlingAfterJoin = false
+            }
+        }
     }
     
-    func sendGameState() {
-        if deck.count == 1 { reshuffleDiscardIntoDeck() }
-        
+    func getJoinData(state: GolfV2GameState, localParticipantID: UUID) -> Data? {
+        guard !state.seats.contains(localParticipantID),
+              let openIndex = state.seats.firstIndex(of: Self.unclaimedSeat) else { return nil }
+
+        var updatedSeats = state.seats
+        updatedSeats[openIndex] = localParticipantID
+
+        let isLobbyNowFull = !updatedSeats.contains(Self.unclaimedSeat)
+        let nextSeatIndex = isLobbyNowFull ? updatedSeats.firstIndex(of: localParticipantID)! : state.currentSeatIndex
+
+        let updatedState = GolfV2GameState(
+            sessionID: state.sessionID,
+            deck: state.deck,
+            discardPile: state.discardPile,
+            seats: updatedSeats,
+            hands: state.hands,
+            currentSeatIndex: nextSeatIndex,
+            turnNumber: state.turnNumber + 1,
+            lastPlayerDrewFromDeck: false,
+            lastPlayerIndexReplaced: nil,
+            faceUpIndices: state.faceUpIndices,
+            goingOutSeat: nil)
+
+        return try? JSONEncoder().encode(updatedState)
+    }
+
+    private func sendLegacyGameState() {
         let currentGameState = GolfGameState(
             sessionID: self.sessionID!,
             deck: self.deck,
@@ -431,14 +793,49 @@ class GolfManager: ObservableObject, GameEngine {
             senderFaceUpIndices: self.preTurnFaceUpIndices,
             receiverFaceUpIndices: self.opponentFaceUpIndices
         )
-        
+
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
             print("Error: Failed to encode GolfGameState into Data.")
             return
         }
-        
+
+        self.turnNumber += 1
         self.onTurnCompleted?(stateData, .golf) //send data to MessagesViewController
     }
-    
-}
 
+    private func sendV2GameState() {
+        allHands[mySeatIndex] = playerHand
+        let previousSeat = (mySeatIndex - 1 + seats.count) % seats.count
+        if turnNumber > 0 {
+            allHands[previousSeat] = opponentHand
+            allFaceUpIndices[previousSeat] = opponentFaceUpIndices
+        }
+
+        allFaceUpIndices[mySeatIndex] = preTurnFaceUpIndices
+
+        let nextSeat = (mySeatIndex + 1) % seats.count
+
+        let currentGameState = GolfV2GameState(
+            sessionID: self.sessionID!,
+            deck: self.deck,
+            discardPile: self.discardPile,
+            seats: self.seats,
+            hands: self.allHands,
+            currentSeatIndex: nextSeat,
+            turnNumber: self.turnNumber + 1,
+            lastPlayerDrewFromDeck: self.drewFromDeck,
+            lastPlayerIndexReplaced: self.indexReplaced,
+            faceUpIndices: self.allFaceUpIndices,
+            goingOutSeat: self.goingOutSeat
+        )
+
+        guard let stateData = try? JSONEncoder().encode(currentGameState) else {
+            print("Error: Failed to encode GolfV2GameState into Data.")
+            return
+        }
+
+        self.turnNumber += 1
+        self.onTurnCompleted?(stateData, .golf)
+    }
+
+}

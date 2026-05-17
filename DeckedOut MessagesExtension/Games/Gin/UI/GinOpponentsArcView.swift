@@ -1,21 +1,20 @@
 //
-//  Crazy8sOpponentsArcView.swift
+//  GinOpponentsArcView.swift
 //  DeckedOut
 //
-//  Created by Sawyer Christensen on 5/5/26.
+//  Created by Sawyer Christensen on 5/10/26.
 //
 
 import SwiftUI
 
-struct Crazy8sOpponentsArcView: View {
-    @EnvironmentObject var game: Crazy8sManager
+struct GinOpponentsArcView: View {
+    @EnvironmentObject var game: GinRummyManager
 
     let discardPileZone: CGRect
     let deckZone: CGRect
 
     private var opponentCount: Int { max(game.seats.count - 1, 1) }
 
-    // All opponent seats in clockwise order starting from the player's left
     private var opponentSeats: [Int] {
         guard game.seats.count > 2 else { return [] }
         var result: [Int] = []
@@ -37,7 +36,7 @@ struct Crazy8sOpponentsArcView: View {
     // MARK: 1v1 view
     var body: some View {
         if game.isSinglePlayer || game.seats.count <= 2 {
-            Crazy8sOpponentHandView(
+            GinOpponentHandView(
                 cards: game.opponentHand,
                 discardPileZone: discardPileZone,
                 deckZone: deckZone
@@ -53,8 +52,9 @@ struct Crazy8sOpponentsArcView: View {
         let count = seats.count
         let showAnimatedActive = (
             game.phase == .animationPhase ||
-            game.phase == .mainPhase || //not completely sure why we need main phase here
-            game.isAnimatingOpponentTurn || game.phase == .gameEndPhase)
+            game.phase == .drawPhase || //not completely sure why we need draw phase here
+            game.isAnimatingOpponentTurn ||
+            game.phase == .gameEndPhase && game.opponentHasWon)
 
         return ZStack {
             ForEach(Array(seats.enumerated()), id: \.element) { index, seatIndex in
@@ -63,7 +63,7 @@ struct Crazy8sOpponentsArcView: View {
 
                 Group {
                     if isActive {
-                        Crazy8sOpponentHandView(
+                        GinOpponentHandView(
                             cards: game.opponentHand,
                             discardPileZone: discardPileZone,
                             deckZone: deckZone,
@@ -138,7 +138,7 @@ struct Crazy8sOpponentsArcView: View {
                 let idx = cards.firstIndex(of: card)!
                 let angle = Angle.degrees((Double(idx) - center) * -fan)
                 let yOff = -abs((Double(idx) - center) * yMult)
-                let reveal: Double = game.isGameOver ? 360 : 180
+                let reveal: Double = (game.playerHasWon || game.opponentHasWon) ? 360 : 180
 
                 CardView(frontImage: card.imageName, cardHeight: cardH, rotation: reveal)
                     .rotationEffect(angle)
@@ -146,7 +146,7 @@ struct Crazy8sOpponentsArcView: View {
                     .shadow(color: .black.opacity(0.25), radius: 20)
                     .animation(
                         .spring(response: 0.6, dampingFraction: 0.7).delay(Double(idx) * 0.1),
-                        value: game.isGameOver
+                        value: game.playerHasWon || game.opponentHasWon
                     )
             }
             .frame(width: cardW, height: cardH)

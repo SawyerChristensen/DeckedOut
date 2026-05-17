@@ -52,9 +52,7 @@ struct GolfGameView: View {
     var body: some View {
         ZStack {
             VStack {
-                opponentHand
-                    .rotationEffect(.degrees(180))
-                    .padding(.top, 15)
+                opponentsHand
                 Spacer()
                 deckAndDiscard
                 Spacer()
@@ -91,11 +89,14 @@ struct GolfGameView: View {
         )
         .overlay {
             if game.phase == .idlePhase {
-                WaitingOverlayView()
+                WaitingOverlayView(
+                    joinedCount: game.isJoiningPhase ? game.seats.filter { $0 != GolfManager.unclaimedSeat }.count : nil,
+                    totalCount: game.isJoiningPhase ? game.seats.count : nil
+                )
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "You: \(game.playerScore)\nOpponent: \(game.opponentScore)", comment: "Win screen message for Golf"))
+                WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "You: \(game.playerScore)\nBest: \(game.opponentScore)", comment: "Win screen message for Golf"))
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             
@@ -106,20 +107,20 @@ struct GolfGameView: View {
             }
         }
         .onChange(of: game.turnNumber) { lastTurn, newTurn in
-            if game.phase == .animationPhase {
-                animateOpponentsTurn()
+            Task {
+                if game.phase == .animationPhase || game.isAnimatingOpponentTurn {
+                    await animateOpponentsTurn()
+                }
             }
         }
         .onChange(of: game.opponentDepartingFromIndex) { _, newValue in
             if newValue == nil { hideTopDiscard = false }
         }
         .task { //triggers the first time the view is presented
-            if !game.hasPerformedInitialLoad{
-                do {
-                    try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                } catch { }
+            if !game.hasPerformedInitialLoad {
+                do { try await Task.sleep(nanoseconds: 500_000_000) } catch { } // 0.5s
             }
-            animateOpponentsTurn()
+            await animateOpponentsTurn()
         }
     }
     
@@ -311,6 +312,7 @@ struct GolfGameView: View {
                     .frame(width: buttonSize, height: buttonSize)
                     .foregroundStyle(.white.opacity(0.5))
             }
+            .buttonStyle(.plain)
             .padding(.top, 55)
         }
         .frame(height: 130)
@@ -346,16 +348,11 @@ struct GolfGameView: View {
         }
     }
 
-    private var opponentHand: some View {
-        GolfOpponentHandView(
-            cards: game.opponentHand,
-            faceUpIndices: game.opponentFaceUpIndices,
-            discardPileZone: discardFrame,
-            deckZone: deckFrame
-        )
-        .allowsHitTesting(false)
-        //.shadow(color: .black.opacity(0.1), radius: 5)
-        .zIndex(2)
+    private var opponentsHand: some View {
+        GolfOpponentsSectionView(discardPileZone: discardFrame, deckZone: deckFrame)
+            //.padding(.top, 15)
+            .allowsHitTesting(false)
+            .zIndex(2)
     }
 
     private var playerHand: some View {
@@ -403,8 +400,8 @@ struct GolfGameView: View {
     
     
     // MARK: - Helper functions
-    private func animateOpponentsTurn() { //sets trigger, animation is handled in opponentHandView
-        if game.phase == .animationPhase {
+    private func animateOpponentsTurn() async { //sets trigger, animation is handled in opponentHandView
+        if game.phase == .animationPhase || game.isAnimatingOpponentTurn {
             if let replaceIndex = game.indexReplaced {
                 if !game.drewFromDeck { hideTopDiscard = true }
                 game.opponentDepartingFromIndex = replaceIndex
@@ -417,6 +414,7 @@ struct GolfGameView: View {
         } else {
             game.opponentReplaceCard()
         }
+        do { try await Task.sleep(nanoseconds: 800_000_000) } catch { } // wait for swap animation
         game.hasPerformedInitialLoad = true
     }
     

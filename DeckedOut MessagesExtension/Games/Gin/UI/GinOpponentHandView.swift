@@ -14,11 +14,15 @@ struct GinOpponentHandView: View {
     let cards: [Card]
     var discardPileZone: CGRect? = nil
     var deckZone: CGRect? = nil
-    
-    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect) {
+    var sizeScale: CGFloat = 1.0
+    var handRotation: Double = 0 // parent rotation in degrees (z-axis); used to correct animation offsets
+
+    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect, sizeScale: CGFloat = 1.0, handRotation: Double = 0) {
         self.cards = cards
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
+        self.sizeScale = sizeScale
+        self.handRotation = handRotation
     }
     
     // For animating from deck/discard
@@ -30,33 +34,42 @@ struct GinOpponentHandView: View {
     @State private var normalRotation: Double = 180 //default to face down
     @State private var cardWaitingToAnimate: Card?
     @State private var winGlowRadius: CGFloat = 0
-    
+    @State private var animatingShadowRadius: CGFloat = 0
+    @State private var animatingScaleCorrection: CGFloat = 1.0
+
     // Card sizing
-    private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 }
-    private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
-    private var spacing: CGFloat { cards.count >= 10 ? -72 : -66 } 
+    private var cardWidth: CGFloat { (cards.count >= 10 ? 98 : 101.5) * sizeScale }
+    private var cardHeight: CGFloat { (cards.count >= 10 ? 140 : 145) * sizeScale }
+    private var spacing: CGFloat { (cards.count >= 10 ? -72 : -66) * sizeScale }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
     private let fanningAngle: Double = 4
     
     var body: some View {
-        HStack(spacing: spacing) {
+        RotatedHandLayout(
+            rotation: .degrees(handRotation),
+            spacing: spacing,
+            sizeScale: sizeScale,
+            cardWidth: cardWidth,
+            cardHeight: cardHeight
+        ) {
             ForEach(cards) { card in
                 let isAnimating = (animatingCard == card)
                 let index = cards.firstIndex(of: card)!
                 let angle = Angle.degrees((Double(index) - centerOffset) * -fanningAngle)
-                let yOffset = -abs((Double(index) - centerOffset) * 5)
                 let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
+                let restingRotation = angle + .degrees(handRotation)
                 
-                CardView(frontImage: card.imageName, rotation: isAnimating ? animatingRotation : revealRotation)
+                CardView(frontImage: card.imageName, cardHeight: cardHeight, rotation: isAnimating ? animatingRotation : revealRotation)
+                    .scaleEffect(isAnimating ? animatingScaleCorrection : 1.0)
                     .zIndex(Double(index))
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)
-                    .rotationEffect(isAnimating ? animationRotationCorrection : angle)
-                    .offset(y: yOffset)
+                    .rotationEffect(isAnimating ? animationRotationCorrection : restingRotation)
                     .offset(isAnimating ? animationOffset : .zero)
-                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? winGlowRadius : (isAnimating ? 0 : 20))
+                    .shadow(color: game.opponentHasWon ? .red : .black.opacity(0.25), radius: game.opponentHasWon ? winGlowRadius : (isAnimating ? animatingShadowRadius : 20))
                     .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1),
                         value: game.opponentHasWon || game.playerHasWon // trigger when this value changes
                     )
+                    .animation(.spring(response: 0.5, dampingFraction: 0.7), value: cards.count)
                     .background( // capture the global frame of this specific slot
                         GeometryReader { geo in
                             Color.clear
@@ -68,9 +81,7 @@ struct GinOpponentHandView: View {
                     )
             }
             .frame(width: cardWidth, height: cardHeight)
-            .animation(.spring(response: 0.5, dampingFraction: 0.7), value: cards.count)
         }
-        .frame(height: cardHeight) //technically should be adding the arch amount but this doesnt really matter...
         .onAppear {
             if game.opponentHasWon {
                 withAnimation(.linear(duration: 1)) {
@@ -132,7 +143,7 @@ struct GinOpponentHandView: View {
         if game.opponentDrewFromDeck {
             offsetToDraw = CGSize(
                 width: drawZone.midX - cardFrame.midX,
-                height: drawZone.midY - cardFrame.midY + cardHeight/4) //cardHeight/4 is offseting how the deck is built stack is construction and just so happens to match well. will need to change this once the deck starts getting slimmed down
+                height: drawZone.midY - cardFrame.midY + cardHeight/5) //cardHeight/5 is offseting how the deck is built stack is construction and just so happens to match well. will need to change this once the deck starts getting slimmed down
         } else {
             offsetToDraw = CGSize(
                 width: drawZone.midX - cardFrame.midX,
@@ -145,13 +156,17 @@ struct GinOpponentHandView: View {
         
         // initial state
         animationOffset = offsetToDraw
-        animationRotationCorrection = .degrees(0)
+        animationRotationCorrection = .zero
+        animatingShadowRadius = 0
+        animatingScaleCorrection = 1.0 / sizeScale
         self.cardWaitingToAnimate = nil
-        
+
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animationOffset = .zero
-            animationRotationCorrection = fanAngle
+            animationRotationCorrection = fanAngle + .degrees(handRotation)
             animatingRotation = 180 //make sure the card is face down at end of animation
+            animatingShadowRadius = 20
+            animatingScaleCorrection = 1.0
         }
             
         // Clear draw animation state and call discard animation
@@ -162,22 +177,24 @@ struct GinOpponentHandView: View {
     
     private func animateDiscard(card: Card, cardFrame: CGRect, fanAngle: Angle) {
         // Calculate offset from card's natural position to discard pile
-        let cardIndex = cards.firstIndex(of: card)
-        let yArcOffset = abs(Double(cardIndex! - cards.count / 2) * 5)
         let offsetToDiscard = CGSize(
             width: discardPileZone!.midX - cardFrame.midX,
-            height: discardPileZone!.midY - cardFrame.midY + yArcOffset
+            height: discardPileZone!.midY - cardFrame.midY
         )
-        
+
         // initial state
         animatingRotation = -180 //card is face down
         animationOffset = .zero
-        animationRotationCorrection = fanAngle
-        
+        animationRotationCorrection = fanAngle + .degrees(handRotation)
+        animatingShadowRadius = 20
+        animatingScaleCorrection = 1.0
+
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
             animatingRotation = 0 //card gets discarded face up
             animationOffset = offsetToDiscard
-            animationRotationCorrection = .degrees(0)
+            animationRotationCorrection = .zero
+            animatingShadowRadius = 0
+            animatingScaleCorrection = 1.0 / sizeScale
         }
             
         // Resolve animation state

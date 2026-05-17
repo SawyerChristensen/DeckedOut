@@ -269,8 +269,9 @@ struct MainMenuView: View {
             //.shadow(color: .white.opacity(0.5), radius: 3)
             //.offset(x: isExpanded ? 40 : 0, y: isExpanded ? -80 : 0) //right and up in expanded
         }
+        .buttonStyle(.plain) //turns off the accessibility background showing the button shape
     }
-    
+
     private var customizationButton: some View {
         Button(action: {
             let impact = UIImpactFeedbackGenerator(style: .light)
@@ -304,6 +305,7 @@ struct MainMenuView: View {
             //.shadow(color: .white.opacity(0.5), radius: 5)
             .offset(x: isExpanded ? -40 : 0, y: isExpanded ? 25 : 0) //left and down in expanded
         }
+        .buttonStyle(.plain) //turns off the accessibility background showing the button shape
     }
     
     // MARK: - Menu helper functins
@@ -584,6 +586,7 @@ struct MainMenuView: View {
                 .background(.ultraThinMaterial, in: Circle()) // Liquid glass effect!
                 .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
         }
+        .buttonStyle(.plain)
     }
     
     private var deckSection: some View {
@@ -683,7 +686,7 @@ struct MainMenuView: View {
                 .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 2))
                 .shadow(color: .black.opacity(0.2), radius: 5, x: 5, y: 5)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
     }
     
     private var handSizePicker: some View {

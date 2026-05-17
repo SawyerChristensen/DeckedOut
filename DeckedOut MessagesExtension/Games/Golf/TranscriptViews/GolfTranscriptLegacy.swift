@@ -1,5 +1,5 @@
 //
-//  GolfTranscriptDefault.swift
+//  GolfTranscriptLegacy.swift
 //  DeckedOut
 //
 //  Created by Sawyer Christensen on 4/15/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GolfTranscriptDefault: View {
+struct GolfTranscriptLegacy: View {
     let gameState: GolfGameState
     let isFromMe: Bool
     var onHeightChange: ((CGFloat) -> Void)? = nil

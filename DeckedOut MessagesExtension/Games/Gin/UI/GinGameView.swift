@@ -37,11 +37,14 @@ struct GinGameView: View {
         }
         .overlay {
             if game.phase == .idlePhase {
-                WaitingOverlayView()
+                WaitingOverlayView(
+                    joinedCount: game.isJoiningPhase ? game.seats.filter { $0 != GinRummyManager.unclaimedSeat }.count : nil,
+                    totalCount: game.isJoiningPhase ? game.seats.count : nil
+                )
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             else if game.phase == .gameEndPhase {
-                WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "Gin Rummy", comment: "Win screen message for Gin Rummy"))
+                WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "Gin Rummy!", comment: "Win screen message for Gin Rummy"))
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
             
@@ -52,22 +55,17 @@ struct GinGameView: View {
             }
         }
         .onChange(of: game.turnNumber) { lastTurn, newTurn in
-            if game.phase == .animationPhase {
-                animateOpponentsTurn()
+            Task {
+                if game.phase == .animationPhase || game.isAnimatingOpponentTurn {
+                    await animateOpponentsTurn()
+                }
             }
         }
         .task { //triggers the first time the view is presented
             if !game.hasPerformedInitialLoad {
-                do {
-                    try await Task.sleep(nanoseconds: 500_000_000) // 0.5s
-                }
-                catch {
-                    return
-                }
+                do { try await Task.sleep(nanoseconds: 500_000_000) } catch { } // 0.5s
             }
-            if !game.hasPerformedInitialLoad && game.phase == .animationPhase { //if we're still waiting to load, load. this is just to make sure we avoid a race condition with the onChange modifier somehow
-                animateOpponentsTurn()
-            }
+            await animateOpponentsTurn()
         }
     }
     
@@ -81,8 +79,8 @@ struct GinGameView: View {
     }
     
     private var opponentsHand: some View {
-        GinOpponentHandView(cards: game.opponentHand, discardPileZone: discardFrame, deckZone: deckFrame)
-            .padding(.top, 30)
+        GinOpponentsArcView(discardPileZone: discardFrame, deckZone: deckFrame)
+            .padding(.top, 25)
             .zIndex(2)
     }
     
@@ -209,6 +207,7 @@ struct GinGameView: View {
                         //}
                         //.foregroundStyle(.white.opacity(0.5))
                     }
+                    .buttonStyle(.plain)
                     
                     Spacer()
                 }
@@ -253,14 +252,18 @@ struct GinGameView: View {
     
     
     // MARK: - Helper functions
-    private func animateOpponentsTurn() { //modifies backend, which triggers animation in opponentHandView
+    private func animateOpponentsTurn() async { //modifies backend, which triggers animation in opponentHandView
+        guard game.phase == .animationPhase || game.isAnimatingOpponentTurn else {
+            game.hasPerformedInitialLoad = true
+            return
+        }
         if game.opponentDrewFromDeck {
             game.opponentDrawFromDeck()
         } else {
             game.opponentDrawFromDiscard()
         }
+        do { try await Task.sleep(nanoseconds: 1_300_000_000) } catch { } // wait for draw (0.7s) + discard (0.5s) animations
         game.hasPerformedInitialLoad = true
-        //animating discard is automatically handled in opponents hand view
     }
     
     private func calculateProperDeckZone(from frame: CGRect) -> CGRect {

@@ -38,6 +38,7 @@ struct GolfPlayerHandView: View {
     @State private var animationOffset: CGSize = .zero
     @State private var animationRotationCorrection: Angle = .zero
     @State private var flipRotation: Double = 0
+    @State private var displayedCancelled: Set<Int> = []
     
     // Card sizing
     private let columns = 3
@@ -60,7 +61,7 @@ struct GolfPlayerHandView: View {
                             let isAnimating = animatingCard == card
                             let isDeparting = departingIndex == index
                             let isFaceUp = faceUpIndices.contains(index)
-                            let isCancelled = game.playerCancelledIndices.contains(index)
+                            let isCancelled = displayedCancelled.contains(index)
 
                             GeometryReader { geo in
                                 let geoFrame = geo.frame(in: .global)
@@ -122,6 +123,15 @@ struct GolfPlayerHandView: View {
             }
         }
         .frame(height: cardHeight * CGFloat(rows) + gridSpacingV)
+        .onAppear {
+            displayedCancelled = game.playerCancelledIndices
+        }
+        .onChange(of: game.playerCancelledIndices) { _, new in
+            // Defer past the placement reset so the .animation(value: isCancelled) doesn't pull the offset reset into its transaction
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                displayedCancelled = new
+            }
+        }
     }
     
     private func animateDraw(card: Card, cardFrame: CGRect, drawZone: CGRect) {

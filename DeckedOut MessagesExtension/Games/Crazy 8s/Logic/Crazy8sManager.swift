@@ -35,7 +35,7 @@ struct Crazy8sV2GameState: Codable, V2GameState {
 }
 
 // MARK: The Game Engine
-class Crazy8sManager: ObservableObject, GameEngine {
+class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     static let shared = Crazy8sManager()
     static let unclaimedSeat = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
 
@@ -73,6 +73,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
     var animatingOpponentSeat: Int = 0
     @Published var isJoiningPhase: Bool = false
     @Published var isSettlingAfterJoin: Bool = false
+    @Published var joinWasOverwritten: Bool = false
     var pendingJoinState: Crazy8sV2GameState? = nil
     var localParticipantID: UUID? = nil
 
@@ -175,12 +176,12 @@ class Crazy8sManager: ObservableObject, GameEngine {
     
     func opponentDrawFromDeck() {
         guard phase == .animationPhase || isAnimatingOpponentTurn, !deck.isEmpty else { return }
-        
+
         let card = deck.popLast()!
         opponentHand.append(card)
         opponentCardAnimatingFromDeck = card
     }
-    
+
     func opponentDiscardCard(card: Card) { //pseudo discard
         guard phase == .animationPhase || isAnimatingOpponentTurn else { return }
 
@@ -223,7 +224,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
     
     func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), isSinglePlayer: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
         if isSinglePlayer == false, let v2State = try? JSONDecoder().decode(Crazy8sV2GameState.self, from: data) {
-            loadV2State(state: v2State, isPlayersTurn: isPlayersTurn, localParticipantID: localParticipantID, conversationID: conversationID, isExplicitChange: isExplicitChange)
+            loadV2State(state: v2State, localParticipantID: localParticipantID, conversationID: conversationID, isExplicitChange: isExplicitChange)
         } else if let legacyState = try? JSONDecoder().decode(Crazy8sLegacyGameState.self, from: data) {
             loadLegacyState(state: legacyState, isPlayersTurn: isPlayersTurn, conversationID: conversationID, isExplicitChange: isExplicitChange)
         } else {
@@ -277,16 +278,33 @@ class Crazy8sManager: ObservableObject, GameEngine {
         }
     }
 
-    private func loadV2State(state: Crazy8sV2GameState, isPlayersTurn: Bool, localParticipantID: UUID, conversationID: String, isExplicitChange: Bool) {
+    private func loadV2State(state: Crazy8sV2GameState, localParticipantID: UUID, conversationID: String, isExplicitChange: Bool) {
         let isInitialLoad = (self.sessionID == nil)
         let isSameSession = (self.sessionID == state.sessionID)
         let isNewTurn = state.turnNumber > self.turnNumber
+        
+        let isConcurrentWinner = isSameSession &&
+                                    (state.turnNumber == self.turnNumber) &&
+                                    (state.seats.map { $0.uuidString }.joined() > self.seats.map { $0.uuidString }.joined())
 
-        guard isInitialLoad || (isSameSession && isNewTurn) || isExplicitChange else {
+        guard isExplicitChange || isInitialLoad || (isSameSession && isNewTurn) || isConcurrentWinner else {
             return
         }
-
         if isExplicitChange { resetToInit() }
+        
+        let isMissingUserID = !state.seats.contains(localParticipantID)
+        if isMissingUserID { //if the user is missing from seats...
+            let joinRecord = "crazy8s_joined_\(state.sessionID.uuidString)"
+            if UserDefaults.standard.data(forKey: joinRecord) != nil { //but we have a record of them joining
+                self.localParticipantID = localParticipantID
+                self.pendingJoinState = state
+                self.seats = state.seats
+                self.turnNumber = state.turnNumber
+                self.isJoiningPhase = true
+                self.joinWasOverwritten = true
+                return
+            }
+        }
 
         self.localParticipantID = localParticipantID
         self.isSinglePlayer = false
@@ -310,7 +328,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
             } else if emptySeatCount == 1 {
                 // User hasn't joined and there is exactly one seat left
                 Task { @MainActor in
-                    self.performJoin(shouldBroadcast: false)
+                    self.joinGame(shouldBroadcast: false)
                 }
                 return
             }
@@ -406,6 +424,7 @@ class Crazy8sManager: ObservableObject, GameEngine {
         self.isSinglePlayer = false //we can check chat member count, this is probably redundant
         self.isJoiningPhase = false
         self.isSettlingAfterJoin = false
+        self.joinWasOverwritten = false
         self.pendingJoinState = nil
     }
     
@@ -524,17 +543,38 @@ class Crazy8sManager: ObservableObject, GameEngine {
             return try? JSONEncoder().encode(initialState)
         }
     }
+
+    func joinGame(shouldBroadcast: Bool = true) {
+        guard let state = pendingJoinState,
+              let lpID = localParticipantID,
+              let joinData = getJoinData(state: state, localParticipantID: lpID) else { return }
+
+        joinWasOverwritten = false
+        pendingJoinState = nil
+        UserDefaults.standard.set(joinData, forKey: "crazy8s_joined_\(state.sessionID.uuidString)")
+        if shouldBroadcast {
+            onJoinCompleted?(joinData, .crazy8s)
+        }
+        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, isSinglePlayer: false, conversationID: "")
+        
+        if isJoiningPhase {
+            isSettlingAfterJoin = true
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
+                self.isSettlingAfterJoin = false
+            }
+        }
+    }
     
-    func joinGame(state: Crazy8sV2GameState, localParticipantID: UUID) -> Data? {
+    func getJoinData(state: Crazy8sV2GameState, localParticipantID: UUID) -> Data? {
         guard !state.seats.contains(localParticipantID),
               let openIndex = state.seats.firstIndex(of: Self.unclaimedSeat) else { return nil }
 
         var updatedSeats = state.seats
         updatedSeats[openIndex] = localParticipantID
-        
-        //if the lobby is now full, the current user was the last to join and should be the first to move
+
         let isLobbyNowFull = !updatedSeats.contains(Self.unclaimedSeat)
-        let nextSeatIndex = isLobbyNowFull ? openIndex : state.currentSeatIndex
+        let nextSeatIndex = isLobbyNowFull ? updatedSeats.firstIndex(of: localParticipantID)! : state.currentSeatIndex
 
         let updatedState = Crazy8sV2GameState(
             sessionID: state.sessionID,
@@ -549,39 +589,6 @@ class Crazy8sManager: ObservableObject, GameEngine {
             activeSuitOverride: state.activeSuitOverride)
 
         return try? JSONEncoder().encode(updatedState)
-    }
-
-    func performJoin(shouldBroadcast: Bool = true) {
-        guard let state = pendingJoinState,
-              let lpID = localParticipantID,
-              let joinData = joinGame(state: state, localParticipantID: lpID) else { return }
-
-        pendingJoinState = nil
-        UserDefaults.standard.set(joinData, forKey: "crazy8s_joined_\(state.sessionID.uuidString)")
-        if shouldBroadcast {
-            onJoinCompleted?(joinData, .crazy8s)
-        }
-        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, isSinglePlayer: false, conversationID: "")
-
-        // Keep the joining screen visible while concurrent joins settle.
-        // Skip if the lobby just filled — no concurrency risk when you're the last one in.
-        if isJoiningPhase {
-            isSettlingAfterJoin = true
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
-                self.isSettlingAfterJoin = false
-            }
-        }
-    }
-
-    // Re-join after a concurrent join overwrote ours (last-writer-wins on MSSession).
-    // Resets internal state so performJoin() works against the surviving message's state.
-    func rejoinWithCurrentState(_ currentState: Crazy8sV2GameState, localParticipantID: UUID) {
-        self.pendingJoinState = currentState
-        self.localParticipantID = localParticipantID
-        self.isJoiningPhase = true
-        self.turnNumber = currentState.turnNumber
-        performJoin()
     }
 
     func sendGameStateSwitch() {

@@ -14,9 +14,9 @@ struct LetterCardImage: View {
     
     private var font: Font {
         if currentLanguage.hasPrefix("zh-Hans") { // Simplified Chinese
-            return .custom("baotuxiaobaiti", size: 30)
+            return .custom("baotuxiaobaiti", fixedSize: 30)
         } else if currentLanguage.hasPrefix("zh-Hant") { // Traditional Chinese
-            return .custom("GenRyuMinJP-Bold", size: 30)
+            return .custom("GenRyuMinJP-Bold", fixedSize: 30)
         //} else if currentLanguage.hasPrefix("hi") { // Hindi
             //return .system(size: 30, weight: .regular, design: .serif)
         //} else if currentLanguage.hasPrefix("ja") { // Japanese
@@ -27,7 +27,7 @@ struct LetterCardImage: View {
         //} else if currentLanguage.hasPrefix("ru") { // Russian
             //return .system(size: 30, weight: .regular, design: .serif)
         }
-        return .custom("Holtzschue-Regular", size: 30)
+        return .custom("Holtzschue-Regular", fixedSize: 34) //originally size 30
     }
     
     private var useImageAsset: Bool {
@@ -39,16 +39,16 @@ struct LetterCardImage: View {
     //}
     
     private var isHoltzschue: Bool {
-        return font == .custom("Holtzschue-Regular", size: 30)
+        return font == .custom("Holtzschue-Regular", fixedSize: 34)
     }
     
     private var verticalCentering: CGFloat {
         if currentLanguage.hasPrefix("zh-Hans") {
             return -2
-        } else if isHoltzschue || currentLanguage.hasPrefix("zh-Hant") {
+        } else if currentLanguage.hasPrefix("zh-Hant") {
             return 2
-        } else { //currently unused
-            return 0
+        } else { //then its Holtzschue
+            return 3
         }
     }
 

@@ -207,6 +207,7 @@ struct Crazy8sGameView: View {
                         //}
                         //.foregroundStyle(.white.opacity(0.5))
                     }
+                    .buttonStyle(.plain)
                     
                     Spacer()
                 }

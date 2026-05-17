@@ -1,19 +1,14 @@
-**Group Chat Update**
-    *Crazy 8s*
-        -Backend (DONE)
-        -Frontend (DONE)
-        -Transcript (DONE)
-        
-    *Gin Rummy*
-        -Backend
-        -Frontend
-        
-    *Golf*
-        -Backend
-        -Frontend
-            -Golf cards instantly rotate upon hitting discard pile due to the opponents hand being rotated 180 degrees. rotate during new animations (this should already be implemented in crazy 8s and gin discard animations)
+-shadows might be different between the active hand and static hand in opponent hand view
 
-***----------*** UPDATE 3.0.0 ***----------***
+-goes gin opponent hand need cardheight passed to the card view?
+
+-look into removing handRotation from golf backend? probably not needed. golf hands are never rotated. likely does nothing
+-moms increased text side makes the selected: spades appear lower. the padding above the card needs to be dynamic
+-moms colors are also weird, (see shadow glows)
+
+-draw to discard shadow in golf is sudden
+
+-cap golf opponents to 4 in code? (5 players total?)
 
 -usernames? in groupchat settings?
 
@@ -98,6 +93,8 @@ Customizations to sell:
 
 
 QOL changes / possible updates:
+-probably dont need to pass isFromMe to the transcript views? maybe for legacy transcripts
+-animate draw in gin and crazy 8s have different completions, figure out why that is
 -look into why arrow replace animation isnt doing the same animation seen in SF Symbols
 -alphabetize game list depending on language, start in center with most popular game?
 -look for regional (not just language!) differences in card game names? (Switch is called “last card” in New Zealand)
