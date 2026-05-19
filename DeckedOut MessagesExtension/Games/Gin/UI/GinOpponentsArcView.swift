@@ -140,7 +140,7 @@ struct GinOpponentsArcView: View {
                 let yOff = -abs((Double(idx) - center) * yMult)
                 let reveal: Double = (game.playerHasWon || game.opponentHasWon) ? 360 : 180
 
-                CardView(frontImage: card.imageName, cardHeight: cardH, rotation: reveal)
+                CardView(frontImage: card.imageName, backImageName: "cardBackRed", cardHeight: cardH, rotation: reveal)
                     .rotationEffect(angle)
                     .offset(y: yOff)
                     .shadow(color: .black.opacity(0.25), radius: 20)

@@ -178,7 +178,7 @@ struct GolfOpponentsSectionView: View {
                             let cardFlip: Double = (revealAll || isFaceUp) ? 0 : -180
                             let isCancelled = cancelledSet.contains(index)
 
-                            CardView(frontImage: cards[index].imageName, cardHeight: cardH, rotation: cardFlip)
+                            CardView(frontImage: cards[index].imageName, backImageName: "cardBackRed", cardHeight: cardH, rotation: cardFlip)
                                 .frame(width: cardW, height: cardH)
                                 .opacity(isCancelled ? 0.8 : 1.0)
                                 .shadow(color: .black.opacity(0.25), radius: 4)

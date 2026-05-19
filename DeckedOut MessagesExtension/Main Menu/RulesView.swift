@@ -50,7 +50,7 @@ struct RulesView: View {
                         .frame(width: 50, height: 50)
                         .foregroundStyle(
                             .white,     // Primary (Layer 1)
-                            Color(red: 255 / 255.0, green: 66 / 255.0, blue: 69 / 255.0), // Secondary (Layer 2)
+                            Color("salmonRed"), // Secondary (Layer 2)
                             .black      // Tertiary (Layer 3)
                         )
                         .applyGradientSymbolColor()

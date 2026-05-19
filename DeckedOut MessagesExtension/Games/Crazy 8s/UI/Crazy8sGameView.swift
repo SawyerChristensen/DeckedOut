@@ -11,7 +11,8 @@ import SwiftUI
 struct Crazy8sGameView: View {
     @EnvironmentObject var game: Crazy8sManager
     @Environment(\.colorScheme) var colorScheme
-    
+    @ObservedObject private var cardBackSelection = CardBackSelection.shared
+
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
     @State private var isHoveringDiscard: Bool = false
@@ -110,10 +111,14 @@ struct Crazy8sGameView: View {
         .zIndex(1)
     }
     
+    private var isMyTurn: Bool {
+        game.phase == .mainPhase
+    }
+
     private var theDeck: some View {
         ZStack {
             ForEach(0..<5) { i in
-                Image("cardBackRed")
+                Image(isMyTurn ? cardBackSelection.selectedName : "cardBackRed")
                     .resizable()
                     .aspectRatio(0.7, contentMode: .fit)
                     .frame(height: 145)

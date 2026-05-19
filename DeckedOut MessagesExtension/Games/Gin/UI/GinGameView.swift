@@ -11,7 +11,8 @@ import SwiftUI
 struct GinGameView: View {
     @EnvironmentObject var game: GinRummyManager
     @Environment(\.colorScheme) var colorScheme
-    
+    @ObservedObject private var cardBackSelection = CardBackSelection.shared
+
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
     @State private var lastDrawSource: DrawSource = .none
@@ -105,10 +106,14 @@ struct GinGameView: View {
         .zIndex(1)
     }
     
+    private var isMyTurn: Bool {
+        game.phase == .drawPhase || game.phase == .discardPhase
+    }
+
     private var theDeck: some View {
         ZStack {
             ForEach(0..<5) { i in
-                Image("cardBackRed")
+                Image(isMyTurn ? cardBackSelection.selectedName : "cardBackRed")
                     .resizable()
                     .aspectRatio(0.7, contentMode: .fit)
                     .frame(height: 145)

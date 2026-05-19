@@ -67,6 +67,7 @@ struct GolfOpponentHandView: View {
                             ZStack {
                                 // Main card (departs to discard during animation)
                                 CardView(frontImage: isDeparting ? (departingCardImage ?? card.imageName) : card.imageName,
+                                         backImageName: "cardBackRed",
                                          rotation: isDeparting ? departingRotation : (revealAll || isFaceUp ? 0 : -180))
                                     .shadow(color: game.opponentHasWon ? .red : .clear, radius: winGlowRadius)
                                     .shadow(color: game.opponentHasWon ? .red.opacity(0.5) : .clear, radius: winGlowRadius) //for extra red intensity
@@ -77,7 +78,7 @@ struct GolfOpponentHandView: View {
                                 
                                 // Arriving card overlay (animates in from source)
                                 if isArriving, let newCard = arrivingCard {
-                                    CardView(frontImage: newCard.imageName, rotation: arrivingRotation)
+                                    CardView(frontImage: newCard.imageName, backImageName: "cardBackRed", rotation: arrivingRotation)
                                         .shadow(color: .black.opacity(0.25), radius: 5)
                                         .scaleEffect(arrivingScale)
                                         .offset(arrivingOffset)

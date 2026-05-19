@@ -1,14 +1,13 @@
--shadows might be different between the active hand and static hand in opponent hand view
 
--goes gin opponent hand need cardheight passed to the card view?
+-when moving to expanded view, the buttons seems to transition out with opacity instead of moving to their new location. did the view hierarchy break somewhere
+
+-does gin opponent hand need cardheight passed to the card view?
 
 -look into removing handRotation from golf backend? probably not needed. golf hands are never rotated. likely does nothing
 -moms increased text side makes the selected: spades appear lower. the padding above the card needs to be dynamic
 -moms colors are also weird, (see shadow glows)
 
 -draw to discard shadow in golf is sudden
-
--cap golf opponents to 4 in code? (5 players total?)
 
 -usernames? in groupchat settings?
 
@@ -40,8 +39,6 @@
 -see if getting rid of legacy (pre 3.0 groupchat update) load states functions is advisable? if everyone is already updated? it doesnt hurt to keep them. could prevent crashes for stragglers
 
 ***----------*** UPDATE 5.0.0 ***----------***
-
--delete hangar png if paint thing is finalized
 
 -Customization menu similar to the main menu, where you drag to select your card, back button to the main menu once you select a card
 
@@ -77,6 +74,7 @@ Customizations to sell:
         -some sort of looping animation?
         -solid gold
         -$2.99 Ultra custom photo upload?
+    -unique ace of spades card with every card back??
     -card fronts
         -free tier:
             -basic regional differences

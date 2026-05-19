@@ -11,7 +11,8 @@ import SwiftUI
 struct GolfGameView: View {
     @EnvironmentObject var game: GolfManager
     @Environment(\.colorScheme) var colorScheme
-    
+    @ObservedObject private var cardBackSelection = CardBackSelection.shared
+
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero
     @State private var lastDrawSource: DrawSource = .none
@@ -65,7 +66,7 @@ struct GolfGameView: View {
             
             // Opponent deck-to-discard animation overlay
             if let card = deckToDiscardCard {
-                CardView(frontImage: card.imageName, rotation: deckToDiscardRotation)
+                CardView(frontImage: card.imageName, backImageName: "cardBackRed", rotation: deckToDiscardRotation)
                     .frame(width: 91, height: 130)
                     .shadow(color: .black.opacity(0.25), radius: 10)
                     .offset(deckToDiscardOffset)
@@ -183,10 +184,14 @@ struct GolfGameView: View {
         .zIndex(1)
     }
     
+    private var isMyTurn: Bool {
+        game.phase == .drawPhase || game.phase == .placementPhase
+    }
+
     private var theDeck: some View {
         ZStack {
             ForEach(0..<5) { i in
-                Image("cardBackRed")
+                Image(isMyTurn ? cardBackSelection.selectedName : "cardBackRed")
                     .resizable()
                     .aspectRatio(0.7, contentMode: .fit)
                     .frame(height: 130)

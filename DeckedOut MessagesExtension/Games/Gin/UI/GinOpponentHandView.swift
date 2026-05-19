@@ -59,7 +59,7 @@ struct GinOpponentHandView: View {
                 let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
                 let restingRotation = angle + .degrees(handRotation)
                 
-                CardView(frontImage: card.imageName, cardHeight: cardHeight, rotation: isAnimating ? animatingRotation : revealRotation)
+                CardView(frontImage: card.imageName, backImageName: "cardBackRed", cardHeight: cardHeight, rotation: isAnimating ? animatingRotation : revealRotation)
                     .scaleEffect(isAnimating ? animatingScaleCorrection : 1.0)
                     .zIndex(Double(index))
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)

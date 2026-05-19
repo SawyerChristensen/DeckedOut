@@ -10,15 +10,18 @@ import SwiftUI
 struct CardView: View { //where only one side is a (letter?)
     let frontImage: String
     var backLetter: String?
+    var backImageName: String? = nil //custom card-back image; overrides the user's selected card back
     var cardHeight : CGFloat = 145
     var rotation: Double = 0 //default to face up
+
+    @ObservedObject private var cardBackSelection = CardBackSelection.shared
 
     @ViewBuilder
     private var backImage: some View {
         if let letter = backLetter {
             LetterCardImage(character: letter)
         } else {
-            Image("cardBackRed")
+            Image(backImageName ?? cardBackSelection.selectedName)
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
         }

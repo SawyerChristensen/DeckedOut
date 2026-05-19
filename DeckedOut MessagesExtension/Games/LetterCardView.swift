@@ -10,6 +10,7 @@ import SwiftUI
 struct LetterCardImage: View {
     let character: String
 
+    @ObservedObject private var cardBackSelection = CardBackSelection.shared
     let currentLanguage = Locale.preferredLanguages.first ?? "en"
     
     private var font: Font {
@@ -27,7 +28,7 @@ struct LetterCardImage: View {
         //} else if currentLanguage.hasPrefix("ru") { // Russian
             //return .system(size: 30, weight: .regular, design: .serif)
         }
-        return .custom("Holtzschue-Regular", fixedSize: 34) //originally size 30
+        return .custom("Holtzschue-Regular", fixedSize: 33) //originally size 30
     }
     
     private var useImageAsset: Bool {
@@ -39,7 +40,7 @@ struct LetterCardImage: View {
     //}
     
     private var isHoltzschue: Bool {
-        return font == .custom("Holtzschue-Regular", fixedSize: 34)
+        return font == .custom("Holtzschue-Regular", fixedSize: 33)
     }
     
     private var verticalCentering: CGFloat {
@@ -58,7 +59,7 @@ struct LetterCardImage: View {
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
         } else {
-            Image("cardBackRedBase")
+            Image(cardBackSelection.baseName)
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
                 .overlay(

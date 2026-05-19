@@ -27,17 +27,42 @@ struct MainMenuView: View {
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
     
     @State private var titleTransitionEdge: Edge = .trailing
+    @State private var themeTitleTransitionEdge: Edge = .trailing
     @State private var activeGameIndex: Int = 0
+    @State private var activeThemeIndex: Int = MainMenuView.initialSelectedThemeIndex()
+    @State private var selectedThemeIndex: Int = MainMenuView.initialSelectedThemeIndex()
+    @State private var themeWheelKey: Int = 0
+    @StateObject private var cardBackSelection = CardBackSelection.shared
     @State private var availableGames: [MenuGame] = [
         MenuGame(type: .ginRummy, title: "Gin Rummy", logoCard: "ginRummyCard"),
         MenuGame(type: .crazy8s, title: "Crazy 8s", logoCard: "crazy8sCard"),
         MenuGame(type: .golf, title: "Golf", logoCard: "golfCard")
     ]
+    private static let themes: [CardBackTheme] = [
+        CardBackTheme(title: "Classic Blue", logoCard: "cardBackBlue", price: nil),
+        CardBackTheme(title: "Classic Purple", logoCard: "cardBackPurple", price: nil),
+        CardBackTheme(title: "Classic Red", logoCard: "cardBackRed", price: nil),
+        CardBackTheme(title: "Sunset", logoCard: "cardBackSunset", price: "$0.99"),
+        CardBackTheme(title: "Ocean", logoCard: "cardBackOcean", price: "$0.99"),
+        CardBackTheme(title: "Spider's Web", logoCard: "cardBackWeb", price: "$0.99"), //string just for temporary design purposes
+        CardBackTheme(title: "USA 🇺🇸", logoCard: "cardBackAmerica", price: "$0.99"),
+        CardBackTheme(title: "China 🇨🇳", logoCard: "cardBackChina", price: "$0.99"),
+    ]
+    private var themes: [CardBackTheme] { MainMenuView.themes }
+    private var isThemeSelected: Bool { activeThemeIndex == selectedThemeIndex }
+
+    private static func initialSelectedThemeIndex() -> Int {
+        let name = CardBackSelection.shared.selectedName
+        return themes.firstIndex(where: { $0.logoCard == name })
+            ?? themes.firstIndex(where: { $0.logoCard == CardBackSelection.defaultName })
+            ?? 0
+    }
     @State private var activeSubmenu: GameType? = nil
     private var isInSubmenu: Bool { activeSubmenu != nil }
     @State private var isTitleBarHidden: Bool = false
     @State private var isCardWheelHidden: Bool = false
     @State private var showingRules: Bool = false
+    @State private var showingThemes: Bool = false
     @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
     private var buttonSize: CGFloat { isExpanded ? scaledButtonUnit * 7 : scaledButtonUnit * 4 }
     let isIpad = UIDevice.current.userInterfaceIdiom == .pad
@@ -55,12 +80,12 @@ struct MainMenuView: View {
             default:
                 EmptyView()
             }
-            
+
             VStack {// Main view
                 gameTitleBar
-                
+
                 midSection
-                
+
                 cardWheel
             }
         }
@@ -99,36 +124,67 @@ struct MainMenuView: View {
     
     private var gameTitleBar: some View {
         VStack(spacing: isExpanded ? 15 : 5) {
-            Text(LocalizedStringKey(availableGames[activeGameIndex].title))
-                //.font(.system(size: 20, weight: .semibold, design: .serif))
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-                .fontDesign(.serif)
-                .foregroundColor(.white)
-                .shadow(color: .white.opacity(0.33), radius: 5)
-                .padding(.top, isExpanded ? (isIpad ? 30 : 15) : 0) //pretty sure spacing doesnt include safearea - first element
-                .id(activeGameIndex)
-                .transition(.asymmetric(
-                    insertion: .move(edge: titleTransitionEdge).combined(with: .opacity),
-                    removal: .move(edge: titleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
-                ))
-                .animation(.easeInOut, value: activeGameIndex)
-                .scaleEffect(isExpanded ? 1.2 : 1)
-            
-            HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
-                Image(systemName: "crown.fill")
-                    .foregroundStyle(LinearGradient(colors: [
-                        Color(red: 1.0, green: 1.0, blue: 0.33), // Bright Yellow at the top
-                            Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish gold at the bottom
-                        ],
-                        startPoint: .top, // or topLeading
-                        endPoint: .bottom // & bottomTrailing
-                    ))
-                    .shadow(color: .orange, radius: 5)
-                
-                Text("\(availableGames[activeGameIndex].wins) Wins")
+            ZStack {
+                // Game title face
+                Text(LocalizedStringKey(availableGames[activeGameIndex].title))
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .fontDesign(.serif)
                     .foregroundColor(.white)
                     .shadow(color: .white.opacity(0.33), radius: 5)
+                    .id(activeGameIndex)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: titleTransitionEdge).combined(with: .opacity),
+                        removal: .move(edge: titleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+                    ))
+                    .animation(.easeInOut, value: activeGameIndex)
+                    .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
+
+                // Theme title face — pre-rotated 180° so it shows on the back of the flip
+                Text(LocalizedStringKey(themes[activeThemeIndex].title))
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .fontDesign(.serif)
+                    .foregroundColor(.white)
+                    .shadow(color: .white.opacity(0.33), radius: 5)
+                    .id(activeThemeIndex)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: themeTitleTransitionEdge).combined(with: .opacity),
+                        removal: .move(edge: themeTitleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+                    ))
+                    .animation(.easeInOut, value: activeThemeIndex)
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                    .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
+            }
+            .padding(.top, isExpanded ? (isIpad ? 30 : 15) : 0) //pretty sure spacing doesnt include safearea - first element
+            .scaleEffect(isExpanded ? 1.2 : 1)
+            .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
+
+            ZStack {
+                // Win counter face
+                HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
+                    Image(systemName: "crown.fill")
+                        .foregroundStyle(LinearGradient(colors: [
+                            Color(red: 1.0, green: 1.0, blue: 0.33), // Bright Yellow at the top
+                                Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish gold at the bottom
+                            ],
+                            startPoint: .top, // or topLeading
+                            endPoint: .bottom // & bottomTrailing
+                        ))
+                        .shadow(color: .orange, radius: 5)
+
+                    Text("\(availableGames[activeGameIndex].wins) Wins")
+                        .foregroundColor(.white)
+                        .shadow(color: .white.opacity(0.33), radius: 5)
+                }
+                .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
+
+                // Price face
+                Text(LocalizedStringKey(themes[activeThemeIndex].price ?? "Owned"))
+                    .foregroundColor(.white)
+                    .shadow(color: .white.opacity(0.33), radius: 5)
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                    .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
             }
             .font(isExpanded ? .headline : .subheadline)
             .fontWeight(.medium)
@@ -136,6 +192,7 @@ struct MainMenuView: View {
             .contentTransition(.interpolate)
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isExpanded)
             .scaleEffect(isExpanded ? 1.2 : 1)
+            .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
             
     
             Divider()
@@ -168,7 +225,7 @@ struct MainMenuView: View {
                 HStack {
                     rulesButton
                     Spacer()
-                    //customizationButton //add when we have skins to add!
+                    customizationButton
                 }
                 .padding(.top, isExpanded ? -95 : 10)
                 .padding(.horizontal, isExpanded ? (isIpad ? 250 : 70) : 25)
@@ -177,8 +234,28 @@ struct MainMenuView: View {
     }
     
     private var cardWheel: some View {
+        ZStack {
+            // Game wheel — each card flips individually in place when showingThemes toggles.
+            gameCardWheel
+                .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
+                .allowsHitTesting(!showingThemes)
+
+            // Theme wheel — flips in to replace the game wheel; both card faces match.
+            themeCardWheel
+                .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
+                .allowsHitTesting(showingThemes)
+        }
+        //.zIndex(999) //keep the cards on top
+        .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
+        .scaleEffect(isExpanded ? 1.4 : 1.1)
+        .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 40) //40: in compact main menu
+        .opacity(isCardWheelHidden ? 0 : 1)
+    }
+
+    private var gameCardWheel: some View {
         MenuCardWheel(
             games: availableGames,
+            showingThemes: showingThemes,
             onActiveIndexChange: { newIndex, direction in // handle real-time mid-swipe updates
                 if activeGameIndex != newIndex {
                     titleTransitionEdge = direction
@@ -210,64 +287,82 @@ struct MainMenuView: View {
                 }
             )
         )
-        //.zIndex(999) //keep the cards on top
-        .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
-        .scaleEffect(isExpanded ? 1.4 : 1.1)
-        .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 40) //40: in compact main menu
-        .opacity(isCardWheelHidden ? 0 : 1)
+    }
+
+    private var themeCardWheel: some View {
+        ThemeCardWheel(
+            themes: themes,
+            initialIndex: activeThemeIndex,
+            showingThemes: showingThemes,
+            onActiveIndexChange: { newIndex, direction in
+                if activeThemeIndex != newIndex {
+                    themeTitleTransitionEdge = direction
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        activeThemeIndex = newIndex
+                    }
+                }
+            }
+        )
+        .id(themeWheelKey)
     }
     
     private var rulesButton: some View {
         Button(action: {
             let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
-            withAnimation(.easeInOut(duration: 0.2)) {
-                showingRules = true
+            if showingThemes {
+                withAnimation(.spring(response: 0.67, dampingFraction: 0.7)) {
+                    showingThemes = false
+                    activeThemeIndex = selectedThemeIndex
+                }
+            } else {
+                withAnimation(.spring(response: 0.2, dampingFraction: 0.7)) {
+                    showingRules = true
+                }
             }
         }) {
-            HStack(spacing: 8) { // Groups the icon and text
-                
-                /*Image(systemName: "text.book.closed")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: buttonSize, height: buttonSize)
-                    //.symbolRenderingMode(.palette)
-                    .foregroundStyle(
-                        .white//,             // Primary (Layer 1)
-                        //Color(white: 0.3),  // Secondary (Layer 2)
-                        //.brown.opacity(1.0) // Tertiary (Layer 3)
-                    )
-                    .applyGradientSymbolColor()*/
-                
-                Image("colored.text.book.closed")
-                    .resizable()
-                    .scaledToFit()
+            HStack { // Groups the icon and text
+                let currentIcon = showingThemes ? Image(systemName: "chevron.left") : Image("colored.text.book.closed")
+                currentIcon
+                    .font(.system(size: buttonSize, weight: showingThemes ? .medium : .regular))
                     .frame(width: buttonSize, height: buttonSize)
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(
                         .white,             // Primary (Layer 1)
                         Color(white: 0.3),  // Secondary (Layer 2)
-                        Color(red: 183 / 255.0, green: 138 / 255.0, blue: 102 / 255.0) // Tertiary (Layer 3)
+                        Color("bookBrown") // Tertiary (Layer 3)
                     )
+                    .contentTransition(.symbolEffect(.replace))
                     .applyGradientSymbolColor()
                     .shadow(color: .black.opacity(0.15), radius: 5, x: -5, y: 5)
 
-                //if isExpanded {
-                    Text("Rules")
-                        .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)//.opacity(0.95))
-                        //.shadow(color: .white.opacity(0.5), radius: 1, x: 1, y: -1)
-                        //.transition(.asymmetric(
-                        //    insertion: .move(edge: .leading).combined(with: .scale(scale: 0.5, anchor: .leading)).combined(with: .opacity),
-                            // Fades out and scales down instantly when going back to compact
-                        //    removal: .identity//.combined(with: .scale(scale: 0.5))
-                        //))
-                //}
+                ZStack(alignment: .leading) {
+                    if showingThemes {
+                        Text("Back")
+                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .transition(
+                                // Slides in from the right while fading
+                                .move(edge: .trailing)
+                                .combined(with: .opacity)
+                            )
+                    } else {
+                        Text("Rules")
+                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .transition(
+                                // Slides out to the left and shrinks
+                                .move(edge: .leading)
+                                .combined(with: .opacity)
+                                .combined(with: .scale(scale: 0.5, anchor: .leading))
+                            )
+                    }
+                }
             }
             .fixedSize(horizontal: true, vertical: false)
-            //.shadow(color: .white.opacity(0.5), radius: 3)
-            //.offset(x: isExpanded ? 40 : 0, y: isExpanded ? -80 : 0) //right and up in expanded
+            .offset(x: isExpanded ? 40 : 0, y: isExpanded ? -50 : 0) //right and up in expanded
         }
         .buttonStyle(.plain) //turns off the accessibility background showing the button shape
     }
@@ -276,34 +371,59 @@ struct MainMenuView: View {
         Button(action: {
             let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
-            //action()
+            if !showingThemes {
+                themeWheelKey += 1
+                activeThemeIndex = selectedThemeIndex
+                withAnimation(.spring(response: 0.67, dampingFraction: 0.7)) {
+                    showingThemes = true
+                }
+            } else if !isThemeSelected {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    selectedThemeIndex = activeThemeIndex
+                }
+                cardBackSelection.selectedName = themes[activeThemeIndex].logoCard
+            }
         }) {
-            HStack(spacing: 12) {
-                //if isExpanded {
-                    Text("Themes")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)//.opacity(0.95))
-                        //.shadow(color: .white.opacity(0.5), radius: 1, x: -1, y: -1)
-                        //.transition(.asymmetric(
-                            //insertion: .move(edge: .trailing).combined(with: .scale(scale: 0.5, anchor: .trailing)).combined(with: .opacity),
-                            // Same here, clean fade and shrink on exit
-                           // removal: .identity//.combined(with: .scale(scale: 0.5))
-                        //))
-                //}
+            HStack(spacing: 16) {
+                ZStack(alignment: .leading) {
+                    if !showingThemes {
+                        Text("Themes")
+                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .transition(
+                                // Slides out from the left while fading
+                                .move(edge: .leading)
+                                .combined(with: .opacity)
+                                .combined(with: .scale(scale: 0.5, anchor: .leading))
+                            )
+                    } else {
+                        Text("Select")
+                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .transition(
+                                // Slides out from the left while fading
+                                .move(edge: .trailing)
+                                .combined(with: .opacity)
+                            )
+                    }
+                }
+                    
                 
-                Image(systemName: "paintpalette.fill")
-                    .resizable()
-                    .scaledToFit()
+                Image(systemName: showingThemes ? "checkmark.circle.fill" : "paintpalette.fill")
+                    .font(.system(size: buttonSize, weight: showingThemes ? .semibold : .regular))
                     .frame(width: buttonSize, height: buttonSize)
                     .symbolRenderingMode(.multicolor)
+                    .contentTransition(.symbolEffect(.replace))
+                    .symbolEffect(.bounce, value: selectedThemeIndex)
                     .applyGradientSymbolColor()
+                    .saturation(showingThemes && isThemeSelected ? 0 : 1)
                     .shadow(color: .black.opacity(0.15), radius: 5, x: 5, y: 5)
                 
             }
             .fixedSize(horizontal: true, vertical: false)
-            //.shadow(color: .white.opacity(0.5), radius: 5)
-            .offset(x: isExpanded ? -40 : 0, y: isExpanded ? 25 : 0) //left and down in expanded
+            .offset(x: isExpanded ? -40 : 0, y: isExpanded ? 100 : 0) //left and down in expanded
         }
         .buttonStyle(.plain) //turns off the accessibility background showing the button shape
     }
@@ -542,8 +662,8 @@ struct MainMenuView: View {
                             let verticalShiftToCenter = -(UIScreen.main.bounds.height / 2)
                             let targetRotation = Double(col - 1) * -45.0
                             
-                            // The animating Red back card
-                            Image("cardBackRed")
+                            // The animating card back
+                            Image(cardBackSelection.selectedName)
                                 .resizable()
                                 .aspectRatio(0.7, contentMode: .fit)
                                 .frame(height: cardHeight)
@@ -626,7 +746,7 @@ struct MainMenuView: View {
             }
             
             ForEach(0..<5) { i in
-                Image("cardBackRed")
+                Image(cardBackSelection.selectedName)
                     .resizable()
                     .aspectRatio(0.7, contentMode: .fit)
                     .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145) // Make cards bigger in expanded!
