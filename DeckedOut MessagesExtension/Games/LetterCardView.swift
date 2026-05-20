@@ -27,20 +27,20 @@ struct LetterCardImage: View {
             //return .system(size: 30, weight: .regular, design: .serif)
         //} else if currentLanguage.hasPrefix("ru") { // Russian
             //return .system(size: 30, weight: .regular, design: .serif)
+        } else if cardBackSelection.selectedName == "cardBackWeb" {
+            return .custom("KingthingsWidow", fixedSize: 42)
+        } else if cardBackSelection.selectedName == "cardBackKoi" {
+            return .custom("SuperShake", fixedSize: 26)
         }
         return .custom("Holtzschue-Regular", fixedSize: 33) //originally size 30
     }
     
-    private var useImageAsset: Bool {
-        character == "!"
-    }
-    
-    //private var isChinese: Bool {
-    //    return currentLanguage.hasPrefix("zh-Hans") || currentLanguage.hasPrefix("zh-Hant")
-    //}
-    
     private var isHoltzschue: Bool {
         return font == .custom("Holtzschue-Regular", fixedSize: 33)
+    }
+
+    private var isExclamation: Bool {
+        isHoltzschue && character == "!"
     }
     
     private var verticalCentering: CGFloat {
@@ -48,27 +48,33 @@ struct LetterCardImage: View {
             return -2
         } else if currentLanguage.hasPrefix("zh-Hant") {
             return 2
-        } else { //then its Holtzschue
+        } else if isHoltzschue {
             return 3
+        } else if cardBackSelection.selectedName == "cardBackWeb" {
+            return 1
+        } else if cardBackSelection.selectedName == "cardBackKoi" {
+            return -2
+        } else {
+            return 0
         }
     }
 
     var body: some View {
-        if useImageAsset {
-            Image("\(character)Card")
-                .resizable()
-                .aspectRatio(0.7, contentMode: .fit)
-        } else {
-            Image(cardBackSelection.baseName)
-                .resizable()
-                .aspectRatio(0.7, contentMode: .fit)
-                .overlay(
+        Image(cardBackSelection.baseName)
+            .resizable()
+            .aspectRatio(0.7, contentMode: .fit)
+            .overlay {
+                if isExclamation {
+                    Image("\(character)Card")
+                        .resizable()
+                        .aspectRatio(0.7, contentMode: .fit)
+                } else {
                     Text(character)
                         .font(font)
                         .offset(y: verticalCentering)
-                        .foregroundStyle(.white)
-                )
-        }
+                        .foregroundStyle(cardBackSelection.textColor)
+                }
+            }
     }
 }
 

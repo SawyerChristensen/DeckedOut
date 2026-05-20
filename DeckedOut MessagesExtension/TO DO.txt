@@ -1,6 +1,12 @@
-! holtschuhe needs a replacement
+-make theme titles match their fonts?
 
-opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top
+-need to add actual price data instead of just strings for cards by implementing (storekit?)
+
+-more designs? unlockable achievement card backs?
+
+***----------*** UPDATE 3.1.0 ***----------***
+
+-opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top
 
 -does gin opponent hand need cardheight passed to the card view?
 
@@ -25,7 +31,7 @@ opponent hands need to be lower z index than deck, but drawn cards still need to
     -Reduced Motion (all animations turned off/instant)
     -Differentiate without color alone (pretty sure this is already done)
     
-***----------*** UPDATE 3.1.0 ***----------***
+***----------*** UPDATE 3.2.0 ***----------***
 
 -add Spades or some other game (should supports groupchats by default)
 
@@ -41,11 +47,7 @@ opponent hands need to be lower z index than deck, but drawn cards still need to
 
 ***----------*** UPDATE 5.0.0 ***----------***
 
--Customization menu similar to the main menu, where you drag to select your card, back button to the main menu once you select a card
-
--Ads...
-
-***----------*** UPDATE 5.0.0 ***----------***
+Ads $$$
 
 GAMES TO ADD:
     -Crazy 8s (WIP)

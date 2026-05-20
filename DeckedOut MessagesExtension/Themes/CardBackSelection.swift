@@ -29,6 +29,10 @@ final class CardBackSelection: ObservableObject {
     var selectedColor: Color {
         return CardBackTheme.theme(forLogoCard: selectedName)?.primaryColor ?? Color("salmonRed")
     }
+    
+    var textColor: Color {
+        return CardBackTheme.theme(forLogoCard: selectedName)?.secondaryColor ?? Color(.white)
+    }
 
     private init() {
         self.selectedName = UserDefaults.standard.string(forKey: storageKey) ?? Self.defaultName
