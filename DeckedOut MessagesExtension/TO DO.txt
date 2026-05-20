@@ -1,5 +1,6 @@
+! holtschuhe needs a replacement
 
--when moving to expanded view, the buttons seems to transition out with opacity instead of moving to their new location. did the view hierarchy break somewhere
+opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top
 
 -does gin opponent hand need cardheight passed to the card view?
 

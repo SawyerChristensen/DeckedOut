@@ -57,14 +57,18 @@ struct GolfOpponentsSectionView: View {
     // MARK: 1v1 view
     var body: some View {
         if game.isSinglePlayer || game.seats.count <= 2 {
+            let opponentSeat = game.seats.indices.contains(game.mySeatIndex)
+                ? (game.mySeatIndex + 1) % max(game.seats.count, 1)
+                : 0
             GolfOpponentHandView(
                 cards: game.opponentHand,
                 faceUpIndices: game.opponentFaceUpIndices,
                 discardPileZone: discardPileZone,
-                deckZone: deckZone
+                deckZone: deckZone,
+                cardBackName: game.isSinglePlayer ? game.opponentCardBack : game.cardBack(forSeat: opponentSeat)
             )
             .padding(.vertical, 30)
-            
+
         } else {
             multiOpponentGrid
         }
@@ -134,12 +138,14 @@ struct GolfOpponentsSectionView: View {
                     discardPileZone: discardPileZone,
                     deckZone: deckZone,
                     sizeScale: handScale,
-                    handRotation: 0 // grid layout never rotates the hand; mirrors arc-view API
+                    handRotation: 0, // grid layout never rotates the hand; mirrors arc-view API
+                    cardBackName: game.cardBack(forSeat: seatIndex)
                 )
             } else if seatIndex < game.allHands.count {
                 staticOpponentHand(
                     cards: game.allHands[seatIndex],
-                    faceUpIndices: game.allFaceUpIndices[seatIndex]
+                    faceUpIndices: game.allFaceUpIndices[seatIndex],
+                    cardBackName: game.cardBack(forSeat: seatIndex)
                 )
             }
         }
@@ -148,7 +154,7 @@ struct GolfOpponentsSectionView: View {
 
     // MARK: Static Opponent Hand (2x3 Grid)
     @ViewBuilder
-    private func staticOpponentHand(cards: [Card], faceUpIndices: Set<Int>) -> some View {
+    private func staticOpponentHand(cards: [Card], faceUpIndices: Set<Int>, cardBackName: String = "cardBackRed") -> some View {
         let cardW: CGFloat = 91 * handScale
         let cardH: CGFloat = 130 * handScale
         let spacingH: CGFloat = 24 * handScale
@@ -178,7 +184,7 @@ struct GolfOpponentsSectionView: View {
                             let cardFlip: Double = (revealAll || isFaceUp) ? 0 : -180
                             let isCancelled = cancelledSet.contains(index)
 
-                            CardView(frontImage: cards[index].imageName, backImageName: "cardBackRed", cardHeight: cardH, rotation: cardFlip)
+                            CardView(frontImage: cards[index].imageName, backImageName: cardBackName, cardHeight: cardH, rotation: cardFlip)
                                 .frame(width: cardW, height: cardH)
                                 .opacity(isCancelled ? 0.8 : 1.0)
                                 .shadow(color: .black.opacity(0.25), radius: 4)

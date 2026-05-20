@@ -113,25 +113,33 @@ struct GinGameView: View {
     private var theDeck: some View {
         ZStack {
             ForEach(0..<5) { i in
-                Image(isMyTurn ? cardBackSelection.selectedName : "cardBackRed")
-                    .resizable()
-                    .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: 145)
-                    .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
-                    .shadow(radius: i == 4 ? 1 : 8)
-                    .background {
-                        if i == 4 { // 4 is top card, the stack proceeds up-left, not down-right
-                            GeometryReader { geo in
-                                Color.clear
-                                    .onAppear {
-                                        deckFrame = calculateProperDeckZone(from: geo.frame(in: .global))
-                                    }
-                                    .onChange(of: geo.frame(in: .global)) { _, newFrame in
-                                        deckFrame = calculateProperDeckZone(from: newFrame)
-                                    }
-                            }
+                ZStack {
+                    Image(cardBackSelection.selectedName)
+                        .resizable()
+                        .aspectRatio(0.7, contentMode: .fit)
+                        .opacity(isMyTurn ? 1 : 0)
+                    Image(game.opponentDeckCardBack)
+                        .resizable()
+                        .aspectRatio(0.7, contentMode: .fit)
+                        .opacity(isMyTurn ? 0 : 1)
+                }
+                .frame(height: 145)
+                .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
+                .shadow(radius: i == 4 ? 1 : 8)
+                .animation(cardBackSelection.selectedName == game.opponentDeckCardBack ? nil : .easeInOut(duration: 0.4), value: isMyTurn)
+                .background {
+                    if i == 4 { // 4 is top card, the stack proceeds up-left, not down-right
+                        GeometryReader { geo in
+                            Color.clear
+                                .onAppear {
+                                    deckFrame = calculateProperDeckZone(from: geo.frame(in: .global))
+                                }
+                                .onChange(of: geo.frame(in: .global)) { _, newFrame in
+                                    deckFrame = calculateProperDeckZone(from: newFrame)
+                                }
                         }
                     }
+                }
             }
         }
     }

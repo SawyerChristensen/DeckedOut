@@ -18,6 +18,7 @@ struct GinRummyGameState: Codable, BasicGameState {
     let indexSenderDrewTo: Int?
     let indexSenderDiscardedFrom: Int?
     let turnNumber: Int
+    let senderCardBack: String? //the card-back the sender has equipped; optional for backward compat
 }
 
 // V2: Seat-based groupchat multiplayer game snapshot
@@ -32,6 +33,7 @@ struct GinRummyV2GameState: Codable, V2GameState {
     let lastPlayerDrewFromDeck: Bool
     let lastPlayerIndexDrewTo: Int?
     let lastPlayerIndexDiscardedFrom: Int?
+    let seatCardBacks: [String]? //parallel to seats; optional for backward compat
 }
 
 // MARK: The Game Engine
@@ -59,6 +61,10 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     var handSize: Int = 7 //configurable from the menu (7 or 10)
     var isSinglePlayer: Bool = true
 
+    // Card-back equipped by each player (sent in the message payload)
+    @Published var opponentCardBack: String = "cardBackRed" //v1: the single opponent's equipped back
+    @Published var seatCardBacks: [String] = [] //v2: parallel to `seats`; updated each turn
+
     // Multiplayer (V2) properties
     var seats: [UUID] = []
     var mySeatIndex: Int = 0
@@ -75,6 +81,21 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     var needsToJoin: Bool {
         guard isJoiningPhase, let lpID = localParticipantID else { return false }
         return !seats.contains(lpID)
+    }
+
+    /// Returns the card-back image name for a specific seat. Falls back to `cardBackRed`.
+    func cardBack(forSeat seatIndex: Int) -> String {
+        if isSinglePlayer { return opponentCardBack }
+        return seatCardBacks.indices.contains(seatIndex) ? seatCardBacks[seatIndex] : "cardBackRed"
+    }
+
+    /// Card-back to display on the deck/discard stacks when it isn't the user's turn.
+    /// Reflects the upcoming player's card back, so the deck updates as soon as the previous turn lands.
+    var opponentDeckCardBack: String {
+        if isSinglePlayer { return opponentCardBack }
+        guard !seats.isEmpty else { return "cardBackRed" }
+        let nextSeat = (animatingOpponentSeat + 1) % seats.count
+        return cardBack(forSeat: nextSeat)
     }
 
     private init() {} // values are already initialized here ^
@@ -223,7 +244,11 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.turnNumber = state.turnNumber
         self.deck = state.deck
         self.discardPile = state.discardPile
-        
+        // The sender of this message is the opponent we're about to play against.
+        if isPlayersTurn, let sentBack = state.senderCardBack {
+            self.opponentCardBack = sentBack
+        }
+
         if isPlayersTurn, //does not check if this is the same game session!! just the same conversation!!
            let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
            let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
@@ -301,6 +326,12 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.deck = state.deck
         self.discardPile = state.discardPile
         self.allHands = state.hands
+        // Take the latest per-seat card backs from the message, defaulting any missing entries.
+        var incomingBacks = state.seatCardBacks ?? Array(repeating: "cardBackRed", count: state.seats.count)
+        if incomingBacks.count < state.seats.count {
+            incomingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: state.seats.count - incomingBacks.count))
+        }
+        self.seatCardBacks = incomingBacks
 
         // Joining phase: unclaimed seats remain
         if state.seats.contains(Self.unclaimedSeat) {
@@ -415,6 +446,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.isSettlingAfterJoin = false
         self.joinWasOverwritten = false
         self.pendingJoinState = nil
+        self.opponentCardBack = "cardBackRed"
+        self.seatCardBacks = []
     }
     
     private func applyOpponentTurnVisuals(state: GinRummyGameState) -> Bool {
@@ -499,6 +532,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             seatList.append(Self.unclaimedSeat)
         }
 
+        let myCardBack = CardBackSelection.shared.selectedName
+
         if seats.count == 2 { //1v1 game mode, create legacy game state
             let legacyState = GinRummyGameState(
                 sessionID: newSessionID,
@@ -509,11 +544,15 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
                 senderDrewFromDeck: false,
                 indexSenderDrewTo: nil,
                 indexSenderDiscardedFrom: nil,
-                turnNumber: 0)
+                turnNumber: 0,
+                senderCardBack: myCardBack)
             self.isSinglePlayer = true
             return try? JSONEncoder().encode(legacyState)
 
         } else { //we have a groupchat
+            // Only the creator's back is known up front; other seats default until they join.
+            var initialBacks = Array(repeating: "cardBackRed", count: playerCount)
+            initialBacks[0] = myCardBack
             let initialState = GinRummyV2GameState(
                 sessionID: newSessionID,
                 deck: newDeck,
@@ -524,7 +563,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
                 turnNumber: 0,
                 lastPlayerDrewFromDeck: false,
                 lastPlayerIndexDrewTo: nil,
-                lastPlayerIndexDiscardedFrom: nil
+                lastPlayerIndexDiscardedFrom: nil,
+                seatCardBacks: initialBacks
             )
             self.isSinglePlayer = false
             return try? JSONEncoder().encode(initialState)
@@ -563,6 +603,13 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         let isLobbyNowFull = !updatedSeats.contains(Self.unclaimedSeat)
         let nextSeatIndex = isLobbyNowFull ? updatedSeats.firstIndex(of: localParticipantID)! : state.currentSeatIndex
 
+        // Carry forward known card-backs and write the joiner's into their slot.
+        var updatedBacks = state.seatCardBacks ?? Array(repeating: "cardBackRed", count: state.seats.count)
+        if updatedBacks.count < updatedSeats.count {
+            updatedBacks.append(contentsOf: Array(repeating: "cardBackRed", count: updatedSeats.count - updatedBacks.count))
+        }
+        updatedBacks[openIndex] = CardBackSelection.shared.selectedName
+
         let updatedState = GinRummyV2GameState(
             sessionID: state.sessionID,
             deck: state.deck,
@@ -573,7 +620,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             turnNumber: state.turnNumber + 1,
             lastPlayerDrewFromDeck: false,
             lastPlayerIndexDrewTo: nil,
-            lastPlayerIndexDiscardedFrom: nil)
+            lastPlayerIndexDiscardedFrom: nil,
+            seatCardBacks: updatedBacks)
 
         return try? JSONEncoder().encode(updatedState)
     }
@@ -598,14 +646,15 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             senderDrewFromDeck: self.opponentDrewFromDeck,
             indexSenderDrewTo: self.indexDrawnTo,
             indexSenderDiscardedFrom: self.indexDiscardedFrom,
-            turnNumber: self.turnNumber + 1
+            turnNumber: self.turnNumber + 1,
+            senderCardBack: CardBackSelection.shared.selectedName
         )
-        
+
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
             print("Error: Failed to encode GinRummyGameState into Data.")
             return
         }
-        
+
         self.onTurnCompleted?(stateData, .ginRummy) //send data to MessagesViewController
     }
 
@@ -618,6 +667,15 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
 
         let nextSeat = (mySeatIndex + 1) % seats.count
 
+        // Preserve other seats' card-backs, set our own slot to current selection.
+        var outgoingBacks = seatCardBacks
+        if outgoingBacks.count < seats.count {
+            outgoingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: seats.count - outgoingBacks.count))
+        }
+        if outgoingBacks.indices.contains(mySeatIndex) {
+            outgoingBacks[mySeatIndex] = CardBackSelection.shared.selectedName
+        }
+
         let currentGameState = GinRummyV2GameState(
             sessionID: self.sessionID!,
             deck: self.deck,
@@ -628,7 +686,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             turnNumber: self.turnNumber + 1,
             lastPlayerDrewFromDeck: self.opponentDrewFromDeck,
             lastPlayerIndexDrewTo: self.indexDrawnTo,
-            lastPlayerIndexDiscardedFrom: self.indexDiscardedFrom
+            lastPlayerIndexDiscardedFrom: self.indexDiscardedFrom,
+            seatCardBacks: outgoingBacks
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
@@ -637,6 +696,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         }
 
         self.turnNumber += 1
+        // Mark our seat as the one who just played so the deck immediately reflects the next player's back.
+        self.seatCardBacks = outgoingBacks
+        self.animatingOpponentSeat = mySeatIndex
         self.onTurnCompleted?(stateData, .ginRummy)
     }
 }

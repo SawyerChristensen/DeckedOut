@@ -17,14 +17,16 @@ struct GolfOpponentHandView: View {
     var deckZone: CGRect? = nil
     var sizeScale: CGFloat = 1.0
     var handRotation: Double = 0 // parent rotation in degrees (z-axis); used to correct animation offsets
+    var cardBackName: String = "cardBackRed"
 
-    init(cards: [Card], faceUpIndices: Set<Int>, discardPileZone: CGRect, deckZone: CGRect, sizeScale: CGFloat = 1.0, handRotation: Double = 0) {
+    init(cards: [Card], faceUpIndices: Set<Int>, discardPileZone: CGRect, deckZone: CGRect, sizeScale: CGFloat = 1.0, handRotation: Double = 0, cardBackName: String = "cardBackRed") {
         self.cards = cards
         self.faceUpIndices = faceUpIndices
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
         self.sizeScale = sizeScale
         self.handRotation = handRotation
+        self.cardBackName = cardBackName
     }
     
     // For animating departure and arrival
@@ -67,7 +69,7 @@ struct GolfOpponentHandView: View {
                             ZStack {
                                 // Main card (departs to discard during animation)
                                 CardView(frontImage: isDeparting ? (departingCardImage ?? card.imageName) : card.imageName,
-                                         backImageName: "cardBackRed",
+                                         backImageName: cardBackName,
                                          rotation: isDeparting ? departingRotation : (revealAll || isFaceUp ? 0 : -180))
                                     .shadow(color: game.opponentHasWon ? .red : .clear, radius: winGlowRadius)
                                     .shadow(color: game.opponentHasWon ? .red.opacity(0.5) : .clear, radius: winGlowRadius) //for extra red intensity
@@ -78,7 +80,7 @@ struct GolfOpponentHandView: View {
                                 
                                 // Arriving card overlay (animates in from source)
                                 if isArriving, let newCard = arrivingCard {
-                                    CardView(frontImage: newCard.imageName, backImageName: "cardBackRed", rotation: arrivingRotation)
+                                    CardView(frontImage: newCard.imageName, backImageName: cardBackName, rotation: arrivingRotation)
                                         .shadow(color: .black.opacity(0.25), radius: 5)
                                         .scaleEffect(arrivingScale)
                                         .offset(arrivingOffset)

@@ -38,17 +38,8 @@ struct MainMenuView: View {
         MenuGame(type: .crazy8s, title: "Crazy 8s", logoCard: "crazy8sCard"),
         MenuGame(type: .golf, title: "Golf", logoCard: "golfCard")
     ]
-    private static let themes: [CardBackTheme] = [
-        CardBackTheme(title: "Classic Blue", logoCard: "cardBackBlue", price: nil),
-        CardBackTheme(title: "Classic Purple", logoCard: "cardBackPurple", price: nil),
-        CardBackTheme(title: "Classic Red", logoCard: "cardBackRed", price: nil),
-        CardBackTheme(title: "Sunset", logoCard: "cardBackSunset", price: "$0.99"),
-        CardBackTheme(title: "Ocean", logoCard: "cardBackOcean", price: "$0.99"),
-        CardBackTheme(title: "Spider's Web", logoCard: "cardBackWeb", price: "$0.99"), //string just for temporary design purposes
-        CardBackTheme(title: "USA 🇺🇸", logoCard: "cardBackAmerica", price: "$0.99"),
-        CardBackTheme(title: "China 🇨🇳", logoCard: "cardBackChina", price: "$0.99"),
-    ]
-    private var themes: [CardBackTheme] { MainMenuView.themes }
+    private static var themes: [CardBackTheme] { CardBackTheme.all }
+    private var themes: [CardBackTheme] { CardBackTheme.all }
     private var isThemeSelected: Bool { activeThemeIndex == selectedThemeIndex }
 
     private static func initialSelectedThemeIndex() -> Int {
@@ -221,16 +212,30 @@ struct MainMenuView: View {
     private var midSection: some View {
         Spacer()
             .frame(maxWidth: .infinity)
-            .overlay( //this is so we can keep the vertical spacing of the Spacer() while injecting an HStack of different vertical spacing
+            /*.overlay( //this is so we can keep the vertical spacing of the Spacer() while injecting an HStack of different vertical spacing
                 HStack {
                     rulesButton
+                        //.padding(.leading, isExpanded ? (isIpad ? 290 : 110) : 25)
                     Spacer()
                     customizationButton
+                        //.padding(.trailing, isExpanded ? (isIpad ? 290 : 110) : 25)
                 }
-                .padding(.top, isExpanded ? -95 : 10)
-                .padding(.horizontal, isExpanded ? (isIpad ? 250 : 70) : 25)
+                //.padding(.top, isExpanded ? -90 : 10)
+                //.padding(.horizontal, isExpanded ? (isIpad ? 400 : 200) : 25)
                 .opacity(isTitleBarHidden ? 0 : 1)
-            )
+            )*/
+            .overlay(alignment: .leading) {
+                rulesButton
+                    .padding(.leading, isExpanded ? (isIpad ? 250 : 75) : 25)
+                    .padding(.top, isExpanded ? (isIpad ? -120 : -130) : 0)
+                    .opacity(isTitleBarHidden ? 0 : 1)
+            }
+            .overlay(alignment: .trailing) {
+                customizationButton
+                    .padding(.trailing, isExpanded ? (isIpad ? 250 : 75) : 25)
+                    .padding(.top, isExpanded ? (isIpad ? 70 : 100) : 0)
+                    .opacity(isTitleBarHidden ? 0 : 1)
+            }
     }
     
     private var cardWheel: some View {
@@ -308,7 +313,7 @@ struct MainMenuView: View {
     
     private var rulesButton: some View {
         Button(action: {
-            let impact = UIImpactFeedbackGenerator(style: .light)
+            let impact = UIImpactFeedbackGenerator(style: .medium)
             impact.impactOccurred()
             if showingThemes {
                 withAnimation(.spring(response: 0.67, dampingFraction: 0.7)) {
@@ -323,9 +328,10 @@ struct MainMenuView: View {
         }) {
             HStack { // Groups the icon and text
                 let currentIcon = showingThemes ? Image(systemName: "chevron.left") : Image("colored.text.book.closed")
+                let iconRenderSize = scaledButtonUnit * 7 // fixed render size; scaleEffect handles compact/expanded sizing
                 currentIcon
-                    .font(.system(size: buttonSize, weight: showingThemes ? .medium : .regular))
-                    .frame(width: buttonSize, height: buttonSize)
+                    .font(.system(size: iconRenderSize, weight: showingThemes ? .medium : .regular))
+                    .frame(width: iconRenderSize, height: iconRenderSize)
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(
                         .white,             // Primary (Layer 1)
@@ -335,6 +341,8 @@ struct MainMenuView: View {
                     .contentTransition(.symbolEffect(.replace))
                     .applyGradientSymbolColor()
                     .shadow(color: .black.opacity(0.15), radius: 5, x: -5, y: 5)
+                    .scaleEffect(buttonSize / iconRenderSize)
+                    .frame(width: buttonSize, height: buttonSize)
 
                 ZStack(alignment: .leading) {
                     if showingThemes {
@@ -362,26 +370,32 @@ struct MainMenuView: View {
                 }
             }
             .fixedSize(horizontal: true, vertical: false)
-            .offset(x: isExpanded ? 40 : 0, y: isExpanded ? -50 : 0) //right and up in expanded
         }
         .buttonStyle(.plain) //turns off the accessibility background showing the button shape
     }
 
     private var customizationButton: some View {
         Button(action: {
-            let impact = UIImpactFeedbackGenerator(style: .light)
-            impact.impactOccurred()
-            if !showingThemes {
+            if !showingThemes { // Opening the themes menu
+                let impact = UIImpactFeedbackGenerator(style: .medium)
+                impact.impactOccurred()
                 themeWheelKey += 1
                 activeThemeIndex = selectedThemeIndex
                 withAnimation(.spring(response: 0.67, dampingFraction: 0.7)) {
                     showingThemes = true
                 }
-            } else if !isThemeSelected {
+                
+            } else if !isThemeSelected { // Selecting a NEW theme
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
                 withAnimation(.easeInOut(duration: 0.2)) {
                     selectedThemeIndex = activeThemeIndex
                 }
                 cardBackSelection.selectedName = themes[activeThemeIndex].logoCard
+            } else {
+                // Trying to select the ALREADY SELECTED theme (Error haptic)
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.error)
             }
         }) {
             HStack(spacing: 16) {
@@ -411,19 +425,21 @@ struct MainMenuView: View {
                 }
                     
                 
+                let iconRenderSize = scaledButtonUnit * 7 // fixed render size; scaleEffect handles compact/expanded sizing
                 Image(systemName: showingThemes ? "checkmark.circle.fill" : "paintpalette.fill")
-                    .font(.system(size: buttonSize, weight: showingThemes ? .semibold : .regular))
-                    .frame(width: buttonSize, height: buttonSize)
+                    .font(.system(size: iconRenderSize, weight: showingThemes ? .semibold : .regular))
+                    .frame(width: iconRenderSize, height: iconRenderSize)
                     .symbolRenderingMode(.multicolor)
                     .contentTransition(.symbolEffect(.replace))
                     .symbolEffect(.bounce, value: selectedThemeIndex)
                     .applyGradientSymbolColor()
                     .saturation(showingThemes && isThemeSelected ? 0 : 1)
                     .shadow(color: .black.opacity(0.15), radius: 5, x: 5, y: 5)
+                    .scaleEffect(buttonSize / iconRenderSize)
+                    .frame(width: buttonSize, height: buttonSize)
                 
             }
             .fixedSize(horizontal: true, vertical: false)
-            .offset(x: isExpanded ? -40 : 0, y: isExpanded ? 100 : 0) //left and down in expanded
         }
         .buttonStyle(.plain) //turns off the accessibility background showing the button shape
     }

@@ -16,13 +16,15 @@ struct GinOpponentHandView: View {
     var deckZone: CGRect? = nil
     var sizeScale: CGFloat = 1.0
     var handRotation: Double = 0 // parent rotation in degrees (z-axis); used to correct animation offsets
+    var cardBackName: String = "cardBackRed"
 
-    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect, sizeScale: CGFloat = 1.0, handRotation: Double = 0) {
+    init(cards: [Card], discardPileZone: CGRect, deckZone: CGRect, sizeScale: CGFloat = 1.0, handRotation: Double = 0, cardBackName: String = "cardBackRed") {
         self.cards = cards
         self.discardPileZone = discardPileZone
         self.deckZone = deckZone
         self.sizeScale = sizeScale
         self.handRotation = handRotation
+        self.cardBackName = cardBackName
     }
     
     // For animating from deck/discard
@@ -59,7 +61,7 @@ struct GinOpponentHandView: View {
                 let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
                 let restingRotation = angle + .degrees(handRotation)
                 
-                CardView(frontImage: card.imageName, backImageName: "cardBackRed", cardHeight: cardHeight, rotation: isAnimating ? animatingRotation : revealRotation)
+                CardView(frontImage: card.imageName, backImageName: cardBackName, cardHeight: cardHeight, rotation: isAnimating ? animatingRotation : revealRotation)
                     .scaleEffect(isAnimating ? animatingScaleCorrection : 1.0)
                     .zIndex(Double(index))
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)

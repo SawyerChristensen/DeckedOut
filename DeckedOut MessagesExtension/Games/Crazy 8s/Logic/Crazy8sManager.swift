@@ -18,6 +18,7 @@ struct Crazy8sLegacyGameState: Codable, BasicGameState {
     let didDiscard: Bool
     let activeSuitOverride: Suit?
     let turnNumber: Int
+    let senderCardBack: String? //the card-back the sender has equipped; optional for backward compat
 }
 
 // V2: Seat-based groupchat multiplayer game snapshot
@@ -32,6 +33,7 @@ struct Crazy8sV2GameState: Codable, V2GameState {
     let cardsDrawnByLastPlayer: Int
     let lastPlayerDidDiscard: Bool
     let activeSuitOverride: Suit?
+    let seatCardBacks: [String]? //parallel to seats; optional for backward compat
 }
 
 // MARK: The Game Engine
@@ -63,6 +65,10 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var opponentCardAnimatingFromDeck: Card? = nil        // The trigger for draw animations
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
 
+    // Card-back equipped by each player (sent in the message payload)
+    @Published var opponentCardBack: String = "cardBackRed" //v1: the single opponent's equipped back
+    @Published var seatCardBacks: [String] = [] //v2: parallel to `seats`; updated each turn
+
     // Multiplayer (V2) properties
     var seats: [UUID] = []
     var mySeatIndex: Int = 0
@@ -80,6 +86,21 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     var needsToJoin: Bool {
         guard isJoiningPhase, let lpID = localParticipantID else { return false }
         return !seats.contains(lpID)
+    }
+
+    /// Returns the card-back image name for a specific seat. Falls back to `cardBackRed`.
+    func cardBack(forSeat seatIndex: Int) -> String {
+        if isSinglePlayer { return opponentCardBack }
+        return seatCardBacks.indices.contains(seatIndex) ? seatCardBacks[seatIndex] : "cardBackRed"
+    }
+
+    /// Card-back to display on the deck/discard stacks when it isn't the user's turn.
+    /// Reflects the upcoming player's card back, so the deck updates as soon as the previous turn lands.
+    var opponentDeckCardBack: String {
+        if isSinglePlayer { return opponentCardBack }
+        guard !seats.isEmpty else { return "cardBackRed" }
+        let nextSeat = (animatingOpponentSeat + 1) % seats.count
+        return cardBack(forSeat: nextSeat)
     }
 
     private init() {} // values are already initialized here ^
@@ -246,6 +267,9 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         self.turnNumber = state.turnNumber
         self.deck = state.deck
         self.discardPile = state.discardPile
+        if isPlayersTurn, let sentBack = state.senderCardBack {
+            self.opponentCardBack = sentBack
+        }
         self.cardsDrawnThisTurn = 0
         self.userDidDiscard = false
         self.opponentDidDiscard = state.didDiscard
@@ -314,6 +338,11 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         self.deck = state.deck
         self.discardPile = state.discardPile
         self.allHands = state.hands
+        var incomingBacks = state.seatCardBacks ?? Array(repeating: "cardBackRed", count: state.seats.count)
+        if incomingBacks.count < state.seats.count {
+            incomingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: state.seats.count - incomingBacks.count))
+        }
+        self.seatCardBacks = incomingBacks
 
         // Joining phase: unclaimed seats remain
         if state.seats.contains(Self.unclaimedSeat) {
@@ -426,8 +455,10 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         self.isSettlingAfterJoin = false
         self.joinWasOverwritten = false
         self.pendingJoinState = nil
+        self.opponentCardBack = "cardBackRed"
+        self.seatCardBacks = []
     }
-    
+
     private func prepareOpponentsTurnForAnimation(state: Crazy8sLegacyGameState) -> Bool {
         guard turnNumber > 0 else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
@@ -511,6 +542,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             seatList.append(Self.unclaimedSeat)
         }
         
+        let myCardBack = CardBackSelection.shared.selectedName
+
         if seats.count == 2 { //1v1 game mode , create legacy game state for now
             let legacyState = Crazy8sLegacyGameState(
                 sessionID: newSessionID,
@@ -522,11 +555,14 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 didDiscard: false,
                 activeSuitOverride: nil,
                 turnNumber: 0,
+                senderCardBack: myCardBack
             )
             self.isSinglePlayer = true
             return try? JSONEncoder().encode(legacyState)
-            
+
         } else { //we have a groupchat
+            var initialBacks = Array(repeating: "cardBackRed", count: playerCount)
+            initialBacks[0] = myCardBack
             let initialState = Crazy8sV2GameState(
                 sessionID: newSessionID,
                 deck: newDeck,
@@ -537,7 +573,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 turnNumber: 0,
                 cardsDrawnByLastPlayer: 0,
                 lastPlayerDidDiscard: false,
-                activeSuitOverride: nil
+                activeSuitOverride: nil,
+                seatCardBacks: initialBacks
             )
             self.isSinglePlayer = false
             return try? JSONEncoder().encode(initialState)
@@ -576,6 +613,12 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         let isLobbyNowFull = !updatedSeats.contains(Self.unclaimedSeat)
         let nextSeatIndex = isLobbyNowFull ? updatedSeats.firstIndex(of: localParticipantID)! : state.currentSeatIndex
 
+        var updatedBacks = state.seatCardBacks ?? Array(repeating: "cardBackRed", count: state.seats.count)
+        if updatedBacks.count < updatedSeats.count {
+            updatedBacks.append(contentsOf: Array(repeating: "cardBackRed", count: updatedSeats.count - updatedBacks.count))
+        }
+        updatedBacks[openIndex] = CardBackSelection.shared.selectedName
+
         let updatedState = Crazy8sV2GameState(
             sessionID: state.sessionID,
             deck: state.deck,
@@ -586,7 +629,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             turnNumber: state.turnNumber + 1,
             cardsDrawnByLastPlayer: 0,
             lastPlayerDidDiscard: false,
-            activeSuitOverride: state.activeSuitOverride)
+            activeSuitOverride: state.activeSuitOverride,
+            seatCardBacks: updatedBacks)
 
         return try? JSONEncoder().encode(updatedState)
     }
@@ -611,7 +655,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             cardsOpponentDrew: self.cardsDrawnThisTurn,
             didDiscard: self.userDidDiscard,
             activeSuitOverride: activeSuitOverride,
-            turnNumber: self.turnNumber + 1
+            turnNumber: self.turnNumber + 1,
+            senderCardBack: CardBackSelection.shared.selectedName
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
@@ -632,6 +677,14 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
 
         let nextSeat = (mySeatIndex + 1) % seats.count
 
+        var outgoingBacks = seatCardBacks
+        if outgoingBacks.count < seats.count {
+            outgoingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: seats.count - outgoingBacks.count))
+        }
+        if outgoingBacks.indices.contains(mySeatIndex) {
+            outgoingBacks[mySeatIndex] = CardBackSelection.shared.selectedName
+        }
+
         let currentGameState = Crazy8sV2GameState(
             sessionID: self.sessionID!,
             deck: self.deck,
@@ -642,7 +695,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             turnNumber: self.turnNumber + 1,
             cardsDrawnByLastPlayer: self.cardsDrawnThisTurn,
             lastPlayerDidDiscard: self.userDidDiscard,
-            activeSuitOverride: self.activeSuitOverride
+            activeSuitOverride: self.activeSuitOverride,
+            seatCardBacks: outgoingBacks
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
@@ -651,7 +705,10 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         }
 
         self.turnNumber += 1
+        // Mark our seat as the one who just played so the deck immediately reflects the next player's back.
+        self.seatCardBacks = outgoingBacks
+        self.animatingOpponentSeat = mySeatIndex
         self.onTurnCompleted?(stateData, .crazy8s)
     }
-    
+
 }

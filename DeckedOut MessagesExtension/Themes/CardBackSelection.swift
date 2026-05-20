@@ -24,6 +24,12 @@ final class CardBackSelection: ObservableObject {
         return UIImage(named: candidate) != nil ? candidate : selectedName
     }
 
+    /// Accent color of the currently selected theme. Falls back to `salmonRed` if the
+    /// stored card-back name doesn't match a known theme (e.g. a removed/renamed asset).
+    var selectedColor: Color {
+        return CardBackTheme.theme(forLogoCard: selectedName)?.primaryColor ?? Color("salmonRed")
+    }
+
     private init() {
         self.selectedName = UserDefaults.standard.string(forKey: storageKey) ?? Self.defaultName
     }

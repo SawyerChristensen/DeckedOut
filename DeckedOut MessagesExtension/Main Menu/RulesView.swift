@@ -12,6 +12,7 @@ struct RulesView: View {
     var isExpanded: Bool = false
     var onDismiss: () -> Void
     
+    @ObservedObject private var cardBackSelection = CardBackSelection.shared
     @State private var currentPage: Int = 0
     @ScaledMetric(relativeTo: .body) private var scale: CGFloat = 1.0 //padding needs to shrink as text size increases. iOS does not do this automatically
     
@@ -49,9 +50,9 @@ struct RulesView: View {
                         .font(.system(size: 45))
                         .frame(width: 50, height: 50)
                         .foregroundStyle(
-                            .white,     // Primary (Layer 1)
-                            Color("salmonRed"), // Secondary (Layer 2)
-                            .black      // Tertiary (Layer 3)
+                            .white,                              // Primary (Layer 1)
+                            cardBackSelection.selectedColor,     // Secondary (Layer 2) — matches equipped theme
+                            .black                               // Tertiary (Layer 3)
                         )
                         .applyGradientSymbolColor()
                         //.shadow(color: .white.opacity(0.3), radius: 3)

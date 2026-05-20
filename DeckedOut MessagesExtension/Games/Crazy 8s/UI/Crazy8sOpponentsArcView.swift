@@ -37,10 +37,14 @@ struct Crazy8sOpponentsArcView: View {
     // MARK: 1v1 view
     var body: some View {
         if game.isSinglePlayer || game.seats.count <= 2 {
+            let opponentSeat = game.seats.indices.contains(game.mySeatIndex)
+                ? (game.mySeatIndex + 1) % max(game.seats.count, 1)
+                : 0
             Crazy8sOpponentHandView(
                 cards: game.opponentHand,
                 discardPileZone: discardPileZone,
-                deckZone: deckZone
+                deckZone: deckZone,
+                cardBackName: game.isSinglePlayer ? game.opponentCardBack : game.cardBack(forSeat: opponentSeat)
             )
         } else {
             multiOpponentArc
@@ -69,9 +73,10 @@ struct Crazy8sOpponentsArcView: View {
                             deckZone: deckZone,
                             sizeScale: handScale,
                             handRotation: pos.rotation,
+                            cardBackName: game.cardBack(forSeat: seatIndex)
                         )
                     } else if seatIndex < game.allHands.count {
-                        staticOpponentHand(cards: game.allHands[seatIndex])
+                        staticOpponentHand(cards: game.allHands[seatIndex], cardBackName: game.cardBack(forSeat: seatIndex))
                             .rotationEffect(.degrees(pos.rotation))
                     }
                 }
@@ -125,7 +130,7 @@ struct Crazy8sOpponentsArcView: View {
     }
 
     @ViewBuilder
-    private func staticOpponentHand(cards: [Card]) -> some View {
+    private func staticOpponentHand(cards: [Card], cardBackName: String = "cardBackRed") -> some View {
         let cardW: CGFloat = (cards.count >= 10 ? 98 : 101.5) * handScale
         let cardH: CGFloat = (cards.count >= 10 ? 140 : 145) * handScale
         let sp: CGFloat = (cards.count >= 10 ? -72 : -66) * handScale
@@ -140,7 +145,7 @@ struct Crazy8sOpponentsArcView: View {
                 let yOff = -abs((Double(idx) - center) * yMult)
                 let reveal: Double = game.isGameOver ? 360 : 180
 
-                CardView(frontImage: card.imageName, backImageName: "cardBackRed", cardHeight: cardH, rotation: reveal)
+                CardView(frontImage: card.imageName, backImageName: cardBackName, cardHeight: cardH, rotation: reveal)
                     .rotationEffect(angle)
                     .offset(y: yOff)
                     .shadow(color: .black.opacity(0.25), radius: 20)
