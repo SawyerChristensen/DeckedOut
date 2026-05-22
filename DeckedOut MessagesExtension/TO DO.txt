@@ -1,13 +1,8 @@
--need restore purchases button (i sf symbol next to purchaseable names?) or the price?
-
-***----------*** UPDATE 3.1.0 ***----------***
-
 -make theme titles match their fonts?
 
--add more in app purchases localizations in the app store
+-add more in app purchase localizations in the app store
 
 -more localized storefronts
-
 
 ***----------*** UPDATE 3.1.1 ***----------***
 

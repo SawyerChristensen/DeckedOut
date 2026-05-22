@@ -17,7 +17,7 @@ struct ThemeCardWheel: View {
     private var spacing: CGFloat { -95 }
     private var stepWidth: CGFloat { cardWidth + spacing }
     private var fanningAngle: Double { 10 }
-    private let visibleCount = 15 // Number of cards visible in the wheel at once
+    private let visibleCount = 21 // Number of cards visible in the wheel at once
 
     @State private var currentCenterIndex: Int
     @State private var previousVirtualIndex: Int

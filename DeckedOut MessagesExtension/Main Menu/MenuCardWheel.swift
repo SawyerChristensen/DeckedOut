@@ -27,7 +27,7 @@ struct MenuCardWheel: View {
     private var spacing: CGFloat { hasSelectedGame ? -30 : -95 }
     private var stepWidth: CGFloat { cardWidth + spacing }
     private var fanningAngle: Double { hasSelectedGame ? 16 : 10 }
-    private let visibleCount = 15 // Number of cards visible in the wheel at once
+    private let visibleCount = 21 // Number of cards visible in the wheel at once
     
     @State private var currentCenterIndex: Int = 0 //the default game that is shown when opening the main menu
     @State private var previousVirtualIndex: Int = 0 // Tracks previous virtual index so we can determine swipe direction

@@ -42,6 +42,10 @@ struct MainMenuView: View {
     private static var themes: [CardBackTheme] { CardBackTheme.all }
     private var themes: [CardBackTheme] { CardBackTheme.all }
     private var isThemeSelected: Bool { activeThemeIndex == selectedThemeIndex }
+    private var isActiveThemeWinLocked: Bool {
+        guard let required = themes[activeThemeIndex].requiredWins else { return false }
+        return WinTracker.shared.totalWins < required
+    }
 
     private static func initialSelectedThemeIndex() -> Int {
         let name = CardBackSelection.shared.selectedName
@@ -55,6 +59,9 @@ struct MainMenuView: View {
     @State private var isCardWheelHidden: Bool = false
     @State private var showingRules: Bool = false
     @State private var showingThemes: Bool = false
+    @State private var showingRestore: Bool = false
+    @State private var isRestoring: Bool = false
+    @State private var lastWinsShown: Int = 0 //tracks prior win count so numericText knows which direction to slide
     @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
     private var buttonSize: CGFloat { isExpanded ? scaledButtonUnit * 7 : scaledButtonUnit * 4 }
     let isIpad = UIDevice.current.userInterfaceIdiom == .pad
@@ -171,20 +178,32 @@ struct MainMenuView: View {
                     Text("\(availableGames[activeGameIndex].wins) Wins")
                         .foregroundColor(.white)
                         .shadow(color: .white.opacity(0.33), radius: 5)
+                        .contentTransition(.numericText(countsDown: availableGames[activeGameIndex].wins < lastWinsShown))
+                        .animation(.snappy, value: availableGames[activeGameIndex].wins)
+                        .onChange(of: availableGames[activeGameIndex].wins) { _, newValue in
+                            lastWinsShown = newValue
+                        }
                 }
+                .fixedSize(horizontal: true, vertical: false)
                 .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
 
                 // Price face
                 priceText
                     .foregroundColor(.white)
                     .shadow(color: .white.opacity(0.33), radius: 5)
+                    .fixedSize(horizontal: true, vertical: false)
+                    .id(priceTextKey) //distinct labels get distinct identities so the slide only fires when the displayed text actually changes
+                    .transition(.asymmetric(
+                        insertion: .move(edge: themeTitleTransitionEdge).combined(with: .opacity),
+                        removal: .move(edge: themeTitleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+                    ))
+                    .animation(.easeInOut, value: activeThemeIndex) //animates only on theme swipes — internal state toggles snap
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
                     .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
             }
             .font(isExpanded ? .headline : .subheadline)
             .fontWeight(.medium)
             .padding(.top, isExpanded ? 15 : 0)
-            .contentTransition(.interpolate)
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isExpanded)
             .scaleEffect(isExpanded ? 1.2 : 1)
             .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
@@ -305,7 +324,7 @@ struct MainMenuView: View {
             showingThemes: showingThemes,
             onActiveIndexChange: { newIndex, direction in
                 if activeThemeIndex != newIndex {
-                    themeTitleTransitionEdge = direction
+                    themeTitleTransitionEdge = (direction == .trailing) ? .leading : .trailing
                     withAnimation(.easeInOut(duration: 0.2)) {
                         activeThemeIndex = newIndex
                     }
@@ -391,7 +410,11 @@ struct MainMenuView: View {
                 
             } else if !isThemeSelected { // Selecting a NEW theme
                 let theme = themes[activeThemeIndex]
-                if store.isOwned(theme.productID) {
+                if let required = theme.requiredWins, WinTracker.shared.totalWins < required {
+                    // Win-locked theme — block selection with an error haptic
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.error)
+                } else if store.isOwned(theme.productID) {
                     commitThemeSelection()
                 } else if let productID = theme.productID {
                     Task {
@@ -442,7 +465,7 @@ struct MainMenuView: View {
                     .contentTransition(.symbolEffect(.replace))
                     .symbolEffect(.bounce, value: selectedThemeIndex)
                     .applyGradientSymbolColor()
-                    .saturation(showingThemes && isThemeSelected ? 0 : 1)
+                    .saturation(showingThemes && (isThemeSelected || isActiveThemeWinLocked) ? 0 : 1)
                     .shadow(color: .black.opacity(0.15), radius: 5, x: 5, y: 5)
                     .scaleEffect(buttonSize / iconRenderSize)
                     .frame(width: buttonSize, height: buttonSize)
@@ -461,6 +484,20 @@ struct MainMenuView: View {
         }
     }
 
+    //distills the priceText into a stable key — identical labels (e.g. two Owned themes) share an id so no slide fires
+    private var priceTextKey: String {
+        let theme = themes[activeThemeIndex]
+        if let required = theme.requiredWins, WinTracker.shared.totalWins < required {
+            return "winlock:\(required)"
+        }
+        guard let productID = theme.productID else { return "owned" }
+        if store.isOwned(productID) { return "owned" }
+        if isRestoring { return "restoring" }
+        if showingRestore { return "restore" }
+        if let price = store.displayPrice(for: productID) { return "price:\(price)" }
+        return "loading"
+    }
+
     private func commitThemeSelection() {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
@@ -473,16 +510,56 @@ struct MainMenuView: View {
     @ViewBuilder
     private var priceText: some View {
         let theme = themes[activeThemeIndex]
-        if let productID = theme.productID {
-            if store.isOwned(productID) {
-                Text("Owned")
-            } else if let price = store.displayPrice(for: productID) {
-                Text(price)
-            } else {
-                Text(verbatim: "—") // products still loading or fetch failed
+        let isWinLocked = (theme.requiredWins.map { WinTracker.shared.totalWins < $0 }) ?? false
+        let isOwned = !isWinLocked && (theme.productID == nil || store.isOwned(theme.productID!))
+        Group {
+            if isWinLocked, let required = theme.requiredWins {
+                HStack(spacing: 4) {
+                    Image(systemName: "lock.fill")
+                    Text(required == 1 ? "Win a game" : "Win two games")
+                }
+            } else if isOwned {
+                Text("Owned") //single branch covers both free themes and paid-but-owned themes so SwiftUI sees no structural change between them
+            } else if let productID = theme.productID {
+                if isRestoring {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(.white)
+                } else if showingRestore {
+                    Button {
+                        Task {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                isRestoring = true
+                            }
+                            await store.restore()
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                isRestoring = false
+                                showingRestore = false
+                            }
+                        }
+                    } label: {
+                        Text("Restore Purchases").underline()
+                    }
+                    .buttonStyle(.plain)
+                } else if let price = store.displayPrice(for: productID) {
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                            showingRestore = true
+                        }
+                    } label: {
+                        Text(price).underline()
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    Text(verbatim: "—") // products still loading or fetch failed
+                }
             }
-        } else {
-            Text("Owned")
+        }
+        .onChange(of: activeThemeIndex) { _, _ in
+            showingRestore = false
+        }
+        .onChange(of: showingThemes) { _, newValue in
+            if !newValue { showingRestore = false }
         }
     }
     

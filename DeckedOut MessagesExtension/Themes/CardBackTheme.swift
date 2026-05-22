@@ -13,6 +13,8 @@ struct CardBackTheme: Identifiable {
     var logoCard: String
     /// App Store Connect non-consumable IAP product ID. `nil` means this theme is free.
     var productID: String?
+    /// Total wins (across all games) required to unlock this theme. `nil` means no win gate.
+    var requiredWins: Int? = nil
     var primaryColor: Color //accent color used in Rules view
     var secondaryColor: Color = .white
 }
@@ -24,13 +26,15 @@ extension CardBackTheme {
         CardBackTheme(title: "Classic Blue",
                       logoCard: "cardBackBlue",
                       productID: nil, //included
+                      requiredWins: 2,
                       primaryColor: Color(red: 0, green: 84/255, blue: 166/255)),
-        
+
         CardBackTheme(title: "Classic Purple",
                       logoCard: "cardBackPurple",
                       productID: nil, //included
+                      requiredWins: 1,
                       primaryColor: Color(red: 100/255, green: 0, blue: 200/255)),
-        
+
         CardBackTheme(title: "Classic Red",
                       logoCard: "cardBackRed",
                       productID: nil, //included
