@@ -1,21 +1,47 @@
+-Add Accessibility features
+    -Standalone background implementation (DONE)
+    -Show button shapes (DONE)
+    -Increase Contrast (DONE)
+    -Voice Control:
+        -Transcript (DONE)
+        -Gin (DONE)
+        -Crazy 8s (DONE)
+        -Golf (DONE)
+        -Main menu (DONE)
+        -Theme menu (DONE)
+            
+        -Going to compact after move to manually send?
+        -disable main menu accessibily elements if we are in a submenu (TEST)
+        
+        
+    -Reduce Motion should make all main menu transitions instant and turn off hand transcript animations
+    
+-discarding by voice does not account for the arc. cards lower in the arc show up at the discard pile lower than cards who are higher in the arc
+
 -opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top (opponent hand sometimes clips above deck in groupchat modes)
 
--draw to discard shadow in golf is sudden
+-draw to discard shadow animation in golf is sudden?
 
--Add Accessibility features
-    -increased text side makes the selected: spades appear lower. the padding above the card needs to be dynamic
-    -moms colors are also weird, (see shadow glows)
-    -Larger Text (mostly complete, add scrollable rules view for truly massive text)
-    -Reduced Motion (all animations turned off/instant)
-    -Differentiate without color alone (pretty sure this is already done)
-    
--review localized "start game" button sizes
-    
-***----------*** UPDATE 3.2.0 ***----------***
+-make winYellow normal yellow
+
+-background should only be dark with incresed contrast
+
+-sent messages from opponent should have their card back in the thumbnail, users card back if from user
+
+-localize all accessibility labels
+
+-adjust prices of IAPs in app store
+    -aint nobody buying a card game skin for 50k in vietnam. 10k maybe
+
+***----------*** UPDATE 3.2.0 ACCESSIBILITY UPDATE ***----------***
+
+-GameCenter achievements (button on main menu?)
+
+***----------*** UPDATE 3.3.0 ACCESSIBILITY UPDATE ***----------*** NOMINATE!
 
 -add Dou Dizhu (Chinese, 3 player by default)
 
-***----------*** UPDATE 4.0.0 ***----------***
+***----------*** UPDATE 4.0.0 DOU DIZHU UPDATE ***----------***
 
 -add mau mau variant of crazy 8s and the one for turkish?
 
@@ -23,7 +49,7 @@
 
 -see if getting rid of legacy (pre 3.0 groupchat update) load states functions is advisable? if everyone is already updated? it doesnt hurt to keep them. could prevent crashes for stragglers
 
-***----------*** UPDATE 5.0.0 ***----------***
+***----------*** UPDATE 5.0.0 5th GAME UPDATE ***----------***
 
 Ads $$$
 
@@ -78,6 +104,8 @@ Customizations to sell:
 
 
 QOL changes / possible updates:
+-Differentiate without color alone should make the main menu icons white outlines again
+-accessibility show numbers still rank cards vertically on the fan rather than left to right
 -look into why arrow replace animation isnt doing the same animation seen in SF Symbols
 -look into deprecating isSinglePlayer? (just check seats.count)
 -usernames? in groupchat settings?

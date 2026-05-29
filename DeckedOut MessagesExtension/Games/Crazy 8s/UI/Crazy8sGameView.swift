@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Crazy8sGameView: View {
     @EnvironmentObject var game: Crazy8sManager
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
     @ObservedObject private var cardBackSelection = CardBackSelection.shared
 
     @State private var deckFrame: CGRect = .zero
@@ -18,13 +18,11 @@ struct Crazy8sGameView: View {
     @State private var isHoveringDiscard: Bool = false
     @State private var isDraggedCardPlayable: Bool = false
     @State private var showRules: Bool = false
-    @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
-    private var buttonSize: CGFloat { scaledButtonUnit * 4 }
+    @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
+    @ScaledMetric(relativeTo: .title) var suitTextOffset: CGFloat = -100
     
     var body: some View {
         ZStack {
-            backgroundView
-            
             VStack {
                 opponentsHand
                 Spacer()
@@ -32,21 +30,15 @@ struct Crazy8sGameView: View {
                 deckAndDiscard
                 rulesButtonSection
                 playersHand
-                
+
             }
         }
+        .background(FeltBackgroundView())
         .overlay {
             if game.userNeedsToChooseSuit {
                 SuitSelectionOverlay()
             }
-            
-            if showRules {
-                RulesView(gameType: .crazy8s, isExpanded: true, onDismiss: { showRules = false })
-                    .frame(maxWidth: UIScreen.main.bounds.width)
-                    .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-            }
         }
-        
         .overlay {
             if game.phase == .idlePhase {
                 WaitingOverlayView(
@@ -58,6 +50,14 @@ struct Crazy8sGameView: View {
             else if game.phase == .gameEndPhase {
                 WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "Out!", comment: "Win screen message for Crazy 8s"))
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+            }
+        }
+        .accessibilityHidden(showRules)
+        .overlay {
+            if showRules {
+                RulesView(gameType: .crazy8s, isExpanded: true, onDismiss: { showRules = false })
+                    .frame(maxWidth: UIScreen.main.bounds.width)
+                    .transition(.opacity.animation(.easeInOut(duration: 0.2)))
             }
         }
         .onChange(of: game.turnNumber) { lastTurn, newTurn in
@@ -77,13 +77,6 @@ struct Crazy8sGameView: View {
     
     
     // MARK: - View Sections
-    private var backgroundView: some View {
-        Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .ignoresSafeArea()
-    }
-    
     private var opponentsHand: some View {
         Crazy8sOpponentsArcView(discardPileZone: discardFrame, deckZone: deckFrame)
             .padding(.top, 30)
@@ -97,8 +90,7 @@ struct Crazy8sGameView: View {
             Spacer()
             
             theDeck
-                .onTapGesture { handleDeckTap() }
-            
+
             Spacer()
             Spacer()
             
@@ -147,6 +139,18 @@ struct Crazy8sGameView: View {
                 }
             }
         }
+        .onTapGesture { handleDeckTap() }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Deck", comment: "Voice Control label for drawing a card from the deck"))
+        .accessibilityHint(Text("Draws a card into your hand.", comment: "Context for VoiceOver users"))
+        .accessibilityInputLabels([
+            Text("Deck", comment: "Voice Control input label"),
+            Text("the deck", comment: "Voice Control input label"),
+            Text("Draw from the deck", comment: "Voice Control input label"),
+            Text("Draw from deck", comment: "Voice Control input label")
+        ])
+        .accessibilityAddTraits([.isImage, .isButton])
+        .accessibilityAction { handleDeckTap() }
     }
     
     private func handleDeckTap() {
@@ -181,7 +185,7 @@ struct Crazy8sGameView: View {
                     //.padding(.horizontal, 10)
                     //.padding(.vertical, 6)
                     //.background(Capsule().fill(.black.opacity(0.6)))
-                    .offset(y: -100) //7.5 pizels above the discard
+                    .offset(y: suitTextOffset) //7.5 pixels above the discard
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             
@@ -193,8 +197,30 @@ struct Crazy8sGameView: View {
                     .animation(.easeInOut(duration: 0.2), value: isHoveringDiscard)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(discardPileAccessibilityLabel))
+        .accessibilityAddTraits(.isImage)
     }
-    
+
+    private var discardPileAccessibilityLabel: String {
+        guard let topCard = game.discardPile.last else {
+            return String(localized: "Empty discard pile.", comment: "VoiceOver label when the discard pile has no cards")
+        }
+        let topCardDescription = String(
+            format: String(localized: "Top card: %@ of %@.", comment: "VoiceOver label for the top card of the discard pile, e.g. Top card: Queen of Hearts."),
+            topCard.rank.localizedName,
+            topCard.suit.localizedName
+        )
+        if let activeSuit = game.activeSuitOverride {
+            let activeSuitDescription = String(
+                format: String(localized: "Active suit: %@.", comment: "VoiceOver label for the suit chosen after an 8 was played"),
+                activeSuit.localizedName
+            )
+            return "\(topCardDescription) \(activeSuitDescription)"
+        }
+        return topCardDescription
+    }
+
     private var rulesButtonSection: some View {
         Spacer()
             .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width)
@@ -207,20 +233,36 @@ struct Crazy8sGameView: View {
                             showRules = true
                         }
                     }) {
-                        //HStack {
+                        HStack {
                             Image(systemName: "text.book.closed")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: buttonSize, height: buttonSize)
-                                .foregroundStyle(.white.opacity(0.5))
-                            
-                            //Text("Rules")
-                                //.font(.title3)
-                                //.fontWeight(.semibold)
-                        //}
-                        //.foregroundStyle(.white.opacity(0.5))
+                                .font(.system(size: rulesButtonSize))
+
+                            if showButtonShapes {
+                                Text("Rules")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
+                        .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+                        .background(
+                            Group {
+                                if showButtonShapes {
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(.ultraThinMaterial)
+                                }
+                            }
+                        )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(Text("Rules", comment: "Voice Control label for opening the rules"))
+                    .accessibilityInputLabels([
+                        Text("Rules", comment: "Voice Control input label"),
+                        Text("the rules", comment: "Voice Control input label"),
+                        Text("Game rules", comment: "Voice Control input label"),
+                        Text("Show rules", comment: "Voice Control input label"),
+                        Text("Show game rules", comment: "Voice Control input label")
+                    ])
                     
                     Spacer()
                 }

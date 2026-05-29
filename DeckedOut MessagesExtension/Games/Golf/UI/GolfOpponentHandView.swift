@@ -71,8 +71,8 @@ struct GolfOpponentHandView: View {
                                 CardView(frontImage: isDeparting ? (departingCardImage ?? card.imageName) : card.imageName,
                                          backImageName: cardBackName,
                                          rotation: isDeparting ? departingRotation : (revealAll || isFaceUp ? 0 : -180))
-                                    .shadow(color: game.opponentHasWon ? .red : .clear, radius: winGlowRadius)
-                                    .shadow(color: game.opponentHasWon ? .red.opacity(0.5) : .clear, radius: winGlowRadius) //for extra red intensity
+                                    .shadow(color: game.opponentHasWon ? Color("lossRed") : .clear, radius: winGlowRadius)
+                                    .shadow(color: game.opponentHasWon ? Color("lossRed").opacity(0.5) : .clear, radius: winGlowRadius) //for extra red intensity
                                     .opacity(isCancelled ? 0.8 : 1.0)
                                     .animation(.easeInOut(duration: 0.3), value: isCancelled)
                                     .scaleEffect(isDeparting ? departingScale : 1.0)

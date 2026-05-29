@@ -94,9 +94,10 @@ struct GolfTranscriptV2: View {
                     }
             }
         )
-        .background(Image("feltBackgroundLight")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-        )
+        .background(FeltBackgroundView())
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("Golf")
+        .accessibilityInputLabels(["Golf", "Card Game", "Golf game", "Golf card game", "Open card game"])
     }
 }

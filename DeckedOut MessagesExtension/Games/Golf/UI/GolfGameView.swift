@@ -10,7 +10,7 @@ import SwiftUI
 
 struct GolfGameView: View {
     @EnvironmentObject var game: GolfManager
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
     @ObservedObject private var cardBackSelection = CardBackSelection.shared
 
     @State private var deckFrame: CGRect = .zero
@@ -34,8 +34,7 @@ struct GolfGameView: View {
     @State private var hideTopDiscard: Bool = false
     @State private var hoveringShadowRadius: CGFloat = 20
     @State private var winGlowRadius: CGFloat = 0
-    @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
-    private var buttonSize: CGFloat { scaledButtonUnit * 4 }
+    @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
     
     /// During the opponent draw-from-discard animation, show the card underneath instead of the top
     private var visibleDiscardCard: Card? {
@@ -74,7 +73,7 @@ struct GolfGameView: View {
             }
         }
         .background(
-            backgroundView
+            FeltBackgroundView()
         )
         .background(
             GeometryReader { geo in
@@ -100,7 +99,9 @@ struct GolfGameView: View {
                 WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "You: \(game.playerScore)\nBest: \(game.opponentScore)", comment: "Win screen message for Golf"))
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
-            
+        }
+        .accessibilityHidden(showRules)
+        .overlay {
             if showRules {
                 RulesView(gameType: .golf, isExpanded: true, onDismiss: { showRules = false })
                     .frame(maxWidth: UIScreen.main.bounds.width)
@@ -127,59 +128,22 @@ struct GolfGameView: View {
     
     
     // MARK: - View Sections
-    private var backgroundView: some View {
-        ZStack(alignment: .top) {
-            Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight")
-                .resizable()
-                .scaledToFill()
-                .frame(
-                    width: UIScreen.main.bounds.width,
-                    height: UIScreen.main.bounds.height,
-                    alignment: .top
-                )
-                .clipped()
-        }
-        .ignoresSafeArea()
-    }
-    
     private var deckAndDiscard: some View {
         HStack {
             Spacer()
             Spacer()
+            
             theDeck
-                .onTapGesture { handleDeckTap() }
-                .gesture(
-                    DragGesture(minimumDistance: 10, coordinateSpace: .global)
-                        .onChanged { value in
-                            handleSourceDrag(source: .deck, location: value.location)
-                        }
-                        .onEnded { value in
-                            handleSourceDragEnd(at: value.location)
-                        }
-                )
             
             Spacer()
-
             rulesButtonSection
                 .padding(.horizontal)
-            
             Spacer()
 
             discardPile
-                .gesture(
-                    DragGesture(minimumDistance: 10, coordinateSpace: .global)
-                        .onChanged { value in
-                            handleSourceDrag(source: .discard, location: value.location)
-                        }
-                        .onEnded { value in
-                            handleSourceDragEnd(at: value.location)
-                        }
-                )
+            
             Spacer()
-            //rulesButtonSection
-                //.padding(.horizontal)
             Spacer()
-            //Spacer()
         }
         .zIndex(1)
     }
@@ -220,6 +184,27 @@ struct GolfGameView: View {
                 }
             }
         }
+        .onTapGesture { handleDeckTap() }
+        .gesture(
+            DragGesture(minimumDistance: 10, coordinateSpace: .global)
+                .onChanged { value in
+                    handleSourceDrag(source: .deck, location: value.location)
+                }
+                .onEnded { value in
+                    handleSourceDragEnd(at: value.location)
+                }
+        )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Deck", comment: "Voice Control label for drawing a card from the deck"))
+        .accessibilityHint(Text("Draws a card.", comment: "Context for VoiceOver users"))
+        .accessibilityInputLabels([
+            Text("Deck", comment: "Voice Control input label"),
+            Text("the deck", comment: "Voice Control input label"),
+            Text("Draw from the deck", comment: "Voice Control input label"),
+            Text("Draw from deck", comment: "Voice Control input label")
+        ])
+        .accessibilityAddTraits([.isImage, .isButton])
+        .accessibilityAction { handleDeckTap() }
     }
     
     private func handleDeckTap() {
@@ -267,6 +252,25 @@ struct GolfGameView: View {
                     .frame(width: 91, height: 130)
             }
         }
+        .gesture(
+            DragGesture(minimumDistance: 10, coordinateSpace: .global)
+                .onChanged { value in
+                    handleSourceDrag(source: .discard, location: value.location)
+                }
+                .onEnded { value in
+                    handleSourceDragEnd(at: value.location)
+                }
+        )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Discard pile", comment: "Voice Control label for drawing a card from the discard pile"))
+        .accessibilityInputLabels([
+            Text("Discard pile", comment: "Voice Control input label"),
+            Text("the discard pile", comment: "Voice Control input label"),
+            Text("Draw from the discard pile", comment: "Voice Control input label"),
+            Text("Draw from discard pile", comment: "Voice Control input label")
+        ])
+        .accessibilityAddTraits([.isImage, .isButton])
+        .accessibilityAction { handleDiscardTap() }
     }
     
     private func handleDiscardTap() {
@@ -320,12 +324,27 @@ struct GolfGameView: View {
                 }
             }) {
                 Image(systemName: "text.book.closed")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: buttonSize, height: buttonSize)
-                    .foregroundStyle(.white.opacity(0.5))
+                    .font(.system(size: rulesButtonSize))
+                    .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
             }
+            .padding(showButtonShapes ? EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8) : EdgeInsets())
+            .background(
+                Group {
+                    if showButtonShapes {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+            )
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("Rules", comment: "Voice Control label for opening the rules"))
+            .accessibilityInputLabels([
+                Text("Rules", comment: "Voice Control input label"),
+                Text("the rules", comment: "Voice Control input label"),
+                Text("Game rules", comment: "Voice Control input label"),
+                Text("Show rules", comment: "Voice Control input label"),
+                Text("Show game rules", comment: "Voice Control input label")
+            ])
             .padding(.top, 55)
         }
         .frame(height: 130)
@@ -390,8 +409,8 @@ struct GolfGameView: View {
                 playerSlotFrames[index] = frame
             }
         )
-        .shadow(color: game.playerHasWon ? .yellow : .clear, radius: winGlowRadius)
-        .shadow(color: game.playerHasWon ? .yellow.opacity(0.5) : .clear, radius: winGlowRadius) //to increase the yellow's intensity
+        .shadow(color: game.playerHasWon ? Color("winYellow") : .clear, radius: winGlowRadius)
+        .shadow(color: game.playerHasWon ? Color("winYellow").opacity(0.5) : .clear, radius: winGlowRadius) //to increase the yellow's intensity
         .onAppear {
             if game.playerHasWon {
                 withAnimation(.linear(duration: 0.67)) {

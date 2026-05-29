@@ -31,6 +31,11 @@ struct GinPlayerHandView: View {
     @State private var animationOffset: CGSize = .zero
     @State private var animationRotationCorrection: Angle = .zero
     @State private var flipRotation: Double = 0
+
+    // For Voice Control–triggered discards (animates a card to the discard pile without a drag)
+    @State private var voiceDiscardingCard: Card?
+    @State private var voiceDiscardOffset: CGSize = .zero
+    @State private var voiceDiscardRotation: Angle = .zero
     
     // Card sizing
     private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 } // 140 * 0.7 & 145 * 0.7
@@ -57,6 +62,8 @@ struct GinPlayerHandView: View {
                         return calculateDragRotation(height: dragOffset.height, angle: angle)
                     } else if isAnimating {
                         return animationRotationCorrection
+                    } else if voiceDiscardingCard == card {
+                        return voiceDiscardRotation
                     } else {
                         return angle
                     }
@@ -65,14 +72,25 @@ struct GinPlayerHandView: View {
                 GeometryReader { geo in
                     let geoFrame = geo.frame(in: .global)
                     
-                    CardView(frontImage: card.imageName,
-                             rotation: isAnimating ? flipRotation : 0)
+                    CardView(frontImage: card.imageName, rotation: isAnimating ? flipRotation : 0)
+                        // Transforms
                         .rotationEffect(finalRotation)
                         .offset(x: isDragging ? .zero : xOffset, y: isDragging ? .zero : yOffset) //for the arc
                         .scaleEffect(isDragging ? 1.1 : 1.0)
                         .offset(isDragging ? dragOffset : .zero) //for dragging
                         //.rotationEffect(isAnimating ? animationRotationCorrection : .degrees(0))
                         .offset(isAnimating ? animationOffset : .zero)
+                        .offset(voiceDiscardingCard == card ? voiceDiscardOffset : .zero)
+                    
+                        // Accessibility configuration
+                        .contentShape(Rectangle())
+                        .accessibilityElement(children: .ignore)
+                        //.accessibilitySortPriority(Double(cards.count - visualIndex)) does not affect numbers at present
+                        .accessibilityLabel(Text(accessibilityLabel(for: card)))
+                        .accessibilityInputLabels(accessibilityInputLabels(for: card))
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityAction { voiceDiscard(card: card, from: geoFrame, fanAngle: angle) }
+                    
                         .gesture(
                             DragGesture(coordinateSpace: .global)
                                 .onChanged { value in
@@ -198,6 +216,49 @@ struct GinPlayerHandView: View {
         return realIndex
     }
     
+    private func accessibilityLabel(for card: Card) -> String {
+        String(
+            format: String(localized: "%@ of %@", comment: "Voice Control card name, e.g. Queen of Hearts"),
+            card.rank.localizedName,
+            card.suit.localizedName
+        )
+    }
+
+    private func accessibilityInputLabels(for card: Card) -> [Text] {
+        let rank = card.rank.localizedName
+        let suit = card.suit.localizedName
+        let base = "\(rank) of \(suit)"
+        let bare = "\(rank) \(suit)"
+        return [
+            Text(base),
+            Text("the \(base)"),
+            Text(bare),
+        ]
+    }
+
+    private func voiceDiscard(card: Card, from cardFrame: CGRect, fanAngle: Angle) {
+        guard game.phase == .discardPhase, let discardZone = discardPileZone else {
+            SoundManager.instance.playErrorFeedback()
+            return
+        }
+        voiceDiscardingCard = card
+        voiceDiscardRotation = fanAngle
+        let offset = CGSize(
+            width: discardZone.midX - cardFrame.midX,
+            height: discardZone.midY - cardFrame.midY
+        )
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+            voiceDiscardOffset = offset
+            voiceDiscardRotation = .zero
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+            game.discardCard(card: card)
+            voiceDiscardingCard = nil
+            voiceDiscardOffset = .zero
+            voiceDiscardRotation = .zero
+        }
+    }
+
     private func calculateDragRotation(height: CGFloat, angle: Angle) -> Angle {
         // 1. The height at which the card should be fully straight (0 degrees)
         let rotationStopThreshold: CGFloat = 250.0

@@ -10,7 +10,8 @@ import SwiftUI
 
 struct GinGameView: View {
     @EnvironmentObject var game: GinRummyManager
-    @Environment(\.colorScheme) var colorScheme
+    //@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+    @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
     @ObservedObject private var cardBackSelection = CardBackSelection.shared
 
     @State private var deckFrame: CGRect = .zero
@@ -18,14 +19,11 @@ struct GinGameView: View {
     @State private var lastDrawSource: DrawSource = .none
     @State private var isHoveringDiscard: Bool = false
     @State private var showRules: Bool = false
-    @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
-    private var buttonSize: CGFloat { scaledButtonUnit * 4 }
     @State private var handShadowRadius: CGFloat = 5
+    @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
     
     var body: some View {
         ZStack {
-            backgroundView
-            
             VStack {
                 opponentsHand
                 Spacer()
@@ -33,9 +31,10 @@ struct GinGameView: View {
                 deckAndDiscard
                 rulesButtonSection
                 playersHand
-                
+
             }
         }
+        .background(FeltBackgroundView())
         .overlay {
             if game.phase == .idlePhase {
                 WaitingOverlayView(
@@ -48,7 +47,9 @@ struct GinGameView: View {
                 WinScreenView(playerHasWon: game.playerHasWon, winMessage: String(localized: "Gin Rummy!", comment: "Win screen message for Gin Rummy"))
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             }
-            
+        }
+        .accessibilityHidden(showRules)
+        .overlay {
             if showRules {
                 RulesView(gameType: .ginRummy, isExpanded: true, onDismiss: { showRules = false })
                     .frame(maxWidth: UIScreen.main.bounds.width)
@@ -72,13 +73,6 @@ struct GinGameView: View {
     
     
     // MARK: - View Sections
-    private var backgroundView: some View {
-        Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .ignoresSafeArea()
-    }
-    
     private var opponentsHand: some View {
         GinOpponentsArcView(discardPileZone: discardFrame, deckZone: deckFrame)
             .padding(.top, 25)
@@ -92,11 +86,10 @@ struct GinGameView: View {
             Spacer()
             
             theDeck
-                .onTapGesture { handleDeckTap() }
-            
+
             Spacer()
             Spacer()
-            
+
             discardPile
             
             Spacer()
@@ -142,6 +135,18 @@ struct GinGameView: View {
                 }
             }
         }
+        .onTapGesture { handleDeckTap() }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Deck", comment: "Voice Control label for drawing a card from the deck"))
+        .accessibilityHint(Text("Draws a card into your hand.", comment: "Context for VoiceOver users"))
+        .accessibilityInputLabels([
+            Text("Deck", comment: "Voice Control input label"),
+            Text("the deck", comment: "Voice Control input label"),
+            Text("Draw from the deck", comment: "Voice Control input label"),
+            Text("Draw from deck", comment: "Voice Control input label")
+        ])
+        .accessibilityAddTraits([.isImage, .isButton])
+        .accessibilityAction { handleDeckTap() }
     }
     
     private func handleDeckTap() {
@@ -183,6 +188,16 @@ struct GinGameView: View {
                     .frame(width: 101.5, height: 145)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Discard pile", comment: "Voice Control label for drawing a card from the discard pile"))
+        .accessibilityInputLabels([
+            Text("Discard pile", comment: "Voice Control input label"),
+            Text("the discard pile", comment: "Voice Control input label"),
+            Text("Draw from the discard pile", comment: "Voice Control input label"),
+            Text("Draw from discard pile", comment: "Voice Control input label")
+        ])
+        .accessibilityAddTraits([.isImage, .isButton])
+        .accessibilityAction { handleDiscardTap() }
     }
     
     private func handleDiscardTap() {
@@ -207,24 +222,40 @@ struct GinGameView: View {
                             showRules = true
                         }
                     }) {
-                        //HStack {
+                        HStack {
                             Image(systemName: "text.book.closed")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: buttonSize, height: buttonSize)
-                                .foregroundStyle(.white.opacity(0.5))
-                            
-                            //Text("Rules")
-                                //.font(.title3)
-                                //.fontWeight(.semibold)
-                        //}
-                        //.foregroundStyle(.white.opacity(0.5))
+                                .font(.system(size: rulesButtonSize))
+
+                            if showButtonShapes {
+                                Text("Rules")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
+                        .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+                        .background(
+                            Group {
+                                if showButtonShapes {
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(.ultraThinMaterial)
+                                }
+                            }
+                        )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(Text("Rules", comment: "Voice Control label for opening the rules"))
+                    .accessibilityInputLabels([
+                        Text("Rules", comment: "Voice Control input label"),
+                        Text("the rules", comment: "Voice Control input label"),
+                        Text("Game rules", comment: "Voice Control input label"),
+                        Text("Show rules", comment: "Voice Control input label"),
+                        Text("Show game rules", comment: "Voice Control input label")
+                    ])
                     
                     Spacer()
                 }
-                .padding(.top, 15)
+                .padding(.top, 10)
                 .padding(.horizontal, 30)
             )
     }
@@ -243,7 +274,7 @@ struct GinGameView: View {
             }
         )
         .padding(.bottom, 40)
-        .shadow(color: game.playerHasWon ? .yellow : .black.opacity(0.25), radius: handShadowRadius, x: (handShadowRadius - 5) / 2) //when handShadowRadius is 15 or 5 it results in offsets of 5 and 0
+        .shadow(color: game.playerHasWon ? Color("winYellow") : .black.opacity(0.25), radius: handShadowRadius, x: (handShadowRadius - 5) / 2) //when handShadowRadius is 15 or 5 it results in offsets of 5 and 0
         .onAppear {
             if game.playerHasWon {
                 withAnimation(.linear(duration: 1)) {

@@ -47,9 +47,10 @@ struct Crazy8sTranscriptInvite: View {
                     }
             }
         )
-        .background(Image("feltBackgroundLight")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-        )
+        .background(FeltBackgroundView())
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("Crazy 8s")
+        .accessibilityInputLabels(["Crazy 8s", "Card Game", "Crazy 8s game", "Crazy 8s Invite", "Crazy 8s Game Invite", "Crazy 8s card game", "Open card game"])
     }
 }

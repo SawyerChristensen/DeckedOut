@@ -46,12 +46,7 @@ struct JoinGameView: View {
 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            Image("feltBackgroundLight")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
-        )
+        .background(FeltBackgroundView())
         .onChange(of: needsToJoin) { _, newValue in
             if newValue { isJoining = false }
         }

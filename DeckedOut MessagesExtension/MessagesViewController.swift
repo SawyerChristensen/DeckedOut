@@ -291,11 +291,7 @@ class MessagesViewController: MSMessagesAppViewController {
                 .multilineTextAlignment(.center)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(
-                    Image("feltBackgroundLight")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                )
+                .background(FeltBackgroundView())
         }
     }
     
@@ -511,6 +507,11 @@ class MessagesViewController: MSMessagesAppViewController {
                 self.activeGameEngine?.clearMidTurnState(conversationID: conversation.localParticipantIdentifier.uuidString)
             }
         }
+
+        // VoiceOver users don't generate a "recent touch interaction" with their move, so conversation.send only stages the message in the input field instead of sending it. Collapsing to compact surfaces the input field with the Send button so the user knows to send manually.
+        if UIAccessibility.isVoiceOverRunning {
+            requestPresentationStyle(.compact)
+        }
     }
     
     private func sendJoinMessage(session: MSSession, conversation: MSConversation, gameType: GameType, isSinglePlayer: Bool, stateData: Data) {
@@ -546,6 +547,11 @@ class MessagesViewController: MSMessagesAppViewController {
         message.layout = liveLayout
 
         conversation.send(message)
+
+        // VoiceOver users don't generate a "recent touch interaction" with their join, so conversation.send only stages the message in the input field instead of sending it. Collapsing to compact surfaces the input field with the Send button so the user knows to send manually.
+        if UIAccessibility.isVoiceOverRunning {
+            requestPresentationStyle(.compact)
+        }
     }
 
     private func extractGameInfo(from message: MSMessage) -> (type: GameType, data: Data, isSinglePlayer: Bool)? {

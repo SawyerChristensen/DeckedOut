@@ -47,9 +47,10 @@ struct GinTranscriptInvite: View {
                     }
             }
         )
-        .background(Image("feltBackgroundLight")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-        )
+        .background(FeltBackgroundView())
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("Gin")
+        .accessibilityInputLabels(["Gin", "Gin Rummy", "Card Game", "Gin game", "Gin Rummy game", "Gin Rummy Invite", "Gin Rummy Game Invite", "Gin card game", "Gin Rummy card game", "Open card game"])
     }
 }

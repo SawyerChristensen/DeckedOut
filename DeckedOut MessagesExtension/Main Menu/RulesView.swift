@@ -40,6 +40,16 @@ struct RulesView: View {
                             .symbolRenderingMode(.hierarchical)
                             .foregroundColor(.white.opacity(0.7))
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Close")
+                    .accessibilityHint("Closes the rules window")
+                    .accessibilityInputLabels([
+                        Text("Close rules", comment: "Voice Control input label"),
+                        Text("Dismiss", comment: "Voice Control input label"),
+                        Text("Dismiss rules", comment: "Voice Control input label"),
+                        Text("Exit", comment: "Voice Control input label"),
+                        Text("Exit rules", comment: "Voice Control input label")
+                    ])
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, isExpanded ? 20 : 12)
@@ -150,30 +160,25 @@ private struct RulePage: View {
     @ScaledMetric(relativeTo: .body) private var scale: CGFloat = 1.0 //padding needs to shrink as text size increases. iOS does not do this automatically
     
     var body: some View {
-        VStack(spacing: 12 / pow(scale, 3)) {
-            /*Image(systemName: imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 50)
-                .foregroundStyle(.white.opacity(0.85))
-                .shadow(color: .white.opacity(0.3), radius: 3)
-                .padding(.top, (isExpanded ? 24 : 8) / pow(scale, 3))*/
-            
-            Text(title)
-                .font(.headline)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.top, 8 / pow(scale, 3))
-            
-            Text(description)
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 24 / pow(scale, 2))
-            
-            Spacer()
+        ScrollView {
+            VStack(spacing: 12 / pow(scale, 3)) {
+                Text(title)
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.top, 8 / pow(scale, 3))
+
+                Text(description)
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24 / pow(scale, 2))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 8 / pow(scale, 3))
         }
-        .padding(.top, 8 / pow(scale, 3))
+        .scrollIndicators(.automatic)
+        .scrollBounceBehavior(.basedOnSize)
     }
 }
 

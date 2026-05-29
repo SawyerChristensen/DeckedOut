@@ -11,6 +11,8 @@ import Messages
 struct MainMenuView: View {
     @Environment(\.colorScheme) var colorScheme //for light/dark theme detection
     //@Environment(\.locale) var locale //for language detection
+    @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: MenuViewModel
     private var isExpanded: Bool { viewModel.presentationStyle == .expanded }
     
@@ -66,7 +68,7 @@ struct MainMenuView: View {
     private var buttonSize: CGFloat { isExpanded ? scaledButtonUnit * 7 : scaledButtonUnit * 4 }
     let isIpad = UIDevice.current.userInterfaceIdiom == .pad
   
-    
+    // MARK: - Top Level Parent View
     var body: some View {
         ZStack {
             switch activeSubmenu {
@@ -81,13 +83,14 @@ struct MainMenuView: View {
             }
 
             VStack {// Main view
-                gameTitleBar
+                topSection
 
                 midSection
 
-                cardWheel
+                bottomSection
             }
         }
+        .accessibilityHidden(showingRules)
         .overlay {
             if showingRules {
                 RulesView(gameType: availableGames[activeGameIndex].type, isExpanded: isExpanded) {
@@ -98,121 +101,59 @@ struct MainMenuView: View {
                 .transition(.opacity)
             }
         }
-        .background(backgroundLayer)
+        .background(FeltBackgroundView())
         .onAppear {
             preloadWins()
         }
         .task {
             await store.start()
         }
-    }
-    
-    
-    private var backgroundLayer: some View {
-        ZStack {
-            Image("feltBackgroundLight") //Image(colorScheme == .dark ? "feltBackgroundDark" : "feltBackgroundLight")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
-            /*LinearGradient(
-                gradient: Gradient(colors: [Color.white.opacity(0.1), Color.black.opacity(0.1)]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()*/
+        .accessibilityAction(.escape) {
+            if showingThemes { // Closes the themes menu
+                withAnimation(.spring(response: 1, dampingFraction: 0.7)) {
+                    showingThemes = false
+                    activeThemeIndex = selectedThemeIndex
+                }
+            } else if showingRules { // Closes the rules view
+                withAnimation(.easeInOut(duration: 0.4)) {
+                    showingRules = false
+                }
+            } else if isInSubmenu { // Exits the active game submenu
+                withAnimation {
+                    activeSubmenu = nil
+                }
+            } else { // Nothing is open to close, so let the system dismiss the whole view
+                dismiss()
+            }
         }
     }
     
-    private var gameTitleBar: some View {
-        VStack(spacing: isExpanded ? 15 : 5) {
-            ZStack {
-                // Game title face
-                Text(LocalizedStringKey(availableGames[activeGameIndex].title))
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .fontDesign(.serif)
-                    .foregroundColor(.white)
-                    .shadow(color: .white.opacity(0.33), radius: 5)
-                    .id(activeGameIndex)
-                    .transition(.asymmetric(
-                        insertion: .move(edge: titleTransitionEdge).combined(with: .opacity),
-                        removal: .move(edge: titleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
-                    ))
-                    .animation(.easeInOut, value: activeGameIndex)
-                    .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
-
-                // Theme title face — pre-rotated 180° so it shows on the back of the flip
-                Text(LocalizedStringKey(themes[activeThemeIndex].title))
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .fontDesign(.serif)
-                    .foregroundColor(.white)
-                    .shadow(color: .white.opacity(0.33), radius: 5)
-                    .id(activeThemeIndex)
-                    .transition(.asymmetric(
-                        insertion: .move(edge: themeTitleTransitionEdge).combined(with: .opacity),
-                        removal: .move(edge: themeTitleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
-                    ))
-                    .animation(.easeInOut, value: activeThemeIndex)
-                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-                    .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
-            }
-            .padding(.top, isExpanded ? (isIpad ? 30 : 15) : 0) //pretty sure spacing doesnt include safearea - first element
-            .scaleEffect(isExpanded ? 1.2 : 1)
-            .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
-
-            ZStack {
-                // Win counter face
-                HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
-                    Image(systemName: "crown.fill")
-                        .foregroundStyle(LinearGradient(colors: [
-                            Color(red: 1.0, green: 1.0, blue: 0.33), // Bright Yellow at the top
-                                Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish gold at the bottom
-                            ],
-                            startPoint: .top, // or topLeading
-                            endPoint: .bottom // & bottomTrailing
-                        ))
-                        .shadow(color: .orange, radius: 5)
-
-                    Text("\(availableGames[activeGameIndex].wins) Wins")
-                        .foregroundColor(.white)
-                        .shadow(color: .white.opacity(0.33), radius: 5)
-                        .contentTransition(.numericText(countsDown: availableGames[activeGameIndex].wins < lastWinsShown))
-                        .animation(.snappy, value: availableGames[activeGameIndex].wins)
-                        .onChange(of: availableGames[activeGameIndex].wins) { _, newValue in
-                            lastWinsShown = newValue
-                        }
-                }
-                .fixedSize(horizontal: true, vertical: false)
-                .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
-
-                // Price face
-                priceText
-                    .foregroundColor(.white)
-                    .shadow(color: .white.opacity(0.33), radius: 5)
-                    .fixedSize(horizontal: true, vertical: false)
-                    .id(priceTextKey) //distinct labels get distinct identities so the slide only fires when the displayed text actually changes
-                    .transition(.asymmetric(
-                        insertion: .move(edge: themeTitleTransitionEdge).combined(with: .opacity),
-                        removal: .move(edge: themeTitleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
-                    ))
-                    .animation(.easeInOut, value: activeThemeIndex) //animates only on theme swipes — internal state toggles snap
-                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-                    .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
-            }
-            .font(isExpanded ? .headline : .subheadline)
-            .fontWeight(.medium)
-            .padding(.top, isExpanded ? 15 : 0)
-            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isExpanded)
-            .scaleEffect(isExpanded ? 1.2 : 1)
-            .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
+    // MARK: - Top Section
+    private var topSection: some View {
+        VStack(spacing: isExpanded ? 15 : (showButtonShapes ? 0 : 5)) {
             
+            mainTitle
+                .accessibilityRepresentation {
+                    if showingThemes {
+                        themeTitleFace
+                    } else {
+                        gameTitleFace
+                    }
+                }
+
+            mainSubtitle
+                .accessibilityRepresentation {
+                    if showingThemes {
+                        priceFace
+                    } else {
+                        winCounterFace
+                    }
+                }
     
             Divider()
                 .opacity(0)
             
-            Divider()
+            Divider() //a teensy bit silly
                 .opacity(0)
             
         }
@@ -230,8 +171,123 @@ struct MainMenuView: View {
                 .ignoresSafeArea()
         )
         .opacity(isTitleBarHidden ? 0 : 1)
+        .accessibilityHidden(isTitleBarHidden)
     }
     
+    private var mainTitle: some View {
+        ZStack {
+            gameTitleFace
+            
+            themeTitleFace
+        }
+        .padding(.top, isExpanded ? (isIpad ? 30 : 15) : 0) //pretty sure spacing doesnt include safearea - first element
+        .scaleEffect(isExpanded ? 1.2 : 1)
+        .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
+    }
+    
+    private var gameTitleFace: some View {
+        Text(LocalizedStringKey(availableGames[activeGameIndex].title))
+            .font(.largeTitle)
+            .fontWeight(.semibold)
+            .fontDesign(.serif)
+            .foregroundColor(.white)
+            .shadow(color: .white.opacity(0.33), radius: 5)
+            .id(activeGameIndex)
+            .transition(.asymmetric(
+                insertion: .move(edge: titleTransitionEdge).combined(with: .opacity),
+                removal: .move(edge: titleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+            ))
+            .animation(.easeInOut, value: activeGameIndex)
+            .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
+            .accessibilityLabel("Selected game: \(availableGames[activeGameIndex].title)")
+            .accessibilityHidden(showingThemes)
+    }
+    
+    private var themeTitleFace: some View {
+        Text(LocalizedStringKey(themes[activeThemeIndex].title))
+            .font(.largeTitle)
+            .fontWeight(.semibold)
+            .fontDesign(.serif)
+            .foregroundColor(.white)
+            .shadow(color: .white.opacity(0.33), radius: 5)
+            .id(activeThemeIndex)
+            .transition(.asymmetric(
+                insertion: .move(edge: themeTitleTransitionEdge).combined(with: .opacity),
+                removal: .move(edge: themeTitleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+            ))
+            .animation(.easeInOut, value: activeThemeIndex)
+            .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+            .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
+            .accessibilityLabel("Selected theme: \(themes[activeThemeIndex].title)")
+            .accessibilityHidden(!showingThemes)
+    }
+    
+    private var mainSubtitle: some View {
+        ZStack {
+            winCounterFace
+                    
+            priceFace
+        }
+        .font(isExpanded ? .headline : .subheadline)
+        .fontWeight(.medium)
+        .padding(.top, isExpanded ? 15 : 0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isExpanded)
+        .scaleEffect(isExpanded ? 1.2 : 1)
+        .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
+    }
+    
+    private var winCounterFace: some View {
+        HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
+            Image(systemName: "crown.fill")
+                .foregroundStyle(LinearGradient(colors: [
+                    Color(red: 1.0, green: 1.0, blue: 0.33), // Bright Yellow at the top
+                    Color(red: 1.0, green: 0.7, blue: 0.3) // Orangish gold at the bottom
+                ],
+                startPoint: .top, // or topLeading
+                endPoint: .bottom // & bottomTrailing
+                ))
+                .shadow(color: .orange, radius: 5)
+
+            Text("\(availableGames[activeGameIndex].wins) Wins")
+                .foregroundColor(.white)
+                .shadow(color: .white.opacity(0.33), radius: 5)
+                .contentTransition(.numericText(countsDown: availableGames[activeGameIndex].wins < lastWinsShown))
+                .animation(.snappy, value: availableGames[activeGameIndex].wins)
+                .onChange(of: availableGames[activeGameIndex].wins) { _, newValue in
+                    lastWinsShown = newValue
+                }
+        }
+        .fixedSize(horizontal: true, vertical: false)
+        .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
+        .accessibilityElement(children: .ignore) //dont count the crown as a seperate element
+        .accessibilityLabel("\(availableGames[activeGameIndex].title) win count: \(availableGames[activeGameIndex].wins)")
+        .accessibilityHidden(showingThemes)
+    }
+    
+    private var priceFace: some View {
+        priceText
+            .foregroundColor(.white)
+            .shadow(color: .white.opacity(0.33), radius: 5)
+            .fixedSize(horizontal: true, vertical: false)
+            .id(priceTextKey) //distinct labels get distinct identities so the slide only fires when the displayed text actually changes
+            .transition(.asymmetric(
+                insertion: .move(edge: themeTitleTransitionEdge).combined(with: .opacity),
+                removal: .move(edge: themeTitleTransitionEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+            ))
+            .animation(.easeInOut, value: activeThemeIndex) //animates only on theme swipes — internal state toggles snap
+            .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+            .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
+            .accessibilityHidden(!showingThemes)
+            /*.accessibilityRepresentation {
+                if showingThemes {
+                    priceText // Feed VoiceOver the buttons only when the menu is actually open
+                } else {
+                    EmptyView() // Feed VoiceOver nothing. It cannot read what isn't there.
+                }
+            }*/
+    }
+    
+    // MARK: - Mid Section
     private var midSection: some View {
         Spacer()
             .frame(maxWidth: .infinity)
@@ -249,89 +305,18 @@ struct MainMenuView: View {
             )*/
             .overlay(alignment: .leading) {
                 rulesButton
-                    .padding(.leading, isExpanded ? (isIpad ? 250 : 75) : 25)
-                    .padding(.top, isExpanded ? (isIpad ? -120 : -130) : 0)
+                    .padding(.leading, isExpanded ? (isIpad ? 250 : 75) : (showButtonShapes ? 10 : 25))
+                    .padding(.top, isExpanded ? (isIpad ? -120 : -130) : (showButtonShapes ? 20 : 0))
                     .opacity(isTitleBarHidden ? 0 : 1)
+                    .accessibilityHidden(isTitleBarHidden)
             }
             .overlay(alignment: .trailing) {
                 customizationButton
-                    .padding(.trailing, isExpanded ? (isIpad ? 250 : 75) : 25)
-                    .padding(.top, isExpanded ? (isIpad ? 70 : 100) : 0)
+                    .padding(.trailing, isExpanded ? (isIpad ? 250 : 75) : (showButtonShapes ? 10 : 25))
+                    .padding(.top, isExpanded ? (isIpad ? 70 : 100) : (showButtonShapes ? 20 : 0))
                     .opacity(isTitleBarHidden ? 0 : 1)
+                    .accessibilityHidden(isTitleBarHidden)
             }
-    }
-    
-    private var cardWheel: some View {
-        ZStack {
-            // Game wheel — each card flips individually in place when showingThemes toggles.
-            gameCardWheel
-                .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
-                .allowsHitTesting(!showingThemes)
-
-            // Theme wheel — flips in to replace the game wheel; both card faces match.
-            themeCardWheel
-                .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
-                .allowsHitTesting(showingThemes)
-        }
-        //.zIndex(999) //keep the cards on top
-        .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
-        .scaleEffect(isExpanded ? 1.4 : 1.1)
-        .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 40) //40: in compact main menu
-        .opacity(isCardWheelHidden ? 0 : 1)
-    }
-
-    private var gameCardWheel: some View {
-        MenuCardWheel(
-            games: availableGames,
-            showingThemes: showingThemes,
-            onActiveIndexChange: { newIndex, direction in // handle real-time mid-swipe updates
-                if activeGameIndex != newIndex {
-                    titleTransitionEdge = direction
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        activeGameIndex = newIndex
-                    }
-                }
-            },
-            userSelectedGame: { index in // handle selecting a game
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    activeSubmenu = availableGames[index].type
-                }
-                withAnimation(.linear(duration: 0.05).delay(0.12)) { //wait a bit then trigger a fast fade
-                    isTitleBarHidden = true
-                }
-                Task {
-                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
-                    isCardWheelHidden = true //hide AFTER the animation to render the cards invisible so they dont clip in when transitioning between compact and expanded in the subview
-                }
-            },
-            hasSelectedGame: Binding(
-                get: { activeSubmenu != nil },
-                set: { newValue in
-                    if newValue {
-                        activeSubmenu = availableGames[activeGameIndex].type
-                    } else {
-                        activeSubmenu = nil
-                    }
-                }
-            )
-        )
-    }
-
-    private var themeCardWheel: some View {
-        ThemeCardWheel(
-            themes: themes,
-            initialIndex: activeThemeIndex,
-            showingThemes: showingThemes,
-            onActiveIndexChange: { newIndex, direction in
-                if activeThemeIndex != newIndex {
-                    themeTitleTransitionEdge = (direction == .trailing) ? .leading : .trailing
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        activeThemeIndex = newIndex
-                    }
-                }
-            }
-        )
-        .id(themeWheelKey)
     }
     
     private var rulesButton: some View {
@@ -393,10 +378,21 @@ struct MainMenuView: View {
                 }
             }
             .fixedSize(horizontal: true, vertical: false)
+            .padding(showButtonShapes ? (isExpanded ? EdgeInsets(top: 14, leading: 20, bottom: 14, trailing: 20) : EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)) : EdgeInsets())
+            .background(
+                Group {
+                    if showButtonShapes {
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+            )
         }
-        .buttonStyle(.plain) //turns off the accessibility background showing the button shape
+        .buttonStyle(.plain) //turns off the accessibility background showing the button shape we do this manually
+        .accessibilityLabel(showingThemes ? "Back" : "Rules")
+        .accessibilityAddTraits(.isButton)
     }
-
+    
     private var customizationButton: some View {
         Button(action: {
             if !showingThemes { // Opening the themes menu
@@ -454,7 +450,7 @@ struct MainMenuView: View {
                             )
                     }
                 }
-                    
+                
                 
                 let iconRenderSize = scaledButtonUnit * 7 // fixed render size; scaleEffect handles compact/expanded sizing
                 Image(systemName: showingThemes ? "checkmark.circle.fill" : "paintpalette.fill")
@@ -471,8 +467,113 @@ struct MainMenuView: View {
                 
             }
             .fixedSize(horizontal: true, vertical: false)
+            .padding(showButtonShapes ? (isExpanded ? EdgeInsets(top: 14, leading: 20, bottom: 14, trailing: 20) : EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)) : EdgeInsets())
+            .background(
+                Group {
+                    if showButtonShapes {
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+            )
         }
         .buttonStyle(.plain) //turns off the accessibility background showing the button shape
+        .accessibilityLabel(showingThemes ? "Select" : "Themes")
+        .accessibilityAddTraits(.isButton)
+    }
+    
+    // MARK: - Bottom Section
+    private var bottomSection: some View {
+        ZStack {
+            // Game wheel — each card flips individually in place when showingThemes toggles.
+            gameCardWheel
+                .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
+                .allowsHitTesting(!showingThemes)
+                .accessibilityHidden(showingThemes)
+                .accessibilityElement(children: showingThemes ? .ignore : .contain)
+
+            // Theme wheel — flips in to replace the game wheel; both card faces match.
+            themeCardWheel
+                .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
+                .allowsHitTesting(showingThemes)
+                .accessibilityHidden(!showingThemes)
+                .accessibilityElement(children: showingThemes ? .contain : .ignore)
+        }
+        //.zIndex(999) //keep the cards on top
+        .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
+        .scaleEffect(isExpanded ? 1.4 : 1.1)
+        .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 40) //40: in compact main menu
+        .opacity(isCardWheelHidden ? 0 : 1)
+        .accessibilityHidden(isCardWheelHidden)
+    }
+
+    private var gameCardWheel: some View {
+        MenuCardWheel(
+            games: availableGames,
+            showingThemes: showingThemes,
+            onActiveIndexChange: { newIndex, direction in // handle real-time mid-swipe updates
+                if activeGameIndex != newIndex {
+                    titleTransitionEdge = direction
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        activeGameIndex = newIndex
+                    }
+                }
+            },
+            userSelectedGame: { index in // handle selecting a game
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    activeSubmenu = availableGames[index].type
+                }
+                withAnimation(.linear(duration: 0.05).delay(0.12)) { //wait a bit then trigger a fast fade
+                    isTitleBarHidden = true
+                }
+                Task {
+                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+                    isCardWheelHidden = true //hide AFTER the animation to render the cards invisible so they dont clip in when transitioning between compact and expanded in the subview
+                }
+            },
+            hasSelectedGame: Binding(
+                get: { activeSubmenu != nil },
+                set: { newValue in
+                    if newValue {
+                        activeSubmenu = availableGames[activeGameIndex].type
+                    } else {
+                        activeSubmenu = nil
+                    }
+                }
+            )
+        )
+    }
+
+    private var themeCardWheel: some View {
+        ThemeCardWheel(
+            themes: themes,
+            initialIndex: activeThemeIndex,
+            showingThemes: showingThemes,
+            onActiveIndexChange: { newIndex, direction in
+                if activeThemeIndex != newIndex {
+                    themeTitleTransitionEdge = (direction == .trailing) ? .leading : .trailing
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        activeThemeIndex = newIndex
+                    }
+                }
+            },
+            onThemeSelected: { selectedIndex in
+                let theme = themes[selectedIndex]
+                
+                if let required = theme.requiredWins, WinTracker.shared.totalWins < required {
+                    return // Theme is locked! Add haptic error buzz?
+                }
+                
+                cardBackSelection.selectedName = theme.logoCard // Commit the theme change to the global store
+                
+                // Update the local UI state and animate the menu closing
+                withAnimation(.spring(response: 1, dampingFraction: 0.7)) {
+                    selectedThemeIndex = selectedIndex
+                    showingThemes = false
+                }
+            }
+        )
+        .id(themeWheelKey)
     }
     
     // MARK: - Menu helper functins
@@ -570,12 +671,15 @@ struct MainMenuView: View {
     // MARK: - Gin Submenu
     private var ginSubmenuView: some View {
         ZStack {
-            ginCompactSubmenu
-                .opacity(isExpanded ? 0 : 1)
-            ginExpandedSubmenu
-                .opacity(isExpanded ? 1 : 0)
+            if isExpanded {
+                ginExpandedSubmenu
+                    .transition(.opacity)
+            } else {
+                ginCompactSubmenu
+                    .transition(.opacity)
+            }
         }
-        //.animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
         .transition(.offset(y: UIScreen.main.bounds.height / 2))
     }
     
@@ -618,14 +722,17 @@ struct MainMenuView: View {
     // MARK: - Crazy8s Submenu
     private var crazy8sSubmenuView: some View {
         ZStack {
-            crazy8sCompactSubmenu
-                .opacity(isExpanded ? 0 : 1)
-            crazy8sExpandedSubmenu
-                .opacity(isExpanded ? 1 : 0)
+            if isExpanded {
+                crazy8sExpandedSubmenu
+                    .transition(.opacity)
+            } else {
+                crazy8sCompactSubmenu
+                    .transition(.opacity)
+            }
             ginExpandedSubmenu
                 .hidden() //here to match crazy8sSubmenuView size to ginSubmenuView
         }
-        //.animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
         .transition(.offset(y: UIScreen.main.bounds.height / 2))
     }
     
@@ -671,14 +778,17 @@ struct MainMenuView: View {
     // MARK: - Golf Submenu
     private var golfSubmenuView: some View {
         ZStack {
-            golfCompactSubmenu
-                .opacity(isExpanded ? 0 : 1)
-            golfExpandedSubmenu
-                .opacity(isExpanded ? 1 : 0)
+            if isExpanded {
+                golfExpandedSubmenu
+                    .transition(.opacity)
+            } else {
+                golfCompactSubmenu
+                    .transition(.opacity)
+            }
             ginExpandedSubmenu
                 .hidden() //here to match golfSubmenuView size to ginSubmenuView
         }
-        //.animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
         .transition(.offset(y: UIScreen.main.bounds.height / 2))
     }
     
@@ -838,6 +948,9 @@ struct MainMenuView: View {
                 .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("Back")
+        .accessibilityAddTraits(.isButton)
+        .accessibilityInputLabels(["Back", "Back to main menu", "Dismiss", "Exit", "Left Arrow"])
     }
     
     private var deckSection: some View {
@@ -888,6 +1001,9 @@ struct MainMenuView: View {
                     .opacity(i >= 5 - hiddenAnimatedAwayCards ? 0 : 1)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(cardsAnimatedAway >= 5 ? "Joker card" : "Deck of cards")
+        .accessibilityAddTraits(.isImage)
     }
     
     private var startButton: some View {
@@ -938,6 +1054,10 @@ struct MainMenuView: View {
                 .shadow(color: .black.opacity(0.2), radius: 5, x: 5, y: 5)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("Start Game")
+        .accessibilityInputLabels(["Start Game", "Start", "Begin Game", "Play"])
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint("Attaches the game to your message so you can send it.")
     }
     
     private var handSizePicker: some View {
@@ -945,6 +1065,7 @@ struct MainMenuView: View {
             Text("Hand Size:")
                 .font(.system(size: isExpanded ? 30 : 20, weight: .semibold, design: .serif))
                 .foregroundColor(.white)
+                .accessibilityAddTraits(.isHeader)
             
             HStack(spacing: 30) {
                 cardOption(selectedHandSize: 7, imageName: card7Image, tilt: -8) //left card
@@ -960,6 +1081,7 @@ struct MainMenuView: View {
     @ViewBuilder
     private func cardOption(selectedHandSize: Int, imageName: String, tilt: Double) -> some View {
         let isSelected = (handSize == selectedHandSize)
+        let suit = imageName.replacingOccurrences(of: String(selectedHandSize), with: "") //for edge case accessibility addressing
         
         Image(imageName)
             .resizable()
@@ -979,6 +1101,13 @@ struct MainMenuView: View {
                     handSize = selectedHandSize
                 }
             }
+            // ACCESSIBILITY MODIFIERS:
+            .contentShape(Rectangle())
+            .accessibilityElement(children: .ignore) // Ignore default image reading
+            .accessibilityLabel("\(selectedHandSize) cards") // What VoiceOver reads
+            .accessibilityInputLabels(["\(selectedHandSize)", "\(selectedHandSize) cards", "\(selectedHandSize) of \(suit)"]) // What Voice Control listens for
+            .accessibilityAddTraits(.isButton) // Tells the system it's clickable
+            .accessibilityAddTraits(isSelected ? .isSelected : []) // Announces the visual state
     }
 }
 

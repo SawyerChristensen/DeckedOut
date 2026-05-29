@@ -37,6 +37,7 @@ struct MenuCardWheel: View {
     
     private var continuousIndex: Double { Double(currentCenterIndex) - (Double(dragTranslation) / stepWidth) - (Double(animatedOffset) / stepWidth) }
     private var activeIndex: Int { Int(round(continuousIndex)) }
+    private var activeGameTitle: String { games[gameIndex(for: currentCenterIndex)].title }
     
     /// Maps any virtual index (can be negative or beyond games.count) to a valid game array index
     private func gameIndex(for virtualIndex: Int) -> Int {
@@ -64,6 +65,18 @@ struct MenuCardWheel: View {
         return hasSelectedGame ? -500 : abs(distance * 20)
     }
     
+    /// Helper function to programmatically move the wheel
+    private func moveWheel(by shift: Int, dragOffset: CGFloat = 0) {
+        let newIndex = currentCenterIndex + shift
+        animatedOffset = dragOffset + (CGFloat(shift) * stepWidth)
+        currentCenterIndex = newIndex
+        
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            animatedOffset = 0
+        }
+        notifyActiveChange(for: newIndex)
+    }
+    
     var body: some View {
         HStack(spacing: spacing) {
             ForEach(visibleVirtualIndices, id: \.self) { virtualIndex in
@@ -76,6 +89,7 @@ struct MenuCardWheel: View {
                 
                 let baseRotation: Double = isCenter ? 0 : 180
                 let flipRotation: Double = showingThemes ? -180 : 0
+                
                 CardView(frontImage: game.localizedLogoCard, cardHeight: cardHeight, rotation: baseRotation + flipRotation)
                     .zIndex(Double(visibleCount) - abs(distance))
                     .rotationEffect(.degrees(distance * fanningAngle))
@@ -88,13 +102,7 @@ struct MenuCardWheel: View {
                             }
                             userSelectedGame(realIndex)  //parent view should handle exact parent view changes
                         } else {
-                            // Set animatedOffset to keep cards visually in place, then animate to 0
-                            animatedOffset = CGFloat(virtualIndex - currentCenterIndex) * stepWidth
-                            currentCenterIndex = virtualIndex
-                            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-                                animatedOffset = 0
-                            }
-                            notifyActiveChange(for: virtualIndex)
+                            moveWheel(by: virtualIndex - currentCenterIndex)
                         }
                     }
             }
@@ -118,11 +126,11 @@ struct MenuCardWheel: View {
                 }
                 .onEnded { value in  // Predict where the scroll should land based on gesture speed and distance
                     isDragging = false
-                    
+
                     let verticalMove = value.translation.height
                     let horizontalMove = value.translation.width
                     let verticalVelocity = value.predictedEndTranslation.height
-                    
+
                     let isUpward = verticalMove < -50 || verticalVelocity < -150 // Check if the movement is strongly upward
                     let isPrimarilyVertical = abs(verticalMove) > abs(horizontalMove) * 1.5 //Check if the gesture is PRIMARILY vertical (avoids diagonals)
                     if isUpward && isPrimarilyVertical {
@@ -132,26 +140,37 @@ struct MenuCardWheel: View {
                         userSelectedGame(gameIndex(for: currentCenterIndex))
                         return // Exit early if vertical selection swipe
                     }
-                    
+
                     let maxFlickCards = 5 // Cap how far a single flick can travel
                     let predictedDrag = value.predictedEndTranslation.width
                     let rawShift = Int(round(-predictedDrag / stepWidth))
                     let indexShift = max(-maxFlickCards, min(maxFlickCards, rawShift))
-                    
-                    let newIndex = currentCenterIndex + indexShift // No clamping — infinite loop!
-                    
-                    // Capture the drag position so the visual position doesn't jump when
-                    // @GestureState resets dragTranslation to 0 and currentCenterIndex changes.
-                    // animatedOffset temporarily holds the visual displacement, then animates to 0.
-                    let dragOffset = value.translation.width
-                    animatedOffset = dragOffset + CGFloat(currentCenterIndex - newIndex) * stepWidth
-                    currentCenterIndex = newIndex
-                    
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-                        animatedOffset = 0
-                    }
-                    notifyActiveChange(for: newIndex)
+
+                    moveWheel(by: indexShift, dragOffset: value.translation.width)
                 }
         )
+        // --- Accessibility Configuration ---
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Game Selection Carousel")
+        .accessibilityInputLabels(["\(activeGameTitle) Card", "Select Game", "Current Game", "Select \(activeGameTitle)", "Open submenu", "Open Game", "Open \(activeGameTitle)", "Play Game", "Play \(activeGameTitle)"])
+        .accessibilityValue(activeGameTitle)
+        .accessibilityHint("Swipe up or down to change game. Double tap to open the \(games[gameIndex(for: currentCenterIndex)].title) menu.")
+        .accessibilityAction { // Default VoiceOver Activation Action
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                hasSelectedGame = true
+            }
+            userSelectedGame(gameIndex(for: currentCenterIndex))
+        }
+        .accessibilityScrollAction { edge in // Voice Control: "Scroll Left / Scroll Right"
+            if edge == .leading { moveWheel(by: -1) }
+            else if edge == .trailing { moveWheel(by: 1) }
+        }
+        .accessibilityAdjustableAction { direction in  // VoiceOver: swipe up / swipe down on adjustable
+            switch direction {
+            case .increment: moveWheel(by: 1)
+            case .decrement: moveWheel(by: -1)
+            @unknown default: break
+            }
+        }
     }
 }

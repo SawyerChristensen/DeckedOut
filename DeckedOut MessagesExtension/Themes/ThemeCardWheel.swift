@@ -11,6 +11,7 @@ struct ThemeCardWheel: View {
     let themes: [CardBackTheme]
     let showingThemes: Bool //drives the per-card flip in from the game wheel
     var onActiveIndexChange: (Int, Edge) -> Void // (themeIndex, direction the new title enters from)
+    var onThemeSelected: (Int) -> Void
 
     private var cardWidth: CGFloat { 140 }
     private var cardHeight: CGFloat { 200 }
@@ -25,16 +26,18 @@ struct ThemeCardWheel: View {
     @GestureState private var dragTranslation: CGFloat = 0
     @State private var animatedOffset: CGFloat = 0 // Animated offset for flick momentum — decays to 0 as the cards settle
 
-    init(themes: [CardBackTheme], initialIndex: Int = 0, showingThemes: Bool, onActiveIndexChange: @escaping (Int, Edge) -> Void) {
+    init(themes: [CardBackTheme], initialIndex: Int = 0, showingThemes: Bool, onActiveIndexChange: @escaping (Int, Edge) -> Void, onThemeSelected: @escaping (Int) -> Void) {
         self.themes = themes
         self.showingThemes = showingThemes
         self.onActiveIndexChange = onActiveIndexChange
+        self.onThemeSelected = onThemeSelected
         self._currentCenterIndex = State(initialValue: initialIndex)
         self._previousVirtualIndex = State(initialValue: initialIndex)
     }
 
     private var continuousIndex: Double { Double(currentCenterIndex) - (Double(dragTranslation) / stepWidth) - (Double(animatedOffset) / stepWidth) }
     private var activeIndex: Int { Int(round(continuousIndex)) }
+    private var activeThemeTitle: String { themes[themeIndex(for: currentCenterIndex)].title }
 
     /// Maps any virtual index (can be negative or beyond themes.count) to a valid theme array index
     private func themeIndex(for virtualIndex: Int) -> Int {
@@ -61,6 +64,18 @@ struct ThemeCardWheel: View {
 
     private func getCurrentYOffset(for distance: Double) -> CGFloat {
         return abs(distance * 20)
+    }
+    
+    /// Helper function to programmatically move the wheel
+    private func moveWheel(by shift: Int, dragOffset: CGFloat = 0) {
+        let newIndex = currentCenterIndex + shift
+        animatedOffset = dragOffset + (CGFloat(shift) * stepWidth)
+        currentCenterIndex = newIndex
+        
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+            animatedOffset = 0
+        }
+        notifyActiveChange(for: newIndex)
     }
 
     var body: some View {
@@ -98,6 +113,8 @@ struct ThemeCardWheel: View {
                                 animatedOffset = 0
                             }
                             notifyActiveChange(for: virtualIndex)
+                        } else { //user tapped the center card
+                            onThemeSelected(realIndex)
                         }
                     }
             }
@@ -140,5 +157,23 @@ struct ThemeCardWheel: View {
                     notifyActiveChange(for: newIndex)
                 }
         )
+        // --- Accessibility Configuration ---
+        .accessibilityElement(children: .ignore) // Ignores individual cards; only the wheel is focused
+        .accessibilityLabel("Theme Selection Carousel")
+        .accessibilityInputLabels(["Select Theme", "Select \(activeThemeTitle)", "\(activeThemeTitle) Card", "Equip Theme", "Equip \(activeThemeTitle)",])
+        .accessibilityValue(activeThemeTitle)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction { onThemeSelected(themeIndex(for: currentCenterIndex)) } //Default VoiceOver activation action
+        .accessibilityScrollAction { edge in  // Voice Control: "Scroll Left / Scroll Right"
+            if edge == .leading { moveWheel(by: -1) }
+            else if edge == .trailing { moveWheel(by: 1) }
+        }
+        .accessibilityAdjustableAction { direction in // VoiceOver: Flick Up / Flick Down
+            switch direction {
+            case .increment: moveWheel(by: 1)
+            case .decrement: moveWheel(by: -1)
+            @unknown default: break
+            }
+        }
     }
 }

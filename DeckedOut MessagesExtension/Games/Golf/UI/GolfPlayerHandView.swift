@@ -68,12 +68,22 @@ struct GolfPlayerHandView: View {
 
                                 CardView(frontImage: card.imageName,
                                          rotation: isAnimating ? flipRotation : (isDeparting || isFaceUp ? 0 : -180))
+                                    // Transforms
                                     .rotationEffect(isAnimating ? animationRotationCorrection : .zero)
                                     .scaleEffect(isDragging ? 1.1 : 1.0)
                                     .opacity(isCancelled ? 0.8 : 1.0)
                                     .animation(.easeInOut(duration: 0.3), value: isCancelled)
                                     .offset(isDeparting ? departingOffset : (isDragging ? dragOffset : .zero))
                                     .offset(isAnimating ? animationOffset : .zero)
+
+                                    // Accessibility configuration
+                                    .contentShape(Rectangle())
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel(Text(accessibilityLabel(for: card, at: index, isFaceUp: isFaceUp)))
+                                    .accessibilityInputLabels(accessibilityInputLabels(for: card, at: index, isFaceUp: isFaceUp))
+                                    .accessibilityAddTraits(.isButton)
+                                    .accessibilityAction { onCardTapped?(index) }
+
                                     .onTapGesture {
                                         onCardTapped?(index)
                                     }
@@ -159,6 +169,63 @@ struct GolfPlayerHandView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             animatingCard = nil
             flipRotation = 0
+        }
+    }
+
+    private func accessibilityLabel(for card: Card, at index: Int, isFaceUp: Bool) -> String {
+        let row = (index / columns) + 1
+        let col = (index % columns) + 1
+        if isFaceUp {
+            return String(
+                format: String(localized: "%@ of %@, row %lld column %lld", comment: "Voice Control label for a face-up Golf grid card, e.g. Queen of Hearts, row 1 column 2"),
+                card.rank.localizedName,
+                card.suit.localizedName,
+                row,
+                col
+            )
+        } else {
+            return String(
+                format: String(localized: "Face-down card, row %lld column %lld", comment: "Voice Control label for a face-down Golf grid card"),
+                row,
+                col
+            )
+        }
+    }
+
+    private func accessibilityInputLabels(for card: Card, at index: Int, isFaceUp: Bool) -> [Text] {
+        let row = (index / columns) + 1
+        let col = (index % columns) + 1
+        let rowOrdinal = ordinal(row)
+        let colOrdinal = ordinal(col)
+
+        var labels: [Text] = [
+            Text("Row \(row) column \(col)", comment: "Voice Control input label for a Golf grid card, e.g. row 1 column 2"),
+            Text("Column \(col) row \(row)", comment: "Voice Control input label for a Golf grid card, e.g. column 2 row 1"),
+            Text("\(rowOrdinal) row \(colOrdinal) column"),
+            Text("\(colOrdinal) column \(rowOrdinal) row"),
+            Text("the \(rowOrdinal) row \(colOrdinal) column"),
+            Text("the \(colOrdinal) column \(rowOrdinal) row")
+        ]
+
+        if isFaceUp {
+            let rank = card.rank.localizedName
+            let suit = card.suit.localizedName
+            let base = "\(rank) of \(suit)"
+            let bare = "\(rank) \(suit)"
+            labels.append(Text(base))
+            labels.append(Text("the \(base)"))
+            labels.append(Text(bare))
+        }
+
+        return labels
+    }
+
+    private func ordinal(_ n: Int) -> String {
+        switch n {
+        case 1: return String(localized: "first", comment: "Ordinal word used in Voice Control input labels (Golf grid positions)")
+        case 2: return String(localized: "second", comment: "Ordinal word used in Voice Control input labels (Golf grid positions)")
+        case 3: return String(localized: "third", comment: "Ordinal word used in Voice Control input labels (Golf grid positions)")
+        default: return "\(n)"
         }
     }
 }
