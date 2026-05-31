@@ -9,6 +9,7 @@ import SwiftUI
 
 struct Crazy8sTranscriptInvite: View {
     var gameState: Crazy8sV2GameState? = nil
+    var inviterCardBackOverride: String? = nil //used by the legacy 1v1 path where gameState isn't passed in
     var onHeightChange: ((CGFloat) -> Void)? = nil
     
     private var joinedPlayerCount: Int { gameState?.seats.filter { $0 != Crazy8sManager.unclaimedSeat }.count ?? 0 }
@@ -17,11 +18,17 @@ struct Crazy8sTranscriptInvite: View {
         guard gameState != nil else { return false } // If there is no V2 game state, we aren't waiting for group chat players
         return joinedPlayerCount < totalPlayerCount
     }
+    private var inviterCardBack: String? {
+        if let override = inviterCardBackOverride { return override }
+        guard let backs = gameState?.seatCardBacks, joinedPlayerCount > 0 else { return nil }
+        let idx = joinedPlayerCount - 1
+        return backs.indices.contains(idx) ? backs[idx] : nil
+    }
 
     var body: some View {
         VStack() {
             
-            Crazy8sTranscriptInviteHand()
+            Crazy8sTranscriptInviteHand(cardBackName: inviterCardBack)
                 .offset(y: 40)
                 .frame(height: 150)
                 .overlay(alignment: .top) {

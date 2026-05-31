@@ -223,7 +223,7 @@ struct GolfGameView: View {
                 hoveringFlipRotation = 0
             }
         } else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
         }
     }
 
@@ -289,7 +289,7 @@ struct GolfGameView: View {
         } else if game.phase == .placementPhase && game.drewFromDeck {
             animateDiscard()
         } else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
         }
     }
     
@@ -500,7 +500,7 @@ struct GolfGameView: View {
                let index = game.playerHand.firstIndex(of: card) {
                 animatePlacement(at: index)
             } else {
-                SoundManager.instance.playErrorFeedback()
+                HapticManager.instance.playErrorFeedback()
             }
         }
     }
@@ -509,7 +509,7 @@ struct GolfGameView: View {
         if game.phase == .placementPhase {
             animatePlacement(at: index)
         } else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
         }
     }
 

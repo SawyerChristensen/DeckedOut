@@ -158,7 +158,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         let isLegalPlay = isEight || matchesSuit || matchesRank
         
         guard phase == .mainPhase, isLegalPlay, let index = playerHand.firstIndex(of: card) else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
             return
         }
         
@@ -166,6 +166,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         discardPile.append(card)
         userDidDiscard = true
         SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
 
         if card.rank == .eight {
             userNeedsToChooseSuit = true //signals GameView to prompt the user for a new suit
@@ -209,6 +210,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         opponentHand.removeLast()
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
 
         opponentHasWon = opponentHand.isEmpty
         if opponentHasWon {

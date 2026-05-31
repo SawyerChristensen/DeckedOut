@@ -142,6 +142,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         playerHand.remove(at: index) //we could also use indexDiscardedFrom...
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
         playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
         if playerHasWon {
             SoundManager.instance.playGameEnd(didWin: true)
@@ -182,6 +183,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         opponentHand.remove(at: discardIndex)
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
         if opponentHasWon {
             SoundManager.instance.playGameEnd(didWin: false)

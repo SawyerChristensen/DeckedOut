@@ -66,6 +66,8 @@ struct MainMenuView: View {
     @State private var showingRestore: Bool = false
     @State private var isRestoring: Bool = false
     @State private var lastWinsShown: Int = 0 //tracks prior win count so numericText knows which direction to slide
+    @AppStorage("hasCompletedMainMenuOnboarding") private var hasCompletedOnboarding: Bool = false
+    @State private var hasDraggedCards: Bool = false //session-only flag; flips on first wheel movement to advance the onboarding subtitle
     @ScaledMetric(relativeTo: .title) private var scaledButtonUnit: CGFloat = 10
     private var buttonSize: CGFloat { isExpanded ? scaledButtonUnit * 7 : scaledButtonUnit * 4 }
     let isIpad = UIDevice.current.userInterfaceIdiom == .pad
@@ -268,6 +270,21 @@ struct MainMenuView: View {
     }
     
     private var winCounterFace: some View {
+        ZStack {
+            if hasCompletedOnboarding {
+                winCountContent
+                    .transition(.opacity)
+            } else {
+                onboardingSubtitle
+                    .transition(.opacity)
+            }
+        }
+        .fixedSize(horizontal: true, vertical: false)
+        .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
+        .accessibilityHidden(showingThemes)
+    }
+
+    private var winCountContent: some View {
         HStack(spacing: 4) { // Adjust spacing to move the crown closer/further from the text
             Image(systemName: "crown.fill")
                 .foregroundStyle(LinearGradient(colors: [
@@ -288,11 +305,20 @@ struct MainMenuView: View {
                     lastWinsShown = newValue
                 }
         }
-        .fixedSize(horizontal: true, vertical: false)
-        .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
         .accessibilityElement(children: .ignore) //dont count the crown as a seperate element
         .accessibilityLabel("\(availableGames[activeGameIndex].title) win count: \(availableGames[activeGameIndex].wins)")
-        .accessibilityHidden(showingThemes)
+    }
+
+    private var onboardingSubtitle: some View {
+        Text(hasDraggedCards ? "Tap a card to select a game" : "Drag the cards left or right")
+            .foregroundColor(.white)
+            .shadow(color: .white.opacity(0.33), radius: 5)
+            .id(hasDraggedCards ? "onboarding.tap" : "onboarding.drag") //distinct id so SwiftUI animates the swap
+            .transition(.asymmetric(
+                insertion: .move(edge: .bottom).combined(with: .opacity),
+                removal: .move(edge: .top).combined(with: .opacity)
+            ))
+            .accessibilityLabel(hasDraggedCards ? "Tap a card to select a game" : "Drag the cards left or right")
     }
     
     private var priceFace: some View {
@@ -548,6 +574,11 @@ struct MainMenuView: View {
                     withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
                         activeGameIndex = newIndex
                     }
+                    if !hasCompletedOnboarding && !hasDraggedCards {
+                        withAnimation(.easeInOut(duration: 0.4).speed(motionSpeed)) {
+                            hasDraggedCards = true
+                        }
+                    }
                 }
             },
             userSelectedGame: { index in // handle selecting a game
@@ -556,6 +587,9 @@ struct MainMenuView: View {
                 }
                 withAnimation(.linear(duration: 0.05).delay(0.12).speed(motionSpeed)) { //wait a bit then trigger a fast fade
                     isTitleBarHidden = true
+                    if !hasCompletedOnboarding {
+                        hasCompletedOnboarding = true
+                    }
                 }
                 let speed = motionSpeed
                 Task {

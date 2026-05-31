@@ -60,10 +60,6 @@ struct WinScreenView: View {
                                 .foregroundColor(.white.opacity(0.9))
                         }
                     }
-
-                    /*Text("Tap to dismiss")
-                        .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.5))*/
                 }
                 .padding(40)
                 .background(
@@ -84,7 +80,7 @@ struct WinScreenView: View {
                 }
                 if playerHasWon && WinTracker.shared.totalWins >= 2 {
                     Task {
-                        try? await Task.sleep(for: .seconds(2))
+                        try? await Task.sleep(for: .seconds(1))
                         await MainActor.run { requestReview() }
                     }
                 }

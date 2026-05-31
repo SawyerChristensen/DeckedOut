@@ -160,7 +160,7 @@ struct Crazy8sGameView: View {
             game.drawFromDeck()
             SoundManager.instance.playCardDeal()
         } else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
         }
     }
     
@@ -352,7 +352,7 @@ struct Crazy8sGameView: View {
                 game.discardCard(card: card)
             } else {
                 print(game.phase)
-                SoundManager.instance.playErrorFeedback()
+                HapticManager.instance.playErrorFeedback()
             }
         } else {
             //print("Drop → No zone, card returns")

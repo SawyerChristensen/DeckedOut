@@ -178,7 +178,7 @@ struct GinPlayerHandView: View {
         
         if predictedDropIndex != newIndex {
             predictedDropIndex = newIndex
-            SoundManager.instance.playCardReorder()
+            HapticManager.instance.playCardReorder()
         }
     }
     
@@ -240,7 +240,7 @@ struct GinPlayerHandView: View {
 
     private func voiceDiscard(card: Card, from cardFrame: CGRect, arcOffset: CGSize, fanAngle: Angle) {
         guard game.phase == .discardPhase, let discardZone = discardPileZone else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
             return
         }
         voiceDiscardingCard = card

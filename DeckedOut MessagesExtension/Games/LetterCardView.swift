@@ -9,10 +9,20 @@ import SwiftUI
 
 struct LetterCardImage: View {
     let character: String
+    var overrideCardBackName: String? = nil //if set, overrides the user's selected card back (e.g. show inviter's theme in transcripts)
 
     @ObservedObject private var cardBackSelection = CardBackSelection.shared
     let currentLanguage = Locale.preferredLanguages.first ?? "en"
-    
+
+    private var effectiveName: String { overrideCardBackName ?? cardBackSelection.selectedName }
+    private var effectiveBaseName: String {
+        let candidate = effectiveName + "Base"
+        return UIImage(named: candidate) != nil ? candidate : effectiveName
+    }
+    private var effectiveTextColor: Color {
+        return CardBackTheme.theme(forLogoCard: effectiveName)?.secondaryColor ?? Color(.white)
+    }
+
     private var font: Font {
         if currentLanguage.hasPrefix("zh-Hans") { // Simplified Chinese
             return .custom("baotuxiaobaiti", fixedSize: 30)
@@ -27,9 +37,9 @@ struct LetterCardImage: View {
             //return .system(size: 30, weight: .regular, design: .serif)
         //} else if currentLanguage.hasPrefix("ru") { // Russian
             //return .system(size: 30, weight: .regular, design: .serif)
-        } else if cardBackSelection.selectedName == "cardBackWeb" {
+        } else if effectiveName == "cardBackWeb" {
             return .custom("KingthingsWidow", fixedSize: 42)
-        } else if cardBackSelection.selectedName == "cardBackKoi" {
+        } else if effectiveName == "cardBackKoi" {
             return .custom("SuperShake", fixedSize: 26)
         }
         return .custom("Holtzschue-Regular", fixedSize: 33) //originally size 30
@@ -50,9 +60,9 @@ struct LetterCardImage: View {
             return 2
         } else if isHoltzschue {
             return 3
-        } else if cardBackSelection.selectedName == "cardBackWeb" {
+        } else if effectiveName == "cardBackWeb" {
             return 1
-        } else if cardBackSelection.selectedName == "cardBackKoi" {
+        } else if effectiveName == "cardBackKoi" {
             return -2
         } else {
             return 0
@@ -60,7 +70,7 @@ struct LetterCardImage: View {
     }
 
     var body: some View {
-        Image(cardBackSelection.baseName)
+        Image(effectiveBaseName)
             .resizable()
             .aspectRatio(0.7, contentMode: .fit)
             .overlay {
@@ -72,7 +82,7 @@ struct LetterCardImage: View {
                     Text(character)
                         .font(font)
                         .offset(y: verticalCentering)
-                        .foregroundStyle(cardBackSelection.textColor)
+                        .foregroundStyle(effectiveTextColor)
                 }
             }
     }
@@ -82,6 +92,7 @@ struct LetterCardView: View { //where both sides are letters
     let frontChar: String
     let backChar: String
     let isFlipped: Bool
+    var cardBackName: String? = nil
 
     var rotation: Double {
         isFlipped ? 180 : 0
@@ -90,12 +101,12 @@ struct LetterCardView: View { //where both sides are letters
     var body: some View {
         ZStack {
             // BACK (Visible when rotation is > 90)
-            LetterCardImage(character: backChar)
+            LetterCardImage(character: backChar, overrideCardBackName: cardBackName)
                 .modifier(FlipOpacity(rotation: rotation + 180))
                 .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
 
             // FRONT (Visible when rotation is < 90)
-            LetterCardImage(character: frontChar)
+            LetterCardImage(character: frontChar, overrideCardBackName: cardBackName)
                 .modifier(FlipOpacity(rotation: rotation))
         }
         .rotation3DEffect(

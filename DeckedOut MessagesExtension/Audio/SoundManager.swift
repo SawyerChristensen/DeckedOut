@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit //only for haptics
 import AVFoundation
 
 class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES HAPTICS (seperate later?)
@@ -22,17 +21,10 @@ class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES HAPTICS (se
     private var cardSlapPlayer: AVAudioPlayer?
     private var gameOverPlayer: AVAudioPlayer?
     
-    // Haptics
-    private let selectionFeedback = UISelectionFeedbackGenerator()
-    private let mediumImpact = UIImpactFeedbackGenerator(style: .medium)
-    private let hapticNotifications = UINotificationFeedbackGenerator()
-
-    
     //MARK: - INIT
     private override init() {
         super.init()
         setupSFX()
-        setupHaptics()
         NotificationCenter.default.addObserver(self,
             selector: #selector(handleSecondaryAudioChange),
             name: AVAudioSession.silenceSecondaryAudioHintNotification,
@@ -40,44 +32,28 @@ class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES HAPTICS (se
     }
     
     private func setupSFX() {
-        if let dealUrl = Bundle.main.url(forResource: "CardDeal", withExtension: "wav") {
+        if let dealUrl = Bundle.main.url(forResource: "CardDeal", withExtension: "aac") {
             cardDealPlayer = try? AVAudioPlayer(contentsOf: dealUrl)
             cardDealPlayer?.volume = 0.3
             cardDealPlayer?.prepareToPlay()
         }
-        if let slapUrl = Bundle.main.url(forResource: "CardSlap", withExtension: "wav") {
+        if let slapUrl = Bundle.main.url(forResource: "CardSlap", withExtension: "aac") {
             cardSlapPlayer = try? AVAudioPlayer(contentsOf: slapUrl)
             cardSlapPlayer?.volume = 0.15
             cardSlapPlayer?.prepareToPlay()
         }
     }
     
-    private func setupHaptics() {
-        selectionFeedback.prepare()
-        mediumImpact.prepare()
-        hapticNotifications.prepare()
-    }
-    
     
     //MARK: - Public Play Triggers
     func playCardDeal() {
-        cardDealPlayer?.currentTime = 0 //is the redundant? doesnt it default to the start?
+        cardDealPlayer?.currentTime = 0
         cardDealPlayer?.play()
-        //softImpact.impactOccurred()
     }
     
     func playCardSlap() {
         cardSlapPlayer?.currentTime = 0
         cardSlapPlayer?.play()
-        mediumImpact.impactOccurred()
-    }
-    
-    func playCardReorder() {
-        selectionFeedback.selectionChanged()
-    }
-    
-    func playErrorFeedback() {
-        hapticNotifications.notificationOccurred(.error)
     }
     
     func playGameEnd(didWin: Bool) {

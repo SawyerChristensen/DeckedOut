@@ -157,7 +157,7 @@ struct GinGameView: View {
             lastDrawSource = .deck
             SoundManager.instance.playCardDeal()
         } else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
         }
     }
     
@@ -208,7 +208,7 @@ struct GinGameView: View {
             lastDrawSource = .discard
             SoundManager.instance.playCardDeal()
         } else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
         }
     }
     
@@ -338,7 +338,7 @@ struct GinGameView: View {
             if game.phase == .discardPhase {
                 game.discardCard(card: card)
             } else {
-                SoundManager.instance.playErrorFeedback()
+                HapticManager.instance.playErrorFeedback()
             }
         } else {
             //print("Drop → No zone, card returns")

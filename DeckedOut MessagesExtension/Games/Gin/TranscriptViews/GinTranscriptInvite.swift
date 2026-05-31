@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GinTranscriptInvite: View {
     var gameState: GinRummyV2GameState? = nil
+    var inviterCardBackOverride: String? = nil //used by the legacy 1v1 path where gameState isn't passed in
     var onHeightChange: ((CGFloat) -> Void)? = nil
 
     private var joinedPlayerCount: Int { gameState?.seats.filter { $0 != GinRummyManager.unclaimedSeat }.count ?? 0 }
@@ -17,11 +18,17 @@ struct GinTranscriptInvite: View {
         guard gameState != nil else { return false }
         return joinedPlayerCount < totalPlayerCount
     }
+    private var inviterCardBack: String? {
+        if let override = inviterCardBackOverride { return override }
+        guard let backs = gameState?.seatCardBacks, joinedPlayerCount > 0 else { return nil }
+        let idx = joinedPlayerCount - 1
+        return backs.indices.contains(idx) ? backs[idx] : nil
+    }
 
     var body: some View {
         VStack() {
 
-            GinTranscriptInviteHand()
+            GinTranscriptInviteHand(cardBackName: inviterCardBack)
                 .offset(y: 40)
                 .frame(height: 150)
                 .overlay(alignment: .top) {

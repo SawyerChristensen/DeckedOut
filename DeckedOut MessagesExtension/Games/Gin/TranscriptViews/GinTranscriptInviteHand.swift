@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GinTranscriptInviteHand: View {
+    var cardBackName: String? = nil
+
     var words: [String] {
         // Get the user's top preferred language, default to English if unavailable
         let currentLanguage = Locale.preferredLanguages.first ?? "en"
@@ -61,7 +63,7 @@ struct GinTranscriptInviteHand: View {
                 
                 let center = Double(charCount - 1) / 2.0
 
-                LetterCardView(frontChar: frontChar, backChar: backChar, isFlipped: isFlipped)
+                LetterCardView(frontChar: frontChar, backChar: backChar, isFlipped: isFlipped, cardBackName: cardBackName)
                     .frame(width: cardWidth, height: cardHeight)
                     .zIndex(Double(index))
                     .rotationEffect(.degrees((Double(index) - center) * fanningAngle))

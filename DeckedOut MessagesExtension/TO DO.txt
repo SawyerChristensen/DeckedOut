@@ -1,7 +1,9 @@
+-BRING CGFI BACK TO CHINA
+
 -adjust prices of IAPs in app store
     -aint nobody buying a card game skin for 50k in vietnam. 20k maybe
 
--sent messages from opponent should have their card back in the thumbnail, users card back if from user
+-change crazy 8s rules text and golf winning text
 
 -opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top (opponent hand sometimes clips above deck in groupchat modes)
 

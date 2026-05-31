@@ -169,6 +169,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         discardPile.append(oldCard)
         hoveringCard = nil
         SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
         endTurn()
     }
 
@@ -182,6 +183,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         discardPile.append(drawn)
         hoveringCard = nil
         SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
         endTurn()
     }
 
@@ -250,6 +252,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
 
         discardPile.append(cardToDiscard)
         SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
 
         if isSinglePlayer {
             if playerFaceUpIndices.count == 6 {

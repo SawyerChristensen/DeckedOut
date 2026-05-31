@@ -19,7 +19,7 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupAudioSession()
+        setupFeedbackSystems()
         NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate), name: UIScene.willDeactivateNotification, object: nil)
     }
 
@@ -35,14 +35,19 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func setupAudioSession() {
-        do {
+    private func setupFeedbackSystems() {
+        _ = HapticManager.instance //init Haptic engine on main thread (required)
+        
+        do { //setup audio session
             try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default) //.ambient allows mixing with background music and respects silent switch
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             //print("Could not set up audio session: \(error)")
         }
-        _ = SoundManager.instance //this *should* load the sound manager into ram and trigger the lazy init
+        
+        Task.detached(priority: .userInitiated) { //init audio on background thread
+            _ = SoundManager.instance
+        }
     }
 
     
@@ -50,7 +55,12 @@ class MessagesViewController: MSMessagesAppViewController {
     override func willBecomeActive(with conversation: MSConversation) {
         super.willBecomeActive(with: conversation)
         guard let message = conversation.selectedMessage, // Do we have a message? Can we decode it?
-            let gameInfo = extractGameInfo(from: message) else { return } // If there's no message to select, the user is likely opening the main menu from the app drawer
+            let gameInfo = extractGameInfo(from: message) else { //No message to decode, the user is opening the main menu
+            if presentationStyle != .transcript && children.isEmpty {
+                presentMenuView(for: presentationStyle, with: conversation)
+            }
+            return
+        }
 
         let isFromMe = !conversation.remoteParticipantIdentifiers.contains(message.senderParticipantIdentifier)
 
@@ -154,6 +164,7 @@ class MessagesViewController: MSMessagesAppViewController {
             } else if let decodedState = try? JSONDecoder().decode(GinRummyGameState.self, from: stateData) {
                 if decodedState.turnNumber == 0 { // Game invite
                     GinTranscriptInvite(
+                        inviterCardBackOverride: decodedState.senderCardBack,
                         onHeightChange: { [weak self] height in
                             self?.transcriptHeight = height
                         }
@@ -208,6 +219,7 @@ class MessagesViewController: MSMessagesAppViewController {
             } else if let legacyState = try? JSONDecoder().decode(Crazy8sLegacyGameState.self, from: stateData) {
                 if legacyState.turnNumber == 0 { // Game invite view
                     Crazy8sTranscriptInvite(
+                        inviterCardBackOverride: legacyState.senderCardBack,
                         onHeightChange: { [weak self] height in
                             self?.transcriptHeight = height
                         }
@@ -262,6 +274,7 @@ class MessagesViewController: MSMessagesAppViewController {
             } else if let decodedState = try? JSONDecoder().decode(GolfGameState.self, from: stateData) {
                 if decodedState.turnNumber == 0 { // Game invite
                     GolfTranscriptInvite(
+                        inviterCardBackOverride: decodedState.senderCardBack,
                         onHeightChange: { [weak self] height in
                             self?.transcriptHeight = height
                         }

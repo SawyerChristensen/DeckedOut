@@ -172,7 +172,7 @@ struct Crazy8sPlayerHandView: View {
         
         if predictedDropIndex != newIndex {
             predictedDropIndex = newIndex
-            SoundManager.instance.playCardReorder()
+            HapticManager.instance.playCardReorder()
         }
     }
     
@@ -261,7 +261,7 @@ struct Crazy8sPlayerHandView: View {
 
     private func voiceDiscard(card: Card, from cardFrame: CGRect, arcOffset: CGSize, fanAngle: Angle) {
         guard game.phase == .mainPhase, game.isCardPlayable(card), let discardZone = discardPileZone else {
-            SoundManager.instance.playErrorFeedback()
+            HapticManager.instance.playErrorFeedback()
             return
         }
         voiceDiscardingCard = card
