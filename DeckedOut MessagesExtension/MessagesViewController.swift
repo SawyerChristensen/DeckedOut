@@ -20,6 +20,7 @@ class MessagesViewController: MSMessagesAppViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupFeedbackSystems()
+        updateAccessibilityModal(for: presentationStyle)
         NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)), name: UIScene.willDeactivateNotification, object: nil)
     }
 
@@ -112,7 +113,8 @@ class MessagesViewController: MSMessagesAppViewController {
 
     override func willTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         super.willTransition(to: presentationStyle)
-    
+        updateAccessibilityModal(for: presentationStyle)
+
         let isGameLoaded = activeGameEngine != nil
         let isShowingMenu = children.first is UIHostingController<MainMenuView>
 
@@ -137,6 +139,10 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     // MARK: - Helper functions
+    private func updateAccessibilityModal(for presentationStyle: MSMessagesAppPresentationStyle) {
+        view.accessibilityViewIsModal = (presentationStyle == .expanded) //in order to block the imessage elements underneath the view from being recognized/assigned numbers
+    }
+
     private func presentTranscriptView(for gameType: GameType, stateData: Data, isFromMe: Bool, localParticipantID: UUID) {
         let rootView = decideTranscriptView(for: gameType, stateData: stateData, isFromMe: isFromMe, localParticipantID: localParticipantID)
         let transcriptViewController = UIHostingController(rootView: rootView)

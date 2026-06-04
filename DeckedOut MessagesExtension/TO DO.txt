@@ -1,15 +1,3 @@
--the "selected" text is below the opponents hand's z value
-
--opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top (opponent hand sometimes clips above deck in groupchat modes)
-
--opponent draw to discard shadow animation in golf is sudden?
-
--is there a way to interact with voiceover that blocks out the imessage elements from being scanned under it?
-
--turn off main menu card flips and themes menu entry animation for reduce motion (prefer cross fade transitions setting)?
-
-***----------*** UPDATE 3.3.1 minor accessibility update ***----------***
-
 -GameCenter achievements (button on main menu?)
 
 ***----------*** UPDATE 3.4.0 GameCenter UPDATE ***----------***
@@ -78,11 +66,14 @@ Customizations to sell:
 
 
 Known issues:
+-the "selected" text is below the opponents hand's z value in groupchat
+-opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top (opponent hand sometimes clips above deck in groupchat modes)
 -in crazy 8s if discarding a queen and then another card on the final move, it does not animate the queen's discard
 -in 1v1 player if drawing cards user gets a queen, plays it, draws more cards and then discards again, the draws are not animated if the player draws more than 3
 -Cannot detect if a user is using Voice Control, just VoiceOver. add Voice Control to the check if a function comes out that checks for this
 
 QOL changes / possible updates:
+-turn off main menu card flips and themes menu entry animation for reduce motion (prefer cross fade transitions setting)?
 -Differentiate without color alone should make the main menu icons white outlines again
 -accessibility show numbers still rank cards vertically on the fan rather than left to right
 -look into why arrow replace animation isnt doing the same animation seen in SF Symbols

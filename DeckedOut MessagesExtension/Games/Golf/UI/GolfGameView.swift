@@ -33,6 +33,7 @@ struct GolfGameView: View {
     @State private var deckToDiscardCard: Card? = nil
     @State private var deckToDiscardOffset: CGSize = .zero
     @State private var deckToDiscardRotation: Double = 0
+    @State private var deckToDiscardShadowRadius: CGFloat = 10
     @State private var hideTopDiscard: Bool = false
     @State private var hoveringShadowRadius: CGFloat = 20
     @State private var winGlowRadius: CGFloat = 0
@@ -69,7 +70,7 @@ struct GolfGameView: View {
             if let card = deckToDiscardCard {
                 CardView(frontImage: card.imageName, backImageName: game.opponentDeckCardBack, rotation: deckToDiscardRotation)
                     .frame(width: 91, height: 130)
-                    .shadow(color: .black.opacity(0.25), radius: 10)
+                    .shadow(color: .black.opacity(0.25), radius: deckToDiscardShadowRadius)
                     .offset(deckToDiscardOffset)
                     .zIndex(4)
             }
@@ -453,6 +454,7 @@ struct GolfGameView: View {
     private func animateDeckToDiscard(card: Card) {
         deckToDiscardCard = card
         deckToDiscardRotation = -180 // face down at start
+        deckToDiscardShadowRadius = 10
         deckToDiscardOffset = CGSize(
             width: deckFrame.midX - overlayCenter.x,
             height: deckFrame.midY - overlayCenter.y
@@ -465,6 +467,7 @@ struct GolfGameView: View {
                     height: discardFrame.midY - overlayCenter.y
                 )
                 deckToDiscardRotation = 0 // flip to face up
+                deckToDiscardShadowRadius = 0
             }
         }
 
@@ -473,6 +476,7 @@ struct GolfGameView: View {
             deckToDiscardCard = nil
             deckToDiscardOffset = .zero
             deckToDiscardRotation = 0
+            deckToDiscardShadowRadius = 10
         }
     }
     
