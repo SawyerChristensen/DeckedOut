@@ -58,7 +58,16 @@ struct GinTranscriptV2: View {
         .background(FeltBackgroundView())
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Gin")
-        .accessibilityInputLabels(["Gin", "Gin Rummy", "Card Game", "Gin game", "Gin Rummy game", "Gin card game", "Gin Rummy card game", "Open card game"])
+        .accessibilityLabel(Text("Gin", comment: "VoiceOver accessibility label for the Gin game transcript bubble"))
+        .accessibilityInputLabels([
+            Text("Gin", comment: "Voice Control input label – Gin game transcript bubble"),
+            Text("Gin Rummy", comment: "Voice Control input label – alternative name for the Gin game"),
+            Text("Card Game", comment: "Voice Control input label – generic phrase for a card game"),
+            Text("Gin game", comment: "Voice Control input label – Gin game transcript bubble"),
+            Text("Gin Rummy game", comment: "Voice Control input label – Gin game transcript bubble"),
+            Text("Gin card game", comment: "Voice Control input label – Gin game transcript bubble"),
+            Text("Gin Rummy card game", comment: "Voice Control input label – Gin game transcript bubble"),
+            Text("Open card game", comment: "Voice Control input label – open the card game from the transcript bubble"),
+        ])
     }
 }

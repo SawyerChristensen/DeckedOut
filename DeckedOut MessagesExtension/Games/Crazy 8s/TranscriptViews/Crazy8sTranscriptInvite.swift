@@ -57,7 +57,15 @@ struct Crazy8sTranscriptInvite: View {
         .background(FeltBackgroundView())
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Crazy 8s")
-        .accessibilityInputLabels(["Crazy 8s", "Card Game", "Crazy 8s game", "Crazy 8s Invite", "Crazy 8s Game Invite", "Crazy 8s card game", "Open card game"])
+        .accessibilityLabel(Text("Crazy 8s", comment: "VoiceOver accessibility label for the Crazy 8s game invite transcript bubble"))
+        .accessibilityInputLabels([
+            Text("Crazy 8s", comment: "Voice Control input label – Crazy 8s game transcript bubble"),
+            Text("Card Game", comment: "Voice Control input label – generic phrase for a card game"),
+            Text("Crazy 8s game", comment: "Voice Control input label – Crazy 8s game transcript bubble"),
+            Text("Crazy 8s Invite", comment: "Voice Control input label – Crazy 8s game invite transcript bubble"),
+            Text("Crazy 8s Game Invite", comment: "Voice Control input label – Crazy 8s game invite transcript bubble"),
+            Text("Crazy 8s card game", comment: "Voice Control input label – Crazy 8s game transcript bubble"),
+            Text("Open card game", comment: "Voice Control input label – open the card game from the transcript bubble"),
+        ])
     }
 }

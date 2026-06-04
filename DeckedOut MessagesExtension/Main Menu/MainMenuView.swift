@@ -232,7 +232,7 @@ struct MainMenuView: View {
             ))
             .animation(.easeInOut.speed(motionSpeed), value: activeGameIndex)
             .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
-            .accessibilityLabel("Selected game: \(availableGames[activeGameIndex].title)")
+            .accessibilityLabel(Text("Selected game: \(availableGames[activeGameIndex].title)", comment: "VoiceOver accessibility label that announces the currently selected game, e.g. 'Selected game: Crazy 8s'"))
             .accessibilityHidden(showingThemes)
     }
 
@@ -251,7 +251,7 @@ struct MainMenuView: View {
             .animation(.easeInOut.speed(motionSpeed), value: activeThemeIndex)
             .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
             .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
-            .accessibilityLabel("Selected theme: \(themes[activeThemeIndex].title)")
+            .accessibilityLabel(Text("Selected theme: \(themes[activeThemeIndex].title)", comment: "VoiceOver accessibility label that announces the currently selected card-back theme, e.g. 'Selected theme: Sunset'"))
             .accessibilityHidden(!showingThemes)
     }
 
@@ -306,7 +306,7 @@ struct MainMenuView: View {
                 }
         }
         .accessibilityElement(children: .ignore) //dont count the crown as a seperate element
-        .accessibilityLabel("\(availableGames[activeGameIndex].title) win count: \(availableGames[activeGameIndex].wins)")
+        .accessibilityLabel(Text("\(availableGames[activeGameIndex].title) win count: \(availableGames[activeGameIndex].wins)", comment: "VoiceOver accessibility label that announces the win count for a specific game, e.g. 'Crazy 8s win count: 5'"))
     }
 
     private var onboardingSubtitle: some View {
@@ -318,7 +318,9 @@ struct MainMenuView: View {
                 insertion: .move(edge: .bottom).combined(with: .opacity),
                 removal: .move(edge: .top).combined(with: .opacity)
             ))
-            .accessibilityLabel(hasDraggedCards ? "Tap a card to select a game" : "Drag the cards left or right")
+            .accessibilityLabel(hasDraggedCards
+                ? Text("Tap a card to select a game", comment: "VoiceOver accessibility label – onboarding hint shown after the user has dragged cards")
+                : Text("Drag the cards left or right", comment: "VoiceOver accessibility label – initial onboarding hint to drag the card carousel"))
     }
     
     private var priceFace: some View {
@@ -446,7 +448,9 @@ struct MainMenuView: View {
             )
         }
         .buttonStyle(.plain) //turns off the accessibility background showing the button shape we do this manually
-        .accessibilityLabel(showingThemes ? "Back" : "Rules")
+        .accessibilityLabel(showingThemes
+            ? Text("Back", comment: "VoiceOver accessibility label – back button to leave themes mode")
+            : Text("Rules", comment: "VoiceOver accessibility label – opens the rules of the selected game"))
         .accessibilityAddTraits(.isButton)
     }
     
@@ -535,7 +539,9 @@ struct MainMenuView: View {
             )
         }
         .buttonStyle(.plain) //turns off the accessibility background showing the button shape
-        .accessibilityLabel(showingThemes ? "Select" : "Themes")
+        .accessibilityLabel(showingThemes
+            ? Text("Select", comment: "VoiceOver accessibility label – confirm the highlighted theme selection")
+            : Text("Themes", comment: "VoiceOver accessibility label – opens the theme picker"))
         .accessibilityAddTraits(.isButton)
     }
     
@@ -1016,9 +1022,15 @@ struct MainMenuView: View {
                 .shadow(color: .black.opacity(0.15), radius: 5, x: 0, y: 2)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Back")
+        .accessibilityLabel(Text("Back", comment: "VoiceOver accessibility label – back button to return to the main menu"))
         .accessibilityAddTraits(.isButton)
-        .accessibilityInputLabels(["Back", "Back to main menu", "Dismiss", "Exit", "Left Arrow"])
+        .accessibilityInputLabels([
+            Text("Back", comment: "Voice Control input label – back button"),
+            Text("Back to main menu", comment: "Voice Control input label – back button alternative phrasing"),
+            Text("Dismiss", comment: "Voice Control input label – back / dismiss button"),
+            Text("Exit", comment: "Voice Control input label – back / exit button"),
+            Text("Left Arrow", comment: "Voice Control input label – the chevron icon on the back button"),
+        ])
     }
     
     private var deckSection: some View {
@@ -1070,7 +1082,9 @@ struct MainMenuView: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(cardsAnimatedAway >= 5 ? "Joker card" : "Deck of cards")
+        .accessibilityLabel(cardsAnimatedAway >= 5
+            ? Text("Joker card", comment: "VoiceOver accessibility label for the joker card image revealed after the deck animates away")
+            : Text("Deck of cards", comment: "VoiceOver accessibility label for the deck-of-cards image in the submenu"))
         .accessibilityAddTraits(.isImage)
     }
     
@@ -1123,10 +1137,16 @@ struct MainMenuView: View {
                 .shadow(color: .black.opacity(0.2), radius: 5, x: 5, y: 5)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("New Game")
-        .accessibilityInputLabels(["New Game", "New", "Create Game", "Start Game", "Play"])
+        .accessibilityLabel(Text("New Game", comment: "VoiceOver accessibility label – button that starts a new game and attaches it to the message"))
+        .accessibilityInputLabels([
+            Text("New Game", comment: "Voice Control input label – new game button"),
+            Text("New", comment: "Voice Control input label – new game button shorthand"),
+            Text("Create Game", comment: "Voice Control input label – new game button alternative phrasing"),
+            Text("Start Game", comment: "Voice Control input label – new game button alternative phrasing"),
+            Text("Play", comment: "Voice Control input label – new game button shorthand"),
+        ])
         .accessibilityAddTraits(.isButton)
-        .accessibilityHint("Attaches the game to your message so you can send it.")
+        .accessibilityHint(Text("Attaches the game to your message so you can send it.", comment: "VoiceOver accessibility hint describing what the New Game button does"))
     }
     
     private var handSizePicker: some View {
@@ -1173,8 +1193,12 @@ struct MainMenuView: View {
             // ACCESSIBILITY MODIFIERS:
             .contentShape(Rectangle())
             .accessibilityElement(children: .ignore) // Ignore default image reading
-            .accessibilityLabel("\(selectedHandSize) cards") // What VoiceOver reads
-            .accessibilityInputLabels(["\(selectedHandSize)", "\(selectedHandSize) cards", "\(selectedHandSize) of \(suit)"]) // What Voice Control listens for
+            .accessibilityLabel(Text("\(selectedHandSize) cards", comment: "VoiceOver accessibility label for a hand-size option card, e.g. '7 cards'")) // What VoiceOver reads
+            .accessibilityInputLabels([
+                Text(verbatim: "\(selectedHandSize)"),
+                Text("\(selectedHandSize) cards", comment: "Voice Control input label – hand-size option, e.g. '7 cards'"),
+                Text("\(selectedHandSize) of \(suit)", comment: "Voice Control input label – hand-size option matching the displayed card, e.g. '7 of Hearts'"),
+            ]) // What Voice Control listens for
             .accessibilityAddTraits(.isButton) // Tells the system it's clickable
             .accessibilityAddTraits(isSelected ? .isSelected : []) // Announces the visual state
     }

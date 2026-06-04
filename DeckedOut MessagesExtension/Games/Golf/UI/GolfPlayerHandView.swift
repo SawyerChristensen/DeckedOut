@@ -203,20 +203,23 @@ struct GolfPlayerHandView: View {
         var labels: [Text] = [
             Text("Row \(row) column \(col)", comment: "Voice Control input label for a Golf grid card, e.g. row 1 column 2"),
             Text("Column \(col) row \(row)", comment: "Voice Control input label for a Golf grid card, e.g. column 2 row 1"),
-            Text("\(rowOrdinal) row \(colOrdinal) column"),
-            Text("\(colOrdinal) column \(rowOrdinal) row"),
-            Text("the \(rowOrdinal) row \(colOrdinal) column"),
-            Text("the \(colOrdinal) column \(rowOrdinal) row")
+            Text("\(rowOrdinal) row \(colOrdinal) column", comment: "Voice Control input label for a Golf grid card using ordinal words, e.g. first row second column"),
+            Text("\(colOrdinal) column \(rowOrdinal) row", comment: "Voice Control input label for a Golf grid card using ordinal words, e.g. second column first row"),
+            Text("the \(rowOrdinal) row \(colOrdinal) column", comment: "Voice Control input label for a Golf grid card prefixed with 'the', e.g. the first row second column"),
+            Text("the \(colOrdinal) column \(rowOrdinal) row", comment: "Voice Control input label for a Golf grid card prefixed with 'the', e.g. the second column first row")
         ]
 
         if isFaceUp {
             let rank = card.rank.localizedName
             let suit = card.suit.localizedName
-            let base = "\(rank) of \(suit)"
+            let base = String(
+                format: String(localized: "%@ of %@", comment: "Voice Control card name, e.g. Queen of Hearts"),
+                rank, suit
+            )
             let bare = "\(rank) \(suit)"
-            labels.append(Text(base))
-            labels.append(Text("the \(base)"))
-            labels.append(Text(bare))
+            labels.append(Text(verbatim: base))
+            labels.append(Text("the \(base)", comment: "Voice Control input label for a card prefixed with the article 'the', e.g. 'the Queen of Hearts'"))
+            labels.append(Text(verbatim: bare))
         }
 
         return labels

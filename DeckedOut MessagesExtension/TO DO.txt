@@ -1,18 +1,3 @@
--2 draws 2 (DONE)
--queens skip (DONE)
--aces reverse direction (DONE)
-
--the main menu view broke on ipad (DONE)
-
--change crazy 8s rules text (DONE)
--translate "new game" button (DONE)
-
--audio does not play starting a game and then switching to expanded view (DONE?)
-
--fix first turn delay (DONE?)
-
-***----------*** UPDATE 3.3 Crazy 8s update ***----------*** NOMINATE!
-
 -the "selected" text is below the opponents hand's z value
 
 -opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top (opponent hand sometimes clips above deck in groupchat modes)
@@ -23,8 +8,6 @@
 
 -turn off main menu card flips and themes menu entry animation for reduce motion (prefer cross fade transitions setting)?
 
--localize all accessibility labels (Claude busy work)
-
 ***----------*** UPDATE 3.3.1 minor accessibility update ***----------***
 
 -GameCenter achievements (button on main menu?)
@@ -33,7 +16,7 @@
 
 -add 4th game
 
-***----------*** UPDATE 4.0.0 DOU DIZHU UPDATE ***----------***
+***----------*** UPDATE 4.0.0 4th game UPDATE ***----------***
 
 -add mau mau variant of crazy 8s and the one for turkish?
 

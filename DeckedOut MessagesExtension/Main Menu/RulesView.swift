@@ -41,8 +41,8 @@ struct RulesView: View {
                             .foregroundColor(.white.opacity(0.7))
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Close")
-                    .accessibilityHint("Closes the rules window")
+                    .accessibilityLabel(Text("Close", comment: "VoiceOver accessibility label for the rules window close button"))
+                    .accessibilityHint(Text("Closes the rules window", comment: "VoiceOver accessibility hint describing what the rules close button does"))
                     .accessibilityInputLabels([
                         Text("Close rules", comment: "Voice Control input label"),
                         Text("Dismiss", comment: "Voice Control input label"),

@@ -229,12 +229,15 @@ struct GinPlayerHandView: View {
     private func accessibilityInputLabels(for card: Card) -> [Text] {
         let rank = card.rank.localizedName
         let suit = card.suit.localizedName
-        let base = "\(rank) of \(suit)"
+        let base = String(
+            format: String(localized: "%@ of %@", comment: "Voice Control card name, e.g. Queen of Hearts"),
+            rank, suit
+        )
         let bare = "\(rank) \(suit)"
         return [
-            Text(base),
-            Text("the \(base)"),
-            Text(bare),
+            Text(verbatim: base),
+            Text("the \(base)", comment: "Voice Control input label for a card in hand prefixed with the article 'the', e.g. 'the Queen of Hearts'"),
+            Text(verbatim: bare),
         ]
     }
 

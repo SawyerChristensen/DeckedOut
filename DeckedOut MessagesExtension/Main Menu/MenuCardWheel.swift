@@ -153,10 +153,20 @@ struct MenuCardWheel: View {
         )
         // --- Accessibility Configuration ---
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Game Selection Carousel")
-        .accessibilityInputLabels(["\(activeGameTitle) Card", "Select Game", "Current Game", "Select \(activeGameTitle)", "Open submenu", "Open Game", "Open \(activeGameTitle)", "Play Game", "Play \(activeGameTitle)"])
-        .accessibilityValue(activeGameTitle)
-        .accessibilityHint("Swipe up or down to change game. Double tap to open the \(games[gameIndex(for: currentCenterIndex)].title) menu.")
+        .accessibilityLabel(Text("Game Selection Carousel", comment: "VoiceOver accessibility label for the main menu game-selection carousel"))
+        .accessibilityInputLabels([
+            Text("\(activeGameTitle) Card", comment: "Voice Control input label – the active card in the game carousel, e.g. 'Crazy 8s Card'"),
+            Text("Select Game", comment: "Voice Control input label – select the current game in the carousel"),
+            Text("Current Game", comment: "Voice Control input label – refers to the game currently centered in the carousel"),
+            Text("Select \(activeGameTitle)", comment: "Voice Control input label – select the named game, e.g. 'Select Crazy 8s'"),
+            Text("Open submenu", comment: "Voice Control input label – open the submenu for the selected game"),
+            Text("Open Game", comment: "Voice Control input label – open the selected game"),
+            Text("Open \(activeGameTitle)", comment: "Voice Control input label – open the named game, e.g. 'Open Crazy 8s'"),
+            Text("Play Game", comment: "Voice Control input label – play the selected game"),
+            Text("Play \(activeGameTitle)", comment: "Voice Control input label – play the named game, e.g. 'Play Crazy 8s'"),
+        ])
+        .accessibilityValue(Text(verbatim: activeGameTitle))
+        .accessibilityHint(Text("Swipe up or down to change game. Double tap to open the \(games[gameIndex(for: currentCenterIndex)].title) menu.", comment: "VoiceOver accessibility hint for the game-selection carousel, %@ is the selected game name"))
         .accessibilityAction { // Default VoiceOver Activation Action
             withAnimation(.spring(response: 0.6, dampingFraction: 0.7).speed(motionSpeed)) {
                 hasSelectedGame = true

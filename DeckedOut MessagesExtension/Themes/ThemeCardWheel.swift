@@ -161,9 +161,15 @@ struct ThemeCardWheel: View {
         )
         // --- Accessibility Configuration ---
         .accessibilityElement(children: .ignore) // Ignores individual cards; only the wheel is focused
-        .accessibilityLabel("Theme Selection Carousel")
-        .accessibilityInputLabels(["Select Theme", "Select \(activeThemeTitle)", "\(activeThemeTitle) Card", "Equip Theme", "Equip \(activeThemeTitle)",])
-        .accessibilityValue(activeThemeTitle)
+        .accessibilityLabel(Text("Theme Selection Carousel", comment: "VoiceOver accessibility label for the theme-selection carousel"))
+        .accessibilityInputLabels([
+            Text("Select Theme", comment: "Voice Control input label – select the current theme in the carousel"),
+            Text("Select \(activeThemeTitle)", comment: "Voice Control input label – select the named theme, e.g. 'Select Sunset'"),
+            Text("\(activeThemeTitle) Card", comment: "Voice Control input label – the active card in the theme carousel, e.g. 'Sunset Card'"),
+            Text("Equip Theme", comment: "Voice Control input label – equip the current theme"),
+            Text("Equip \(activeThemeTitle)", comment: "Voice Control input label – equip the named theme, e.g. 'Equip Sunset'"),
+        ])
+        .accessibilityValue(Text(verbatim: activeThemeTitle))
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { onThemeSelected(themeIndex(for: currentCenterIndex)) } //Default VoiceOver activation action
         .accessibilityScrollAction { edge in  // Voice Control: "Scroll Left / Scroll Right"

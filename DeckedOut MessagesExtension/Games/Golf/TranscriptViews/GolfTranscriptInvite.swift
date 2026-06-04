@@ -57,7 +57,15 @@ struct GolfTranscriptInvite: View {
         .background(FeltBackgroundView())
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Golf")
-        .accessibilityInputLabels(["Golf", "Card Game", "Golf game", "Golf Invite", "Golf Game Invite", "Golf card game", "Open card game"])
+        .accessibilityLabel(Text("Golf", comment: "VoiceOver accessibility label for the Golf game invite transcript bubble"))
+        .accessibilityInputLabels([
+            Text("Golf", comment: "Voice Control input label – Golf game transcript bubble"),
+            Text("Card Game", comment: "Voice Control input label – generic phrase for a card game"),
+            Text("Golf game", comment: "Voice Control input label – Golf game transcript bubble"),
+            Text("Golf Invite", comment: "Voice Control input label – Golf game invite transcript bubble"),
+            Text("Golf Game Invite", comment: "Voice Control input label – Golf game invite transcript bubble"),
+            Text("Golf card game", comment: "Voice Control input label – Golf game transcript bubble"),
+            Text("Open card game", comment: "Voice Control input label – open the card game from the transcript bubble"),
+        ])
     }
 }
