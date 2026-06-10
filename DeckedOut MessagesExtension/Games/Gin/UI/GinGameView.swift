@@ -229,8 +229,13 @@ struct GinGameView: View {
                             game.requestKnock()
                         }) {
                             HStack {
-                                Image(systemName: "hand.raised.fill")
+                                Image(systemName: game.isKnockArmed ? "hand.raised.fill" : "hand.raised")
                                     .font(.system(size: rulesButtonSize * 0.82))
+
+                                if game.isKnockArmed {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: rulesButtonSize * 0.55))
+                                }
 
                                 if showButtonShapes {
                                     Text("Knock")
@@ -238,20 +243,20 @@ struct GinGameView: View {
                                         .fontWeight(.semibold)
                                 }
                             }
-                            .foregroundStyle(.white.opacity(0.95))
+                            .foregroundStyle(game.isKnockArmed ? Color.white : Color.white.opacity(0.95))
                             .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
                             .background(
                                 Group {
                                     if showButtonShapes {
                                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                            .fill(.ultraThinMaterial)
+                                            .fill(game.isKnockArmed ? Color.green.opacity(0.35) : .ultraThinMaterial)
                                     }
                                 }
                             )
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(Text("Knock", comment: "VoiceOver accessibility label for the knock button in Gin Rummy"))
-                        .accessibilityHint(Text("Declare a knock, then discard to end the round.", comment: "VoiceOver hint for the knock button in Gin Rummy"))
+                        .accessibilityHint(Text(game.isKnockArmed ? "Knock is activated. Discard a card to knock." : "Declare a knock, then discard to end the round.", comment: "VoiceOver hint for the knock button in Gin Rummy"))
                         .accessibilityInputLabels([
                             Text("Knock", comment: "Voice Control input label for the knock button in Gin Rummy"),
                             Text("Declare knock", comment: "Voice Control input label for declaring a knock in Gin Rummy"),

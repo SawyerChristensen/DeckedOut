@@ -79,6 +79,10 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         roundWinType
     }
 
+    var isKnockArmed: Bool {
+        shouldKnockOnDiscard
+    }
+
     var shouldShowKnockRules: Bool {
         isSinglePlayer && handSize == 10
     }
@@ -218,11 +222,20 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     }
 
     func requestKnock() {
+        // Tapping again disarms knock so the player can back out before discarding.
+        if shouldKnockOnDiscard {
+            shouldKnockOnDiscard = false
+            HapticManager.instance.playCardReorder()
+            return
+        }
+
         guard canPlayerKnock else {
             HapticManager.instance.playErrorFeedback()
             return
         }
+
         shouldKnockOnDiscard = true
+        HapticManager.instance.playCardReorder()
     }
 
     func sortPlayerHand(sortState: Int) {
