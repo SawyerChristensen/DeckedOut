@@ -485,7 +485,19 @@ class MessagesViewController: MSMessagesAppViewController {
             case .ginRummy:
                 let ginWonImage = Locale.current.language.languageCode == "zh" ? "GinGameWonChinese" : "GinGameWon"
                 templateLayout.image = UIImage(named: ginWonImage)
-                templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin template win caption/summary")
+                if let ginManager = activeGameEngine as? GinRummyManager,
+                   let roundWinType = ginManager.currentRoundWinType {
+                    switch roundWinType {
+                    case .gin:
+                        templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin template win caption/summary")
+                    case .knock:
+                        templateLayout.caption = NSLocalizedString("I won by knock in Gin!", comment: "Gin template win caption/summary for knocking")
+                    case .undercut:
+                        templateLayout.caption = NSLocalizedString("I won by undercut in Gin!", comment: "Gin template win caption/summary for undercut")
+                    }
+                } else {
+                    templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin template win caption/summary")
+                }
             case .crazy8s:
                 templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s template win caption/summary")
             case .golf:

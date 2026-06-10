@@ -7,6 +7,17 @@
 
 import Foundation
 
+enum GinRoundWinType: String, Codable {
+    case gin
+    case knock
+    case undercut
+}
+
+enum GinRoundWinner: String, Codable {
+    case sender
+    case receiver
+}
+
 // V1: Legacy 2-player game snapshot
 struct GinRummyGameState: Codable, BasicGameState {
     let sessionID: UUID
@@ -19,6 +30,8 @@ struct GinRummyGameState: Codable, BasicGameState {
     let indexSenderDiscardedFrom: Int?
     let turnNumber: Int
     let senderCardBack: String? //the card-back the sender has equipped; optional for backward compat
+    let roundWinner: GinRoundWinner? //explicit winner metadata for non-gin round endings
+    let roundWinType: GinRoundWinType? //distinguishes gin/knock/undercut outcomes
 }
 
 // V2: Seat-based groupchat multiplayer game snapshot
@@ -56,6 +69,19 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var opponentHasWon: Bool = false //stays local
     @Published var isGameOver: Bool = false //stays local
     @Published var turnNumber: Int = 0
+
+    // Knock state is only used in legacy 1v1 10-card gin.
+    private var shouldKnockOnDiscard: Bool = false
+    private var roundWinner: GinRoundWinner? = nil
+    private var roundWinType: GinRoundWinType? = nil
+
+    var currentRoundWinType: GinRoundWinType? {
+        roundWinType
+    }
+
+    var shouldShowKnockRules: Bool {
+        isSinglePlayer && handSize == 10
+    }
     
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     var handSize: Int = 7 //configurable from the menu (7 or 10)
@@ -139,6 +165,10 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     
     func discardCard(card: Card) { //possible room for refactoring/removing discardCard
         guard phase == .discardPhase, let index = playerHand.firstIndex(of: card) else { return }
+        // Capture and clear the local knock intent at discard-time so one tap only applies to one discard.
+        let shouldEvaluateKnock = shouldKnockOnDiscard
+        shouldKnockOnDiscard = false
+
         if let drawn = drawnCard, let drawnIndex = playerHand.firstIndex(of: drawn) {
             indexDrawnTo = drawnIndex
         }
@@ -147,13 +177,106 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
         HapticManager.instance.playCardSlap()
+
+        roundWinner = nil
+        roundWinType = nil
+
         playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
         if playerHasWon {
+            isGameOver = true
+            roundWinner = .sender
+            roundWinType = .gin
             SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
             WinTracker.shared.incrementWins(for: "Gin Rummy")
-        } else { phase = .idlePhase }
+        } else if shouldEvaluateKnock && canPlayerKnock {
+            resolveKnockRoundForLegacySender()
+        } else {
+            isGameOver = false
+            phase = .idlePhase
+        }
         sendGameStateSwitch()
+    }
+
+    var canPlayerKnock: Bool {
+        guard isSinglePlayer else { return false }
+        guard handSize == 10 else { return false }
+        guard phase == .discardPhase else { return false }
+
+        // Before the discard, the hand has 11 cards. Show the button when any legal
+        // discard would leave a non-gin hand with 10 or less deadwood.
+        if playerHand.count == handSize + 1 {
+            return playerHand.contains { candidate in
+                var postDiscardHand = playerHand
+                guard let index = postDiscardHand.firstIndex(of: candidate) else { return false }
+                postDiscardHand.remove(at: index)
+                return canKnock(afterDiscarding: postDiscardHand)
+            }
+        }
+
+        return canKnock(afterDiscarding: playerHand)
+    }
+
+    func requestKnock() {
+        guard canPlayerKnock else {
+            HapticManager.instance.playErrorFeedback()
+            return
+        }
+        shouldKnockOnDiscard = true
+    }
+
+    func sortPlayerHand(sortState: Int) {
+        // sortState: 0 = unsorted, 1 = sorted ascending, 2 = sorted descending
+        if sortState == 0 {
+            // Just play a sound/haptic, no actual sorting
+            HapticManager.instance.playCardReorder()
+            return
+        }
+        
+        let sortedHand = playerHand.sorted { card1, card2 in
+            // First sort by suit (spades=0, hearts=1, clubs=2, diamonds=3)
+            if card1.suit.rawValue != card2.suit.rawValue {
+                let suitComparison = card1.suit.rawValue < card2.suit.rawValue
+                return sortState == 1 ? suitComparison : !suitComparison
+            }
+            // Then sort by rank (ace=0 lowest, king=12 highest)
+            let rankComparison = card1.rank.rawValue < card2.rank.rawValue
+            return sortState == 1 ? rankComparison : !rankComparison
+        }
+        
+        playerHand = sortedHand
+        HapticManager.instance.playCardReorder()
+    }
+
+    private func resolveKnockRoundForLegacySender() {
+        guard let outcome = GinRummyValidator.evaluateKnock(knockerHand: playerHand, defenderHand: opponentHand) else {
+            isGameOver = false
+            phase = .idlePhase
+            return
+        }
+
+        if outcome.isUndercut {
+            playerHasWon = false
+            opponentHasWon = true
+            roundWinner = .receiver
+            roundWinType = .undercut
+        } else {
+            playerHasWon = true
+            opponentHasWon = false
+            roundWinner = .sender
+            roundWinType = .knock
+            WinTracker.shared.incrementWins(for: "Gin Rummy")
+        }
+
+        isGameOver = true
+        SoundManager.instance.playGameEnd(didWin: playerHasWon)
+        phase = .gameEndPhase
+    }
+
+    private func canKnock(afterDiscarding hand: [Card]) -> Bool {
+        guard hand.count == handSize else { return false }
+        guard !GinRummyValidator.canMeldAllCards(hand: hand) else { return false }
+        return GinRummyValidator.minimumDeadwoodPoints(hand: hand) <= 10
     }
     
     func opponentDrawFromDeck() {
@@ -190,6 +313,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         HapticManager.instance.playCardSlap()
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
         if opponentHasWon {
+            isGameOver = true
+            roundWinner = .sender
+            roundWinType = .gin
             SoundManager.instance.playGameEnd(didWin: false)
             isAnimatingOpponentTurn = false
             phase = .gameEndPhase
@@ -250,6 +376,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.turnNumber = state.turnNumber
         self.deck = state.deck
         self.discardPile = state.discardPile
+        self.roundWinner = state.roundWinner
+        self.roundWinType = state.roundWinType
+        self.shouldKnockOnDiscard = false
         // The sender of this message is the opponent we're about to play against.
         if isPlayersTurn, let sentBack = state.senderCardBack {
             self.opponentCardBack = sentBack
@@ -274,7 +403,10 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             if hasVisualsToAnimate {//it is not the first turn...
                 phase = .animationPhase
             } else { //it is the first turn...
-                checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
+                hydrateLegacyWinnerFlagsFromRoundResult(isPlayersTurn: isPlayersTurn)
+                if !isGameOver {
+                    checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
+                }
                 if isGameOver {
                     phase = .gameEndPhase
                     SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
@@ -286,8 +418,16 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         } else { //it is not the players turn...
             self.playerHand = state.senderHand
             self.opponentHand = state.receiverHand
-            playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
-            if playerHasWon {
+            hydrateLegacyWinnerFlagsFromRoundResult(isPlayersTurn: isPlayersTurn)
+            if !isGameOver {
+                playerHasWon = GinRummyValidator.canMeldAllCards(hand: self.playerHand)
+                if playerHasWon {
+                    roundWinner = .sender
+                    roundWinType = .gin
+                    isGameOver = true
+                }
+            }
+            if isGameOver {
                 phase = .gameEndPhase
                 SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
             } else {
@@ -295,6 +435,29 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
                 phase = .idlePhase
             }
         }
+    }
+
+    private func hydrateLegacyWinnerFlagsFromRoundResult(isPlayersTurn: Bool) {
+        guard let winner = roundWinner else {
+            playerHasWon = false
+            opponentHasWon = false
+            isGameOver = false
+            return
+        }
+
+        // In legacy state, sender == message author and receiver == viewer.
+        // `isPlayersTurn` means the local player is receiver for this update.
+        let localIsReceiver = isPlayersTurn
+        let localWon: Bool
+        if localIsReceiver {
+            localWon = (winner == .receiver)
+        } else {
+            localWon = (winner == .sender)
+        }
+
+        playerHasWon = localWon
+        opponentHasWon = !localWon
+        isGameOver = true
     }
 
     private func loadV2State(state: GinRummyV2GameState, localParticipantID: UUID, conversationID: String, isExplicitChange: Bool) {
@@ -436,9 +599,12 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.indexDrawnTo = nil
         self.indexDiscardedFrom = nil
         self.drawnCard = nil
+        self.shouldKnockOnDiscard = false
         self.playerHasWon = false
         self.opponentHasWon = false
         self.isGameOver = false
+        self.roundWinner = nil
+        self.roundWinType = nil
         self.hasPerformedInitialLoad = false
         self.turnNumber = 0
         self.seats = []
@@ -507,8 +673,17 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     }
     
     func checkWin() { //set for deprecation when we disallow first turn wins
+        roundWinner = nil
+        roundWinType = nil
         playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
+        if playerHasWon {
+            roundWinner = .sender
+            roundWinType = .gin
+        } else if opponentHasWon {
+            roundWinner = .receiver
+            roundWinType = .gin
+        }
         isGameOver = playerHasWon || opponentHasWon
     }
     
@@ -551,7 +726,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
                 indexSenderDrewTo: nil,
                 indexSenderDiscardedFrom: nil,
                 turnNumber: 0,
-                senderCardBack: myCardBack)
+                senderCardBack: myCardBack,
+                roundWinner: nil,
+                roundWinType: nil)
             self.isSinglePlayer = true
             return try? JSONEncoder().encode(legacyState)
 
@@ -653,7 +830,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             indexSenderDrewTo: self.indexDrawnTo,
             indexSenderDiscardedFrom: self.indexDiscardedFrom,
             turnNumber: self.turnNumber + 1,
-            senderCardBack: CardBackSelection.shared.selectedName
+            senderCardBack: CardBackSelection.shared.selectedName,
+            roundWinner: self.roundWinner,
+            roundWinType: self.roundWinType
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {

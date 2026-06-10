@@ -22,6 +22,7 @@ struct GinGameView: View {
     @State private var isHoveringDiscard: Bool = false
     @State private var showRules: Bool = false
     @State private var handShadowRadius: CGFloat = 5
+    @State private var cardSortState: Int = 0 // 0 = unsorted, 1 = sorted ascending, 2 = sorted descending
     @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
     
     var body: some View {
@@ -53,7 +54,12 @@ struct GinGameView: View {
         .accessibilityHidden(showRules)
         .overlay {
             if showRules {
-                RulesView(gameType: .ginRummy, isExpanded: true, onDismiss: { showRules = false })
+                RulesView(
+                    gameType: .ginRummy,
+                    showsGinKnockRules: game.shouldShowKnockRules,
+                    isExpanded: true,
+                    onDismiss: { showRules = false }
+                )
                     .frame(maxWidth: UIScreen.main.bounds.width)
                     .transition(.opacity.animation(.easeInOut(duration: 0.2).speed(motionSpeed)))
             }
@@ -217,6 +223,42 @@ struct GinGameView: View {
             .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width)
             .overlay(
                 HStack {
+                    if game.canPlayerKnock {
+                        // The player declares knock before discarding; the discard action resolves the round.
+                        Button(action: {
+                            game.requestKnock()
+                        }) {
+                            HStack {
+                                Image(systemName: "hand.raised.fill")
+                                    .font(.system(size: rulesButtonSize * 0.82))
+
+                                if showButtonShapes {
+                                    Text("Knock")
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                }
+                            }
+                            .foregroundStyle(.white.opacity(0.95))
+                            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+                            .background(
+                                Group {
+                                    if showButtonShapes {
+                                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                            .fill(.ultraThinMaterial)
+                                    }
+                                }
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text("Knock", comment: "VoiceOver accessibility label for the knock button in Gin Rummy"))
+                        .accessibilityHint(Text("Declare a knock, then discard to end the round.", comment: "VoiceOver hint for the knock button in Gin Rummy"))
+                        .accessibilityInputLabels([
+                            Text("Knock", comment: "Voice Control input label for the knock button in Gin Rummy"),
+                            Text("Declare knock", comment: "Voice Control input label for declaring a knock in Gin Rummy"),
+                            Text("Call knock", comment: "Voice Control input label for declaring a knock in Gin Rummy")
+                        ])
+                    }
+
                     Button(action: {
                         let impact = UIImpactFeedbackGenerator(style: .light)
                         impact.impactOccurred()
@@ -253,6 +295,42 @@ struct GinGameView: View {
                         Text("Game rules", comment: "Voice Control input label"),
                         Text("Show rules", comment: "Voice Control input label"),
                         Text("Show game rules", comment: "Voice Control input label")
+                    ])
+
+                    Button(action: {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                        cardSortState = (cardSortState + 1) % 3
+                        game.sortPlayerHand(sortState: cardSortState)
+                    }) {
+                        HStack {
+                            Image(systemName: cardSortState == 0 ? "arrow.up.arrow.down" : (cardSortState == 1 ? "arrow.up" : "arrow.down"))
+                                .font(.system(size: rulesButtonSize))
+
+                            if showButtonShapes {
+                                Text(cardSortState == 0 ? "Sort" : (cardSortState == 1 ? "Asc" : "Desc"))
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
+                        .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+                        .background(
+                            Group {
+                                if showButtonShapes {
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(.ultraThinMaterial)
+                                }
+                            }
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text("Sort hand", comment: "Voice Control label for sorting the player's hand"))
+                    .accessibilityHint(Text("Cycles between unsorted, ascending, and descending sort.", comment: "VoiceOver hint for the sort button"))
+                    .accessibilityInputLabels([
+                        Text("Sort", comment: "Voice Control input label"),
+                        Text("Sort hand", comment: "Voice Control input label"),
+                        Text("Sort cards", comment: "Voice Control input label")
                     ])
                     
                     Spacer()

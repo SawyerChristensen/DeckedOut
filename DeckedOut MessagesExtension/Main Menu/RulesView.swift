@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RulesView: View {
     let gameType: GameType
+    var showsGinKnockRules: Bool = false
     var isExpanded: Bool = false
     var onDismiss: () -> Void
     
@@ -121,12 +122,21 @@ struct RulesView: View {
     private var pages: [(symbol: SymbolType, title: LocalizedStringKey, description: LocalizedStringKey)] {
         switch gameType {
         case .ginRummy:
-            return [
+            var ginPages: [(symbol: SymbolType, title: LocalizedStringKey, description: LocalizedStringKey)] = [
                 (.custom("colored.square.stack.3d.up"), "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),
                 (.system("arrow.trianglehead.2.clockwise.rotate.90"), "Your Turn", "Draw one card from either the deck or the discard pile, then discard one card from your hand."),
-                (.custom("colored.rectangle.3.group"), "Melds", "Arrange your cards into sets (same rank) or runs (consecutive cards of the same suit) of 3 or more."),
-                (.system("crown.fill"), "How to Win", "Once all your cards form valid melds, you win! The fewer turns it takes, the better.")
+                (.custom("colored.rectangle.3.group"), "Melds", "Arrange your cards into sets (same rank) or runs (consecutive cards of the same suit) of 3 or more.")
             ]
+
+            if showsGinKnockRules {
+                ginPages.append((.system("hand.raised.fill"), "Knocking", "In 10-card 1v1 Gin, you can knock during your discard if that discard leaves you with 10 or less deadwood."))
+                ginPages.append((.system("rectangle.stack.fill.badge.person.crop"), "Layoffs", "After a knock, your opponent may lay off deadwood onto your melds. If their deadwood ties or beats yours, they undercut and win."))
+                ginPages.append((.system("crown.fill"), "How to Win", "Win by going gin, or by knocking successfully in 10-card 1v1 Gin."))
+            } else {
+                ginPages.append((.system("crown.fill"), "How to Win", "Once all your cards form valid melds, you win! The fewer turns it takes, the better."))
+            }
+
+            return ginPages
         case .crazy8s:
             return [
                 (.custom("colored.square.stack.3d.up"), "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),

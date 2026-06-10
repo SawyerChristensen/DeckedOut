@@ -14,8 +14,24 @@ struct GinTranscriptLegacy: View {
     
     private var playersHand: [Card] { isFromMe ? gameState.senderHand : gameState.receiverHand }
     private var opponentsHand: [Card] { isFromMe ? gameState.receiverHand : gameState.senderHand }
-    private var playerWon: Bool { GinRummyValidator.canMeldAllCards(hand: playersHand) }
-    private var opponentWon: Bool { GinRummyValidator.canMeldAllCards(hand: opponentsHand) }
+    private var playerWon: Bool {
+        if let roundWinner = gameState.roundWinner {
+            if isFromMe {
+                return roundWinner == .sender
+            }
+            return roundWinner == .receiver
+        }
+        return GinRummyValidator.canMeldAllCards(hand: playersHand)
+    }
+    private var opponentWon: Bool {
+        if let roundWinner = gameState.roundWinner {
+            if isFromMe {
+                return roundWinner == .receiver
+            }
+            return roundWinner == .sender
+        }
+        return GinRummyValidator.canMeldAllCards(hand: opponentsHand)
+    }
     
     var body: some View {
         VStack {
