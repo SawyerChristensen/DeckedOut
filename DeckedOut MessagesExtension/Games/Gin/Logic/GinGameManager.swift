@@ -75,6 +75,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     private var roundWinner: GinRoundWinner? = nil
     private var roundWinType: GinRoundWinType? = nil
 
+    // Snapshot of playerHand taken on the first sort of a cycle, restored when the user returns to the unsorted state.
+    private var originalPlayerHandOrder: [Card]? = nil
+
     var currentRoundWinType: GinRoundWinType? {
         roundWinType
     }
@@ -167,6 +170,85 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         phase = .discardPhase
     }
     
+    func sortPlayerHand(sortState: Int) {
+        // sortState: 0 = original unsorted order, 1 = sorted by suit then rank, 2 = sorted by rank
+        if sortState == 0 {
+            if let snapshot = originalPlayerHandOrder {
+                // Restore the snapshot, accounting for cards drawn or discarded since it was taken
+                let currentIDs = Set(playerHand.map(\.id))
+                var restored = snapshot.filter { currentIDs.contains($0.id) }
+                let snapshotIDs = Set(snapshot.map(\.id))
+                restored.append(contentsOf: playerHand.filter { !snapshotIDs.contains($0.id) })
+                playerHand = restored
+                originalPlayerHandOrder = nil
+            }
+            HapticManager.instance.playCardReorder()
+            return
+        }
+
+        // Capture the pre-sort order the first time we sort in a cycle
+        if originalPlayerHandOrder == nil {
+            originalPlayerHandOrder = playerHand
+        }
+
+        let sortedHand = playerHand.sorted { card1, card2 in
+            if sortState == 1 {
+                if card1.suit.rawValue != card2.suit.rawValue {
+                    return card1.suit.rawValue < card2.suit.rawValue
+                }
+                return card1.rank.rawValue < card2.rank.rawValue
+            }
+            // sortState == 2: sort by rank, suit as tiebreaker
+            if card1.rank.rawValue != card2.rank.rawValue {
+                return card1.rank.rawValue < card2.rank.rawValue
+            }
+            return card1.suit.rawValue < card2.suit.rawValue
+        }
+
+        playerHand = sortedHand
+        HapticManager.instance.playCardReorder()
+    }
+    
+    var canPlayerKnock: Bool {
+        guard handSize == 10 else { return false }
+        guard phase == .discardPhase else { return false }
+
+        // Before the discard, the hand has 11 cards. Show the button when any legal discard would leave a non-gin hand with 10 or less deadwood.
+        if playerHand.count == handSize + 1 {
+            return playerHand.contains { candidate in
+                var postDiscardHand = playerHand
+                guard let index = postDiscardHand.firstIndex(of: candidate) else { return false }
+                postDiscardHand.remove(at: index)
+                return canKnock(afterDiscarding: postDiscardHand)
+            }
+        }
+
+        return canKnock(afterDiscarding: playerHand)
+    }
+    
+    private func canKnock(afterDiscarding hand: [Card]) -> Bool {
+        guard hand.count == handSize else { return false }
+        guard !GinRummyValidator.canMeldAllCards(hand: hand) else { return false }
+        return GinRummyValidator.minimumDeadwoodPoints(hand: hand) <= 10
+    }
+    
+    func requestKnock() {
+        // Tapping again disarms knock so the player can back out before discarding.
+        if shouldKnockOnDiscard {
+            shouldKnockOnDiscard = false
+            HapticManager.instance.playCardReorder()
+            return
+        }
+
+        guard canPlayerKnock else {
+            HapticManager.instance.playErrorFeedback()
+            return
+        }
+
+        shouldKnockOnDiscard = true
+        HapticManager.instance.playCardReorder()
+    }
+    
     func discardCard(card: Card) { //possible room for refactoring/removing discardCard
         guard phase == .discardPhase, let index = playerHand.firstIndex(of: card) else { return }
         // Capture and clear the local knock intent at discard-time so one tap only applies to one discard.
@@ -202,65 +284,6 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         sendGameStateSwitch()
     }
 
-    var canPlayerKnock: Bool {
-        guard isSinglePlayer else { return false }
-        guard handSize == 10 else { return false }
-        guard phase == .discardPhase else { return false }
-
-        // Before the discard, the hand has 11 cards. Show the button when any legal
-        // discard would leave a non-gin hand with 10 or less deadwood.
-        if playerHand.count == handSize + 1 {
-            return playerHand.contains { candidate in
-                var postDiscardHand = playerHand
-                guard let index = postDiscardHand.firstIndex(of: candidate) else { return false }
-                postDiscardHand.remove(at: index)
-                return canKnock(afterDiscarding: postDiscardHand)
-            }
-        }
-
-        return canKnock(afterDiscarding: playerHand)
-    }
-
-    func requestKnock() {
-        // Tapping again disarms knock so the player can back out before discarding.
-        if shouldKnockOnDiscard {
-            shouldKnockOnDiscard = false
-            HapticManager.instance.playCardReorder()
-            return
-        }
-
-        guard canPlayerKnock else {
-            HapticManager.instance.playErrorFeedback()
-            return
-        }
-
-        shouldKnockOnDiscard = true
-        HapticManager.instance.playCardReorder()
-    }
-
-    func sortPlayerHand(sortState: Int) {
-        // sortState: 0 = unsorted, 1 = sorted ascending, 2 = sorted descending
-        if sortState == 0 {
-            // Just play a sound/haptic, no actual sorting
-            HapticManager.instance.playCardReorder()
-            return
-        }
-        
-        let sortedHand = playerHand.sorted { card1, card2 in
-            // First sort by suit (spades=0, hearts=1, clubs=2, diamonds=3)
-            if card1.suit.rawValue != card2.suit.rawValue {
-                let suitComparison = card1.suit.rawValue < card2.suit.rawValue
-                return sortState == 1 ? suitComparison : !suitComparison
-            }
-            // Then sort by rank (ace=0 lowest, king=12 highest)
-            let rankComparison = card1.rank.rawValue < card2.rank.rawValue
-            return sortState == 1 ? rankComparison : !rankComparison
-        }
-        
-        playerHand = sortedHand
-        HapticManager.instance.playCardReorder()
-    }
-
     private func resolveKnockRoundForLegacySender() {
         guard let outcome = GinRummyValidator.evaluateKnock(knockerHand: playerHand, defenderHand: opponentHand) else {
             isGameOver = false
@@ -285,60 +308,21 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         SoundManager.instance.playGameEnd(didWin: playerHasWon)
         phase = .gameEndPhase
     }
-
-    private func canKnock(afterDiscarding hand: [Card]) -> Bool {
-        guard hand.count == handSize else { return false }
-        guard !GinRummyValidator.canMeldAllCards(hand: hand) else { return false }
-        return GinRummyValidator.minimumDeadwoodPoints(hand: hand) <= 10
-    }
     
-    func opponentDrawFromDeck() {
-        guard phase == .animationPhase || isAnimatingOpponentTurn,
-              !deck.isEmpty,
-              let drawIndex = indexDrawnTo,
-              drawIndex <= opponentHand.count else {
-            return
-        }
-        let card = deck.popLast()!
-        opponentHand.insert(card, at: drawIndex)
-    }
-
-    func opponentDrawFromDiscard() {
-        guard phase == .animationPhase || isAnimatingOpponentTurn,
-              !discardPile.isEmpty,
-              let drawIndex = indexDrawnTo,
-              drawIndex <= opponentHand.count else {
-            return
-        }
-        let card = discardPile.popLast()!
-        opponentHand.insert(card, at: drawIndex)
-    }
-
-    func opponentDiscardCard(card: Card) {
-        guard phase == .animationPhase || isAnimatingOpponentTurn,
-              let discardIndex = indexDiscardedFrom,
-              discardIndex < opponentHand.count else {
-            return
-        }
-        opponentHand.remove(at: discardIndex)
-        discardPile.append(card)
-        SoundManager.instance.playCardSlap()
-        HapticManager.instance.playCardSlap()
+    // MARK: Utility
+    func checkWin() { //set for deprecation when we disallow first turn wins
+        roundWinner = nil
+        roundWinType = nil
+        playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
-        if opponentHasWon {
-            isGameOver = true
+        if playerHasWon {
             roundWinner = .sender
             roundWinType = .gin
-            SoundManager.instance.playGameEnd(didWin: false)
-            isAnimatingOpponentTurn = false
-            phase = .gameEndPhase
-        } else if isAnimatingOpponentTurn {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.isAnimatingOpponentTurn = false
-            }
-        } else {
-            phase = .drawPhase
+        } else if opponentHasWon {
+            roundWinner = .receiver
+            roundWinType = .gin
         }
+        isGameOver = playerHasWon || opponentHasWon
     }
     
     private func reshuffleDiscardIntoDeck() { //for when the deck count is 1 (could be refactored)
@@ -363,6 +347,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
     }
     
+    // MARK: - Game State Loading
     func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), isSinglePlayer: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
         if isSinglePlayer == false, let v2State = try? JSONDecoder().decode(GinRummyV2GameState.self, from: data) {
             loadV2State(state: v2State, localParticipantID: localParticipantID, conversationID: conversationID, isExplicitChange: isExplicitChange)
@@ -373,6 +358,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         }
     }
 
+    // MARK: 1v1 Loading
     private func loadLegacyState(state: GinRummyGameState, isPlayersTurn: Bool, conversationID: String, isExplicitChange: Bool) {
         let isInitialLoad = (self.sessionID == nil)
         let isSameSession = (self.sessionID == state.sessionID)
@@ -412,7 +398,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             
         } else if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
-            let hasVisualsToAnimate = applyOpponentTurnVisuals(state: state)
+            let hasVisualsToAnimate = prepareOpponentTurnVisuals(state: state)
             if hasVisualsToAnimate {//it is not the first turn...
                 phase = .animationPhase
             } else { //it is the first turn...
@@ -473,6 +459,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         isGameOver = true
     }
 
+    // MARK: Groupchat Loading
     private func loadV2State(state: GinRummyV2GameState, localParticipantID: UUID, conversationID: String, isExplicitChange: Bool) {
         let isInitialLoad = (self.sessionID == nil)
         let isSameSession = (self.sessionID == state.sessionID)
@@ -572,7 +559,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
 
         } else if isMyTurn {
             self.isSpectating = false
-            let hasVisualsToAnimate = applyOpponentTurnVisualsV2(state: state, previousSeat: playerBeforeUser)
+            let hasVisualsToAnimate = prepareOpponentTurnVisualsV2(state: state, previousSeat: playerBeforeUser)
             if hasVisualsToAnimate {
                 phase = .animationPhase
             } else { //it is the first turn
@@ -594,7 +581,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             } else {
                 let lastPlayerSeat = (state.currentSeatIndex - 1 + state.seats.count) % state.seats.count
                 self.animatingOpponentSeat = lastPlayerSeat
-                let hasVisualsToAnimate = applyOpponentTurnVisualsV2(state: state, previousSeat: lastPlayerSeat)
+                let hasVisualsToAnimate = prepareOpponentTurnVisualsV2(state: state, previousSeat: lastPlayerSeat)
                 phase = .idlePhase
                 isAnimatingOpponentTurn = hasVisualsToAnimate
             }
@@ -635,7 +622,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.seatCardBacks = []
     }
     
-    private func applyOpponentTurnVisuals(state: GinRummyGameState) -> Bool {
+    // MARK: Opponent Turn Animations
+    private func prepareOpponentTurnVisuals(state: GinRummyGameState) -> Bool {
         guard let discardedIndex = state.indexSenderDiscardedFrom,
               let drawnIndex = state.indexSenderDrewTo else {
             self.opponentHand = state.senderHand //first turn! simple init, no turn to show
@@ -660,7 +648,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         return true
     }
 
-    private func applyOpponentTurnVisualsV2(state: GinRummyV2GameState, previousSeat: Int) -> Bool {
+    private func prepareOpponentTurnVisualsV2(state: GinRummyV2GameState, previousSeat: Int) -> Bool {
         guard let discardedIndex = state.lastPlayerIndexDiscardedFrom,
               let drawnIndex = state.lastPlayerIndexDrewTo else {
             self.opponentHand = state.hands[previousSeat] //first turn! simple init, no turn to show
@@ -685,21 +673,56 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         return true
     }
     
-    func checkWin() { //set for deprecation when we disallow first turn wins
-        roundWinner = nil
-        roundWinType = nil
-        playerHasWon = GinRummyValidator.canMeldAllCards(hand: playerHand)
+    func opponentDrawFromDeck() {
+        guard phase == .animationPhase || isAnimatingOpponentTurn,
+              !deck.isEmpty,
+              let drawIndex = indexDrawnTo,
+              drawIndex <= opponentHand.count else {
+            return
+        }
+        let card = deck.popLast()!
+        opponentHand.insert(card, at: drawIndex)
+    }
+
+    func opponentDrawFromDiscard() {
+        guard phase == .animationPhase || isAnimatingOpponentTurn,
+              !discardPile.isEmpty,
+              let drawIndex = indexDrawnTo,
+              drawIndex <= opponentHand.count else {
+            return
+        }
+        let card = discardPile.popLast()!
+        opponentHand.insert(card, at: drawIndex)
+    }
+
+    func opponentDiscardCard(card: Card) {
+        guard phase == .animationPhase || isAnimatingOpponentTurn,
+              let discardIndex = indexDiscardedFrom,
+              discardIndex < opponentHand.count else {
+            return
+        }
+        opponentHand.remove(at: discardIndex)
+        discardPile.append(card)
+        SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
-        if playerHasWon {
+        if opponentHasWon {
+            isGameOver = true
             roundWinner = .sender
             roundWinType = .gin
-        } else if opponentHasWon {
-            roundWinner = .receiver
-            roundWinType = .gin
+            SoundManager.instance.playGameEnd(didWin: false)
+            isAnimatingOpponentTurn = false
+            phase = .gameEndPhase
+        } else if isAnimatingOpponentTurn {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isAnimatingOpponentTurn = false
+            }
+        } else {
+            phase = .drawPhase
         }
-        isGameOver = playerHasWon || opponentHasWon
     }
     
+    // MARK: Init New Game
     func createNewGameState(seats: [UUID]) -> Data? {
         let newSessionID = UUID()
         guard let creatorSeat = seats.first else { return nil }
@@ -772,6 +795,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         }
     }
 
+    // MARK: Join Groupchat Logic
     func joinGame(shouldBroadcast: Bool = true) {
         guard let state = pendingJoinState,
               let lpID = localParticipantID,
@@ -827,6 +851,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         return try? JSONEncoder().encode(updatedState)
     }
 
+    // MARK: Send Game State
     func sendGameStateSwitch() {
         if deck.count == 1 { reshuffleDiscardIntoDeck() }
 

@@ -153,6 +153,7 @@ struct MainMenuView: View {
         }
     }
     
+    
     // MARK: - Top Section
     private var topSection: some View {
         VStack(spacing: isExpanded ? 15 : (showButtonShapes ? 0 : 5)) {
@@ -346,22 +347,11 @@ struct MainMenuView: View {
             }*/
     }
     
+    
     // MARK: - Mid Section
     private var midSection: some View {
         Spacer()
             .frame(maxWidth: .infinity)
-            /*.overlay( //this is so we can keep the vertical spacing of the Spacer() while injecting an HStack of different vertical spacing
-                HStack {
-                    rulesButton
-                        //.padding(.leading, isExpanded ? (isIpad ? 290 : 110) : 25)
-                    Spacer()
-                    customizationButton
-                        //.padding(.trailing, isExpanded ? (isIpad ? 290 : 110) : 25)
-                }
-                //.padding(.top, isExpanded ? -90 : 10)
-                //.padding(.horizontal, isExpanded ? (isIpad ? 400 : 200) : 25)
-                .opacity(isTitleBarHidden ? 0 : 1)
-            )*/
             .overlay(alignment: .leading) {
                 rulesButton
                     .padding(.leading, isExpanded ? (isIpad ? 270 : 75) : (showButtonShapes ? 10 : 25))
@@ -545,6 +535,7 @@ struct MainMenuView: View {
         .accessibilityAddTraits(.isButton)
     }
     
+    
     // MARK: - Bottom Section
     private var bottomSection: some View {
         ZStack {
@@ -648,7 +639,8 @@ struct MainMenuView: View {
         .id(themeWheelKey)
     }
     
-    // MARK: - Menu helper functins
+    
+    // MARK: - Menu helper functions
     private func preloadWins() {
         for index in availableGames.indices {
             let title = availableGames[index].title
@@ -741,6 +733,7 @@ struct MainMenuView: View {
         }
     }
     
+    
     // MARK: - Gin Submenu
     private var ginSubmenuView: some View {
         ZStack {
@@ -792,7 +785,8 @@ struct MainMenuView: View {
         }
     }
     
-    // MARK: - Crazy8s Submenu
+    
+    // MARK: - Crazy 8s Submenu
     private var crazy8sSubmenuView: some View {
         ZStack {
             if isExpanded {
@@ -847,6 +841,7 @@ struct MainMenuView: View {
             Spacer()
         }
     }
+    
     
     // MARK: - Golf Submenu
     private var golfSubmenuView: some View {
