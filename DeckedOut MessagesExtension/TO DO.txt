@@ -1,6 +1,9 @@
--GameCenter achievements (button on main menu?)
+-issue for single player card back transcript matching
 
-***----------*** UPDATE 3.4.0 GameCenter UPDATE ***----------***
+-slow down gin and crazy 8s deal animations
+-make the gold submenu deck higher in the z index
+
+***----------*** UPDATE 3.4.0 UPDATE ***----------***
 
 -add 4th game
 
@@ -14,6 +17,11 @@
 
 ***----------*** UPDATE 5.0.0 5th GAME UPDATE ***----------***
 
+-GameCenter achievements
+    -verify they are reported correctly
+    -make icons for each
+    -localize
+
 Ads $$$
 
 -add more in app purchases
@@ -23,11 +31,11 @@ Ads $$$
 -better win screen for each game?
 
 GAMES TO ADD:
-    -Crazy 8s (WIP)
+    -Crazy 8s (DONE)
     -Cribbage
     -Euchre (4 players)
     -Gin Rummy (DONE)
-    -Golf
+    -Golf (DONE)
     -Hearts
     -Idiot (high priority addition)
     -Scopa
@@ -42,7 +50,7 @@ Dice games:
     
 Customizations to sell:
     -Remove Ads ($0.99)
-    -Card backs ($1.99)
+    -Card backs ($0.99 - $1.99) (includes removing ads when they are added)
         -cobweb
         -lantern (makes letters glow?)
         -team trees charity?
@@ -66,6 +74,8 @@ Customizations to sell:
 
 
 Known issues:
+-app goes to a white screen and does not load when opening it for the first time on the app store??
+-Game Center doesn't appear supported for iMessage-only apps (work with Apple to fix)
 -the "selected" text is below the opponents hand's z value in groupchat
 -opponent hands need to be lower z index than deck, but drawn cards still need to spawn on top (opponent hand sometimes clips above deck in groupchat modes)
 -in crazy 8s if discarding a queen and then another card on the final move, it does not animate the queen's discard
@@ -73,6 +83,7 @@ Known issues:
 -Cannot detect if a user is using Voice Control, just VoiceOver. add Voice Control to the check if a function comes out that checks for this
 
 QOL changes / possible updates:
+-game center rocket button on main menu?
 -turn off main menu card flips and themes menu entry animation for reduce motion (prefer cross fade transitions setting)?
 -Differentiate without color alone should make the main menu icons white outlines again
 -accessibility show numbers still rank cards vertically on the fan rather than left to right

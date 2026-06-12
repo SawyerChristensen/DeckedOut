@@ -272,6 +272,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             phase = .gameEndPhase
             isGameOver = true
             WinTracker.shared.incrementWins(for: "Crazy 8s")
+            //GameCenterManager.shared.reportWin(firstWin: .firstWinCrazy8s)
         } else {
             phase = .idlePhase
         }

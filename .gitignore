@@ -89,3 +89,18 @@ fastlane/test_output
 
 /DeckedOut.xcodeproj/xcuserdata
 DeckedOut.xcodeproj/xcuserdata/sawyerchristensen.xcuserdatad/xcschemes/xcschememanagement.plist
+
+# App Store Connect API secrets — NEVER commit these
+*.p8
+AuthKey_*
+.env
+.env.*
+!.env.example
+secrets/
+scripts/secrets/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

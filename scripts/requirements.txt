@@ -1,0 +1,6 @@
+pyjwt[crypto]>=2.8.0
+requests>=2.31.0
+
+# Only needed if `python upload_metadata.py --translate` used
+# (auto-fill missing locales via the Anthropic API instead of asking Claude Code).
+# anthropic>=0.92.0

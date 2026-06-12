@@ -704,6 +704,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
     private func recordWinOnce() {
         guard let sID = sessionID else { return }
         WinTracker.shared.recordWinOnce(for: "Golf", sessionID: sID)
+        //GameCenterManager.shared.reportWin(firstWin: .firstWinGolf)
     }
 
     func createNewGameState(seats: [UUID]) -> Data? {

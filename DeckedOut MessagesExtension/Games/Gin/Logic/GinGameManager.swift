@@ -152,6 +152,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
             WinTracker.shared.incrementWins(for: "Gin Rummy")
+            //GameCenterManager.shared.reportWin(firstWin: .firstWinGin)
         } else { phase = .idlePhase }
         sendGameStateSwitch()
     }

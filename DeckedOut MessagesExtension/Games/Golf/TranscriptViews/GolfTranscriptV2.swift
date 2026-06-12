@@ -81,6 +81,7 @@ struct GolfTranscriptV2: View {
         .onAppear {
             if playerWon {
                 WinTracker.shared.recordWinOnce(for: "Golf", sessionID: gameState.sessionID)
+                //GameCenterManager.shared.reportWin(firstWin: .firstWinGolf)
             }
         }
         .background( //for measuring & reporting the view height

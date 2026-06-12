@@ -1,0 +1,263 @@
+{
+  "_meta": {
+    "description": "Source of truth for App Store Connect and Game Center localizations.",
+    "instructions": "Edit only the 'en' (English) fields. Leave other locales as null. Run upload_metadata.py — Claude fills missing locales and uploads everything. Filled translations are cached back into this file so re-runs are cheap.",
+    "bundle_id": "Sawyer.DeckedOut",
+    "locales": ["en", "da", "de", "es", "fr", "hi", "it", "ja", "ko", "nb", "nl", "pt-BR", "ru", "sv", "tr", "vi", "zh-Hans", "zh-Hant"]
+  },
+
+  "version_localizations": {
+    "whats_new": {
+      "_max_chars": 4000,
+      "_tone": "Brief, friendly release notes. Use line breaks (\\n) between bullet points.",
+      "en": "Introducing Game Center achievements! Now you can earn fun badges for your in-game accomplishments.",
+      "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+      "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+      "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+    },
+    "_inherit_notes": "description, keywords, and promotional_text default to inheriting from the most recent prior App Store version per locale. Leave 'en' (and all locales) as null to inherit. Fill in 'en' and ask Claude Code to translate when you want to override.",
+    "description": {
+      "_max_chars": 4000,
+      "_tone": "Marketing copy for the App Store listing. Conversational, inviting, highlights gameplay.",
+      "en": null,
+      "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+      "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+      "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+    },
+    "keywords": {
+      "_max_chars": 100,
+      "_tone": "Comma-separated, no spaces after commas to maximize use of the 100-character limit. Search terms only.",
+      "en": null,
+      "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+      "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+      "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+    },
+    "promotional_text": {
+      "_max_chars": 170,
+      "_tone": "Short hook that appears above the description. Updateable without resubmitting a new app version.",
+      "en": null,
+      "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+      "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+      "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+    }
+  },
+
+  "achievements": {
+    "deckedout.first_win.gin": {
+      "_default_image": "images/first_win_gin.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Game-specific name for winning Gin Rummy for the first time.",
+        "en": "Gin Rookie",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Win your first game of Gin Rummy.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You won your first game of Gin Rummy!",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    },
+    "deckedout.first_win.crazy8s": {
+      "_default_image": "images/first_win_crazy8s.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Game-specific name for winning Crazy 8s for the first time.",
+        "en": "Craziest 8s",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Win your first game of Crazy 8s.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You won your first game of Crazy 8s!",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    },
+    "deckedout.first_win.golf": {
+      "_default_image": "images/first_win_golf.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Game-specific name for winning Golf for the first time.",
+        "en": "Tee Off",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Win your first game of Golf.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You won your first game of Golf!",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    },
+    "deckedout.wins.total.1": {
+      "_default_image": "images/wins_1.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy. Marks the player's very first win across any game.",
+        "en": "First Blood",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do.",
+        "en": "Win a game for the first time.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment.",
+        "en": "You won your first game!",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    },
+    "deckedout.wins.total.2": {
+      "_default_image": "images/wins_2.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy. Marks the player's second win — they're getting the hang of it.",
+        "en": "Doubling Down",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do.",
+        "en": "Win 2 games total.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment.",
+        "en": "You won 2 games!",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    },
+    "deckedout.wins.total.10": {
+      "_default_image": "images/wins_10.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy. Marks 10 total wins — a respectable milestone.",
+        "en": "Ten Out of Ten",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do.",
+        "en": "Win 10 games total.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment.",
+        "en": "You won 10 games!",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    },
+    "deckedout.wins.total.20": {
+      "_default_image": "images/wins_20.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy. Marks 20 total wins.",
+        "en": "Card Shark",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do.",
+        "en": "Win 20 games total.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment.",
+        "en": "You won 20 games!",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    },
+    "deckedout.wins.total.100": {
+      "_default_image": "images/wins_100.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy. Marks 100 total wins — a major milestone, slightly grand.",
+        "en": "Decked Out",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do.",
+        "en": "Win 100 games total.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment.",
+        "en": "You won 100 games. Legendary.",
+        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
+        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
+        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+      }
+    }
+  }
+}

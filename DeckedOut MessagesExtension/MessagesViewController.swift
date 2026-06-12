@@ -62,6 +62,11 @@ class MessagesViewController: MSMessagesAppViewController {
         Task.detached(priority: .userInitiated) { //init audio on background thread
             _ = SoundManager.instance
         }
+
+        /*Task.detached(priority: .utility) { //authenticate Game Center on background thread
+            GameCenterManager.shared.authenticate()
+            GameCenterManager.shared.syncAchievementsWithWinCounts()
+        }*/
     }
 
     
