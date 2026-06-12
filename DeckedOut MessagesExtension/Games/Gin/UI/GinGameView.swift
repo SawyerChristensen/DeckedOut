@@ -22,8 +22,12 @@ struct GinGameView: View {
     @State private var isHoveringDiscard: Bool = false
     @State private var showRules: Bool = false
     @State private var handShadowRadius: CGFloat = 5
-    @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
+    @State private var cardSortState: Int = 0 // 0 = original order, 1 = sorted by suit then rank, 2 = sorted by rank
+    @ScaledMetric(relativeTo: .largeTitle) var buttonSize: CGFloat = 36
     
+    private var isMyTurn: Bool { game.phase == .drawPhase || game.phase == .discardPhase }
+    
+    // MARK: - Main Body
     var body: some View {
         ZStack {
             VStack {
@@ -31,7 +35,7 @@ struct GinGameView: View {
                 Spacer()
                     .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width)
                 deckAndDiscard
-                rulesButtonSection
+                utilityButtonSection
                 playersHand
 
             }
@@ -53,7 +57,12 @@ struct GinGameView: View {
         .accessibilityHidden(showRules)
         .overlay {
             if showRules {
-                RulesView(gameType: .ginRummy, isExpanded: true, onDismiss: { showRules = false })
+                RulesView(
+                    gameType: .ginRummy,
+                    showsGinKnockRules: game.shouldShowKnockRules,
+                    isExpanded: true,
+                    onDismiss: { showRules = false }
+                )
                     .frame(maxWidth: UIScreen.main.bounds.width)
                     .transition(.opacity.animation(.easeInOut(duration: 0.2).speed(motionSpeed)))
             }
@@ -99,10 +108,6 @@ struct GinGameView: View {
             Spacer()
         }
         .zIndex(1)
-    }
-    
-    private var isMyTurn: Bool {
-        game.phase == .drawPhase || game.phase == .discardPhase
     }
 
     private var theDeck: some View {
@@ -151,16 +156,6 @@ struct GinGameView: View {
         .accessibilityAction { handleDeckTap() }
     }
     
-    private func handleDeckTap() {
-        if game.phase == .drawPhase {
-            game.drawFromDeck()
-            lastDrawSource = .deck
-            SoundManager.instance.playCardDeal()
-        } else {
-            HapticManager.instance.playErrorFeedback()
-        }
-    }
-    
     private var discardPile: some View {
         ZStack {
             Color.clear // A ghost view reserves the space so Spacers don't collapse when discardPile.count == 0
@@ -202,63 +197,18 @@ struct GinGameView: View {
         .accessibilityAction { handleDiscardTap() }
     }
     
-    private func handleDiscardTap() {
-        if game.phase == .drawPhase {
-            game.drawFromDiscard()
-            lastDrawSource = .discard
-            SoundManager.instance.playCardDeal()
-        } else {
-            HapticManager.instance.playErrorFeedback()
-        }
-    }
-    
-    private var rulesButtonSection: some View {
+    private var utilityButtonSection: some View {
         Spacer()
             .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width)
             .overlay(
-                HStack {
-                    Button(action: {
-                        let impact = UIImpactFeedbackGenerator(style: .light)
-                        impact.impactOccurred()
-                        withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
-                            showRules = true
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "text.book.closed")
-                                .font(.system(size: rulesButtonSize))
-
-                            if showButtonShapes {
-                                Text("Rules")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                            }
-                        }
-                        .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
-                        .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
-                        .background(
-                            Group {
-                                if showButtonShapes {
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .fill(.ultraThinMaterial)
-                                }
-                            }
-                        )
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(Text("Rules", comment: "Voice Control label for opening the rules"))
-                    .accessibilityInputLabels([
-                        Text("Rules", comment: "Voice Control input label"),
-                        Text("the rules", comment: "Voice Control input label"),
-                        Text("Game rules", comment: "Voice Control input label"),
-                        Text("Show rules", comment: "Voice Control input label"),
-                        Text("Show game rules", comment: "Voice Control input label")
-                    ])
-                    
+                HStack(spacing: buttonSize/2) {
+                    knockButton
+                    rulesButton
+                    sortButton
                     Spacer()
                 }
                 .padding(.top, 10)
-                .padding(.horizontal, 30)
+                .padding(.horizontal, 40)
             )
     }
     
@@ -296,8 +246,168 @@ struct GinGameView: View {
         .zIndex(1)
     }
     
+    // MARK: - Utility Buttons
+    private var rulesButton: some View {
+        Button(action: {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
+                showRules = true
+            }
+        }) {
+            HStack {
+                Image(systemName: "text.book.closed")
+                    .font(.system(size: buttonSize))
+                    .frame(width: buttonSize, alignment: .center)
+
+                if showButtonShapes {
+                    Text("Rules")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                }
+            }
+            .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
+            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+            .background(
+                Group {
+                    if showButtonShapes {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("Rules", comment: "Voice Control label for opening the rules"))
+        .accessibilityInputLabels([
+            Text("Rules", comment: "Voice Control input label"),
+            Text("the rules", comment: "Voice Control input label"),
+            Text("Game rules", comment: "Voice Control input label"),
+            Text("Show rules", comment: "Voice Control input label"),
+            Text("Show game rules", comment: "Voice Control input label")
+        ])
+    }
     
-    // MARK: - Helper functions
+    private var sortButton: some View {
+        Button(action: {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            withAnimation(.spring(response: 0.5, dampingFraction: 1)) {
+                cardSortState = (cardSortState + 1) % 3
+                game.sortPlayerHand(sortState: cardSortState)
+            }
+        }) {
+            HStack {
+                Image(systemName: cardSortState == 0 ? "arrow.left.arrow.right" : (cardSortState == 1 ? "arrow.up.right" : "arrow.right"))
+                    .font(.system(size: buttonSize))
+                    .contentTransition(.symbolEffect(.replace))
+                    .frame(width: buttonSize, alignment: .center)
+
+                if showButtonShapes {
+                    Text(cardSortState == 0 ? "Sort" : (cardSortState == 1 ? "Suit/Rank" : "Rank"))
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                }
+            }
+            .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
+            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+            .background(
+                Group {
+                    if showButtonShapes {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("Sort hand", comment: "Voice Control label for sorting the player's hand"))
+        .accessibilityHint(Text("Cycles between the original order, sorted by suit and rank, and sorted by rank.", comment: "VoiceOver hint for the sort button"))
+        .accessibilityInputLabels([
+            Text("Sort", comment: "Voice Control input label"),
+            Text("Sort hand", comment: "Voice Control input label"),
+            Text("Sort cards", comment: "Voice Control input label")
+        ])
+    }
+
+    @ViewBuilder
+    private var knockButton: some View {
+        if game.canPlayerKnock {
+            // The player declares knock before discarding; the discard action resolves the round.
+            Button(action: {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                    game.requestKnock()
+                }
+            }) {
+                HStack {
+                    Image(game.isKnockArmed ? "hand.knocking.fill" : "hand.knocking")
+                        .font(.system(size: buttonSize))
+                        .contentTransition(.symbolEffect(.replace))
+                        .frame(width: buttonSize, alignment: .center)
+
+                    if game.isKnockArmed {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: buttonSize))
+                            .transition(.scale.combined(with: .opacity).animation(.easeInOut(duration: 0.2)))
+                    }
+
+                    if showButtonShapes {
+                        Text("Knock")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                    }
+                }
+                .foregroundStyle(.white) // game.isKnockArmed ? .white : .white.opacity(0.9)
+                .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+                .background(knockButtonBackground)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Knock", comment: "VoiceOver accessibility label for the knock button in Gin Rummy"))
+            .accessibilityHint(Text(game.isKnockArmed ? "Knock is activated. Discard a card to knock." : "Declare a knock, then discard to end the round.", comment: "VoiceOver hint for the knock button in Gin Rummy"))
+            .accessibilityInputLabels([
+                Text("Knock", comment: "Voice Control input label for the knock button in Gin Rummy"),
+                Text("Declare knock", comment: "Voice Control input label for declaring a knock in Gin Rummy"),
+                Text("Call knock", comment: "Voice Control input label for declaring a knock in Gin Rummy")
+            ])
+        }
+    }
+
+    @ViewBuilder
+    private var knockButtonBackground: some View {
+        if showButtonShapes {
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay {
+                    if game.isKnockArmed {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(Color.green.opacity(0.35))
+                    }
+                }
+        }
+    }
+    
+    
+    // MARK: - Helper Functions
+    private func handleDeckTap() {
+        if game.phase == .drawPhase {
+            game.drawFromDeck()
+            lastDrawSource = .deck
+            SoundManager.instance.playCardDeal()
+        } else {
+            HapticManager.instance.playErrorFeedback()
+        }
+    }
+    
+    private func handleDiscardTap() {
+        if game.phase == .drawPhase {
+            game.drawFromDiscard()
+            lastDrawSource = .discard
+            SoundManager.instance.playCardDeal()
+        } else {
+            HapticManager.instance.playErrorFeedback()
+        }
+    }
+
     private func animateOpponentsTurn() async { //modifies backend, which triggers animation in opponentHandView
         guard game.phase == .animationPhase || game.isAnimatingOpponentTurn else {
             game.hasPerformedInitialLoad = true
