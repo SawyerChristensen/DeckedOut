@@ -71,24 +71,15 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var turnNumber: Int = 0
 
     // Knock state is only used in legacy 1v1 10-card gin.
-    private var shouldKnockOnDiscard: Bool = false
+    @Published private var shouldKnockOnDiscard: Bool = false
     private var roundWinner: GinRoundWinner? = nil
     private var roundWinType: GinRoundWinType? = nil
+    var currentRoundWinType: GinRoundWinType? { roundWinType }
+    var isKnockArmed: Bool { shouldKnockOnDiscard }
+    var shouldShowKnockRules: Bool { isSinglePlayer && handSize == 10 }
 
     // Snapshot of playerHand taken on the first sort of a cycle, restored when the user returns to the unsorted state.
     private var originalPlayerHandOrder: [Card]? = nil
-
-    var currentRoundWinType: GinRoundWinType? {
-        roundWinType
-    }
-
-    var isKnockArmed: Bool {
-        shouldKnockOnDiscard
-    }
-
-    var shouldShowKnockRules: Bool {
-        isSinglePlayer && handSize == 10
-    }
     
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
     var handSize: Int = 7 //configurable from the menu (7 or 10)
@@ -275,6 +266,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
             WinTracker.shared.incrementWins(for: "Gin Rummy")
+            //GameCenterManager.shared.reportWin(firstWin: .firstWinGin)
         } else if shouldEvaluateKnock && canPlayerKnock {
             resolveKnockRoundForLegacySender()
         } else {
@@ -302,6 +294,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             roundWinner = .sender
             roundWinType = .knock
             WinTracker.shared.incrementWins(for: "Gin Rummy")
+            //GameCenterManager.shared.reportWin(firstWin: .firstWinGin)
         }
 
         isGameOver = true
@@ -378,6 +371,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.roundWinner = state.roundWinner
         self.roundWinType = state.roundWinType
         self.shouldKnockOnDiscard = false
+        // Hand size isn't transmitted explicitly — infer it from the post-turn hand count.
+        self.handSize = state.senderHand.count
         // The sender of this message is the opponent we're about to play against.
         if isPlayersTurn, let sentBack = state.senderCardBack {
             self.opponentCardBack = sentBack
@@ -495,6 +490,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.deck = state.deck
         self.discardPile = state.discardPile
         self.allHands = state.hands
+        // Hand size isn't transmitted explicitly — infer it from any seat's post-turn hand count.
+        if let firstHand = state.hands.first { self.handSize = firstHand.count }
         // Take the latest per-seat card backs from the message, defaulting any missing entries.
         var incomingBacks = state.seatCardBacks ?? Array(repeating: "cardBackRed", count: state.seats.count)
         if incomingBacks.count < state.seats.count {

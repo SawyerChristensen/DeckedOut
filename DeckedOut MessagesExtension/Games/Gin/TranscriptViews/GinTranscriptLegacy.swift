@@ -39,7 +39,7 @@ struct GinTranscriptLegacy: View {
             Color.clear
                 .frame(height: 150)
                 .overlay { //the crazy 8s player hand expands. making it an overlay means its width expansion does not bubble up and effect the VStacks width
-                    GinTranscriptPlayerHand(cards: opponentWon ? opponentsHand : playersHand, playerWon: playerWon, opponentWon: opponentWon)
+                    GinTranscriptPlayerHand(cards: opponentWon ? opponentsHand : playersHand, playerWon: playerWon, opponentWon: opponentWon, opponentCardBack: isFromMe ? nil : gameState.senderCardBack)
                         .offset(y: opponentWon ? -30 : 50)
                 }
                 

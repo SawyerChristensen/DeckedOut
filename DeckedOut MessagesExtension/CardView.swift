@@ -19,7 +19,7 @@ struct CardView: View { //where only one side is a (letter?)
     @ViewBuilder
     private var backImage: some View {
         if let letter = backLetter {
-            LetterCardImage(character: letter)
+            LetterCardImage(character: letter, overrideCardBackName: backImageName)
         } else {
             Image(backImageName ?? cardBackSelection.selectedName)
                 .resizable()

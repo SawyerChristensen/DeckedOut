@@ -26,8 +26,16 @@ struct GinTranscriptV2: View {
     private var opponentWon: Bool {
         gameState.hands.enumerated().contains { i, hand in i != mySeatIndex && GinRummyValidator.canMeldAllCards(hand: hand) }
     }
+    private var winningOpponentSeatIndex: Int? {
+        gameState.hands.enumerated().first { i, hand in i != mySeatIndex && GinRummyValidator.canMeldAllCards(hand: hand) }?.offset
+    }
     private var winningOpponentHand: [Card] {
-        gameState.hands.enumerated().first { i, hand in i != mySeatIndex && GinRummyValidator.canMeldAllCards(hand: hand) }?.element ?? []
+        guard let idx = winningOpponentSeatIndex else { return [] }
+        return gameState.hands[idx]
+    }
+    private var winningOpponentCardBack: String? {
+        guard let idx = winningOpponentSeatIndex, let backs = gameState.seatCardBacks, backs.indices.contains(idx) else { return nil }
+        return backs[idx]
     }
 
     var body: some View {
@@ -36,7 +44,7 @@ struct GinTranscriptV2: View {
                 .frame(height: 150)
                 .overlay {
                     if playersHand != [] {
-                        GinTranscriptPlayerHand(cards: opponentWon ? winningOpponentHand : playersHand, playerWon: playerWon, opponentWon: opponentWon)
+                        GinTranscriptPlayerHand(cards: opponentWon ? winningOpponentHand : playersHand, playerWon: playerWon, opponentWon: opponentWon, opponentCardBack: winningOpponentCardBack)
                             .offset(y: opponentWon ? -30 : 50)
                     }
                 }

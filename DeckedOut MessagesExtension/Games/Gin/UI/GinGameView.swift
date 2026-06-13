@@ -201,14 +201,15 @@ struct GinGameView: View {
         Spacer()
             .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width)
             .overlay(
-                HStack(spacing: buttonSize/2) {
-                    knockButton
+                HStack(spacing: showButtonShapes ? buttonSize/3 : buttonSize/2) {
                     rulesButton
                     sortButton
+                    knockButton
                     Spacer()
                 }
+                .animation(.spring(response: 0.5, dampingFraction: 0.7), value: game.canPlayerKnock)
                 .padding(.top, 10)
-                .padding(.horizontal, 40)
+                .padding(.horizontal, showButtonShapes ? 20 : 40)
             )
     }
     
@@ -258,7 +259,7 @@ struct GinGameView: View {
             HStack {
                 Image(systemName: "text.book.closed")
                     .font(.system(size: buttonSize))
-                    .frame(width: buttonSize, alignment: .center)
+                    .frame(width: buttonSize, height: buttonSize, alignment: .center)
 
                 if showButtonShapes {
                     Text("Rules")
@@ -301,7 +302,7 @@ struct GinGameView: View {
                 Image(systemName: cardSortState == 0 ? "arrow.left.arrow.right" : (cardSortState == 1 ? "arrow.up.right" : "arrow.right"))
                     .font(.system(size: buttonSize))
                     .contentTransition(.symbolEffect(.replace))
-                    .frame(width: buttonSize, alignment: .center)
+                    .frame(width: buttonSize, height: buttonSize, alignment: .center)
 
                 if showButtonShapes {
                     Text(cardSortState == 0 ? "Sort" : (cardSortState == 1 ? "Suit/Rank" : "Rank"))
@@ -340,16 +341,10 @@ struct GinGameView: View {
                 }
             }) {
                 HStack {
-                    Image(game.isKnockArmed ? "hand.knocking.fill" : "hand.knocking")
+                    Image(game.isKnockArmed ? "hand.knocking.primed" : "hand.knocking")
                         .font(.system(size: buttonSize))
                         .contentTransition(.symbolEffect(.replace))
-                        .frame(width: buttonSize, alignment: .center)
-
-                    if game.isKnockArmed {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: buttonSize))
-                            .transition(.scale.combined(with: .opacity).animation(.easeInOut(duration: 0.2)))
-                    }
+                        .frame(width: buttonSize, height: buttonSize, alignment: .center)
 
                     if showButtonShapes {
                         Text("Knock")
@@ -357,7 +352,7 @@ struct GinGameView: View {
                             .fontWeight(.semibold)
                     }
                 }
-                .foregroundStyle(.white) // game.isKnockArmed ? .white : .white.opacity(0.9)
+                .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.9)) // game.isKnockArmed ? .white : .white.opacity(0.9)
                 .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
                 .background(knockButtonBackground)
             }
@@ -369,6 +364,7 @@ struct GinGameView: View {
                 Text("Declare knock", comment: "Voice Control input label for declaring a knock in Gin Rummy"),
                 Text("Call knock", comment: "Voice Control input label for declaring a knock in Gin Rummy")
             ])
+            .transition(.scale.combined(with: .opacity))
         }
     }
 

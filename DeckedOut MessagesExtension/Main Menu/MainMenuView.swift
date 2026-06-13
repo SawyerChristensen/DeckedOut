@@ -881,11 +881,12 @@ struct MainMenuView: View {
                 }
                 .padding(.trailing, 10)
             }
-            .hidden() //just for reserving space
+            .hidden() // ^ just for reserving space
             .overlay(alignment: .top) {
                 
                 ZStack(alignment: .top) {
                     golfDeckGrid
+                        .zIndex(999)
                         .padding(.top, 80)
                     
                     startButton
@@ -1090,7 +1091,7 @@ struct MainMenuView: View {
                 let selectedGameType = availableGames[activeGameIndex].type
                 onStartGame(selectedGameType, handSize)
                 DispatchQueue.main.async {
-                    withAnimation(.spring(duration: 0.7).speed(speed)) {
+                    withAnimation(.spring(duration: 0.8)) { //animaiton ignores speed modifier. the game being created in the text field does not slow down
                         cardsAnimatedAway += 1
                     }
                     if cardsAnimatedAway <= 5 {
@@ -1111,14 +1112,22 @@ struct MainMenuView: View {
             Text("New Game")
                 .font(.system(size: isExpanded ? 40 : 28, weight: .bold, design: .serif))
                 .foregroundColor(.white)
-                .scaleEffect(cardsAnimatedAway < 7 ? (isPulsating ? 1.05 : 1) : 1.0)
+                .scaleEffect(isPulsating ? 1.05 : 1.0)
+                .animation(cardsAnimatedAway < 7
+                           ? .easeInOut(duration: 0.8).speed(motionSpeed).repeatForever(autoreverses: true)
+                           : .default,
+                    value: isPulsating
+                )
                 .onAppear {
-                    withAnimation(.easeInOut(duration: 0.8).speed(motionSpeed).repeatForever(autoreverses: true)) {
-                        isPulsating = true
+                    isPulsating = true
+                }
+                .onChange(of: cardsAnimatedAway) { _, newValue in
+                    if newValue >= (activeSubmenu == .golf ? 8 : 7) {
+                        isPulsating = false
                     }
                 }
                 .onDisappear {
-                    isPulsating = false // resets the state so it can animate again next time!
+                    isPulsating = false
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)

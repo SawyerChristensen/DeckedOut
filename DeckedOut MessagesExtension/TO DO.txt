@@ -1,9 +1,10 @@
--issue for single player card back transcript matching
+-Only highlight melded cards after game win (in 1v1 10-card Gin)
 
--slow down gin and crazy 8s deal animations
--make the gold submenu deck higher in the z index
+-Support single player in all games (more accessible testing)
 
-***----------*** UPDATE 3.4.0 UPDATE ***----------***
+-Fix knock button not showing up if showButtonShapes is enabled
+
+***----------*** UPDATE 3.4.0 QOL UPDATE ***----------***
 
 -add 4th game
 

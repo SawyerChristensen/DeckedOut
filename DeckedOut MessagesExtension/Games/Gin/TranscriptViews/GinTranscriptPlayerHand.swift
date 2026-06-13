@@ -11,7 +11,8 @@ struct GinTranscriptPlayerHand: View {
     let cards: [Card]
     let playerWon: Bool
     let opponentWon: Bool
-    
+    var opponentCardBack: String? = nil
+
     @State private var cardFlipTrigger: Bool = false
     @State private var cardsAreExpanded: Bool = false
     
@@ -60,6 +61,7 @@ struct GinTranscriptPlayerHand: View {
                 CardView(
                     frontImage: card.imageName,
                     backLetter: backLetter(for: index),
+                    backImageName: opponentWon ? opponentCardBack : nil,
                     rotation: currentRotation(for: index)
                 )
                 .frame(width: cardWidth, height: cardHeight)
