@@ -24,7 +24,8 @@ struct GinGameView: View {
     @State private var handShadowRadius: CGFloat = 5
     @State private var cardSortState: Int = 0 // 0 = original order, 1 = sorted by suit then rank, 2 = sorted by rank
     @ScaledMetric(relativeTo: .largeTitle) var buttonSize: CGFloat = 36
-    
+    private var iconSize: CGFloat { showButtonShapes ? buttonSize * 0.7 : buttonSize }
+
     private var isMyTurn: Bool { game.phase == .drawPhase || game.phase == .discardPhase }
     
     // MARK: - Main Body
@@ -205,11 +206,12 @@ struct GinGameView: View {
                     rulesButton
                     sortButton
                     knockButton
+                        .padding(.leading, showButtonShapes ? 0 : 5)
                     Spacer()
                 }
                 .animation(.spring(response: 0.5, dampingFraction: 0.7), value: game.canPlayerKnock)
                 .padding(.top, 10)
-                .padding(.horizontal, showButtonShapes ? 20 : 40)
+                .padding(.horizontal, showButtonShapes ? 8 : 40)
             )
     }
     
@@ -258,17 +260,19 @@ struct GinGameView: View {
         }) {
             HStack {
                 Image(systemName: "text.book.closed")
-                    .font(.system(size: buttonSize))
-                    .frame(width: buttonSize, height: buttonSize, alignment: .center)
+                    .font(.system(size: iconSize))
+                    .frame(width: iconSize, height: iconSize, alignment: .center)
 
                 if showButtonShapes {
                     Text("Rules")
-                        .font(.title3)
+                        .font(.headline)
                         .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
             }
             .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
-            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10) : EdgeInsets())
             .background(
                 Group {
                     if showButtonShapes {
@@ -300,18 +304,20 @@ struct GinGameView: View {
         }) {
             HStack {
                 Image(systemName: cardSortState == 0 ? "arrow.left.arrow.right" : (cardSortState == 1 ? "arrow.up.right" : "arrow.right"))
-                    .font(.system(size: buttonSize))
+                    .font(.system(size: iconSize))
                     .contentTransition(.symbolEffect(.replace))
-                    .frame(width: buttonSize, height: buttonSize, alignment: .center)
+                    .frame(width: iconSize, height: iconSize, alignment: .center)
 
                 if showButtonShapes {
                     Text(cardSortState == 0 ? "Sort" : (cardSortState == 1 ? "Suit/Rank" : "Rank"))
-                        .font(.title3)
+                        .font(.headline)
                         .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
             }
             .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
-            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10) : EdgeInsets())
             .background(
                 Group {
                     if showButtonShapes {
@@ -342,18 +348,20 @@ struct GinGameView: View {
             }) {
                 HStack {
                     Image(game.isKnockArmed ? "hand.knocking.primed" : "hand.knocking")
-                        .font(.system(size: buttonSize))
+                        .font(.system(size: iconSize))
                         .contentTransition(.symbolEffect(.replace))
-                        .frame(width: buttonSize, height: buttonSize, alignment: .center)
+                        .frame(width: iconSize, height: iconSize, alignment: .center)
 
                     if showButtonShapes {
                         Text("Knock")
-                            .font(.title3)
+                            .font(.headline)
                             .fontWeight(.semibold)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                 }
                 .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.9)) // game.isKnockArmed ? .white : .white.opacity(0.9)
-                .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+                .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10) : EdgeInsets())
                 .background(knockButtonBackground)
             }
             .buttonStyle(.plain)

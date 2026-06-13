@@ -17,6 +17,10 @@ final class StoreManager: ObservableObject {
     @Published private(set) var purchaseInFlight: String? = nil // productID currently being purchased, if any
     @Published private(set) var isChinaStorefront: Bool = false
 
+    /// Non-consumable IAP that grants every other paid IAP.
+    static let masterUnlockProductID = "Sawyer.DeckedOut.MasterUnlock"
+    var ownsMasterUnlock: Bool { ownedProductIDs.contains(Self.masterUnlockProductID) }
+
     private var updatesTask: Task<Void, Never>?
     private var hasStarted = false
 
@@ -60,7 +64,7 @@ final class StoreManager: ObservableObject {
     @discardableResult
     func purchase(_ productID: String) async -> Bool {
         if isChinaStorefront { return true }
-        if ownedProductIDs.contains(productID) { return true }
+        if isOwned(productID) { return true }
         guard let product = products[productID] else { return false }
 
         purchaseInFlight = productID
@@ -95,9 +99,11 @@ final class StoreManager: ObservableObject {
 
     /// Convenience: free themes (productID == nil) always count as owned.
     /// On the China storefront everything is treated as owned because IAPs are disabled there.
+    /// Owning the master-unlock IAP also counts as owning any individual paid IAP.
     func isOwned(_ productID: String?) -> Bool {
         if isChinaStorefront { return true }
         guard let id = productID else { return true }
+        if ownsMasterUnlock { return true }
         return ownedProductIDs.contains(id)
     }
 

@@ -1,11 +1,3 @@
--Only highlight melded cards after game win (in 1v1 10-card Gin)
-
--Support single player in all games (more accessible testing)
-
--Fix knock button not showing up if showButtonShapes is enabled
-
-***----------*** UPDATE 3.4.0 QOL UPDATE ***----------***
-
 -add 4th game
 
 ***----------*** UPDATE 4.0.0 4th game UPDATE ***----------***
@@ -84,6 +76,7 @@ Known issues:
 -Cannot detect if a user is using Voice Control, just VoiceOver. add Voice Control to the check if a function comes out that checks for this
 
 QOL changes / possible updates:
+-Only highlight melded cards after game win (in 1v1 10-card Gin)
 -game center rocket button on main menu?
 -turn off main menu card flips and themes menu entry animation for reduce motion (prefer cross fade transitions setting)?
 -Differentiate without color alone should make the main menu icons white outlines again
