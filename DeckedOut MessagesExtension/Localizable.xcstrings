@@ -1005,7 +1005,6 @@
     },
     "%lld" : {
       "comment" : "Voice Control input label – the bare number for the hand-size option",
-      "extractionState" : "stale",
       "localizations" : {
         "da" : {
           "stringUnit" : {
@@ -1876,7 +1875,110 @@
       }
     },
     "After a knock, your opponent may lay off deadwood onto your melds. If their deadwood ties or beats yours, they undercut and win." : {
-
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Efter en bank kan din modstander lægge overskydende kort til dine kombinationer. Hvis modstanderens overskydende kort er lige med eller færre end dine, vinder modstanderen ved underbud."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nach dem Klopfen darf dein Gegner überschüssige Karten (Deadwood) an deine Kombinationen anlegen. Ist sein Deadwood gleich hoch wie deins oder niedriger, unterschneidet er dich und gewinnt."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tras un golpe, tu oponente puede descargar su deadwood (cartas sueltas) en tus combinaciones. Si su deadwood iguala o supera al tuyo, hace un subcorte y gana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Après un knock, votre adversaire peut ajouter ses cartes mortes (deadwood) à vos combinaisons. Si son deadwood égale ou dépasse le vôtre, il vous contre et gagne."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉक के बाद, आपका प्रतिद्वंद्वी अपना डेडवुड (बची हुई कार्ड) आपके मेल्ड्स पर जोड़ सकता है। यदि उसका डेडवुड आपके बराबर या उससे कम है, तो वह अंडरकट करके जीत जाता है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dopo una bussata, l’avversario può scaricare le proprie carte morte (deadwood) sulle tue combinazioni. Se le sue carte morte pareggiano o superano le tue, fa un undercut e vince."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ノックのあと、対戦相手は自分のデッドウッド（余り札）をこちらのメルズに付けることができます。相手のデッドウッドが同点か下回った場合は、アンダーカットで勝利します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "노크 후, 상대방은 자신의 데드우드(짝이 없는 카드)를 당신의 조합에 붙일 수 있습니다. 상대방의 데드우드가 당신과 같거나 더 적으면, 언더컷으로 승리합니다."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Etter en banking kan motstanderen legge løse kort (deadwood) på kombinasjonene dine. Hvis motstanderens deadwood er likt eller lavere enn ditt, vinner motstanderen med en underkutt."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Na een klop mag je tegenstander overtollige kaarten (deadwood) aan jouw combinaties aanleggen. Als hun deadwood gelijk is aan of lager is dan dat van jou, maken ze een undercut en winnen ze."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Após uma batida, seu oponente pode anexar cartas soltas (deadwood) aos seus jogos. Se as cartas soltas dele empatarem ou superarem as suas, ele faz um undercut e vence."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "После стука соперник может подкладывать свой дедвуд (лишние карты) к вашим комбинациям. Если его дедвуд равен вашему или меньше, он делает андеркат и побеждает."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Efter en knackning får din motståndare lägga av lösa kort (deadwood) på dina kombinationer. Om motståndarens deadwood är lika med eller lägre än ditt vinner hen genom underskärning."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kapı çalındıktan sonra rakibiniz, eşleşmeyen kartlarını (deadwood) sizin eşleşmelerinize ekleyebilir. Rakibin eşleşmeyen kartları sizinkiyle eşitse veya daha azsa, sizi alttan keser ve kazanır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sau khi gõ bài, đối thủ có thể ghép thêm bài thừa (deadwood) vào các bộ của bạn. Nếu số bài thừa của họ bằng hoặc ít hơn của bạn, họ sẽ phản đòn và giành chiến thắng."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌后，对手可将自己的废牌（未组合的牌）搭到你的牌组上。如果对手的废牌与你相同或比你更少，便能反敲获胜。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌之後，對手可將自己的廢牌（未組合的牌）搭到你的組合上。若對手的廢牌與你相同或比你更少，便能反敲獲勝。"
+          }
+        }
+      }
     },
     "Another player joined at the same time you did. Please try again." : {
       "comment" : "A message displayed when another player attempts to join a game at the same time the user is trying to join.",
@@ -2524,10 +2626,106 @@
     "Call knock" : {
       "comment" : "Voice Control input label for declaring a knock in Gin Rummy",
       "localizations" : {
-        "en" : {
+        "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Call knock"
+            "state" : "machine_translated",
+            "value" : "Meld bank"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klopfen ansagen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Cantar golpe"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Annoncer le knock"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉक बोलें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Annuncia la bussata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ノックをコール"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "노크 외치기"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Meld banking"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klop aankondigen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Anunciar batida"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Заявить стук"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Anmäl knackning"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kapıyı çal"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Hô gõ bài"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "叫敲牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "叫敲牌"
           }
         }
       }
@@ -4576,7 +4774,111 @@
       }
     },
     "Cycles between the original order, sorted by suit and rank, and sorted by rank." : {
-      "comment" : "VoiceOver hint for the sort button"
+      "comment" : "VoiceOver hint for the sort button",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Skifter mellem den oprindelige rækkefølge, sorteret efter kulør og værdi, og sorteret efter værdi."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wechselt zwischen der ursprünglichen Reihenfolge, nach Farbe und Rang sortiert und nach Rang sortiert."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Alterna entre el orden original, ordenado por palo y valor, y ordenado por valor."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Alterne entre l’ordre d’origine, le tri par couleur et rang, et le tri par rang."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "मूल क्रम, सूट और रैंक के अनुसार क्रमबद्ध, और रैंक के अनुसार क्रमबद्ध के बीच बदलता है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Alterna tra l’ordine originale, l’ordinamento per seme e valore e l’ordinamento per valore."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "元の順序、スートとランク順、ランク順を順番に切り替えます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "원래 순서, 무늬와 숫자 순 정렬, 숫자 순 정렬 사이를 번갈아 전환합니다."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Veksler mellom den opprinnelige rekkefølgen, sortert etter farge og rang, og sortert etter rang."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wisselt tussen de oorspronkelijke volgorde, gesorteerd op kleur en waarde, en gesorteerd op waarde."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Alterna entre a ordem original, ordenado por naipe e valor, e ordenado por valor."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Переключает между исходным порядком, сортировкой по масти и рангу и сортировкой по рангу."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Växlar mellan den ursprungliga ordningen, sortering efter färg och valör samt sortering efter valör."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Orijinal sıra, gruba ve değere göre sıralı ve değere göre sıralı arasında geçiş yapar."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Chuyển đổi lần lượt giữa thứ tự ban đầu, sắp xếp theo chất và hạng, và sắp xếp theo hạng."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "在原始顺序、按花色与点数排序、以及按点数排序之间循环切换。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "在原始順序、依花色與點數排序、以及依點數排序之間循環切換。"
+          }
+        }
+      }
     },
     "Deck" : {
       "comment" : "Voice Control input label\nVoice Control label for drawing a card from the deck",
@@ -4795,10 +5097,112 @@
     "Declare a knock, then discard to end the round." : {
       "comment" : "VoiceOver hint for the knock button in Gin Rummy",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Erklær en bank, og smid derefter et kort for at afslutte runden."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sage ein Klopfen an und lege dann eine Karte ab, um die Runde zu beenden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Declare a knock, then discard to end the round."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Declara un golpe y luego descarta para terminar la ronda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Déclarez le knock, puis défaussez pour terminer la manche."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉक घोषित करें, फिर राउंड समाप्त करने के लिए एक कार्ड फेंकें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dichiara una bussata, poi scarta per terminare la mano."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ノックを宣言し、カードを1枚捨ててラウンドを終了します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "노크를 선언한 뒤, 카드를 버려 라운드를 끝내세요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Erklær en banking, og kast deretter et kort for å avslutte runden."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kondig een klop aan en gooi vervolgens een kaart weg om de ronde te beëindigen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Declare uma batida e, em seguida, descarte para encerrar a rodada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Объявите стук, затем сбросьте карту, чтобы завершить раунд."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Anmäl en knackning och släng sedan ett kort för att avsluta ronden."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kapı çalın, ardından turu bitirmek için bir kart atın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tuyên bố gõ bài, sau đó bỏ một lá bài để kết thúc ván."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "宣布敲牌，然后弃一张牌以结束本回合。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "宣告敲牌，然後棄一張牌以結束本回合。"
           }
         }
       }
@@ -4806,10 +5210,112 @@
     "Declare knock" : {
       "comment" : "Voice Control input label for declaring a knock in Gin Rummy",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Erklær bank"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klopfen erklären"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Declare knock"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Declarar golpe"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Déclarer le knock"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉक घोषित करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dichiara la bussata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ノックを宣言"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "노크 선언"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Erklær banking"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klop verklaren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Declarar batida"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Объявить стук"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Säg knack"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kapı ilan et"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tuyên bố gõ bài"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "宣布敲牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "宣告敲牌"
           }
         }
       }
@@ -6127,7 +6633,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Piochez une carte dans la pioche ou la défausse, puis défaussez une carte de votre hand."
+            "value" : "Piochez une carte dans le paquet ou dans la défausse, puis défaussez une carte de votre main."
           }
         },
         "hi" : {
@@ -9855,21 +10361,106 @@
     "I won by knock in Gin!" : {
       "comment" : "Gin template win caption/summary for knocking",
       "localizations" : {
-        "en" : {
+        "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "I won by knock in Gin!"
+            "state" : "machine_translated",
+            "value" : "Jeg vandt på bank i Gin!"
           }
-        }
-      }
-    },
-    "I won by undercut in Gin!" : {
-      "comment" : "Gin template win caption/summary for undercut",
-      "localizations" : {
-        "en" : {
+        },
+        "de" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "I won by undercut in Gin!"
+            "state" : "machine_translated",
+            "value" : "Ich habe in Gin durch Klopfen gewonnen!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "¡Gané al Gin por golpe!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "J’ai gagné au Gin par knock !"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "मैं जिन में नॉक से जीत गया!"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ho vinto a Gin bussando!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ジンでノックして勝利しました！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "진에서 노크로 이겼습니다!"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Jeg vant på banking i Gin!"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ik heb gewonnen met Gin door te kloppen!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Eu ganhei no Gin batendo!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Я выиграл в Джин стуком!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Jag vann på Gin genom knackning!"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gin'de kapı çalarak kazandım!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tôi đã thắng ván Gin Rummy bằng cách gõ bài!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "我在金拉米中靠敲牌赢啦！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "我在金拉米中靠敲牌獲勝！"
           }
         }
       }
@@ -10304,7 +10895,111 @@
     },
     "In 1v1 10-card Gin, you can knock if discarding would leave you with 10 or less deadwood." : {
       "comment" : "Text displayed in a notification when a user can knock in a 1v1 10-card Gin game.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "I 1-mod-1 Gin med 10 kort kan du banke, hvis du efter at have lagt et kort ender med 10 eller færre point i overskydende kort."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Im 1-gegen-1-Gin mit 10 Karten kannst du klopfen, wenn dir nach dem Ablegen 10 oder weniger Deadwood-Punkte bleiben."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "En el Gin 1 contra 1 de 10 cartas, puedes golpear si al descartar te quedan 10 puntos o menos de deadwood (cartas sueltas)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Au Gin 1 contre 1 à 10 cartes, vous pouvez frapper si, après votre défausse, il vous reste 10 points ou moins de cartes mortes (deadwood)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "1 बनाम 1, 10-कार्ड जिन में, आप नॉक कर सकते हैं यदि कार्ड फेंकने के बाद आपके पास 10 या उससे कम डेडवुड (बची हुई कार्ड) बचे।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nel Gin 1 contro 1 con 10 carte, puoi bussare se, scartando, ti rimangono 10 o meno punti morti (deadwood)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "1対1の10枚ジンでは、カードを1枚捨てたあとにデッドウッド（余り札）が10点以下になる場合にノックできます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "1대1 10장 진에서는, 카드를 버린 후 데드우드(짝이 없는 카드)가 10점 이하로 남으면 노크할 수 있습니다."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "I 1-mot-1 Gin med 10 kort kan du banke hvis du etter å ha kastet et kort sitter igjen med 10 eller færre poeng i løse kort (deadwood)."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "In 1-tegen-1 Gin met 10 kaarten kun je kloppen als je na het wegleggen 10 of minder deadwood-punten (overtollige kaarten) overhoudt."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "No Gin 1 contra 1 com 10 cartas, você pode bater se, ao descartar, ficar com 10 ou menos pontos de cartas soltas (deadwood)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "В Джине 1 на 1 с 10 картами вы можете постучать, если после сброса у вас останется 10 или меньше очков дедвуда (лишних карт)."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "I Gin 1 mot 1 med 10 kort kan du knacka om du efter att ha slängt ett kort har 10 eller färre poäng i lösa kort (deadwood)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Birebir 10 kartlı Gin'de, bir kart attığınızda elinizde 10 veya daha az eşleşmeyen kart puanı (deadwood) kalacaksa kapı çalabilirsiniz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Trong Gin 1 đấu 1 với 10 lá bài, bạn có thể gõ bài nếu sau khi bỏ một lá, số điểm bài thừa (deadwood) của bạn còn 10 hoặc ít hơn."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "在1对1的10张金拉米中，若弃牌后你的废牌（未组合的牌）剩下10点或更少，便可敲牌。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "在 1 對 1 的 10 張金拉米中，若棄牌後你的廢牌（未組合的牌）剩下 10 點或更少，便可敲牌。"
+          }
+        }
+      }
     },
     "Jack" : {
       "comment" : "Card rank: Jack",
@@ -11386,23 +12081,319 @@
     "Knock" : {
       "comment" : "Voice Control input label for the knock button in Gin Rummy\nVoiceOver accessibility label for the knock button in Gin Rummy",
       "localizations" : {
-        "en" : {
+        "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Knock"
+            "state" : "machine_translated",
+            "value" : "Bank"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klopfen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Golpear"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Frapper"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉक करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bussa"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ノック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "노크"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bank"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kloppen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bater"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Постучать"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Knacka"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kapı Çal"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gõ bài"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌"
           }
         }
       }
     },
     "Knock is activated. Discard a card to knock." : {
-
+      "comment" : "VoiceOver hint for the knock button in Gin Rummy",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Banke er aktiveret. Smid et kort for at banke."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klopfen ist aktiviert. Lege eine Karte ab, um zu klopfen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "El golpe está activado. Descarta una carta para golpear."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le knock est activé. Défaussez une carte pour frapper."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉक सक्रिय है। नॉक करने के लिए एक कार्ड फेंकें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La bussata è attivata. Scarta una carta per bussare."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ノックが有効になりました。カードを1枚捨ててノックします。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "노크가 활성화되었습니다. 카드를 버려 노크하세요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Banking er aktivert. Kast et kort for å banke."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kloppen is geactiveerd. Gooi een kaart weg om te kloppen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bater está ativado. Descarte uma carta para bater."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Стук активирован. Сбросьте карту, чтобы постучать."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Knackning är aktiverad. Släng ett kort för att knacka."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kapı çalma etkin. Kapı çalmak için bir kart atın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gõ đã được kích hoạt. Bỏ một lá bài để gõ."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌已激活。弃一张牌即可敲牌。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌已啟用。棄掉一張牌即可敲牌。"
+          }
+        }
+      }
     },
     "Knocking" : {
       "localizations" : {
-        "en" : {
+        "da" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Knocking"
+            "state" : "machine_translated",
+            "value" : "At banke"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klopfen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "El golpe"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le knock"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉक करना"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La bussata"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ノック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "노크하기"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Banking"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kloppen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bater"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Стук"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Knackning"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kapı Çalma"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gõ bài"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "敲牌"
           }
         }
       }
@@ -11623,7 +12614,110 @@
       }
     },
     "Layoffs" : {
-
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tillæg"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Anlegen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Descargar cartas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ajouts de cartes"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "कार्ड जोड़ना"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Scarico delle carte"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "レイオフ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "카드 붙이기"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Påleggskort"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Aanleggen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Anexar Cartas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Подкладывание карт"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Avläggning"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kart Ekleme"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ghép thêm bài"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "搭牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "搭牌"
+          }
+        }
+      }
     },
     "Left Arrow" : {
       "comment" : "Voice Control input label – the chevron icon on the back button",
@@ -13872,7 +14966,111 @@
     },
     "Rank" : {
       "comment" : "A label for the rank of a card.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Værdi"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rang"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Valor"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rang"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "रैंक"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Valore"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ランク"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "숫자"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rang"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Waarde"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Valor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ранг"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Valör"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Değer"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Hạng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "点数"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "點數"
+          }
+        }
+      }
     },
     "Restore Purchases" : {
       "comment" : "A button label that restores in-app purchases.",
@@ -15387,13 +16585,325 @@
       }
     },
     "Sort" : {
-      "comment" : "Voice Control input label"
+      "comment" : "Voice Control input label",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortér"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordenar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Trier"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "क्रमबद्ध करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordina"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "並べ替え"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "정렬"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sorter"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sorteren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordenar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Сортировать"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortera"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sırala"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sắp xếp"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "整理"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "排序"
+          }
+        }
+      }
     },
     "Sort cards" : {
-      "comment" : "Voice Control input label"
+      "comment" : "Voice Control input label",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortér kort"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karten sortieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordenar cartas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Trier les cartes"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "कार्ड क्रमबद्ध करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordina le carte"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "カードを並べ替え"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "카드 정렬"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sorter kort"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kaarten sorteren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordenar cartas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Сортировать карты"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortera korten"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kartları sırala"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sắp xếp bài"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "整理卡牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "排序卡片"
+          }
+        }
+      }
     },
     "Sort hand" : {
-      "comment" : "Voice Control input label\nVoice Control label for sorting the player's hand"
+      "comment" : "Voice Control input label\nVoice Control label for sorting the player's hand",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortér hånd"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Hand sortieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordenar mano"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Trier la main"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "हाथ क्रमबद्ध करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordina la mano"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "手札を並べ替え"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "패 정렬"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sorter hånden"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Hand sorteren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ordenar mão"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Сортировать руку"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortera handen"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Eli sırala"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sắp xếp tay bài"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "整理手牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "排序手牌"
+          }
+        }
+      }
     },
     "Spades" : {
       "comment" : "Card suit: Spades",
@@ -15718,9 +17228,8 @@
       }
     },
     "Start Game!" : {
-      "comment" : "A button label that starts a game.",
-      "extractionState" : "stale",
-      "isCommentAutoGenerated" : true,
+      "comment" : "A button label that starts a game. (CURRENTLY UNUSED)",
+      "extractionState" : "manual",
       "localizations" : {
         "da" : {
           "stringUnit" : {
@@ -15828,7 +17337,111 @@
     },
     "Suit/Rank" : {
       "comment" : "A label for the sort button.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kulør/Værdi"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Farbe/Rang"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Palo/Valor"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Couleur/Rang"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "सूट/रैंक"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Seme/Valore"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "スート/ランク"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "무늬/숫자"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Farge/Rang"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kleur/Waarde"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Naipe/Valor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Масть/Ранг"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Färg/Valör"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Grup/Değer"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Chất/Hạng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "花色/点数"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "花色/點數"
+          }
+        }
+      }
     },
     "Sunset" : {
       "comment" : "Card back theme name displayed on the main menu",
@@ -17990,7 +19603,111 @@
     },
     "Win by going Gin, or by knocking successfully before your opponent." : {
       "comment" : "Text displayed in a notification when a user has won by going Gin or by knocking successfully before their opponent.",
-      "isCommentAutoGenerated" : true
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vind ved at melde Gin eller ved at banke med succes før din modstander."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gewinne, indem du Gin machst oder erfolgreich klopfst, bevor dein Gegner es tut."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gana haciendo Gin o golpeando con éxito antes que tu oponente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gagnez en faisant Gin ou en frappant avec succès avant votre adversaire."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "जिन बनाकर जीतें, या अपने प्रतिद्वंद्वी से पहले सफलतापूर्वक नॉक करके।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vinci facendo Gin o bussando con successo prima dell’avversario."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ジンを宣言するか、対戦相手より先にノックを成功させると勝利します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "진을 선언하거나, 상대방보다 먼저 노크에 성공하여 승리하세요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vinn ved å gå Gin, eller ved å banke før motstanderen."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Win door Gin te gaan, of door succesvol te kloppen vóór je tegenstander."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vença fazendo Gin ou batendo com sucesso antes do seu oponente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Победите, объявив Джин, или успешно постучав раньше соперника."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vinn genom att gå Gin eller genom att knacka före din motståndare."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gin yaparak ya da rakibinden önce başarıyla kapı çalarak kazan."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Chiến thắng bằng cách hô Gin, hoặc gõ bài thành công trước đối thủ."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "凑成“金”，或抢在对手之前成功敲牌，即可获胜。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "宣告「金」獲勝，或搶在對手之前成功敲牌即可獲勝。"
+          }
+        }
+      }
     },
     "Win two games" : {
       "comment" : "A description of how many wins are required to unlock a theme.",
@@ -18096,6 +19813,113 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "贏兩局"
+          }
+        }
+      }
+    },
+    "You won by undercut in Gin!" : {
+      "comment" : "Gin template win caption/summary for undercut",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Du vandt ved underbud i Gin!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Du hast in Gin durch Unterschneiden gewonnen!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "¡Ganaste al Gin por subcorte!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vous avez gagné au Gin en contrant !"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "आप जिन में अंडरकट से जीत गए!"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Hai vinto a Gin con un undercut!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ジンでアンダーカットして勝利しました！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "진에서 언더컷으로 승리하셨습니다!"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Du vant i Gin med en underkutt!"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Je hebt gewonnen met Gin door een undercut!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Você ganhou no Gin por undercut!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Вы выиграли в Джин андеркатом!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Du vann på Gin genom underskärning!"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gin'de alttan keserek kazandın!"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bạn đã thắng ván Gin Rummy bằng cách phản đòn!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "你在金拉米中靠反敲赢啦！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "您在金拉米中靠反敲獲勝！"
           }
         }
       }
@@ -19072,5 +20896,5 @@
       }
     }
   },
-  "version" : "1.1"
+  "version" : "1.3"
 }

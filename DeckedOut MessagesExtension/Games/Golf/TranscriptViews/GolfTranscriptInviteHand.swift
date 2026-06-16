@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct GolfTranscriptInviteHand: View {
     var cardBackName: String? = nil

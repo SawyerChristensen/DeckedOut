@@ -27,6 +27,7 @@ struct Crazy8sRootView: View {
         } else { //we do not need to join. the game is loaded. display it
             Crazy8sGameView()
                 .environmentObject(game)
+                .id(game.sessionID) // Rebuild the whole game subtree when a new session loads
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct CaptionTextView: View { //this is currently but not as originally designed. currently, multiline view does not actually force multiple lines. what it does do is get rid of the mirroring in front of the text so that it is at least visually balanced in larger accessibility settings. it doesnt need to be changed, but multiline view triggers without actually forcing a multiline view
     let isWaiting: Bool

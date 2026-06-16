@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE8110082FBE72880023EB2C /* CGFI StoreKit Testing.storekit in Resources */ = {isa = PBXBuildFile; fileRef = BE8110072FBE72870023EB2C /* CGFI StoreKit Testing.storekit */; };
-		BE8110092FBE72880023EB2C /* CGFI StoreKit Testing.storekit in Resources */ = {isa = PBXBuildFile; fileRef = BE8110072FBE72870023EB2C /* CGFI StoreKit Testing.storekit */; };
+		BE8110082FBE72880023EB2C /* StoreKit Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = BE8110072FBE72870023EB2C /* StoreKit Config.storekit */; };
+		BE8110092FBE72880023EB2C /* StoreKit Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = BE8110072FBE72870023EB2C /* StoreKit Config.storekit */; };
 		BECF99AA2E04746F007B89C0 /* DeckedOut MessagesExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BECF99A92E04746F007B89C0 /* DeckedOut MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BECF99AF2E04746F007B89C0 /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BECF99AE2E04746F007B89C0 /* Messages.framework */; };
+		BEEDAA262FDDF6FE00286A0D /* TO DO.md in Resources */ = {isa = PBXBuildFile; fileRef = BEEDAA022FDDF6FE00286A0D /* TO DO.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,10 +39,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		BE8110072FBE72870023EB2C /* CGFI StoreKit Testing.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "CGFI StoreKit Testing.storekit"; sourceTree = "<group>"; };
+		BE8110072FBE72870023EB2C /* StoreKit Config.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "StoreKit Config.storekit"; sourceTree = "<group>"; };
 		BECF99A02E04746E007B89C0 /* DeckedOut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeckedOut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECF99A92E04746F007B89C0 /* DeckedOut MessagesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "DeckedOut MessagesExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECF99AE2E04746F007B89C0 /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
+		BEEDAA022FDDF6FE00286A0D /* TO DO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "TO DO.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -85,7 +87,8 @@
 		BECF99992E04746E007B89C0 = {
 			isa = PBXGroup;
 			children = (
-				BE8110072FBE72870023EB2C /* CGFI StoreKit Testing.storekit */,
+				BE8110072FBE72870023EB2C /* StoreKit Config.storekit */,
+				BEEDAA022FDDF6FE00286A0D /* TO DO.md */,
 				BECF99A22E04746E007B89C0 /* DeckedOut */,
 				BECF99B02E04746F007B89C0 /* DeckedOut MessagesExtension */,
 				BECF99AD2E04746F007B89C0 /* Frameworks */,
@@ -217,7 +220,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE8110082FBE72880023EB2C /* CGFI StoreKit Testing.storekit in Resources */,
+				BE8110082FBE72880023EB2C /* StoreKit Config.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,7 +228,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE8110092FBE72880023EB2C /* CGFI StoreKit Testing.storekit in Resources */,
+				BE8110092FBE72880023EB2C /* StoreKit Config.storekit in Resources */,
+				BEEDAA262FDDF6FE00286A0D /* TO DO.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +265,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -293,6 +298,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -451,6 +457,7 @@
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games for iMessage";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -474,6 +481,7 @@
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games for iMessage";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

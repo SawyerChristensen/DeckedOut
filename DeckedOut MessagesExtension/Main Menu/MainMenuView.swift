@@ -1199,7 +1199,7 @@ struct MainMenuView: View {
             .accessibilityElement(children: .ignore) // Ignore default image reading
             .accessibilityLabel(Text("\(selectedHandSize) cards", comment: "VoiceOver accessibility label for a hand-size option card, e.g. '7 cards'")) // What VoiceOver reads
             .accessibilityInputLabels([
-                Text(verbatim: "\(selectedHandSize)"),
+                Text("\(selectedHandSize)"),
                 Text("\(selectedHandSize) cards", comment: "Voice Control input label – hand-size option, e.g. '7 cards'"),
                 Text("\(selectedHandSize) of \(suit)", comment: "Voice Control input label – hand-size option matching the displayed card, e.g. '7 of Hearts'"),
             ]) // What Voice Control listens for
@@ -1223,9 +1223,4 @@ struct MenuGame: Identifiable {
     var title: String
     var logoCard: String // The front of the card
     var wins: Int = 0
-
-    var localizedLogoCard: String {
-        let isSimplifiedChinese = Locale.preferredLanguages.first?.hasPrefix("zh-Hans") == true
-        return isSimplifiedChinese ? logoCard + "Chinese" : logoCard
-    }
 }

@@ -32,18 +32,31 @@ struct GinTranscriptLegacy: View {
         }
         return GinRummyValidator.canMeldAllCards(hand: opponentsHand)
     }
-    
+    // Mirror the template-layout captions so knock/undercut wins read the same in the live transcript.
+    private var winCaption: String {
+        switch gameState.roundWinType {
+        case .knock:
+            return "I won by knock in Gin!"
+        case .undercut:
+            return "You won by undercut in Gin!"
+        default:
+            return "I won in Gin!"
+        }
+    }
+
     var body: some View {
         VStack {
             
             Color.clear
                 .frame(height: 150)
                 .overlay { //the crazy 8s player hand expands. making it an overlay means its width expansion does not bubble up and effect the VStacks width
-                    GinTranscriptPlayerHand(cards: opponentWon ? opponentsHand : playersHand, playerWon: playerWon, opponentWon: opponentWon, opponentCardBack: isFromMe ? nil : gameState.senderCardBack)
+                    // When the message is from us, the only way the opponent won is an undercut — show the receiver's
+                    // (opponent's) card back rather than falling back to our own selected back.
+                    GinTranscriptPlayerHand(cards: opponentWon ? opponentsHand : playersHand, playerWon: playerWon, opponentWon: opponentWon, opponentCardBack: isFromMe ? gameState.receiverCardBack : gameState.senderCardBack)
                         .offset(y: opponentWon ? -30 : 50)
                 }
                 
-            CaptionTextView(isWaiting: isFromMe, altText: opponentWon || playerWon ? "I won in Gin!" : "Your turn in Gin!")
+            CaptionTextView(isWaiting: isFromMe, altText: opponentWon || playerWon ? winCaption : "Your turn in Gin!")
             
         }
         .background( //for measuring & reporting the view height

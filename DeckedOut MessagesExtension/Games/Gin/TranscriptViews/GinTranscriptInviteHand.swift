@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct GinTranscriptInviteHand: View {
     var cardBackName: String? = nil

@@ -60,7 +60,10 @@ struct GinOpponentHandView: View {
                 let isAnimating = (animatingCard == card)
                 let index = cards.firstIndex(of: card)!
                 let angle = Angle.degrees((Double(index) - centerOffset) * -fanningAngle)
-                let revealRotation = game.opponentHasWon || game.playerHasWon ? 360 : normalRotation
+                // Reveal only once the round has fully resolved (phase becomes .gameEndPhase
+                // after any closing turn animation has played). Gating on the win flags alone
+                // would flip the cards face up the instant the message loads, before the turn animates.
+                let revealRotation = game.phase == .gameEndPhase ? 360 : normalRotation
                 let restingRotation = angle + .degrees(handRotation)
                 
                 CardView(frontImage: card.imageName, backImageName: cardBackName, cardHeight: cardHeight, rotation: isAnimating ? animatingRotation : revealRotation)
@@ -71,7 +74,7 @@ struct GinOpponentHandView: View {
                     .offset(isAnimating ? animationOffset : .zero)
                     .shadow(color: game.opponentHasWon ? Color("lossRed") : .black.opacity(0.25), radius: game.opponentHasWon ? winGlowRadius : (isAnimating ? animatingShadowRadius : 20))
                     .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1).speed(motionSpeed),
-                        value: game.opponentHasWon || game.playerHasWon // trigger when this value changes
+                        value: game.phase == .gameEndPhase // trigger the flip once the round resolves, after the turn animation
                     )
                     .animation(.spring(response: 0.5, dampingFraction: 0.7).speed(motionSpeed), value: cards.count)
                     .background( // capture the global frame of this specific slot

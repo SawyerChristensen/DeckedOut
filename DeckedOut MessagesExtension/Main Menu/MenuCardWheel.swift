@@ -92,7 +92,7 @@ struct MenuCardWheel: View {
                 let baseRotation: Double = isCenter ? 0 : 180
                 let flipRotation: Double = showingThemes ? -180 : 0
                 
-                CardView(frontImage: game.localizedLogoCard, cardHeight: cardHeight, rotation: baseRotation + flipRotation)
+                CardView(frontImage: game.logoCard, cardHeight: cardHeight, rotation: baseRotation + flipRotation)
                     .zIndex(Double(visibleCount) - abs(distance))
                     .rotationEffect(.degrees(distance * fanningAngle))
                     .offset(y: yOffset)

@@ -27,7 +27,7 @@ struct GolfRootView: View {
         } else {
             GolfGameView()
                 .environmentObject(game)
+                .id(game.sessionID) // Rebuild the whole game subtree when a new session loads
         }
     }
 }
-

@@ -59,8 +59,8 @@ class MessagesViewController: MSMessagesAppViewController {
             //print("Could not set up audio session: \(error)")
         }
         
-        Task.detached(priority: .userInitiated) { //init audio on background thread
-            _ = SoundManager.instance
+        Task.detached(priority: .userInitiated) { //init audio off the main launch path
+            _ = await SoundManager.instance
         }
 
         /*Task.detached(priority: .utility) { //authenticate Game Center on background thread
@@ -143,11 +143,7 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    // MARK: - Helper functions
-    private func updateAccessibilityModal(for presentationStyle: MSMessagesAppPresentationStyle) {
-        view.accessibilityViewIsModal = (presentationStyle == .expanded) //in order to block the imessage elements underneath the view from being recognized/assigned numbers
-    }
-
+    // MARK: - View Presentation
     private func presentTranscriptView(for gameType: GameType, stateData: Data, isFromMe: Bool, localParticipantID: UUID) {
         let rootView = decideTranscriptView(for: gameType, stateData: stateData, isFromMe: isFromMe, localParticipantID: localParticipantID)
         let transcriptViewController = UIHostingController(rootView: rootView)
@@ -398,6 +394,11 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
+    private func updateAccessibilityModal(for presentationStyle: MSMessagesAppPresentationStyle) {
+        view.accessibilityViewIsModal = (presentationStyle == .expanded) //in order to block the imessage elements underneath the view from being recognized/assigned numbers
+    }
+    
+    // MARK: - Game Sending
     private func createGame(conversation: MSConversation, gameType: GameType, handSize: Int = 7) {
         let session = MSSession()
         let message = MSMessage(session: session)
@@ -410,13 +411,11 @@ class MessagesViewController: MSMessagesAppViewController {
         case .ginRummy:
             GinRummyManager.shared.handSize = handSize
             self.activeGameEngine = GinRummyManager.shared
-            let ginImage = Locale.current.language.languageCode == "zh" ? "GinDefaultChinese" : "GinDefault" //graphic is for both simplified and traditional chinese
-            templateLayout.image = UIImage(named: ginImage)
+            templateLayout.image = UIImage(named: "GinDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "Gin invite caption/summary") //need to use NSLocalizedString here because it is not in a SwiftUI view and therefore automatically included in the localizable catalog. this adds it manually
         case .crazy8s:
             self.activeGameEngine = Crazy8sManager.shared
-            let crazy8sImage = Locale.preferredLanguages.first!.hasPrefix("zh-Hans") ? "Crazy8sDefaultChinese" : "Crazy8sDefault" //graphic is just for simplified chinese
-            templateLayout.image = UIImage(named: crazy8sImage)
+            templateLayout.image = UIImage(named: "Crazy8sDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Crazy 8s!", comment: "Crazy 8s invite caption/summary")
         case .golf:
             self.activeGameEngine = GolfManager.shared
@@ -460,22 +459,6 @@ class MessagesViewController: MSMessagesAppViewController {
         
         self.activeGameEngine = nil //set it back to nil to fix view transition bug. If we don't, willTransition thinks theres an active game when it hasn't been sent yet. activeGameEngine gets reactivated in didReceive/didSelect anyway
     }
-
-    private func normalizedSeats(for conversation: MSConversation) -> [UUID] {
-        var uniqueSeats: [UUID] = []
-        for participantID in [conversation.localParticipantIdentifier] + conversation.remoteParticipantIdentifiers {
-            if !uniqueSeats.contains(participantID) {
-                uniqueSeats.append(participantID)
-            }
-        }
-
-        // If the user is texting themselves, keep gameplay as a 2-seat match.
-        if uniqueSeats.count == 1, let localID = uniqueSeats.first {
-            return [localID, localID]
-        }
-
-        return uniqueSeats
-    }
     
     func sendGameMove(gameType: GameType, stateData: Data) {
         // Further package the game state
@@ -505,8 +488,7 @@ class MessagesViewController: MSMessagesAppViewController {
             
             switch gameType {
             case .ginRummy:
-                let ginWonImage = Locale.current.language.languageCode == "zh" ? "GinGameWonChinese" : "GinGameWon"
-                templateLayout.image = UIImage(named: ginWonImage)
+                templateLayout.image = UIImage(named: "GinGameWon")
                 if let ginManager = activeGameEngine as? GinRummyManager,
                    let roundWinType = ginManager.currentRoundWinType {
                     switch roundWinType {
@@ -515,7 +497,7 @@ class MessagesViewController: MSMessagesAppViewController {
                     case .knock:
                         templateLayout.caption = NSLocalizedString("I won by knock in Gin!", comment: "Gin template win caption/summary for knocking")
                     case .undercut:
-                        templateLayout.caption = NSLocalizedString("I won by undercut in Gin!", comment: "Gin template win caption/summary for undercut")
+                        templateLayout.caption = NSLocalizedString("You won by undercut in Gin!", comment: "Gin template win caption/summary for undercut")
                     }
                 } else {
                     templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin template win caption/summary")
@@ -539,8 +521,7 @@ class MessagesViewController: MSMessagesAppViewController {
             
             switch gameType {
             case .ginRummy:
-                let ginImage = Locale.current.language.languageCode == "zh" ? "GinDefaultChinese" : "GinDefault"
-                templateLayout.image = UIImage(named: ginImage)
+                templateLayout.image = UIImage(named: "GinDefault")
                 templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "Gin Rummy template message caption")
             case .crazy8s:
                 templateLayout.image = UIImage(named: "Crazy8sDefault")
@@ -597,12 +578,10 @@ class MessagesViewController: MSMessagesAppViewController {
         let templateLayout = MSMessageTemplateLayout()
         switch gameType {
         case .ginRummy:
-            let ginImage = Locale.current.language.languageCode == "zh" ? "GinDefaultChinese" : "GinDefault"
-            templateLayout.image = UIImage(named: ginImage)
+            templateLayout.image = UIImage(named: "GinDefault")
             templateLayout.caption = NSLocalizedString("Joined Gin!", comment: "Gin join caption/summary")
         case .crazy8s:
-            let crazy8sImage = Locale.preferredLanguages.first!.hasPrefix("zh-Hans") ? "Crazy8sDefaultChinese" : "Crazy8sDefault" //graphic is just for simplified chinese
-            templateLayout.image = UIImage(named: crazy8sImage)
+            templateLayout.image = UIImage(named: "Crazy8sDefault")
             templateLayout.caption = NSLocalizedString("Joined Crazy 8s!", comment: "Crazy 8s join caption/summary")
         case .golf:
             templateLayout.image = UIImage(named: "GolfDefault")
@@ -627,7 +606,24 @@ class MessagesViewController: MSMessagesAppViewController {
             requestPresentationStyle(.compact)
         }
     }
+    
+    private func normalizedSeats(for conversation: MSConversation) -> [UUID] {
+        var uniqueSeats: [UUID] = []
+        for participantID in [conversation.localParticipantIdentifier] + conversation.remoteParticipantIdentifiers {
+            if !uniqueSeats.contains(participantID) {
+                uniqueSeats.append(participantID)
+            }
+        }
 
+        // If the user is texting themselves, keep gameplay as a 2-seat match.
+        if uniqueSeats.count == 1, let localID = uniqueSeats.first {
+            return [localID, localID]
+        }
+
+        return uniqueSeats
+    }
+
+    // MARK: - Helper Functions
     private func extractGameInfo(from message: MSMessage) -> (type: GameType, data: Data, isSinglePlayer: Bool)? {
         guard let url = message.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }

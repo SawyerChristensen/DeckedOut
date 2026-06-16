@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct GinTranscriptPlayerHand: View {
     let cards: [Card]

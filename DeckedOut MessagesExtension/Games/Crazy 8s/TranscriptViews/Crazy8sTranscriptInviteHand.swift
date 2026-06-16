@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct Crazy8sTranscriptInviteHand: View {
     var cardBackName: String? = nil

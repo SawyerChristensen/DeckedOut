@@ -30,6 +30,7 @@ struct GinRummyGameState: Codable, BasicGameState {
     let indexSenderDiscardedFrom: Int?
     let turnNumber: Int
     let senderCardBack: String? //the card-back the sender has equipped; optional for backward compat
+    let receiverCardBack: String? //the receiver's card-back; needed when the receiver wins on the sender's turn (undercut)
     let roundWinner: GinRoundWinner? //explicit winner metadata for non-gin round endings
     let roundWinType: GinRoundWinType? //distinguishes gin/knock/undercut outcomes
 }
@@ -201,23 +202,23 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     }
     
     var canPlayerKnock: Bool {
-        guard handSize == 10 else { return false }
+        //guard handSize == 10 else { return false }
         guard phase == .discardPhase else { return false }
 
-        // Before the discard, the hand has 11 cards. Show the button when any legal discard would leave a non-gin hand with 10 or less deadwood.
+        // Before the discard, the hand has 8 or 11 cards. Show the button when any legal discard would leave a non-gin hand with 10 or less deadwood.
         if playerHand.count == handSize + 1 {
             return playerHand.contains { candidate in
                 var postDiscardHand = playerHand
                 guard let index = postDiscardHand.firstIndex(of: candidate) else { return false }
                 postDiscardHand.remove(at: index)
-                return canKnock(afterDiscarding: postDiscardHand)
+                return canKnock(afterDiscardingWith: postDiscardHand)
             }
         }
 
-        return canKnock(afterDiscarding: playerHand)
+        return canKnock(afterDiscardingWith: playerHand) //after the dicard
     }
     
-    private func canKnock(afterDiscarding hand: [Card]) -> Bool {
+    private func canKnock(afterDiscardingWith hand: [Card]) -> Bool {
         guard hand.count == handSize else { return false }
         guard !GinRummyValidator.canMeldAllCards(hand: hand) else { return false }
         return GinRummyValidator.minimumDeadwoodPoints(hand: hand) <= 10
@@ -393,11 +394,14 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             
         } else if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
+            // Derive the local winner flags from the round result up front. If the opponent's
+            // turn ended the game (e.g. they knocked and were undercut), isGameOver is now true
+            // and the result is revealed after the closing animation completes in opponentDiscardCard.
+            hydrateLegacyWinnerFlagsFromRoundResult(isPlayersTurn: isPlayersTurn)
             let hasVisualsToAnimate = prepareOpponentTurnVisuals(state: state)
             if hasVisualsToAnimate {//it is not the first turn...
                 phase = .animationPhase
             } else { //it is the first turn...
-                hydrateLegacyWinnerFlagsFromRoundResult(isPlayersTurn: isPlayersTurn)
                 if !isGameOver {
                     checkWin() //this would be a first turn win. chance of that is 1 in 308,984! (refactor to prevent this edge case in later update)
                 }
@@ -597,6 +601,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.indexDiscardedFrom = nil
         self.drawnCard = nil
         self.shouldKnockOnDiscard = false
+        self.originalPlayerHandOrder = nil // otherwise a previous game's sort snapshot blocks capturing the new hand's order
         self.playerHasWon = false
         self.opponentHasWon = false
         self.isGameOver = false
@@ -611,6 +616,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.isSpectating = false
         self.isAnimatingOpponentTurn = false
         self.isSinglePlayer = true
+        self.handSize = 7
+        self.localParticipantID = nil
         self.isJoiningPhase = false
         self.isSettlingAfterJoin = false
         self.joinWasOverwritten = false
@@ -702,6 +709,17 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
         HapticManager.instance.playCardSlap()
+
+        if isGameOver {
+            // The round was already resolved when this state loaded (the opponent knocked —
+            // a knock win, or an undercut loss). Reveal the outcome now that the closing
+            // animation has played, preserving the hydrated winner flags.
+            isAnimatingOpponentTurn = false
+            SoundManager.instance.playGameEnd(didWin: self.playerHasWon)
+            phase = .gameEndPhase
+            return
+        }
+
         opponentHasWon = GinRummyValidator.canMeldAllCards(hand: opponentHand)
         if opponentHasWon {
             isGameOver = true
@@ -765,6 +783,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
                 indexSenderDiscardedFrom: nil,
                 turnNumber: 0,
                 senderCardBack: myCardBack,
+                receiverCardBack: nil, //the receiver hasn't equipped/revealed a back yet at creation
                 roundWinner: nil,
                 roundWinType: nil)
             self.isSinglePlayer = true
@@ -871,6 +890,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             indexSenderDiscardedFrom: self.indexDiscardedFrom,
             turnNumber: self.turnNumber + 1,
             senderCardBack: CardBackSelection.shared.selectedName,
+            receiverCardBack: self.opponentCardBack, //carry the opponent's back so the receiver's hand renders correctly when they win on our turn (undercut)
             roundWinner: self.roundWinner,
             roundWinType: self.roundWinType
         )
