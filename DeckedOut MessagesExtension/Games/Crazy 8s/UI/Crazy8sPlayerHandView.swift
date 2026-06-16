@@ -124,7 +124,7 @@ struct Crazy8sPlayerHandView: View {
                             
                 }
                 .frame(width: cardWidth, height: cardHeight)
-                .zIndex(isDragging ? 100 : Double(visualIndex))
+                .zIndex(Double(visualIndex))
                 .animation(.spring(response: 0.3, dampingFraction: 0.7).speed(motionSpeed), value: predictedDropIndex)
                 .animation(.spring(response: 0.4, dampingFraction: 0.75).speed(motionSpeed), value: cards.count)
             }
