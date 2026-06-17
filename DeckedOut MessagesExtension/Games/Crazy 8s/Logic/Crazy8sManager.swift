@@ -84,7 +84,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     var seats: [UUID] = []
     var mySeatIndex: Int = 0
     @Published var allHands: [[Card]] = []
-    var isSinglePlayer: Bool = false
+    var is1v1: Bool = false
     var isSpectating: Bool = false
     @Published var isAnimatingOpponentTurn: Bool = false
     var animatingOpponentSeat: Int = 0
@@ -101,7 +101,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
 
     /// Returns the card-back image name for a specific seat. Falls back to `cardBackRed`.
     func cardBack(forSeat seatIndex: Int) -> String {
-        if isSinglePlayer { return opponentCardBack }
+        if is1v1 { return opponentCardBack }
         return seatCardBacks.indices.contains(seatIndex) ? seatCardBacks[seatIndex] : "cardBackRed"
     }
 
@@ -109,7 +109,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     /// During animation, matches the seat currently drawing from the deck so the animated card and the deck share a back.
     /// Otherwise reflects the upcoming player's back so the deck updates as soon as the previous turn lands.
     var opponentDeckCardBack: String {
-        if isSinglePlayer { return opponentCardBack }
+        if is1v1 { return opponentCardBack }
         guard !seats.isEmpty else { return "cardBackRed" }
         if phase == .animationPhase || isAnimatingOpponentTurn {
             return cardBack(forSeat: animatingOpponentSeat)
@@ -195,15 +195,15 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             }
         } else if card.rank == .queen {
             activeSuitOverride = nil
-            if isSinglePlayer && !playerHand.isEmpty {
+            if is1v1 && !playerHand.isEmpty {
                 //skip the opponent: keep playing locally without sending. fresh draw allowance for the bonus turn.
                 cardsDrawnThisTurn = 0
                 checkHandPlayability()
             } else {
-                if !isSinglePlayer { skipNextSeat = true }
+                if !is1v1 { skipNextSeat = true }
                 completeTurn()
             }
-        } else if card.rank == .ace && !isSinglePlayer {
+        } else if card.rank == .ace && !is1v1 {
             //reverse direction in V2 groupchat; in V1 legacy the ace plays as a normal card (handled by the else below)
             isDirectionReversed.toggle()
             activeSuitOverride = nil
@@ -217,7 +217,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     @MainActor
     private func dealPenaltyCards(count: Int) async {
         //In V2 3+ player, swap the active opponent slot to the next seat so the penalty draws animate into their hand.
-        let isMultiOpponent = !isSinglePlayer && seats.count > 2
+        let isMultiOpponent = !is1v1 && seats.count > 2
         let step = isDirectionReversed ? -1 : 1
         let nextSeat = seats.isEmpty ? 0 : ((mySeatIndex + step) % seats.count + seats.count) % seats.count
 
@@ -334,8 +334,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         return
     }
     
-    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), isSinglePlayer: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
-        if isSinglePlayer == false, let v2State = try? JSONDecoder().decode(Crazy8sV2GameState.self, from: data) {
+    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), is1v1: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
+        if is1v1 == false, let v2State = try? JSONDecoder().decode(Crazy8sV2GameState.self, from: data) {
             loadV2State(state: v2State, localParticipantID: localParticipantID, conversationID: conversationID, isExplicitChange: isExplicitChange)
         } else if let legacyState = try? JSONDecoder().decode(Crazy8sLegacyGameState.self, from: data) {
             loadLegacyState(state: legacyState, isPlayersTurn: isPlayersTurn, conversationID: conversationID, isExplicitChange: isExplicitChange)
@@ -353,7 +353,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
 
         if isExplicitChange { resetToInit() }
 
-        self.isSinglePlayer = true
+        self.is1v1 = true
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.deck = state.deck
@@ -425,7 +425,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         }
 
         self.localParticipantID = localParticipantID
-        self.isSinglePlayer = false
+        self.is1v1 = false
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.seats = state.seats
@@ -556,7 +556,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         self.isSpectating = false
         self.isAnimatingOpponentTurn = false
         self.animatingOpponentSeat = 0
-        self.isSinglePlayer = false //we can check chat member count, this is probably redundant
+        self.is1v1 = false //we can check chat member count, this is probably redundant
         self.isJoiningPhase = false
         self.isSettlingAfterJoin = false
         self.joinWasOverwritten = false
@@ -710,7 +710,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 senderCardBack: myCardBack,
                 penaltyCardsDealt: nil
             )
-            self.isSinglePlayer = true
+            self.is1v1 = true
             return try? JSONEncoder().encode(legacyState)
 
         } else { //we have a groupchat
@@ -732,7 +732,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 lastPlayerSeatIndex: nil,
                 directionIsReversed: nil
             )
-            self.isSinglePlayer = false
+            self.is1v1 = false
             return try? JSONEncoder().encode(initialState)
         }
     }
@@ -748,7 +748,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         if shouldBroadcast {
             onJoinCompleted?(joinData, .crazy8s)
         }
-        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, isSinglePlayer: false, conversationID: "")
+        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, is1v1: false, conversationID: "")
         
         if isJoiningPhase {
             isSettlingAfterJoin = true
@@ -797,7 +797,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     func sendGameStateSwitch() {
         if deck.count == 1 { reshuffleDiscardIntoDeck() }
 
-        if isSinglePlayer {
+        if is1v1 {
             sendLegacyGameState()
         } else {
             sendV2GameState()

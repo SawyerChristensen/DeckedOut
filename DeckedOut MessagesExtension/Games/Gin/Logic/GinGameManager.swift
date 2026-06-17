@@ -71,20 +71,20 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var isGameOver: Bool = false //stays local
     @Published var turnNumber: Int = 0
 
+    var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
+    var handSize: Int = 7 //configurable from the menu (7 or 10)
+    var is1v1: Bool = true
+    
     // Knock state is only used in legacy 1v1 10-card gin.
     @Published private var shouldKnockOnDiscard: Bool = false
     private var roundWinner: GinRoundWinner? = nil
     private var roundWinType: GinRoundWinType? = nil
     var currentRoundWinType: GinRoundWinType? { roundWinType }
     var isKnockArmed: Bool { shouldKnockOnDiscard }
-    var shouldShowKnockRules: Bool { isSinglePlayer && handSize == 10 }
+    var shouldShowKnockRules: Bool { is1v1 && handSize == 10 }
 
     // Snapshot of playerHand taken on the first sort of a cycle, restored when the user returns to the unsorted state.
     private var originalPlayerHandOrder: [Card]? = nil
-    
-    var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
-    var handSize: Int = 7 //configurable from the menu (7 or 10)
-    var isSinglePlayer: Bool = true
 
     // Card-back equipped by each player (sent in the message payload)
     @Published var opponentCardBack: String = "cardBackRed" //v1: the single opponent's equipped back
@@ -110,7 +110,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
 
     /// Returns the card-back image name for a specific seat. Falls back to `cardBackRed`.
     func cardBack(forSeat seatIndex: Int) -> String {
-        if isSinglePlayer { return opponentCardBack }
+        if is1v1 { return opponentCardBack }
         return seatCardBacks.indices.contains(seatIndex) ? seatCardBacks[seatIndex] : "cardBackRed"
     }
 
@@ -118,7 +118,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     /// During animation, matches the seat currently drawing from the deck so the animated card and the deck share a back.
     /// Otherwise reflects the upcoming player's back so the deck updates as soon as the previous turn lands.
     var opponentDeckCardBack: String {
-        if isSinglePlayer { return opponentCardBack }
+        if is1v1 { return opponentCardBack }
         guard !seats.isEmpty else { return "cardBackRed" }
         if phase == .animationPhase || isAnimatingOpponentTurn {
             return cardBack(forSeat: animatingOpponentSeat)
@@ -202,6 +202,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     }
     
     var canPlayerKnock: Bool {
+        guard is1v1 else { return false } //only available in 1v1 play
         //guard handSize == 10 else { return false }
         guard phase == .discardPhase else { return false }
 
@@ -215,7 +216,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             }
         }
 
-        return canKnock(afterDiscardingWith: playerHand) //after the dicard
+        return canKnock(afterDiscardingWith: playerHand) //keeps the button visible during opponents turn
     }
     
     private func canKnock(afterDiscardingWith hand: [Card]) -> Bool {
@@ -342,8 +343,8 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     }
     
     // MARK: - Game State Loading
-    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), isSinglePlayer: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
-        if isSinglePlayer == false, let v2State = try? JSONDecoder().decode(GinRummyV2GameState.self, from: data) {
+    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), is1v1: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
+        if is1v1 == false, let v2State = try? JSONDecoder().decode(GinRummyV2GameState.self, from: data) {
             loadV2State(state: v2State, localParticipantID: localParticipantID, conversationID: conversationID, isExplicitChange: isExplicitChange)
         } else if let legacyState = try? JSONDecoder().decode(GinRummyGameState.self, from: data) {
             loadLegacyState(state: legacyState, isPlayersTurn: isPlayersTurn, conversationID: conversationID, isExplicitChange: isExplicitChange)
@@ -364,7 +365,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             resetToInit()
         }
         
-        self.isSinglePlayer = true
+        self.is1v1 = true
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.deck = state.deck
@@ -487,7 +488,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         }
         
         self.localParticipantID = localParticipantID
-        self.isSinglePlayer = false
+        self.is1v1 = false
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.seats = state.seats
@@ -615,7 +616,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         self.animatingOpponentSeat = 0
         self.isSpectating = false
         self.isAnimatingOpponentTurn = false
-        self.isSinglePlayer = true
+        self.is1v1 = true
         self.handSize = 7
         self.localParticipantID = nil
         self.isJoiningPhase = false
@@ -786,7 +787,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
                 receiverCardBack: nil, //the receiver hasn't equipped/revealed a back yet at creation
                 roundWinner: nil,
                 roundWinType: nil)
-            self.isSinglePlayer = true
+            self.is1v1 = true
             return try? JSONEncoder().encode(legacyState)
 
         } else { //we have a groupchat
@@ -806,7 +807,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
                 lastPlayerIndexDiscardedFrom: nil,
                 seatCardBacks: initialBacks
             )
-            self.isSinglePlayer = false
+            self.is1v1 = false
             return try? JSONEncoder().encode(initialState)
         }
     }
@@ -823,7 +824,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         if shouldBroadcast {
             onJoinCompleted?(joinData, .ginRummy)
         }
-        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, isSinglePlayer: false, conversationID: "")
+        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, is1v1: false, conversationID: "")
         
         if isJoiningPhase {
             isSettlingAfterJoin = true
@@ -871,7 +872,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     func sendGameStateSwitch() {
         if deck.count == 1 { reshuffleDiscardIntoDeck() }
 
-        if isSinglePlayer {
+        if is1v1 {
             sendLegacyGameState()
         } else {
             sendV2GameState()

@@ -16,12 +16,15 @@
 - [x] Enable knocking in 7 card?
 - [x] Localize update notes via script and push to ASC
 
+- [ ] Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
+  * *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
+
 ### Update 3.5.0 (Crazy 8s QOL)
 - [ ] Add sorting to Crazy 8s
 - [ ] Add Mau Mau variant of Crazy 8s (Joker logo card)
 - [ ] Add Turkish variant of Crazy 8s (Joker? logo card)
+- [ ] Add more localized game assets (at least for Traditional Chinese)
 - [ ] Add support for Arabic?
-- [ ] Add more localized game assets?
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   * *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
 

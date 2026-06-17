@@ -37,7 +37,7 @@ struct GinOpponentsArcView: View {
 
     // MARK: 1v1 view
     var body: some View {
-        if game.isSinglePlayer || game.seats.count <= 2 {
+        if game.is1v1 || game.seats.count <= 2 {
             let opponentSeat = game.seats.indices.contains(game.mySeatIndex)
                 ? (game.mySeatIndex + 1) % max(game.seats.count, 1)
                 : 0
@@ -45,7 +45,7 @@ struct GinOpponentsArcView: View {
                 cards: game.opponentHand,
                 discardPileZone: discardPileZone,
                 deckZone: deckZone,
-                cardBackName: game.isSinglePlayer ? game.opponentCardBack : game.cardBack(forSeat: opponentSeat)
+                cardBackName: game.is1v1 ? game.opponentCardBack : game.cardBack(forSeat: opponentSeat)
             )
         } else {
             multiOpponentArc

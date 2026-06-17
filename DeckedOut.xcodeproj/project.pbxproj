@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE8110082FBE72880023EB2C /* StoreKit Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = BE8110072FBE72870023EB2C /* StoreKit Config.storekit */; };
-		BE8110092FBE72880023EB2C /* StoreKit Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = BE8110072FBE72870023EB2C /* StoreKit Config.storekit */; };
 		BECF99AA2E04746F007B89C0 /* DeckedOut MessagesExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BECF99A92E04746F007B89C0 /* DeckedOut MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BECF99AF2E04746F007B89C0 /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BECF99AE2E04746F007B89C0 /* Messages.framework */; };
-		BEEDAA262FDDF6FE00286A0D /* TO DO.md in Resources */ = {isa = PBXBuildFile; fileRef = BEEDAA022FDDF6FE00286A0D /* TO DO.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -220,7 +217,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE8110082FBE72880023EB2C /* StoreKit Config.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,8 +224,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE8110092FBE72880023EB2C /* StoreKit Config.storekit in Resources */,
-				BEEDAA262FDDF6FE00286A0D /* TO DO.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,7 +254,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = "DeckedOut MessagesExtension/DeckedOut MessagesExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
@@ -293,7 +287,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = "DeckedOut MessagesExtension/DeckedOut MessagesExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
@@ -453,7 +447,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DeckedOut/DeckedOut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games for iMessage";
@@ -477,7 +471,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DeckedOut/DeckedOut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games for iMessage";

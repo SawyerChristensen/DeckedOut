@@ -440,7 +440,10 @@ class MessagesViewController: MSMessagesAppViewController {
         let jsonString = stateData.base64EncodedString()
         var components = URLComponents()
         components.queryItems = [
-            URLQueryItem(name: "isSinglePlayer", value: String(activeGameEngine?.isSinglePlayer ?? true)),
+            // Send both keys during the transition. "isSinglePlayer" is deprecated in
+            // favor of "is1v1"; keep sending it so clients that predate "is1v1" keep working.
+            URLQueryItem(name: "isSinglePlayer", value: String(activeGameEngine?.is1v1 ?? true)),
+            URLQueryItem(name: "is1v1", value: String(activeGameEngine?.is1v1 ?? true)),
             URLQueryItem(name: "gameType", value: gameType.rawValue),
             URLQueryItem(name: "gameState", value: jsonString)]
         message.url = components.url
@@ -465,7 +468,10 @@ class MessagesViewController: MSMessagesAppViewController {
         let stateDataJSONString = stateData.base64EncodedString()
         var components = URLComponents()
         components.queryItems = [
-            URLQueryItem(name: "isSinglePlayer", value: String(activeGameEngine?.isSinglePlayer ?? true)),
+            // Send both keys during the transition. "isSinglePlayer" is deprecated in
+            // favor of "is1v1"; keep sending it so clients that predate "is1v1" keep working.
+            URLQueryItem(name: "isSinglePlayer", value: String(activeGameEngine?.is1v1 ?? true)),
+            URLQueryItem(name: "is1v1", value: String(activeGameEngine?.is1v1 ?? true)),
             URLQueryItem(name: "gameType", value: gameType.rawValue),
             URLQueryItem(name: "gameState", value: stateDataJSONString)]
         
@@ -565,10 +571,13 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func sendJoinMessage(session: MSSession, conversation: MSConversation, gameType: GameType, isSinglePlayer: Bool, stateData: Data) {
+    private func sendJoinMessage(session: MSSession, conversation: MSConversation, gameType: GameType, is1v1: Bool, stateData: Data) {
         var components = URLComponents()
         components.queryItems = [
-            URLQueryItem(name: "isSinglePlayer", value: String(isSinglePlayer)),
+            // Send both keys during the transition. "isSinglePlayer" is deprecated in
+            // favor of "is1v1"; keep sending it so clients that predate "is1v1" keep working.
+            URLQueryItem(name: "isSinglePlayer", value: String(is1v1)),
+            URLQueryItem(name: "is1v1", value: String(is1v1)),
             URLQueryItem(name: "gameType", value: gameType.rawValue),
             URLQueryItem(name: "gameState", value: stateData.base64EncodedString())]
 
@@ -624,7 +633,7 @@ class MessagesViewController: MSMessagesAppViewController {
     }
 
     // MARK: - Helper Functions
-    private func extractGameInfo(from message: MSMessage) -> (type: GameType, data: Data, isSinglePlayer: Bool)? {
+    private func extractGameInfo(from message: MSMessage) -> (type: GameType, data: Data, is1v1: Bool)? {
         guard let url = message.url,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
 
@@ -641,11 +650,14 @@ class MessagesViewController: MSMessagesAppViewController {
             gameType = .ginRummy
         }
 
-        // State format version: absent = 1 (legacy), 2 = seat-based multiplayer
-        let versionString = components.queryItems?.first(where: { $0.name == "isSinglePlayer" })?.value
-        let isSinglePlayer = Bool(versionString ?? "true") ?? true
+        // 1v1 flag: prefer the new "is1v1" key, falling back to the deprecated
+        // "isSinglePlayer" key for messages sent by clients that predate the rename.
+        // Absent on both = legacy 1.x message, which defaults to 1v1 (true).
+        let is1v1String = components.queryItems?.first(where: { $0.name == "is1v1" })?.value
+            ?? components.queryItems?.first(where: { $0.name == "isSinglePlayer" })?.value
+        let is1v1 = Bool(is1v1String ?? "true") ?? true
 
-        return (type: gameType, data: stateData, isSinglePlayer: isSinglePlayer)
+        return (type: gameType, data: stateData, is1v1: is1v1)
     }
     
     private func loadGameStateToMemory(from message: MSMessage, conversation: MSConversation, isExplicitChange: Bool = false) {
@@ -671,7 +683,7 @@ class MessagesViewController: MSMessagesAppViewController {
             from: gameInfo.data,
             isPlayersTurn: !isFromMe,
             localParticipantID: conversation.localParticipantIdentifier,
-            isSinglePlayer: gameInfo.isSinglePlayer,
+            is1v1: gameInfo.is1v1,
             conversationID: conversation.localParticipantIdentifier.uuidString,
             isExplicitChange: isExplicitChange)
     }
@@ -686,7 +698,7 @@ class MessagesViewController: MSMessagesAppViewController {
                       let conversation = self.activeConversation,
                       let selectedMessage = conversation.selectedMessage,
                       let session = selectedMessage.session else { return }
-                self.sendJoinMessage(session: session, conversation: conversation, gameType: gameType, isSinglePlayer: groupEngine.isSinglePlayer, stateData: stateData)
+                self.sendJoinMessage(session: session, conversation: conversation, gameType: gameType, is1v1: groupEngine.is1v1, stateData: stateData)
             }
         }
     }
@@ -721,11 +733,11 @@ protocol GameEngine: AnyObject {
     var isGameOver: Bool { get }    // Used for setting iMessage captions
     var playerHasWon: Bool { get }  // Used for setting iMessage captions
     var discardPile: [Card] { get } // Used for setting iMessage summary text
-    var isSinglePlayer: Bool { get }
+    var is1v1: Bool { get }
     var extensionWidth: CGFloat { get set }
 
     func createNewGameState(seats: [UUID]) -> Data?
-    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID, isSinglePlayer: Bool, conversationID: String, isExplicitChange: Bool)
+    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID, is1v1: Bool, conversationID: String, isExplicitChange: Bool)
     func saveMidTurnState(conversationID: String)
     func clearMidTurnState(conversationID: String)
 }

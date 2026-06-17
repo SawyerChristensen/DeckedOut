@@ -65,7 +65,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
 
     private var preTurnFaceUpIndices: Set<Int> = [] //captured before replaceCard modifies playerFaceUpIndices
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
-    var isSinglePlayer: Bool = true
+    var is1v1: Bool = true
 
     // Card-back equipped by each player (sent in the message payload)
     @Published var opponentCardBack: String = "cardBackRed" //v1: the single opponent's equipped back
@@ -93,7 +93,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
 
     /// Returns the card-back image name for a specific seat. Falls back to `cardBackRed`.
     func cardBack(forSeat seatIndex: Int) -> String {
-        if isSinglePlayer { return opponentCardBack }
+        if is1v1 { return opponentCardBack }
         return seatCardBacks.indices.contains(seatIndex) ? seatCardBacks[seatIndex] : "cardBackRed"
     }
 
@@ -101,7 +101,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
     /// During animation, matches the seat currently drawing from the deck so the animated card and the deck share a back.
     /// Otherwise reflects the upcoming player's back so the deck updates as soon as the previous turn lands.
     var opponentDeckCardBack: String {
-        if isSinglePlayer { return opponentCardBack }
+        if is1v1 { return opponentCardBack }
         guard !seats.isEmpty else { return "cardBackRed" }
         if phase == .animationPhase || isAnimatingOpponentTurn {
             return cardBack(forSeat: animatingOpponentSeat)
@@ -194,7 +194,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
     func endTurn() {
         if deck.count == 1 { reshuffleDiscardIntoDeck() }
 
-        if isSinglePlayer {
+        if is1v1 {
             if opponentFaceUpIndices.count == 6 {
                 resolveGameEnd(playerLastToMove: true)
             } else {
@@ -247,7 +247,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         // allFaceUpIndices[animatingOpponentSeat] is missing the just-replaced index.
         // Without this, the static view that takes over from the animated view would
         // render the new card face-down until the next turn arrives.
-        if !isSinglePlayer,
+        if !is1v1,
            allHands.indices.contains(animatingOpponentSeat),
            allFaceUpIndices.indices.contains(animatingOpponentSeat) {
             allHands[animatingOpponentSeat] = opponentHand
@@ -258,7 +258,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         SoundManager.instance.playCardSlap()
         HapticManager.instance.playCardSlap()
 
-        if isSinglePlayer {
+        if is1v1 {
             if playerFaceUpIndices.count == 6 {
                 resolveGameEnd(playerLastToMove: false)
             } else {
@@ -299,8 +299,8 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
     }
 
-    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), isSinglePlayer: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
-        if isSinglePlayer == false, let v2State = try? JSONDecoder().decode(GolfV2GameState.self, from: data) {
+    func loadState(from data: Data, isPlayersTurn: Bool, localParticipantID: UUID = UUID(), is1v1: Bool = true, conversationID: String, isExplicitChange: Bool = false) {
+        if is1v1 == false, let v2State = try? JSONDecoder().decode(GolfV2GameState.self, from: data) {
             loadV2State(state: v2State, localParticipantID: localParticipantID, conversationID: conversationID, isExplicitChange: isExplicitChange)
         } else if let state = try? JSONDecoder().decode(GolfGameState.self, from: data) {
             loadLegacyState(state: state, isPlayersTurn: isPlayersTurn, conversationID: conversationID, isExplicitChange: isExplicitChange)
@@ -320,7 +320,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
             resetToInit()
         }
 
-        self.isSinglePlayer = true
+        self.is1v1 = true
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.deck = state.deck
@@ -407,7 +407,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         }
 
         self.localParticipantID = localParticipantID
-        self.isSinglePlayer = false
+        self.is1v1 = false
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.seats = state.seats
@@ -550,7 +550,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         self.animatingOpponentSeat = 0
         self.isSpectating = false
         self.isAnimatingOpponentTurn = false
-        self.isSinglePlayer = true
+        self.is1v1 = true
         self.isJoiningPhase = false
         self.isSettlingAfterJoin = false
         self.joinWasOverwritten = false
@@ -747,7 +747,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
                 senderFaceUpIndices: newFaceUpIndices[0],
                 receiverFaceUpIndices: newFaceUpIndices[1],
                 senderCardBack: myCardBack)
-            self.isSinglePlayer = true
+            self.is1v1 = true
             return try? JSONEncoder().encode(initialState)
 
         } else { //we have a groupchat
@@ -773,7 +773,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
                 faceUpIndices: newFaceUpIndices,
                 goingOutSeat: nil,
                 seatCardBacks: initialBacks)
-            self.isSinglePlayer = false
+            self.is1v1 = false
             return try? JSONEncoder().encode(initialState)
         }
     }
@@ -789,7 +789,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         if shouldBroadcast {
             onJoinCompleted?(joinData, .golf)
         }
-        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, isSinglePlayer: false, conversationID: "")
+        loadState(from: joinData, isPlayersTurn: false, localParticipantID: lpID, is1v1: false, conversationID: "")
         
         if isJoiningPhase {
             isSettlingAfterJoin = true
