@@ -36,6 +36,33 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 METADATA_PATH = SCRIPT_DIR / "metadata.json"
 ASC_BASE = "https://api.appstoreconnect.apple.com/v1"
 
+# Where credentials live. Auto-loaded so you never have to `source` them per run.
+CONFIG_PATHS = [
+    Path("~/.appstoreconnect/config.env").expanduser(),
+    SCRIPT_DIR / ".env",
+]
+
+
+def load_config() -> None:
+    """Load KEY=VALUE pairs from config.env files into os.environ (no overwrite).
+
+    Zero-dependency .env parser: ignores blank lines and '#' comments, strips
+    optional surrounding quotes. Existing environment variables win, so you can
+    still override anything inline (e.g. ASC_KEY_ID=... python upload_metadata.py).
+    """
+    for config_path in CONFIG_PATHS:
+        if not config_path.exists():
+            continue
+        for raw in config_path.read_text().splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key and key not in os.environ:
+                os.environ[key] = value
+
 # Xcode locale → App Store Connect locale. Game Center uses the same codes.
 LOCALE_MAP: dict[str, str] = {
     "en": "en-US",
@@ -522,6 +549,7 @@ def main() -> None:
                         help="Skip Game Center achievements (only do version metadata).")
     args = parser.parse_args()
 
+    load_config()
     metadata = json.loads(METADATA_PATH.read_text())
 
     if args.translate or args.translate_only:

@@ -3,23 +3,25 @@
 
 ## 🚀 Active Release Milestones
 
-### Update 3.4.0: Knocking Update (Gin Rummy QOL)
-- [x] Localize knocking rules/labels/accessibility
-- [x] Group assets using localized asset packs
-- [x] New knocking win messages do not display in live transcript
-- [x] When the opponent knocks and then loses by undercut it does not properly transition to game over phase or display the win message despite the game being over for the message recipient
-- [x] Localize "You won by undercut"
-- [x] When a user ends the game in gin and reopens the message, their turn should animate and THEN flip all of the cards over
-- [x] When switching between different games in gin rummy it does not seem everything is properly reset between the messages
-- [x] Transcript displays the opponents hand on the top (the player lost) but with the users card back (the message was sent from user) create an exception for the user losing/opponent winning by undercut
-- [x] Update project to automatically tell App Store Connect this app doesn't use encryption
-- [x] Enable knocking in 7 card?
-- [x] Localize update notes via script and push to ASC
+### Update 3.5.0 - Game Center Achievements 1
+- [x] Implement initial Game Center achievements in ASC
+- [x] Design unique icons for each achievement
+- [x] Fix issue preventing iMessage extension recognition
 
-- [ ] Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
-  * *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
+### Update 3.5.1 - Game Center Achievements 2 (if v1 launch is successful)
+- [ ] Add 20 & 100 win count achievements
+  - [x] Local backend
+  - [ ] App Store Connect
+  - [ ] Images (via Photoshop)
+- [ ] Implement achievements set as TODO in GameCenterManager
+  - [ ] Local backend
+  - [ ] App Store Connect
+  - [ ] Images (via Photoshop)
+- [ ] Localize all achievement titles & descriptions in metadata file (via Claude)
 
-### Update 3.5.0 (Crazy 8s QOL)
+### Update 3.6.0 - Crazy 8s QOL
+- [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
+  - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
 - [ ] Add sorting to Crazy 8s
 - [ ] Add Mau Mau variant of Crazy 8s (Joker logo card)
 - [ ] Add Turkish variant of Crazy 8s (Joker? logo card)
@@ -39,10 +41,6 @@
   - [ ] Frontend
 
 ### General Updates
-- [ ] Implement GameCenter Achievements
-  - [ ] Verify achievements are reported correctly
-  - [ ] Design and build unique icons for *each* achievement
-  - [ ] Localize achievement strings
 - [ ] Monetization Strategy
   - [ ] Add more Card Back IAPs
   - [ ] Add IAP localizations in App Store Connect (automate w/script?)
@@ -188,3 +186,4 @@
 - [ ] Clean up initialization code: Move custom `init` logic inside `PlayerHandView` out of the extension and into the main declaration body wrapper.
 - [ ] Debug audio layer warning: Trace and eliminate the "audio session failure" print statement occurring in console streams.
 - [ ] Does "isFaceUp" need to be a passed variable?
+### Update 3.5.0 - GameCenter Achievements 1

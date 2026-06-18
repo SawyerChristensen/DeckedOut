@@ -10,24 +10,24 @@
     "whats_new": {
       "_max_chars": 4000,
       "_tone": "Brief, friendly release notes. Use line breaks (\\n) between bullet points.",
-      "en": "Introducing knocking! Available in 1v1 10-card Gin Rummy, end the game early if you think if you have less deadwood than your opponent.",
-      "da": "Vi introducerer at banke! Tilgængelig i 1v1 Gin Rummy med 10 kort – afslut spillet tidligt, hvis du mener, du har mindre deadwood end din modstander.",
-      "de": "Klopfen ist da! Verfügbar in 1-gegen-1-Gin-Rummy mit 10 Karten – beende das Spiel vorzeitig, wenn du glaubst, weniger Deadwood als dein Gegner zu haben.",
-      "es": "¡Llega el toque! Disponible en el Gin Rummy de 10 cartas 1 contra 1: termina la partida antes si crees que tienes menos deadwood que tu oponente.",
-      "fr": "Le « knock » arrive ! Disponible au Gin Rummy à 10 cartes en 1 contre 1 : terminez la partie plus tôt si vous pensez avoir moins de deadwood que votre adversaire.",
-      "hi": "नॉकिंग पेश है! 1v1 10-कार्ड जिन रमी में उपलब्ध—अगर आपको लगता है कि आपके पास अपने प्रतिद्वंद्वी से कम डेडवुड है, तो खेल जल्दी समाप्त करें।",
-      "it": "Arriva il knock! Disponibile nel Gin Rummy a 10 carte 1 contro 1: concludi la partita in anticipo se pensi di avere meno deadwood del tuo avversario.",
-      "ja": "ノックが登場！1対1の10枚ジンラミーで利用可能。相手よりデッドウッドが少ないと思ったら、ゲームを早めに終わらせましょう。",
-      "ko": "노크 기능 추가! 1대1 10장 진러미에서 사용 가능 — 상대보다 데드우드가 적다고 생각되면 게임을 일찍 끝내세요.",
-      "nb": "Vi introduserer banking! Tilgjengelig i 1v1 Gin Rummy med 10 kort – avslutt spillet tidlig hvis du tror du har mindre deadwood enn motstanderen.",
-      "nl": "Kloppen is er nu! Beschikbaar in 1v1 Gin Rummy met 10 kaarten – beëindig het spel eerder als je denkt dat je minder deadwood hebt dan je tegenstander.",
-      "pt-BR": "Apresentando o knock! Disponível no Gin Rummy de 10 cartas 1 contra 1: termine o jogo mais cedo se achar que tem menos deadwood que seu oponente.",
-      "ru": "Встречайте «стук»! Доступно в Джин Рамми 1 на 1 с 10 картами — завершите игру досрочно, если считаете, что у вас меньше дедвуда, чем у соперника.",
-      "sv": "Nu kan du knacka! Tillgängligt i 1v1 Gin Rummy med 10 kort – avsluta spelet tidigt om du tror att du har mindre deadwood än din motståndare.",
-      "tr": "Vurma geldi! 1v1 10 kartlı Gin Rummy'de kullanılabilir; rakibinizden daha az deadwood'unuz olduğunu düşünüyorsanız oyunu erkenden bitirin.",
-      "vi": "Giới thiệu tính năng gõ bài! Có trong Gin Rummy 10 lá đấu 1v1 — kết thúc ván sớm nếu bạn nghĩ mình có ít deadwood hơn đối thủ.",
-      "zh-Hans": "全新敲牌功能！适用于 1v1 10 张牌金拉米，如果你认为自己的废牌比对手少，就可以提前结束游戏。",
-      "zh-Hant": "全新敲牌功能！適用於 1v1 10 張牌金拉米，如果你認為自己的廢牌比對手少，就可以提前結束遊戲。"
+      "en": "Game Center achievements are here! Win games to start unlocking them as well as celebratory deck themes.",
+      "da": "Game Center-præstationer er her! Vind spil for at begynde at låse dem op sammen med festlige kortdesigns.",
+      "de": "Game Center-Erfolge sind da! Gewinne Spiele, um sie sowie festliche Kartendesigns freizuschalten.",
+      "es": "¡Ya están aquí los logros de Game Center! Gana partidas para empezar a desbloquearlos junto con vistosos diseños de cartas.",
+      "fr": "Les succès Game Center sont arrivés ! Gagnez des parties pour commencer à les débloquer, ainsi que des thèmes de cartes festifs.",
+      "hi": "Game Center उपलब्धियाँ आ गई हैं! इन्हें और उत्सवपूर्ण डेक थीम अनलॉक करना शुरू करने के लिए गेम जीतें।",
+      "it": "Sono arrivati i risultati di Game Center! Vinci le partite per iniziare a sbloccarli insieme a festosi temi per le carte.",
+      "ja": "Game Centerの実績が登場！ゲームに勝って、実績や華やかなデッキテーマをアンロックしましょう。",
+      "ko": "Game Center 업적이 추가되었습니다! 게임에서 승리하여 업적과 화려한 덱 테마를 잠금 해제해 보세요.",
+      "nb": "Game Center-prestasjoner er her! Vinn spill for å begynne å låse dem opp sammen med festlige kortdesign.",
+      "nl": "Game Center-prestaties zijn er! Win spellen om ze samen met feestelijke kaartthema's te ontgrendelen.",
+      "pt-BR": "As conquistas do Game Center chegaram! Vença partidas para começar a desbloqueá-las e também temas de baralho comemorativos.",
+      "ru": "Достижения Game Center уже здесь! Побеждайте в играх, чтобы открывать их, а также праздничные оформления колод.",
+      "sv": "Game Center-bedrifter är här! Vinn spel för att börja låsa upp dem tillsammans med festliga kortlekteman.",
+      "tr": "Game Center başarımları geldi! Bunları ve şenlikli deste temalarını açmaya başlamak için oyunları kazanın.",
+      "vi": "Thành tích Game Center đã có mặt! Thắng các ván đấu để bắt đầu mở khóa chúng cùng các giao diện bộ bài lễ hội.",
+      "zh-Hans": "Game Center 成就来了！赢得游戏即可开始解锁成就以及精彩的牌背主题。",
+      "zh-Hant": "Game Center 成就來了！贏得遊戲即可開始解鎖成就以及精彩的牌背主題。"
     },
     "_inherit_notes": "description, keywords, and promotional_text default to inheriting from the most recent prior App Store version per locale. Leave 'en' (and all locales) as null to inherit. Fill in 'en' and ask Claude Code to translate when you want to override.",
     "description": {
@@ -58,7 +58,7 @@
 
   "achievements": {
     "deckedout.first_win.gin": {
-      "_default_image": "images/first_win_gin.png",
+      "_default_image": "achievement_images/first_win_gin.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy, ideally clever. Game-specific name for winning Gin Rummy for the first time.",
@@ -85,7 +85,7 @@
       }
     },
     "deckedout.first_win.crazy8s": {
-      "_default_image": "images/first_win_crazy8s.png",
+      "_default_image": "achievement_images/first_win_crazy8s.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy, ideally clever. Game-specific name for winning Crazy 8s for the first time.",
@@ -112,7 +112,7 @@
       }
     },
     "deckedout.first_win.golf": {
-      "_default_image": "images/first_win_golf.png",
+      "_default_image": "achievement_images/first_win_golf.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy, ideally clever. Game-specific name for winning Golf for the first time.",
@@ -139,7 +139,7 @@
       }
     },
     "deckedout.wins.total.1": {
-      "_default_image": "images/wins_1.png",
+      "_default_image": "achievement_images/wins_1.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy. Marks the player's very first win across any game.",
@@ -166,7 +166,7 @@
       }
     },
     "deckedout.wins.total.2": {
-      "_default_image": "images/wins_2.png",
+      "_default_image": "achievement_images/wins_2.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy. Marks the player's second win — they're getting the hang of it.",
@@ -193,7 +193,7 @@
       }
     },
     "deckedout.wins.total.10": {
-      "_default_image": "images/wins_10.png",
+      "_default_image": "achievement_images/wins_10.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy. Marks 10 total wins — a respectable milestone.",
@@ -220,7 +220,7 @@
       }
     },
     "deckedout.wins.total.20": {
-      "_default_image": "images/wins_20.png",
+      "_default_image": "achievement_images/wins_20.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy. Marks 20 total wins.",
@@ -247,7 +247,7 @@
       }
     },
     "deckedout.wins.total.100": {
-      "_default_image": "images/wins_100.png",
+      "_default_image": "achievement_images/wins_100.png",
       "title": {
         "_max_chars": 30,
         "_tone": "Punchy. Marks 100 total wins — a major milestone, slightly grand.",

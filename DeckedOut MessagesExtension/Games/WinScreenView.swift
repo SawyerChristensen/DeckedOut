@@ -41,7 +41,7 @@ struct WinScreenView: View {
                         startPoint: .top,
                         endPoint: .bottom
                         ))
-                        .shadow(color: playerHasWon ? Color("winYellow") : Color("lossRed"), radius: 10)
+                        .shadow(color: playerHasWon ? Palette.winYellow : Palette.lossRed, radius: 10)
                         .scaleEffect(animateIn ? 1.0 : 0.5)
 
                     VStack(spacing: 8) {

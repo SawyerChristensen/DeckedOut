@@ -229,7 +229,7 @@ struct GinGameView: View {
             }
         )
         .padding(.bottom, 40)
-        .shadow(color: game.playerHasWon ? Color("winYellow") : .black.opacity(0.25), radius: handShadowRadius, x: (handShadowRadius - 5) / 2) //when handShadowRadius is 15 or 5 it results in offsets of 5 and 0
+        .shadow(color: game.playerHasWon ? Palette.winYellow : .black.opacity(0.25), radius: handShadowRadius, x: (handShadowRadius - 5) / 2) //when handShadowRadius is 15 or 5 it results in offsets of 5 and 0
         .onAppear {
             if game.playerHasWon {
                 withAnimation(.linear(duration: 1).speed(motionSpeed)) {

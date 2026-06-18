@@ -19,6 +19,12 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Make the main bundle report the parent app's id so GameKit can resolve
+        // our Game Center title from inside the extension. Must run synchronously
+        // and before any GameKit API is touched — installing this on a low-priority
+        // background task races GameKit's bundle-id capture and intermittently
+        // fails with GKError code 15. See MainBundleIdentifierOverride for caveats.
+        MainBundleIdentifierOverride.install()
         setupFeedbackSystems()
         updateAccessibilityModal(for: presentationStyle)
         NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)), name: UIScene.willDeactivateNotification, object: nil)
@@ -60,13 +66,15 @@ class MessagesViewController: MSMessagesAppViewController {
         }
         
         Task.detached(priority: .userInitiated) { //init audio off the main launch path
-            _ = await SoundManager.instance
+            _ = SoundManager.instance
         }
 
-        /*Task.detached(priority: .utility) { //authenticate Game Center on background thread
+        Task.detached(priority: .utility) { //authenticate Game Center on background thread
+            // The bundle-id override is installed synchronously in viewDidLoad,
+            // before this task runs, so GameKit always sees the parent app's id.
             GameCenterManager.shared.authenticate()
             GameCenterManager.shared.syncAchievementsWithWinCounts()
-        }*/
+        }
     }
 
     

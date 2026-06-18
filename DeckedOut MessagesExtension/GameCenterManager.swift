@@ -32,24 +32,24 @@ final class GameCenterManager {
         case firstWinGolf    = "deckedout.first_win.golf"
         
         // Gin Rummy
-        // implement: win by having your entire hand be 1 set (straight) of cards (achieveable more than once?)
+        // TODO: Win by having your entire hand be 1 set (straight) of cards (achieveable more than once?)
         
         // Crazy 8s
-        // implement: discard an 8 (hidden achievement) (8 points)
-        // implement: discard a 2 (hidden achievement) (2 points)
-        // implement: discard a queen (hidden achievement) (5 points)
-        // implement: discard an ace (in group chat mode) (hidden achievement) (5 points)
-        // implement: win in 8 turns exactly
+        // TODO: Discard an 8 (hidden achievement) (8 points)
+        // TODO: Discard a 2 (hidden achievement) (2 points)
+        // TODO: Discard a queen (hidden achievement) (5 points)
+        // TODO: Discard an ace (in group chat mode) (hidden achievement) (5 points)
+        // TODO: Win in 8 turns exactly
         
         // Golf
-        // implement: win by having 0 points ("Hole in one!") (hidden) (0 points) (achieveable more than once?)
-        // implement: win using only royal cards in hand ("Wait... how?") (30 points)
+        // TODO: Win by having 0 points ("Hole in one!") (hidden) (0 points) (achieveable more than once?)
+        // TODO: Win using only royal cards in hand ("Wait... how?") (30 points)
 
         // Cumulative win milestones (progress-based, 0–100%)
         case firstWinEver     = "deckedout.wins.total.1"
         case twoWinsTotal     = "deckedout.wins.total.2"
         case tenWinsTotal     = "deckedout.wins.total.10"
-        case twentyWinsTotal   = "deckedout.wins.total.20"
+        case twentyWinsTotal  = "deckedout.wins.total.20"
         case hundredWinsTotal = "deckedout.wins.total.100"
     }
 

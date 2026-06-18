@@ -27,7 +27,7 @@ final class CardBackSelection: ObservableObject {
     /// Accent color of the currently selected theme. Falls back to `salmonRed` if the
     /// stored card-back name doesn't match a known theme (e.g. a removed/renamed asset).
     var selectedColor: Color {
-        return CardBackTheme.theme(forLogoCard: selectedName)?.primaryColor ?? Color("salmonRed")
+        return CardBackTheme.theme(forLogoCard: selectedName)?.primaryColor ?? Palette.salmonRed
     }
     
     var textColor: Color {

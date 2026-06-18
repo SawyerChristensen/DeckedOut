@@ -410,8 +410,8 @@ struct GolfGameView: View {
                 playerSlotFrames[index] = frame
             }
         )
-        .shadow(color: game.playerHasWon ? Color("winYellow") : .clear, radius: winGlowRadius)
-        .shadow(color: game.playerHasWon ? Color("winYellow").opacity(0.5) : .clear, radius: winGlowRadius) //to increase the yellow's intensity
+        .shadow(color: game.playerHasWon ? Palette.winYellow : .clear, radius: winGlowRadius)
+        .shadow(color: game.playerHasWon ? Palette.winYellow.opacity(0.5) : .clear, radius: winGlowRadius) //to increase the yellow's intensity
         .onAppear {
             if game.playerHasWon {
                 withAnimation(.linear(duration: 0.67).speed(motionSpeed)) {

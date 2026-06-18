@@ -38,7 +38,7 @@ extension CardBackTheme {
         CardBackTheme(title: "Classic Red",
                       logoCard: "cardBackRed",
                       productID: nil, //included
-                      primaryColor: Color("salmonRed")),
+                      primaryColor: Palette.salmonRed),
         
         CardBackTheme(title: "Sunset",
                       logoCard: "cardBackSunset", //$0.99

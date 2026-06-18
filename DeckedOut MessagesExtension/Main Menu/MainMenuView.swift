@@ -393,7 +393,7 @@ struct MainMenuView: View {
                     .foregroundStyle(
                         .white,            // Primary (Layer 1)
                         Color(white: 0.3), // Secondary (Layer 2)
-                        Color("bookBrown") // Tertiary (Layer 3)
+                        Palette.bookBrown // Tertiary (Layer 3)
                     )
                     .contentTransition(.symbolEffect(.replace))
                     .applyGradientSymbolColor()

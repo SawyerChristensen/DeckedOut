@@ -24,7 +24,7 @@ struct GameOverTranscriptView: View {
                     startPoint: .top,
                     endPoint: .bottom
                     ))
-                    .shadow(color: Color("winYellow"), radius: 5,
+                    .shadow(color: Palette.winYellow, radius: 5,
                             x: 4 * sin(angle),
                             y: -4 * cos(angle))
                     .shadow(color: .black.opacity(0.15), radius: 2, y: 6)
@@ -42,7 +42,7 @@ struct GameOverTranscriptView: View {
                 startPoint: .top,
                 endPoint: .bottom
                 ))
-                .shadow(color: Color("lossRed"), radius: 10)
+                .shadow(color: Palette.lossRed, radius: 10)
                 .shadow(color: .black.opacity(0.15), radius: 2, y: 6)
                 .padding(.top, 10)
                 .frame(height: 150)
