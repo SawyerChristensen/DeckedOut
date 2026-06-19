@@ -3,20 +3,15 @@
 
 ## 🚀 Active Release Milestones
 
-### Update 3.5.0 - Game Center Achievements 1
-- [x] Implement initial Game Center achievements in ASC
-- [x] Design unique icons for each achievement
-- [x] Fix issue preventing iMessage extension recognition
-
 ### Update 3.5.1 - Game Center Achievements 2 (if v1 launch is successful)
 - [ ] Add 20 & 100 win count achievements
   - [x] Local backend
   - [ ] App Store Connect
-  - [ ] Images (via Photoshop)
+  - [x] Images (via Photoshop)
 - [ ] Implement achievements set as TODO in GameCenterManager
   - [ ] Local backend
   - [ ] App Store Connect
-  - [ ] Images (via Photoshop)
+  - [x] Images (via Photoshop)
 - [ ] Localize all achievement titles & descriptions in metadata file (via Claude)
 
 ### Update 3.6.0 - Crazy 8s QOL
