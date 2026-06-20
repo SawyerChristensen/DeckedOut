@@ -13,7 +13,7 @@ struct RulesView: View {
     var isExpanded: Bool = false
     var onDismiss: () -> Void
     
-    @ObservedObject private var cardBackSelection = CardBackSelection.shared
+    @ObservedObject private var cardBackSelection = DeckThemeSelection.shared
     @State private var currentPage: Int = 0
     @ScaledMetric(relativeTo: .body) private var scale: CGFloat = 1.0 //padding needs to shrink as text size increases. iOS does not do this automatically
     

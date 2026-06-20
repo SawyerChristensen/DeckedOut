@@ -11,16 +11,16 @@ struct LetterCardImage: View {
     let character: String
     var overrideCardBackName: String? = nil //if set, overrides the user's selected card back (e.g. show inviter's theme in transcripts)
 
-    @ObservedObject private var cardBackSelection = CardBackSelection.shared
+    @ObservedObject private var cardBackSelection = DeckThemeSelection.shared
     let currentLanguage = Locale.preferredLanguages.first ?? "en"
 
-    private var effectiveName: String { overrideCardBackName ?? cardBackSelection.selectedName }
+    private var effectiveName: String { DeckThemeSelection.existingBackName(overrideCardBackName ?? cardBackSelection.selectedName) }
     private var effectiveBaseName: String {
         let candidate = effectiveName + "Base"
         return UIImage(named: candidate) != nil ? candidate : effectiveName
     }
     private var effectiveTextColor: Color {
-        return CardBackTheme.theme(forLogoCard: effectiveName)?.secondaryColor ?? Color(.white)
+        return DeckTheme.theme(forLogoCard: effectiveName)?.secondaryColor ?? Color(.white)
     }
 
     private var font: Font {
@@ -41,6 +41,8 @@ struct LetterCardImage: View {
             return .custom("KingthingsWidow", fixedSize: 42)
         } else if effectiveName == "cardBackKoi" {
             return .custom("SuperShake", fixedSize: 26)
+        } else if effectiveName == "cardBackEnchanted" {
+            return .custom("BoecklinsUniverse", fixedSize: 32)
         }
         return .custom("Holtzschue-Regular", fixedSize: 33) //originally size 30
     }
@@ -64,6 +66,8 @@ struct LetterCardImage: View {
             return 1
         } else if effectiveName == "cardBackKoi" {
             return -2
+        } else if effectiveName == "cardBackEnchanted" {
+            return 3
         } else {
             return 0
         }

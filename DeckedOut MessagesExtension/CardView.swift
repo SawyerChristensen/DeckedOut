@@ -14,14 +14,14 @@ struct CardView: View { //where only one side is a (letter?)
     var cardHeight : CGFloat = 145
     var rotation: Double = 0 //default to face up
 
-    @ObservedObject private var cardBackSelection = CardBackSelection.shared
+    @ObservedObject private var cardBackSelection = DeckThemeSelection.shared
 
     @ViewBuilder
     private var backImage: some View {
         if let letter = backLetter {
             LetterCardImage(character: letter, overrideCardBackName: backImageName)
         } else {
-            Image(backImageName ?? cardBackSelection.selectedName)
+            Image(DeckThemeSelection.existingBackName(backImageName ?? cardBackSelection.selectedName))
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
         }
@@ -37,7 +37,7 @@ struct CardView: View { //where only one side is a (letter?)
             
             
             // FRONT VIEW
-            Image(frontImage)
+            Image(cardBackSelection.frontName(for: frontImage))
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
                 .frame(height: cardHeight)

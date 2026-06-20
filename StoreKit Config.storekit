@@ -55,6 +55,21 @@
       "type" : "NonConsumable"
     },
     {
+      "displayPrice" : "1.99",
+      "familyShareable" : true,
+      "internalID" : "6780035301",
+      "localizations" : [
+        {
+          "description" : "An enchanted card back with custom card fronts.",
+          "displayName" : "Enchanted Theme",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "Sawyer.DeckedOut.Theme.RedFoxEnchanted",
+      "referenceName" : "Enchanted Theme",
+      "type" : "NonConsumable"
+    },
+    {
       "displayPrice" : "4.99",
       "familyShareable" : false,
       "internalID" : "6780035300",

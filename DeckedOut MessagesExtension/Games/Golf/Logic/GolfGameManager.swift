@@ -732,7 +732,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
             newFaceUpIndices.append(Set(allIndices.shuffled().prefix(2)))
         }
 
-        let myCardBack = CardBackSelection.shared.selectedName
+        let myCardBack = DeckThemeSelection.shared.selectedName
 
         if seats.count == 2 { //1v1 game mode, create legacy game state
             let initialState = GolfGameState(
@@ -814,7 +814,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         if updatedBacks.count < updatedSeats.count {
             updatedBacks.append(contentsOf: Array(repeating: "cardBackRed", count: updatedSeats.count - updatedBacks.count))
         }
-        updatedBacks[openIndex] = CardBackSelection.shared.selectedName
+        updatedBacks[openIndex] = DeckThemeSelection.shared.selectedName
 
         let updatedState = GolfV2GameState(
             sessionID: state.sessionID,
@@ -845,7 +845,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
             turnNumber: self.turnNumber + 1,
             senderFaceUpIndices: self.preTurnFaceUpIndices,
             receiverFaceUpIndices: self.opponentFaceUpIndices,
-            senderCardBack: CardBackSelection.shared.selectedName
+            senderCardBack: DeckThemeSelection.shared.selectedName
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
@@ -874,7 +874,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
             outgoingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: seats.count - outgoingBacks.count))
         }
         if outgoingBacks.indices.contains(mySeatIndex) {
-            outgoingBacks[mySeatIndex] = CardBackSelection.shared.selectedName
+            outgoingBacks[mySeatIndex] = DeckThemeSelection.shared.selectedName
         }
 
         let currentGameState = GolfV2GameState(

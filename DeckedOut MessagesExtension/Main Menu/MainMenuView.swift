@@ -36,15 +36,15 @@ struct MainMenuView: View {
     @State private var activeThemeIndex: Int = MainMenuView.initialSelectedThemeIndex()
     @State private var selectedThemeIndex: Int = MainMenuView.initialSelectedThemeIndex()
     @State private var themeWheelKey: Int = 0
-    @StateObject private var cardBackSelection = CardBackSelection.shared
+    @StateObject private var cardBackSelection = DeckThemeSelection.shared
     @StateObject private var store = StoreManager.shared
     @State private var availableGames: [MenuGame] = [
         MenuGame(type: .ginRummy, title: "Gin Rummy", logoCard: "ginRummyCard"),
         MenuGame(type: .crazy8s, title: "Crazy 8s", logoCard: "crazy8sCard"),
         MenuGame(type: .golf, title: "Golf", logoCard: "golfCard")
     ]
-    private static var themes: [CardBackTheme] { CardBackTheme.all }
-    private var themes: [CardBackTheme] { CardBackTheme.all }
+    private static var themes: [DeckTheme] { DeckTheme.all }
+    private var themes: [DeckTheme] { DeckTheme.all }
     private var isThemeSelected: Bool { activeThemeIndex == selectedThemeIndex }
     private var isActiveThemeWinLocked: Bool {
         guard let required = themes[activeThemeIndex].requiredWins else { return false }
@@ -52,9 +52,9 @@ struct MainMenuView: View {
     }
 
     private static func initialSelectedThemeIndex() -> Int {
-        let name = CardBackSelection.shared.selectedName
+        let name = DeckThemeSelection.shared.selectedName
         return themes.firstIndex(where: { $0.logoCard == name })
-            ?? themes.firstIndex(where: { $0.logoCard == CardBackSelection.defaultName })
+            ?? themes.firstIndex(where: { $0.logoCard == DeckThemeSelection.defaultName })
             ?? 0
     }
     @State private var activeSubmenu: GameType? = nil
@@ -1176,7 +1176,7 @@ struct MainMenuView: View {
         let isSelected = (handSize == selectedHandSize)
         let suit = imageName.replacingOccurrences(of: String(selectedHandSize), with: "") //for edge case accessibility addressing
         
-        Image(imageName)
+        Image(cardBackSelection.frontName(for: imageName))
             .resizable()
             .aspectRatio(0.7, contentMode: .fit)
             .frame(height: 145)

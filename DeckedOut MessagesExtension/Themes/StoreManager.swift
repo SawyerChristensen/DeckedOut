@@ -40,7 +40,7 @@ final class StoreManager: ObservableObject {
     }
 
     func loadProducts() async {
-        let ids = CardBackTheme.all.compactMap(\.productID)
+        let ids = DeckTheme.all.compactMap(\.productID)
         guard !ids.isEmpty else { return }
         do {
             let fetched = try await Product.products(for: ids)

@@ -24,7 +24,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // and before any GameKit API is touched — installing this on a low-priority
         // background task races GameKit's bundle-id capture and intermittently
         // fails with GKError code 15. See MainBundleIdentifierOverride for caveats.
-        MainBundleIdentifierOverride.install()
+        //MainBundleIdentifierOverride.install()
         setupFeedbackSystems()
         updateAccessibilityModal(for: presentationStyle)
         NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)), name: UIScene.willDeactivateNotification, object: nil)

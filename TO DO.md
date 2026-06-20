@@ -4,26 +4,43 @@
 ## 🚀 Active Release Milestones
 
 ### Update 3.5.1 - Game Center Achievements 2 (if v1 launch is successful)
-- [ ] Add 20 & 100 win count achievements
+- [x] Add 20 & 100 win count achievements
   - [x] Local backend
-  - [ ] App Store Connect
+  - [x] App Store Connect
   - [x] Images (via Photoshop)
-- [ ] Implement achievements set as TODO in GameCenterManager
-  - [ ] Local backend
-  - [ ] App Store Connect
+- [x] Implement achievements set as TODO in GameCenterManager
+  - [x] Local backend
+  - [x] App Store Connect
   - [x] Images (via Photoshop)
 - [ ] Localize all achievement titles & descriptions in metadata file (via Claude)
+- [x] Localize new version notice
+- [x] Add Enchantment assets to backend
+  - [x] Card back
+  - [x] Card fronts
+- [x] Add sorting to Crazy 8s
+- [ ] Make sure current users can access GameCenter, not just new users who get the new bundle ID install
+
+### Update 3.5.2 - Enchantment Cards release
+- [ ] See if current versions are still pulling the extension bundle ID and not using the new install thing. 
+- [x] Implement Enchantment card asset recognition
+- [ ] Compress Enchantment cards
+- [ ] Review sound manager warning
+- [ ] Make sure knocking rules notice are always present in 1v1 Gin. See if main menu rules view has access to current chat size
+- [ ] Adjust colors of default deck?
+- [ ] Adjust pricing in ASC
 
 ### Update 3.6.0 - Crazy 8s QOL
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
   - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
-- [ ] Add sorting to Crazy 8s
-- [ ] Add Mau Mau variant of Crazy 8s (Joker logo card)
-- [ ] Add Turkish variant of Crazy 8s (Joker? logo card)
+- [ ] Add Mau Mau variant of Crazy 8s (Jack logo card)
+  - [ ] Review stacking 7s, and if we should change the stacking 2s rule in normal Crazy 8s
+- [ ] Add Turkish variant of Crazy 8s (Jack? logo card)
 - [ ] Add more localized game assets (at least for Traditional Chinese)
-- [ ] Add support for Arabic?
+  - [ ] Full German & Turkish versions including their Crazy 8s variant
+- [ ] Localize official full listing (relatively easy)
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   * *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
+
 
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Implement Cribbage

@@ -14,7 +14,7 @@ struct GinGameView: View {
     @Environment(\.accessibilityShowButtonShapes) private var showButtonShapes
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private var motionSpeed: Double { reduceMotion ? 0.66 : 1.0 } //animations should run at 2/3 speed when "Reduce Motion" is enabled
-    @ObservedObject private var cardBackSelection = CardBackSelection.shared
+    @ObservedObject private var cardBackSelection = DeckThemeSelection.shared
 
     @State private var deckFrame: CGRect = .zero
     @State private var discardFrame: CGRect = .zero

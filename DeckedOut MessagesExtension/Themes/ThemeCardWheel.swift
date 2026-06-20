@@ -10,7 +10,7 @@ import SwiftUI
 struct ThemeCardWheel: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private var motionSpeed: Double { reduceMotion ? 0.4 : 1.0 } //animations run at 40% speed (2.5x slower) when Reduce Motion is enabled
-    let themes: [CardBackTheme]
+    let themes: [DeckTheme]
     let showingThemes: Bool //drives the per-card flip in from the game wheel
     var onActiveIndexChange: (Int, Edge) -> Void // (themeIndex, direction the new title enters from)
     var onThemeSelected: (Int) -> Void
@@ -28,7 +28,7 @@ struct ThemeCardWheel: View {
     @GestureState private var dragTranslation: CGFloat = 0
     @State private var animatedOffset: CGFloat = 0 // Animated offset for flick momentum — decays to 0 as the cards settle
 
-    init(themes: [CardBackTheme], initialIndex: Int = 0, showingThemes: Bool, onActiveIndexChange: @escaping (Int, Edge) -> Void, onThemeSelected: @escaping (Int) -> Void) {
+    init(themes: [DeckTheme], initialIndex: Int = 0, showingThemes: Bool, onActiveIndexChange: @escaping (Int, Edge) -> Void, onThemeSelected: @escaping (Int) -> Void) {
         self.themes = themes
         self.showingThemes = showingThemes
         self.onActiveIndexChange = onActiveIndexChange
