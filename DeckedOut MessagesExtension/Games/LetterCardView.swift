@@ -11,10 +11,10 @@ struct LetterCardImage: View {
     let character: String
     var overrideCardBackName: String? = nil //if set, overrides the user's selected card back (e.g. show inviter's theme in transcripts)
 
-    @ObservedObject private var cardBackSelection = DeckThemeSelection.shared
+    @ObservedObject private var cardBackSelection = CurrentTheme.shared
     let currentLanguage = Locale.preferredLanguages.first ?? "en"
 
-    private var effectiveName: String { DeckThemeSelection.existingBackName(overrideCardBackName ?? cardBackSelection.selectedName) }
+    private var effectiveName: String { CurrentTheme.existingBackName(overrideCardBackName ?? cardBackSelection.selectedName) }
     private var effectiveBaseName: String {
         let candidate = effectiveName + "Base"
         return UIImage(named: candidate) != nil ? candidate : effectiveName

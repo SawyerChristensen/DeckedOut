@@ -5,20 +5,20 @@
 
 ### Update 3.5.2 - Enchantment Cards release
 - [x] Implement Enchantment card asset recognition
-- [ ] Make sure knocking rules notice are always present in 1v1 Gin. See if main menu rules view has access to current chat size
 - [x] Compress Enchantment cards
+- [x] Make sure knocking rules notice are always present in 1v1 Gin. See if main menu rules view has access to current chat size
 - [ ] Add National Flag card backs to backend
-- [ ] See if 120hz can be enabled in plist, test frame rate
-  - [ ] Use texture atlas if neccesary to increase
+- [x] Enable 120hz in Info.plist
 - [ ] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
   - [ ] Figure out how to make GC work 100% of the time
   - [ ] Move assets if neccesary
-- [ ] Adjust colors of default deck? (only if we need to reexport for a texture atlas anyway)
-- [ ] Adjust pricing in ASC. Match what is in DeckTheme. Consider organizing those files
+
 
 ### Update 3.5.3 - July 4 National Cards release
+- [ ] Adjust pricing in ASC after 3.5.2 goes live
+- [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
 - [ ] Make national flag cards available in frontend
-- [ ] Review sound manager warning
+  - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
 
 ### Update 3.6.0 - Crazy 8s QOL
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
@@ -144,6 +144,7 @@
 - [ ] Dynamic card sizing: Grow card frame constraints when system accessibility text scaling is active.
 
 ### UI & Aesthetics Polish
+- [ ] Adjust colors of default deck
 - [ ] Have the main menu submenus revealed instead of pulled up
 - [ ] Add a Game Center rocket shortcut button directly to the main menu view.
 - [ ] Investigate why the arrow replace animation fails to mimic the native SF Symbols behavior.
@@ -180,6 +181,7 @@
 - [ ] Implement groupchat configuration features to support user-entered usernames. (Custom or Game Center?)
 
 ### Minor Fixes & Data Optimization
+- [ ] Review sound manager warning. It's init should still probably be on a background thread to keep main clear.
 - [ ] Add an interface onboarding notice clarifying that Aces are not high cards in Gin Rummy.
 - [ ] Force invite views to pause/wait when a "GIN!" state is declared.
 - [ ] Add an immediate restart action path directly within the game win view overlay.
@@ -197,4 +199,3 @@
 - [ ] Clean up initialization code: Move custom `init` logic inside `PlayerHandView` out of the extension and into the main declaration body wrapper.
 - [ ] Debug audio layer warning: Trace and eliminate the "audio session failure" print statement occurring in console streams.
 - [ ] Does "isFaceUp" need to be a passed variable?
-### Update 3.5.0 - GameCenter Achievements 1

@@ -768,7 +768,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             seatList.append(Self.unclaimedSeat)
         }
         
-        let myCardBack = DeckThemeSelection.shared.selectedName
+        let myCardBack = CurrentTheme.shared.selectedName
 
         if seats.count == 2 { //1v1 game mode , create legacy game state for now
             let legacyState = Crazy8sLegacyGameState(
@@ -849,7 +849,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         if updatedBacks.count < updatedSeats.count {
             updatedBacks.append(contentsOf: Array(repeating: "cardBackRed", count: updatedSeats.count - updatedBacks.count))
         }
-        updatedBacks[openIndex] = DeckThemeSelection.shared.selectedName
+        updatedBacks[openIndex] = CurrentTheme.shared.selectedName
 
         let updatedState = Crazy8sV2GameState(
             sessionID: state.sessionID,
@@ -910,7 +910,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             didDiscard: self.userDidDiscard,
             activeSuitOverride: activeSuitOverride,
             turnNumber: self.turnNumber + 1,
-            senderCardBack: DeckThemeSelection.shared.selectedName,
+            senderCardBack: CurrentTheme.shared.selectedName,
             penaltyCardsDealt: penaltyCardsForcedOnOpponent > 0 ? penaltyCardsForcedOnOpponent : nil,
             variant: variant
         )
@@ -945,7 +945,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             outgoingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: seats.count - outgoingBacks.count))
         }
         if outgoingBacks.indices.contains(mySeatIndex) {
-            outgoingBacks[mySeatIndex] = DeckThemeSelection.shared.selectedName
+            outgoingBacks[mySeatIndex] = CurrentTheme.shared.selectedName
         }
 
         let currentGameState = Crazy8sV2GameState(

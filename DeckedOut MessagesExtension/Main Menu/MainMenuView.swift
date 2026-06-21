@@ -35,8 +35,7 @@ struct MainMenuView: View {
     @State private var activeGameIndex: Int = 0
     @State private var activeThemeIndex: Int = MainMenuView.initialSelectedThemeIndex()
     @State private var selectedThemeIndex: Int = MainMenuView.initialSelectedThemeIndex()
-    @State private var themeWheelKey: Int = 0
-    @StateObject private var cardBackSelection = DeckThemeSelection.shared
+    @StateObject private var cardBackSelection = CurrentTheme.shared
     @StateObject private var store = StoreManager.shared
     @State private var availableGames: [MenuGame] = [
         MenuGame(type: .ginRummy, title: "Gin Rummy", logoCard: "ginRummyCard"),
@@ -52,9 +51,9 @@ struct MainMenuView: View {
     }
 
     private static func initialSelectedThemeIndex() -> Int {
-        let name = DeckThemeSelection.shared.selectedName
+        let name = CurrentTheme.shared.selectedName
         return themes.firstIndex(where: { $0.logoCard == name })
-            ?? themes.firstIndex(where: { $0.logoCard == DeckThemeSelection.defaultName })
+            ?? themes.firstIndex(where: { $0.logoCard == CurrentTheme.defaultName })
             ?? 0
     }
     @State private var activeSubmenu: GameType? = nil
@@ -373,7 +372,7 @@ struct MainMenuView: View {
             let impact = UIImpactFeedbackGenerator(style: .medium)
             impact.impactOccurred()
             if showingThemes {
-                withAnimation(.spring(response: 0.67, dampingFraction: 0.7).speed(motionSpeed)) {
+                withAnimation(.spring(response: 1, dampingFraction: 0.7).speed(motionSpeed)) {
                     showingThemes = false
                     activeThemeIndex = selectedThemeIndex
                 }
@@ -449,9 +448,8 @@ struct MainMenuView: View {
             if !showingThemes { // Opening the themes menu
                 let impact = UIImpactFeedbackGenerator(style: .medium)
                 impact.impactOccurred()
-                themeWheelKey += 1
                 activeThemeIndex = selectedThemeIndex
-                withAnimation(.spring(response: 0.67, dampingFraction: 0.7).speed(motionSpeed)) {
+                withAnimation(.spring(response: 1, dampingFraction: 0.7).speed(motionSpeed)) {
                     showingThemes = true
                 }
                 
@@ -612,6 +610,7 @@ struct MainMenuView: View {
             themes: themes,
             initialIndex: activeThemeIndex,
             showingThemes: showingThemes,
+            selectedIndex: selectedThemeIndex,
             onActiveIndexChange: { newIndex, direction in
                 if activeThemeIndex != newIndex {
                     themeTitleTransitionEdge = (direction == .trailing) ? .leading : .trailing
@@ -636,7 +635,6 @@ struct MainMenuView: View {
                 }
             }
         )
-        .id(themeWheelKey)
     }
     
     
@@ -670,7 +668,7 @@ struct MainMenuView: View {
         }
         cardBackSelection.selectedName = themes[activeThemeIndex].logoCard
 
-        withAnimation(.spring(response: 0.67, dampingFraction: 0.7).speed(motionSpeed)) { //send the user back to the main menu
+        withAnimation(.spring(response: 1, dampingFraction: 0.7).speed(motionSpeed)) { //send the user back to the main menu
             showingThemes = false
         }
 
@@ -717,7 +715,7 @@ struct MainMenuView: View {
                             showingRestore = true
                         }
                     } label: {
-                        Text(price).underline()
+                        Text(price)//.underline()
                     }
                     .buttonStyle(.plain)
                 } else {
@@ -1176,7 +1174,7 @@ struct MainMenuView: View {
         let isSelected = (handSize == selectedHandSize)
         let suit = imageName.replacingOccurrences(of: String(selectedHandSize), with: "") //for edge case accessibility addressing
         
-        Image(cardBackSelection.frontName(for: imageName))
+        Image(cardBackSelection.themedFrontName(for: imageName))
             .resizable()
             .aspectRatio(0.7, contentMode: .fit)
             .frame(height: 145)

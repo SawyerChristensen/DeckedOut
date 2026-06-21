@@ -12,6 +12,7 @@ struct ThemeCardWheel: View {
     private var motionSpeed: Double { reduceMotion ? 0.4 : 1.0 } //animations run at 40% speed (2.5x slower) when Reduce Motion is enabled
     let themes: [DeckTheme]
     let showingThemes: Bool //drives the per-card flip in from the game wheel
+    let selectedIndex: Int //the theme the wheel snaps back to whenever the menu reopens
     var onActiveIndexChange: (Int, Edge) -> Void // (themeIndex, direction the new title enters from)
     var onThemeSelected: (Int) -> Void
 
@@ -28,9 +29,10 @@ struct ThemeCardWheel: View {
     @GestureState private var dragTranslation: CGFloat = 0
     @State private var animatedOffset: CGFloat = 0 // Animated offset for flick momentum — decays to 0 as the cards settle
 
-    init(themes: [DeckTheme], initialIndex: Int = 0, showingThemes: Bool, onActiveIndexChange: @escaping (Int, Edge) -> Void, onThemeSelected: @escaping (Int) -> Void) {
+    init(themes: [DeckTheme], initialIndex: Int = 0, showingThemes: Bool, selectedIndex: Int, onActiveIndexChange: @escaping (Int, Edge) -> Void, onThemeSelected: @escaping (Int) -> Void) {
         self.themes = themes
         self.showingThemes = showingThemes
+        self.selectedIndex = selectedIndex
         self.onActiveIndexChange = onActiveIndexChange
         self.onThemeSelected = onThemeSelected
         self._currentCenterIndex = State(initialValue: initialIndex)
@@ -100,7 +102,9 @@ struct ThemeCardWheel: View {
                     frontImage: theme.logoCard,
                     backImageName: theme.logoCard,
                     cardHeight: cardHeight,
-                    rotation: baseRotation + flipRotation
+                    rotation: baseRotation + flipRotation,
+                    validatesAssetNames: false,
+                    themesFront: false // the front here is a card-back image, not a playing card
                 )
                     .zIndex(Double(visibleCount) - abs(distance))
                     .rotationEffect(.degrees(distance * fanningAngle))
@@ -124,6 +128,20 @@ struct ThemeCardWheel: View {
         }
         .offset(x: currentXOffset)
         .animation(.interactiveSpring(response: 0.4, dampingFraction: 0.8).speed(motionSpeed), value: dragTranslation)
+        .onChange(of: showingThemes) { _, nowShowing in
+            // Snap the wheel back to the selected theme the instant the menu opens.
+            // The wheel is still hidden behind the flip's opacity cutoff at this point,
+            // and we disable animation so the reset is invisible — the view keeps its
+            // identity so its flip can animate in sync (back-to-back) with the game wheel.
+            if nowShowing {
+                var txn = Transaction()
+                txn.disablesAnimations = true
+                withTransaction(txn) {
+                    currentCenterIndex = selectedIndex
+                    previousVirtualIndex = selectedIndex
+                }
+            }
+        }
         .onChange(of: activeIndex) { _, newValue in
             if isDragging {
                 notifyActiveChange(for: newValue)

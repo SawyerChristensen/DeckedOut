@@ -81,7 +81,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     private var roundWinType: GinRoundWinType? = nil
     var currentRoundWinType: GinRoundWinType? { roundWinType }
     var isKnockArmed: Bool { shouldKnockOnDiscard }
-    var shouldShowKnockRules: Bool { is1v1 && handSize == 10 }
+    var shouldShowKnockRules: Bool { is1v1 }
 
     // Snapshot of playerHand taken on the first sort of a cycle, restored when the user returns to the unsorted state.
     private var originalPlayerHandOrder: [Card]? = nil
@@ -773,7 +773,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             seatList.append(Self.unclaimedSeat)
         }
 
-        let myCardBack = DeckThemeSelection.shared.selectedName
+        let myCardBack = CurrentTheme.shared.selectedName
 
         if normalizedSeats.count == 2 { //1v1 game mode, create legacy game state
             let legacyState = GinRummyGameState(
@@ -853,7 +853,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         if updatedBacks.count < updatedSeats.count {
             updatedBacks.append(contentsOf: Array(repeating: "cardBackRed", count: updatedSeats.count - updatedBacks.count))
         }
-        updatedBacks[openIndex] = DeckThemeSelection.shared.selectedName
+        updatedBacks[openIndex] = CurrentTheme.shared.selectedName
 
         let updatedState = GinRummyV2GameState(
             sessionID: state.sessionID,
@@ -893,7 +893,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             indexSenderDrewTo: self.indexDrawnTo,
             indexSenderDiscardedFrom: self.indexDiscardedFrom,
             turnNumber: self.turnNumber + 1,
-            senderCardBack: DeckThemeSelection.shared.selectedName,
+            senderCardBack: CurrentTheme.shared.selectedName,
             receiverCardBack: self.opponentCardBack, //carry the opponent's back so the receiver's hand renders correctly when they win on our turn (undercut)
             roundWinner: self.roundWinner,
             roundWinType: self.roundWinType
@@ -922,7 +922,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             outgoingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: seats.count - outgoingBacks.count))
         }
         if outgoingBacks.indices.contains(mySeatIndex) {
-            outgoingBacks[mySeatIndex] = DeckThemeSelection.shared.selectedName
+            outgoingBacks[mySeatIndex] = CurrentTheme.shared.selectedName
         }
 
         let currentGameState = GinRummyV2GameState(
