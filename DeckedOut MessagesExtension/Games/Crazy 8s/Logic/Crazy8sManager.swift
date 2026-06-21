@@ -7,6 +7,30 @@
 
 import Foundation
 
+// Regional rule variant. The mechanics are identical across variants; only the
+// ranks that trigger them differ, so the same engine serves both. The variant is
+// fixed when a game is created and travels in the payload so every participant —
+// regardless of their own region — interprets the shared card state the same way.
+enum Crazy8sVariant: String, Codable {
+    case crazy8s // International default: 8 wild, 2 draws, Queen skips, Ace reverses
+    case mauMau  // German variant: Jack wild, 7 draws, 8 skips, 9 reverses
+
+    var wildRank: Rank    { self == .mauMau ? .jack  : .eight } // choose the next suit
+    var drawTwoRank: Rank { self == .mauMau ? .seven : .two   } // next player draws two
+    var skipRank: Rank    { self == .mauMau ? .eight : .queen } // skip the next player
+    var reverseRank: Rank { self == .mauMau ? .nine  : .ace   } // reverse direction (groupchat)
+
+    /// The variant a newly created game should use, based on the creator's region.
+    /// German-speaking regions default to Mau Mau; everyone else gets Crazy 8s.
+    static func forCurrentRegion() -> Crazy8sVariant {
+        let germanRegions: Set<String> = ["DE", "AT", "CH", "LI"]
+        if let region = Locale.current.region?.identifier, germanRegions.contains(region) {
+            return .mauMau
+        }
+        return .crazy8s
+    }
+}
+
 // V1: Legacy 2-player game snapshot
 struct Crazy8sLegacyGameState: Codable, BasicGameState {
     let sessionID: UUID
@@ -20,6 +44,7 @@ struct Crazy8sLegacyGameState: Codable, BasicGameState {
     let turnNumber: Int
     let senderCardBack: String? //the card-back the sender has equipped; optional for backward compat
     let penaltyCardsDealt: Int? //cards forced on receiver due to a wild card (e.g. a 2); optional for backward compat
+    let variant: Crazy8sVariant? //regional rule variant; optional for backward compat (absent = .crazy8s)
 }
 
 // V2: Seat-based groupchat multiplayer game snapshot
@@ -38,6 +63,7 @@ struct Crazy8sV2GameState: Codable, V2GameState {
     let penaltyCardsDealt: Int? //cards forced on next player due to a wild card (e.g. a 2); optional for backward compat
     let lastPlayerSeatIndex: Int? //who actually played last turn; differs from (currentSeatIndex - 1) when a queen skipped a seat. Optional for backward compat
     let directionIsReversed: Bool? //flipped each time an ace is played; controls whether seat advancement is +1 or -1. Optional for backward compat
+    let variant: Crazy8sVariant? //regional rule variant; optional for backward compat (absent = .crazy8s)
 }
 
 // MARK: The Game Engine
@@ -46,6 +72,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     static let unclaimedSeat = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
 
     @Published var extensionWidth: CGFloat = 375
+    var variant: Crazy8sVariant = .crazy8s //regional rule variant; set at creation and decoded from the payload on load
     @Published var sessionID: UUID? = nil
     @Published var deck: [Card] = []
     @Published var discardPile: [Card] = []
@@ -138,10 +165,12 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             return false
         }
         
-        if card.rank == .eight {
+        if card.rank == variant.wildRank {
+            // Mau Mau: a Jack (wild) may not be played on another Jack.
+            if variant == .mauMau && topCard.rank == variant.wildRank { return false }
             return true
         }
-        
+
         if let requiredSuit = activeSuitOverride {
             return card.suit == requiredSuit
         }
@@ -206,18 +235,12 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     }
     
     func discardCard(card: Card) { // Removed chosenSuit from here, we'll handle it separately
-        guard let topCard = discardPile.last else { return }
-        
-        let isEight = card.rank == .eight
-        let matchesSuit = (activeSuitOverride != nil) ? (card.suit == activeSuitOverride) : (card.suit == topCard.suit)
-        let matchesRank = (card.rank == topCard.rank)
-        let isLegalPlay = isEight || matchesSuit || matchesRank
-        
-        guard phase == .mainPhase, isLegalPlay, let index = playerHand.firstIndex(of: card) else {
+        //isCardPlayable centralizes legality (suit/rank match, wild, and the Mau Mau Jack-on-Jack rule)
+        guard phase == .mainPhase, isCardPlayable(card), let index = playerHand.firstIndex(of: card) else {
             HapticManager.instance.playErrorFeedback()
             return
         }
-        
+
         playerHand.remove(at: index)
         discardPile.append(card)
         userDidDiscard = true
@@ -401,6 +424,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         if isExplicitChange { resetToInit() }
 
         self.is1v1 = true
+        self.variant = state.variant ?? .crazy8s
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.deck = state.deck
@@ -473,6 +497,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
 
         self.localParticipantID = localParticipantID
         self.is1v1 = false
+        self.variant = state.variant ?? .crazy8s
         self.sessionID = state.sessionID
         self.turnNumber = state.turnNumber
         self.seats = state.seats
@@ -568,6 +593,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     }
     
     private func resetToInit() {
+        self.variant = .crazy8s //load() reassigns this from the incoming state immediately after reset
         self.sessionID = nil
         self.playerHand = []
         self.originalPlayerHandOrder = nil // otherwise a previous game's sort snapshot blocks capturing the new hand's order
@@ -637,7 +663,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             //Skip on turn 1: the discard pile may have been initialized with a queen that nobody played.
             if turnNumber > 1, discardPile.count != 2 {
                 var queens: [Card] = []
-                while discardPile.last?.rank == .queen {
+                while discardPile.last?.rank == variant.skipRank {
                     let queen = discardPile.popLast()!
                     queens.append(queen)
                     opponentsHandPreAnimation.append(queen)
@@ -756,7 +782,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 activeSuitOverride: nil,
                 turnNumber: 0,
                 senderCardBack: myCardBack,
-                penaltyCardsDealt: nil
+                penaltyCardsDealt: nil,
+                variant: variant
             )
             self.is1v1 = true
             return try? JSONEncoder().encode(legacyState)
@@ -778,7 +805,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 seatCardBacks: initialBacks,
                 penaltyCardsDealt: nil,
                 lastPlayerSeatIndex: nil,
-                directionIsReversed: nil
+                directionIsReversed: nil,
+                variant: variant
             )
             self.is1v1 = false
             return try? JSONEncoder().encode(initialState)
@@ -837,7 +865,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             seatCardBacks: updatedBacks,
             penaltyCardsDealt: nil,
             lastPlayerSeatIndex: nil,
-            directionIsReversed: state.directionIsReversed)
+            directionIsReversed: state.directionIsReversed,
+            variant: state.variant)
 
         return try? JSONEncoder().encode(updatedState)
     }
@@ -881,8 +910,9 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             didDiscard: self.userDidDiscard,
             activeSuitOverride: activeSuitOverride,
             turnNumber: self.turnNumber + 1,
-            senderCardBack: CardBackSelection.shared.selectedName,
-            penaltyCardsDealt: penaltyCardsForcedOnOpponent > 0 ? penaltyCardsForcedOnOpponent : nil
+            senderCardBack: DeckThemeSelection.shared.selectedName,
+            penaltyCardsDealt: penaltyCardsForcedOnOpponent > 0 ? penaltyCardsForcedOnOpponent : nil,
+            variant: variant
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
@@ -932,7 +962,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             seatCardBacks: outgoingBacks,
             penaltyCardsDealt: penaltyCardsForcedOnOpponent > 0 ? penaltyCardsForcedOnOpponent : nil,
             lastPlayerSeatIndex: mySeatIndex,
-            directionIsReversed: isDirectionReversed
+            directionIsReversed: isDirectionReversed,
+            variant: variant
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {

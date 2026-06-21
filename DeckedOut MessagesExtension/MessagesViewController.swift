@@ -420,6 +420,9 @@ class MessagesViewController: MSMessagesAppViewController {
             templateLayout.image = UIImage(named: "GinDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Gin!", comment: "Gin invite caption/summary") //need to use NSLocalizedString here because it is not in a SwiftUI view and therefore automatically included in the localizable catalog. this adds it manually
         case .crazy8s:
+            //Pick the rule variant from the creator's region (German → Mau Mau). The chosen
+            //variant is baked into the game state below, so every recipient plays by it regardless of their own region.
+            Crazy8sManager.shared.variant = Crazy8sVariant.forCurrentRegion()
             self.activeGameEngine = Crazy8sManager.shared
             templateLayout.image = UIImage(named: "Crazy8sDefault")
             templateLayout.caption = NSLocalizedString("Let's Play Crazy 8s!", comment: "Crazy 8s invite caption/summary")

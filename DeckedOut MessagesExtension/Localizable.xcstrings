@@ -3822,8 +3822,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verrückte Achten"
+            "state" : "machine_translated",
+            "value" : "Mau Mau"
           }
         },
         "es" : {
@@ -3929,8 +3929,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verrückte Achten Kartenspiel"
+            "state" : "machine_translated",
+            "value" : "Mau Mau Kartenspiel"
           }
         },
         "es" : {
@@ -4036,8 +4036,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verrückte-Achten-Spiel"
+            "state" : "machine_translated",
+            "value" : "Mau-Mau-Spiel"
           }
         },
         "es" : {
@@ -4143,8 +4143,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verrückte Achten Spieleinladung"
+            "state" : "machine_translated",
+            "value" : "Mau Mau Spieleinladung"
           }
         },
         "es" : {
@@ -4250,8 +4250,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verrückte Achten Einladung"
+            "state" : "machine_translated",
+            "value" : "Mau Mau Einladung"
           }
         },
         "es" : {
@@ -4356,8 +4356,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Regeln für Achten"
+            "state" : "machine_translated",
+            "value" : "Mau-Mau-Regeln"
           }
         },
         "es" : {
@@ -4463,8 +4463,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Achten!"
+            "state" : "machine_translated",
+            "value" : "Mau Mau!"
           }
         },
         "es" : {
@@ -7152,8 +7152,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Achten sind Joker! Bei einer Zwei muss der nächste Gegner zwei Karten ziehen, Damen setzen aus, Asse kehren die Spielrichtung um."
+            "state" : "machine_translated",
+            "value" : "Buben sind Joker! Bei einer Sieben muss der nächste Gegner zwei Karten ziehen, Achten setzen aus, Neunen kehren die Spielrichtung um."
           }
         },
         "es" : {
@@ -10476,8 +10476,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ich habe in Achten gewonnen!"
+            "state" : "machine_translated",
+            "value" : "Ich habe bei Mau Mau gewonnen!"
           }
         },
         "es" : {
@@ -11227,8 +11227,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verrückte Achten beigetreten!"
+            "state" : "machine_translated",
+            "value" : "Mau Mau beigetreten!"
           }
         },
         "es" : {
@@ -12837,8 +12837,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spielen wir Verrückte Achten!"
+            "state" : "machine_translated",
+            "value" : "Spielen wir Mau Mau!"
           }
         },
         "es" : {
@@ -20478,8 +20478,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du bist am Zug bei Achten!"
+            "state" : "machine_translated",
+            "value" : "Du bist am Zug bei Mau Mau!"
           }
         },
         "es" : {
