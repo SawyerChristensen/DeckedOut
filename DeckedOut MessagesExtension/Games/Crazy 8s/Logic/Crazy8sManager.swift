@@ -50,6 +50,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var deck: [Card] = []
     @Published var discardPile: [Card] = []
     @Published var playerHand: [Card] = []
+    // Snapshot of playerHand taken on the first sort of a cycle, restored when the user returns to the unsorted state.
+    private var originalPlayerHandOrder: [Card]? = nil
     @Published var opponentHand: [Card] = []
     @Published var cardsOpponentDrew: Int = 0
     @Published var cardsDrawnThisTurn: Int = 0 //user version that replaces above int
@@ -164,6 +166,45 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         }
     }
     
+    func sortPlayerHand(sortState: Int) {
+        // sortState: 0 = original unsorted order, 1 = sorted by suit then rank, 2 = sorted by rank
+        if sortState == 0 {
+            if let snapshot = originalPlayerHandOrder {
+                // Restore the snapshot, accounting for cards drawn or discarded since it was taken
+                let currentIDs = Set(playerHand.map(\.id))
+                var restored = snapshot.filter { currentIDs.contains($0.id) }
+                let snapshotIDs = Set(snapshot.map(\.id))
+                restored.append(contentsOf: playerHand.filter { !snapshotIDs.contains($0.id) })
+                playerHand = restored
+                originalPlayerHandOrder = nil
+            }
+            HapticManager.instance.playCardReorder()
+            return
+        }
+
+        // Capture the pre-sort order the first time we sort in a cycle
+        if originalPlayerHandOrder == nil {
+            originalPlayerHandOrder = playerHand
+        }
+
+        let sortedHand = playerHand.sorted { card1, card2 in
+            if sortState == 1 {
+                if card1.suit.rawValue != card2.suit.rawValue {
+                    return card1.suit.rawValue < card2.suit.rawValue
+                }
+                return card1.rank.rawValue < card2.rank.rawValue
+            }
+            // sortState == 2: sort by rank, suit as tiebreaker
+            if card1.rank.rawValue != card2.rank.rawValue {
+                return card1.rank.rawValue < card2.rank.rawValue
+            }
+            return card1.suit.rawValue < card2.suit.rawValue
+        }
+
+        playerHand = sortedHand
+        HapticManager.instance.playCardReorder()
+    }
+    
     func discardCard(card: Card) { // Removed chosenSuit from here, we'll handle it separately
         guard let topCard = discardPile.last else { return }
         
@@ -183,9 +224,11 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         SoundManager.instance.playCardSlap()
         HapticManager.instance.playCardSlap()
 
-        if card.rank == .eight {
+        if card.rank == variant.wildRank {
+            GameCenterManager.shared.report(achievement: .discardEight)
             userNeedsToChooseSuit = true //signals GameView to prompt the user for a new suit
-        } else if card.rank == .two {
+        } else if card.rank == variant.drawTwoRank {
+            GameCenterManager.shared.report(achievement: .discardTwo)
             //block further player interaction while the penalty animation plays
             phase = .animationPhase
             activeSuitOverride = nil
@@ -193,18 +236,22 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 await dealPenaltyCards(count: 2)
                 completeTurn()
             }
-        } else if card.rank == .queen {
+        } else if card.rank == variant.skipRank {
+            GameCenterManager.shared.report(achievement: .discardQueen)
             activeSuitOverride = nil
             if is1v1 && !playerHand.isEmpty {
                 //skip the opponent: keep playing locally without sending. fresh draw allowance for the bonus turn.
+                //this bonus play won't route through sendGameStateSwitch, so count it as a personal turn here.
+                _ = recordLocalTurn()
                 cardsDrawnThisTurn = 0
                 checkHandPlayability()
             } else {
                 if !is1v1 { skipNextSeat = true }
                 completeTurn()
             }
-        } else if card.rank == .ace && !is1v1 {
-            //reverse direction in V2 groupchat; in V1 legacy the ace plays as a normal card (handled by the else below)
+        } else if card.rank == variant.reverseRank && !is1v1 {
+            //reverse direction in V2 groupchat; in V1 legacy the reverse rank plays as a normal card (handled by the else below)
+            GameCenterManager.shared.report(achievement: .discardAce)
             isDirectionReversed.toggle()
             activeSuitOverride = nil
             completeTurn()
@@ -272,7 +319,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             phase = .gameEndPhase
             isGameOver = true
             WinTracker.shared.incrementWins(for: "Crazy 8s")
-            //GameCenterManager.shared.reportWin(firstWin: .firstWinCrazy8s)
+            GameCenterManager.shared.reportWin(firstWin: .firstWinCrazy8s)
         } else {
             phase = .idlePhase
         }
@@ -523,6 +570,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     private func resetToInit() {
         self.sessionID = nil
         self.playerHand = []
+        self.originalPlayerHandOrder = nil // otherwise a previous game's sort snapshot blocks capturing the new hand's order
         self.opponentHand = []
         self.deck = []
         self.discardPile = []
@@ -694,7 +742,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             seatList.append(Self.unclaimedSeat)
         }
         
-        let myCardBack = CardBackSelection.shared.selectedName
+        let myCardBack = DeckThemeSelection.shared.selectedName
 
         if seats.count == 2 { //1v1 game mode , create legacy game state for now
             let legacyState = Crazy8sLegacyGameState(
@@ -773,7 +821,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         if updatedBacks.count < updatedSeats.count {
             updatedBacks.append(contentsOf: Array(repeating: "cardBackRed", count: updatedSeats.count - updatedBacks.count))
         }
-        updatedBacks[openIndex] = CardBackSelection.shared.selectedName
+        updatedBacks[openIndex] = DeckThemeSelection.shared.selectedName
 
         let updatedState = Crazy8sV2GameState(
             sessionID: state.sessionID,
@@ -794,8 +842,26 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         return try? JSONEncoder().encode(updatedState)
     }
 
+    /// Increments and returns the number of turns the local player has personally taken this session.
+    /// Stored in UserDefaults keyed by sessionID so it survives the manager being rebuilt each turn.
+    private func recordLocalTurn() -> Int {
+        guard let sessionID else { return 0 }
+        let key = "crazy8s_myturns_\(sessionID.uuidString)"
+        let next = UserDefaults.standard.integer(forKey: key) + 1
+        UserDefaults.standard.set(next, forKey: key)
+        return next
+    }
+
     func sendGameStateSwitch() {
         if deck.count == 1 { reshuffleDiscardIntoDeck() }
+
+        // Count this as one of the local player's turns. Persisted per-session because the manager
+        // is rebuilt from the message payload between turns, so an in-memory counter wouldn't survive.
+        // Winning on exactly the 8th personal turn earns the Crazy 8s master achievement.
+        let myTurnCount = recordLocalTurn()
+        if playerHasWon && myTurnCount == 8 {
+            GameCenterManager.shared.report(achievement: .crazy8sMaster)
+        }
 
         if is1v1 {
             sendLegacyGameState()
@@ -849,7 +915,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             outgoingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: seats.count - outgoingBacks.count))
         }
         if outgoingBacks.indices.contains(mySeatIndex) {
-            outgoingBacks[mySeatIndex] = CardBackSelection.shared.selectedName
+            outgoingBacks[mySeatIndex] = DeckThemeSelection.shared.selectedName
         }
 
         let currentGameState = Crazy8sV2GameState(

@@ -268,7 +268,10 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             SoundManager.instance.playGameEnd(didWin: true)
             phase = .gameEndPhase
             WinTracker.shared.incrementWins(for: "Gin Rummy")
-            //GameCenterManager.shared.reportWin(firstWin: .firstWinGin)
+            GameCenterManager.shared.reportWin(firstWin: .firstWinGin)
+            if GinRummyValidator.isSingleRun(hand: playerHand) {
+                Task { @MainActor in GameCenterManager.shared.report(.ginMaster) }
+            }
         } else if shouldEvaluateKnock && canPlayerKnock {
             resolveKnockRoundForLegacySender()
         } else {
@@ -296,7 +299,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             roundWinner = .sender
             roundWinType = .knock
             WinTracker.shared.incrementWins(for: "Gin Rummy")
-            //GameCenterManager.shared.reportWin(firstWin: .firstWinGin)
+            GameCenterManager.shared.reportWin(firstWin: .firstWinGin)
         }
 
         isGameOver = true
@@ -770,7 +773,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             seatList.append(Self.unclaimedSeat)
         }
 
-        let myCardBack = CardBackSelection.shared.selectedName
+        let myCardBack = DeckThemeSelection.shared.selectedName
 
         if normalizedSeats.count == 2 { //1v1 game mode, create legacy game state
             let legacyState = GinRummyGameState(
@@ -850,7 +853,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         if updatedBacks.count < updatedSeats.count {
             updatedBacks.append(contentsOf: Array(repeating: "cardBackRed", count: updatedSeats.count - updatedBacks.count))
         }
-        updatedBacks[openIndex] = CardBackSelection.shared.selectedName
+        updatedBacks[openIndex] = DeckThemeSelection.shared.selectedName
 
         let updatedState = GinRummyV2GameState(
             sessionID: state.sessionID,
@@ -890,7 +893,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             indexSenderDrewTo: self.indexDrawnTo,
             indexSenderDiscardedFrom: self.indexDiscardedFrom,
             turnNumber: self.turnNumber + 1,
-            senderCardBack: CardBackSelection.shared.selectedName,
+            senderCardBack: DeckThemeSelection.shared.selectedName,
             receiverCardBack: self.opponentCardBack, //carry the opponent's back so the receiver's hand renders correctly when they win on our turn (undercut)
             roundWinner: self.roundWinner,
             roundWinType: self.roundWinType
@@ -919,7 +922,7 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             outgoingBacks.append(contentsOf: Array(repeating: "cardBackRed", count: seats.count - outgoingBacks.count))
         }
         if outgoingBacks.indices.contains(mySeatIndex) {
-            outgoingBacks[mySeatIndex] = CardBackSelection.shared.selectedName
+            outgoingBacks[mySeatIndex] = DeckThemeSelection.shared.selectedName
         }
 
         let currentGameState = GinRummyV2GameState(

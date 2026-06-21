@@ -12,17 +12,16 @@
   - [x] Local backend
   - [x] App Store Connect
   - [x] Images (via Photoshop)
-- [ ] Localize all achievement titles & descriptions in metadata file (via Claude)
+- [x] Localize all achievement titles & descriptions in metadata file (via Claude)
 - [x] Localize new version notice
 - [x] Add Enchantment assets to backend
   - [x] Card back
   - [x] Card fronts
 - [x] Add sorting to Crazy 8s
-- [ ] Make sure current users can access GameCenter, not just new users who get the new bundle ID install
 
 ### Update 3.5.2 - Enchantment Cards release
-- [ ] See if current versions are still pulling the extension bundle ID and not using the new install thing. 
 - [x] Implement Enchantment card asset recognition
+- [ ] Disable Game Center auth for now if found swizzling definititevly does \*not\* work :(
 - [ ] Compress Enchantment cards
 - [ ] Review sound manager warning
 - [ ] Make sure knocking rules notice are always present in 1v1 Gin. See if main menu rules view has access to current chat size
@@ -53,6 +52,12 @@
   - [ ] Frontend
 
 ### General Updates
+- [ ] MAKE GAME CENTER WORK! 99% Done!
+  - [x] Achievements are implemented in ASC
+  - [x] Game Center is enabled in ASC
+  - [x] Entitlements are present in both the extension and parent stub
+  - [x] Game Center capability is enabled as an identifier in another ASC section somewhere (cant remember where)
+  - [ ] Thought the bundle ID swizzle was working but it does not appear to work in production, and also messages with the bundled asset lookups. Work with apple to figure out a straightforward way to support Game Center achievements in iMessage
 - [ ] Monetization Strategy
   - [ ] Add more Card Back IAPs
   - [ ] Add IAP localizations in App Store Connect (automate w/script?)

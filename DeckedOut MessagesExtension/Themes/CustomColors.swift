@@ -7,23 +7,26 @@ import SwiftUI
 
 // The app's custom palette, defined in code instead of the asset catalog.
 //
-// These colors previously lived in Assets.xcassets/customColors and were used
-// via `Color("name")`. That initializer resolves the name against `Bundle.main`,
-// and UIKit locates a bundle's compiled asset catalog by the bundle's
-// *identifier*. `MainBundleIdentifierOverride` deliberately makes the main
-// bundle report the parent app's identifier (so Game Center recognizes the game
-// from inside the extension), which causes the named-color lookup to miss the
-// extension's catalog and fall back to a default color.
+// History: these colors once lived in Assets.xcassets/customColors and were used
+// via `Color("name")`. While a now-removed `bundleIdentifier` swizzle was in place
+// (it made the main bundle report the parent app's id so Game Center would
+// recognize the game from inside the extension), named-color lookups broke —
+// UIKit's named-asset resolution routes through the bundle identifier, so the
+// rewritten id caused the lookup to miss the extension's compiled catalog and fall
+// back to a default color. Moving the colors into code sidestepped bundle-based
+// asset resolution entirely.
 //
-// Defining the colors in code sidesteps bundle-based asset resolution entirely,
-// so they're immune to the identifier override. Values mirror the original
-// .colorset definitions exactly: sRGB, single appearance (the catalog's Dark
-// slots were empty, so light and dark resolved to the same value).
+// The swizzle has since been removed (it could never make Game Center recognize
+// the game — `gamed` validates the process by its code-signed App ID, not the
+// rewritten string — and it broke asset resolution like this as a side effect).
+// These colors are kept in code anyway: it's simpler and has no bundle dependency.
+// Values mirror the original .colorset definitions exactly: sRGB, single
+// appearance (the catalog's Dark slots were empty, so light and dark resolved to
+// the same value).
 //
 // These live under `Palette` rather than as `Color` extensions because Xcode
-// auto-generates `Color.salmonRed`-style symbols from the asset catalog; a
-// same-named extension would be ambiguous with those (and the generated ones
-// resolve through the bundle, so they break under the override too).
+// auto-generates `Color.salmonRed`-style symbols from the asset catalog, and a
+// same-named extension would be ambiguous with those.
 enum Palette {
     static let salmonRed = Color(.sRGB, red: 255 / 255, green:  75 / 255, blue:  75 / 255)
     static let lossRed   = Color(.sRGB, red: 255 / 255, green:  51 / 255, blue:  51 / 255)

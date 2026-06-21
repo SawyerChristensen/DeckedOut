@@ -704,7 +704,17 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
     private func recordWinOnce() {
         guard let sID = sessionID else { return }
         WinTracker.shared.recordWinOnce(for: "Golf", sessionID: sID)
-        //GameCenterManager.shared.reportWin(firstWin: .firstWinGolf)
+        GameCenterManager.shared.reportWin(firstWin: .firstWinGolf)
+
+        // "Hole in one!" — win with a final score of 0.
+        if playerScore == 0 {
+            GameCenterManager.shared.report(achievement: .golfHoleInOne)
+        }
+        // "Holding Court" — win holding only royal cards (jacks, queens, kings).
+        let royalRanks: Set<Rank> = [.jack, .queen, .king]
+        if !playerHand.isEmpty && playerHand.allSatisfy({ royalRanks.contains($0.rank) }) {
+            GameCenterManager.shared.report(achievement: .golfMaster)
+        }
     }
 
     func createNewGameState(seats: [UUID]) -> Data? {

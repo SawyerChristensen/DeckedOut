@@ -20,6 +20,7 @@ struct Crazy8sGameView: View {
     @State private var isHoveringDiscard: Bool = false
     @State private var isDraggedCardPlayable: Bool = false
     @State private var showRules: Bool = false
+    @State private var cardSortState: Int = 0 // 0 = original order, 1 = sorted by suit then rank, 2 = sorted by rank
     @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
     @ScaledMetric(relativeTo: .title) var suitTextOffset: CGFloat = -100
     
@@ -231,7 +232,7 @@ struct Crazy8sGameView: View {
         Spacer()
             .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width)
             .overlay(
-                HStack {
+                HStack(spacing: rulesButtonSize / 2) {
                     Button(action: {
                         let impact = UIImpactFeedbackGenerator(style: .light)
                         impact.impactOccurred()
@@ -270,11 +271,56 @@ struct Crazy8sGameView: View {
                         Text("Show game rules", comment: "Voice Control input label")
                     ])
                     
+                    sortButton
+                    
                     Spacer()
                 }
                 .padding(.top, 10)
                 .padding(.horizontal, 30)
             )
+    }
+    
+    private var sortButton: some View {
+        Button(action: {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            withAnimation(.spring(response: 0.5, dampingFraction: 1)) {
+                cardSortState = (cardSortState + 1) % 3
+                game.sortPlayerHand(sortState: cardSortState)
+            }
+        }) {
+            HStack {
+                Image(systemName: cardSortState == 0 ? "arrow.left.arrow.right" : (cardSortState == 1 ? "arrow.up.right" : "arrow.right"))
+                    .font(.system(size: rulesButtonSize))
+                    .contentTransition(.symbolEffect(.replace))
+
+                if showButtonShapes {
+                    Text(cardSortState == 0 ? "Sort" : (cardSortState == 1 ? "Suit/Rank" : "Rank"))
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+            }
+            .foregroundStyle(.white.opacity(showButtonShapes ? 1.0 : 0.5))
+            .padding(showButtonShapes ? EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16) : EdgeInsets())
+            .background(
+                Group {
+                    if showButtonShapes {
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("Sort hand", comment: "Voice Control label for sorting the player's hand"))
+        .accessibilityHint(Text("Cycles between the original order, sorted by suit and rank, and sorted by rank.", comment: "VoiceOver hint for the sort button"))
+        .accessibilityInputLabels([
+            Text("Sort", comment: "Voice Control input label"),
+            Text("Sort hand", comment: "Voice Control input label"),
+            Text("Sort cards", comment: "Voice Control input label")
+        ])
     }
     
     private var playersHand: some View {

@@ -26,32 +26,32 @@ final class GameCenterManager {
 
     /// Identifiers for every achievement in the app. The `rawValue` must match the achievement identifier configured in App Store Connect exactly.
     enum Achievement: String, CaseIterable {
-        // Game specific first wins
-        case firstWinGin     = "deckedout.first_win.gin"
-        case firstWinCrazy8s = "deckedout.first_win.crazy8s"
-        case firstWinGolf    = "deckedout.first_win.golf"
-        
-        // Gin Rummy
-        // TODO: Win by having your entire hand be 1 set (straight) of cards (achieveable more than once?)
-        
-        // Crazy 8s
-        // TODO: Discard an 8 (hidden achievement) (8 points)
-        // TODO: Discard a 2 (hidden achievement) (2 points)
-        // TODO: Discard a queen (hidden achievement) (5 points)
-        // TODO: Discard an ace (in group chat mode) (hidden achievement) (5 points)
-        // TODO: Win in 8 turns exactly
-        
-        // Golf
-        // TODO: Win by having 0 points ("Hole in one!") (hidden) (0 points) (achieveable more than once?)
-        // TODO: Win using only royal cards in hand ("Wait... how?") (30 points)
+        // First wins
+        case firstWinGin     = "deckedout.first_win.gin"    /// 10 pts
+        case firstWinCrazy8s = "deckedout.first_win.crazy8s"/// 10 pts
+        case firstWinGolf    = "deckedout.first_win.golf"   /// 10 pts
 
         // Cumulative win milestones (progress-based, 0–100%)
-        case firstWinEver     = "deckedout.wins.total.1"
-        case twoWinsTotal     = "deckedout.wins.total.2"
-        case tenWinsTotal     = "deckedout.wins.total.10"
-        case twentyWinsTotal  = "deckedout.wins.total.20"
-        case hundredWinsTotal = "deckedout.wins.total.100"
-    }
+        case firstWinEver     = "deckedout.wins.total.1"    /// 10 pts
+        case twoWinsTotal     = "deckedout.wins.total.2"    /// 20 pts
+        case tenWinsTotal     = "deckedout.wins.total.10"   /// 30 pts, Hidden
+        case twentyWinsTotal  = "deckedout.wins.total.20"   /// 40 pts, Hidden
+        case hundredWinsTotal = "deckedout.wins.total.100"  /// 50 pts, Hidden
+        
+        // Gin Rummy specific
+        case ginMaster = "deckedout.gin.master"             /// Win a game with your entire hand forming a single run (25 pts)
+        
+        // Crazy 8s specific
+        case discardEight  = "deckedout.crazy8s.eight"      /// Discard an 8 (8 points)
+        case discardTwo    = "deckedout.crazy8s.two"        /// Discard a 2 (2 points)
+        case discardQueen  = "deckedout.crazy8s.queen"      /// Discard a queen (9 points)
+        case discardAce    = "deckedout.crazy8s.ace"        /// Discard an ace in a group chat (1 points)
+        case crazy8sMaster = "deckedout.crazy8s.master"     /// Win on exactly your 8th personal turn (25 pts)
+        
+        // Golf specific
+        case golfHoleInOne = "deckedout.golf.score0"        /// Win a game of Golf with a final score of 0 (0 points)
+        case golfMaster    = "deckedout.golf.master"        /// Win a game of Golf with a hand of only royal cards — jacks, queens, kings (25 pts)
+    } ///in hindsight, first win achievements should've been grouped under their respective games, but keys in ASC are immutable
 
     private(set) var isAuthenticated = false
 
@@ -88,15 +88,30 @@ final class GameCenterManager {
     }
 
     private func handleAuthenticationCallback(viewController: UIViewController?, error: Error?) {
-        if error != nil {
-            //print("Game Center authentication error: \(error?.localizedDescription ?? "")")
+        // Full visibility into every auth callback: GameKit may call this more than once.
+        let player = GKLocalPlayer.local
+        print("🎮 [GCAuth] callback fired — isAuthenticated=\(player.isAuthenticated), viewController=\(viewController != nil ? "PRESENT (sign-in UI offered)" : "nil"), error=\(error.map { "\(($0 as NSError).domain) code=\(($0 as NSError).code): \($0.localizedDescription)" } ?? "none")")
+
+        if let error = error {
+            let ns = error as NSError
+            print("❌ [GCAuth] authentication FAILED — domain=\(ns.domain) code=\(ns.code) — \(ns.localizedDescription)")
+            if let underlying = ns.userInfo[NSUnderlyingErrorKey] as? NSError {
+                print("   ↳ underlying: domain=\(underlying.domain) code=\(underlying.code) — \(underlying.userInfo)")
+            }
             return
         }
+
         // iMessage extension policy: don't interrupt the user with a sign-in sheet.
         // If they want to sign in, they can do so from the Settings app.
-        if viewController != nil { return }
+        if viewController != nil {
+            print("⚠️ [GCAuth] GameKit offered a sign-in sheet — player is NOT signed in to Game Center on this device/sandbox. Skipping (no banner will show).")
+            return
+        }
 
-        guard GKLocalPlayer.local.isAuthenticated else { return }
+        guard player.isAuthenticated else {
+            print("⚠️ [GCAuth] callback had no error and no sheet, but isAuthenticated=false. No banner. (Often a sandbox Game Center account that isn't fully signed in.)")
+            return
+        }
         isAuthenticated = true
 
         Task { await loadAchievements() }
@@ -150,6 +165,13 @@ final class GameCenterManager {
         report(achievement, percentComplete: current + delta)
     }
 
+    /// Nonisolated convenience for reporting a single achievement from non–main-actor game logic. Hops to the main actor.
+    nonisolated func report(achievement: Achievement) {
+        Task { @MainActor in
+            report(achievement)
+        }
+    }
+
     /// Call after recording a win in `WinTracker`. Marks the per-game first-win achievement as earned and updates the cumulative win milestones based on `WinTracker.totalWins`.
     /// Safe to call from any thread.
     nonisolated func reportWin(firstWin: Achievement) {
@@ -196,11 +218,14 @@ final class GameCenterManager {
 
     private func sendReport(_ achievements: [GKAchievement]) {
         Task {
+            let ids = achievements.map { "\($0.identifier)=\(Int($0.percentComplete))%" }.joined(separator: ", ")
             do {
                 try await GKAchievement.report(achievements)
-                    print("Reported: \(achievements.map { "\($0.identifier)=\($0.percentComplete)" })")
+                print("✅ [GameCenter] REPORT SUCCEEDED — \(ids)")
             } catch {
-                print("Game Center: failed to report achievements: \(error.localizedDescription)")
+                let ns = error as NSError
+                // code 15 == GKError.gameUnrecognized (the "no game matching descriptor" failure)
+                print("❌ [GameCenter] REPORT FAILED (code \(ns.code)) — \(ids) — \(ns.localizedDescription)")
             }
         }
     }

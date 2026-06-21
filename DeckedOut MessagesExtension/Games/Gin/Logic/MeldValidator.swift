@@ -67,6 +67,15 @@ public class GinRummyValidator {
         return canMeldRecursive(cardsToMeld: hand.count, handGrid: &handGrid) //hand.count should either be 7 or 10
     }
 
+    /// Returns `true` when every card in the hand belongs to one continuous run of the same suit
+    /// (e.g. 4♥–5♥–6♥–7♥–8♥–9♥–10♥). This is the rarest possible Gin — the whole hand is a single meld.
+    static func isSingleRun(hand: [Card]) -> Bool {
+        guard hand.count >= 3 else { return false }
+        guard Set(hand.map { $0.suit.rawValue }).count == 1 else { return false }
+        let ranks = hand.map { $0.rank.rawValue }.sorted()
+        return zip(ranks, ranks.dropFirst()).allSatisfy { $0 + 1 == $1 }
+    }
+
     /// Returns the smallest possible deadwood total after optimally partitioning the hand into melds.
     static func minimumDeadwoodPoints(hand: [Card]) -> Int {
         bestMeldLayout(hand: hand).deadwoodPoints

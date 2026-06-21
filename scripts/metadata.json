@@ -10,24 +10,24 @@
     "whats_new": {
       "_max_chars": 4000,
       "_tone": "Brief, friendly release notes. Use line breaks (\\n) between bullet points.",
-      "en": "Game Center achievements are here! Win games to start unlocking them as well as celebratory deck themes.",
-      "da": "Game Center-præstationer er her! Vind spil for at begynde at låse dem op sammen med festlige kortdesigns.",
-      "de": "Game Center-Erfolge sind da! Gewinne Spiele, um sie sowie festliche Kartendesigns freizuschalten.",
-      "es": "¡Ya están aquí los logros de Game Center! Gana partidas para empezar a desbloquearlos junto con vistosos diseños de cartas.",
-      "fr": "Les succès Game Center sont arrivés ! Gagnez des parties pour commencer à les débloquer, ainsi que des thèmes de cartes festifs.",
-      "hi": "Game Center उपलब्धियाँ आ गई हैं! इन्हें और उत्सवपूर्ण डेक थीम अनलॉक करना शुरू करने के लिए गेम जीतें।",
-      "it": "Sono arrivati i risultati di Game Center! Vinci le partite per iniziare a sbloccarli insieme a festosi temi per le carte.",
-      "ja": "Game Centerの実績が登場！ゲームに勝って、実績や華やかなデッキテーマをアンロックしましょう。",
-      "ko": "Game Center 업적이 추가되었습니다! 게임에서 승리하여 업적과 화려한 덱 테마를 잠금 해제해 보세요.",
-      "nb": "Game Center-prestasjoner er her! Vinn spill for å begynne å låse dem opp sammen med festlige kortdesign.",
-      "nl": "Game Center-prestaties zijn er! Win spellen om ze samen met feestelijke kaartthema's te ontgrendelen.",
-      "pt-BR": "As conquistas do Game Center chegaram! Vença partidas para começar a desbloqueá-las e também temas de baralho comemorativos.",
-      "ru": "Достижения Game Center уже здесь! Побеждайте в играх, чтобы открывать их, а также праздничные оформления колод.",
-      "sv": "Game Center-bedrifter är här! Vinn spel för att börja låsa upp dem tillsammans med festliga kortlekteman.",
-      "tr": "Game Center başarımları geldi! Bunları ve şenlikli deste temalarını açmaya başlamak için oyunları kazanın.",
-      "vi": "Thành tích Game Center đã có mặt! Thắng các ván đấu để bắt đầu mở khóa chúng cùng các giao diện bộ bài lễ hội.",
-      "zh-Hans": "Game Center 成就来了！赢得游戏即可开始解锁成就以及精彩的牌背主题。",
-      "zh-Hant": "Game Center 成就來了！贏得遊戲即可開始解鎖成就以及精彩的牌背主題。"
+      "en": "Even more Game Center achievements! Now also available in all supported languages.",
+      "da": "Endnu flere Game Center-præstationer! Nu også tilgængelig på dansk.",
+      "de": "Noch mehr Game Center-Erfolge! Jetzt auch auf Deutsch verfügbar.",
+      "es": "¡Aún más logros de Game Center! Ahora también disponible en español.",
+      "fr": "Encore plus de succès Game Center ! Désormais disponible en français.",
+      "hi": "और भी ज़्यादा Game Center उपलब्धियाँ! अब हिंदी में भी उपलब्ध।",
+      "it": "Ancora più risultati di Game Center! Ora disponibile anche in italiano.",
+      "ja": "Game Centerの実績がさらに増えました！日本語にも対応しました。",
+      "ko": "더욱 다양해진 Game Center 업적! 이제 한국어도 지원합니다.",
+      "nb": "Enda flere Game Center-prestasjoner! Nå også tilgjengelig på norsk.",
+      "nl": "Nog meer Game Center-prestaties! Nu ook beschikbaar in het Nederlands.",
+      "pt-BR": "Ainda mais conquistas do Game Center! Agora também disponível em português.",
+      "ru": "Ещё больше достижений Game Center! Теперь доступно и на русском.",
+      "sv": "Ännu fler Game Center-bedrifter! Nu även tillgängligt på svenska.",
+      "tr": "Daha da fazla Game Center başarımı! Artık Türkçe olarak da kullanılabilir.",
+      "vi": "Thêm nhiều thành tích Game Center hơn nữa! Giờ đây đã có bằng tiếng Việt.",
+      "zh-Hans": "更多 Game Center 成就！现已支持简体中文。",
+      "zh-Hant": "更多 Game Center 成就！現已支援繁體中文。"
     },
     "_inherit_notes": "description, keywords, and promotional_text default to inheriting from the most recent prior App Store version per locale. Leave 'en' (and all locales) as null to inherit. Fill in 'en' and ask Claude Code to translate when you want to override.",
     "description": {
@@ -63,25 +63,25 @@
         "_max_chars": 30,
         "_tone": "Punchy, ideally clever. Game-specific name for winning Gin Rummy for the first time.",
         "en": "Gin Rookie",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Gin-debutant", "de": "Gin-Neuling", "es": "Novato del Gin", "fr": "Débutant au Gin", "hi": "जिन नौसिखिया", "it": "Esordiente al Gin",
+        "ja": "ジンの新人", "ko": "진 신참", "nb": "Gin-debutant", "nl": "Gin-groentje", "pt-BR": "Novato no Gin", "ru": "Новичок в джине",
+        "sv": "Gin-nybörjare", "tr": "Gin Çaylağı", "vi": "Tân binh Gin", "zh-Hans": "金拉米新手", "zh-Hant": "金拉米新手"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do. Imperative.",
         "en": "Win your first game of Gin Rummy.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind dit første spil Gin Rummy.", "de": "Gewinne dein erstes Spiel Gin Rummy.", "es": "Gana tu primera partida de Gin Rummy.", "fr": "Gagnez votre première partie de Gin Rami.", "hi": "जिन रम्मी का अपना पहला गेम जीतें।", "it": "Vinci la tua prima partita di Gin Rummy.",
+        "ja": "ジンラミーで初めて勝利しましょう。", "ko": "진 러미에서 첫 게임을 승리하세요.", "nb": "Vinn ditt første spill Gin Rummy.", "nl": "Win je eerste spelletje Gin Rummy.", "pt-BR": "Vença sua primeira partida de Gin Rummy.", "ru": "Выиграйте свою первую партию в джин-рамми.",
+        "sv": "Vinn ditt första parti Gin Rummy.", "tr": "İlk Gin Rummy oyununuzu kazanın.", "vi": "Thắng ván Gin Rummy đầu tiên của bạn.", "zh-Hans": "赢得你的第一局金拉米。", "zh-Hant": "贏得你的第一局金拉米。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment. Past tense.",
         "en": "You won your first game of Gin Rummy!",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt dit første spil Gin Rummy!", "de": "Du hast dein erstes Spiel Gin Rummy gewonnen!", "es": "¡Ganaste tu primera partida de Gin Rummy!", "fr": "Vous avez gagné votre première partie de Gin Rami !", "hi": "आपने जिन रम्मी का अपना पहला गेम जीत लिया!", "it": "Hai vinto la tua prima partita di Gin Rummy!",
+        "ja": "ジンラミーで初勝利を挙げました！", "ko": "진 러미에서 첫 승리를 거뒀습니다!", "nb": "Du vant ditt første spill Gin Rummy!", "nl": "Je hebt je eerste spelletje Gin Rummy gewonnen!", "pt-BR": "Você venceu sua primeira partida de Gin Rummy!", "ru": "Вы выиграли свою первую партию в джин-рамми!",
+        "sv": "Du vann ditt första parti Gin Rummy!", "tr": "İlk Gin Rummy oyununuzu kazandınız!", "vi": "Bạn đã thắng ván Gin Rummy đầu tiên!", "zh-Hans": "你赢得了第一局金拉米！", "zh-Hant": "你贏得了第一局金拉米！"
       }
     },
     "deckedout.first_win.crazy8s": {
@@ -90,25 +90,25 @@
         "_max_chars": 30,
         "_tone": "Punchy, ideally clever. Game-specific name for winning Crazy 8s for the first time.",
         "en": "Craziest 8s",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Skøreste 8'ere", "de": "Verrückteste 8en", "es": "Los 8 más locos", "fr": "Le 8 le plus fou", "hi": "सबसे क्रेज़ी 8", "it": "8 Pazzeschi",
+        "ja": "最高にクレイジーな8", "ko": "최고로 크레이지한 8", "nb": "Sprøeste 8-ere", "nl": "Gekste 8'en", "pt-BR": "8 Mais Loucos", "ru": "Безумные восьмёрки",
+        "sv": "Galnaste 8:orna", "tr": "En Çılgın 8'ler", "vi": "8 Điên Nhất", "zh-Hans": "最疯狂的8", "zh-Hant": "最瘋狂的8"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do. Imperative.",
         "en": "Win your first game of Crazy 8s.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind dit første spil Crazy 8s.", "de": "Gewinne dein erstes Spiel Crazy 8s.", "es": "Gana tu primera partida de Crazy 8s.", "fr": "Gagnez votre première partie de Crazy 8s.", "hi": "क्रेज़ी 8s का अपना पहला गेम जीतें।", "it": "Vinci la tua prima partita di Crazy 8s.",
+        "ja": "クレイジーエイトで初めて勝利しましょう。", "ko": "크레이지 8s에서 첫 게임을 승리하세요.", "nb": "Vinn ditt første spill Crazy 8s.", "nl": "Win je eerste spelletje Crazy 8s.", "pt-BR": "Vença sua primeira partida de Crazy 8s.", "ru": "Выиграйте свою первую партию в Crazy 8s.",
+        "sv": "Vinn ditt första parti Crazy 8s.", "tr": "İlk Crazy 8s oyununuzu kazanın.", "vi": "Thắng ván Crazy 8s đầu tiên của bạn.", "zh-Hans": "赢得你的第一局疯狂8。", "zh-Hant": "贏得你的第一局瘋狂8。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment. Past tense.",
         "en": "You won your first game of Crazy 8s!",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt dit første spil Crazy 8s!", "de": "Du hast dein erstes Spiel Crazy 8s gewonnen!", "es": "¡Ganaste tu primera partida de Crazy 8s!", "fr": "Vous avez gagné votre première partie de Crazy 8s !", "hi": "आपने क्रेज़ी 8s का अपना पहला गेम जीत लिया!", "it": "Hai vinto la tua prima partita di Crazy 8s!",
+        "ja": "クレイジーエイトで初勝利を挙げました！", "ko": "크레이지 8s에서 첫 승리를 거뒀습니다!", "nb": "Du vant ditt første spill Crazy 8s!", "nl": "Je hebt je eerste spelletje Crazy 8s gewonnen!", "pt-BR": "Você venceu sua primeira partida de Crazy 8s!", "ru": "Вы выиграли свою первую партию в Crazy 8s!",
+        "sv": "Du vann ditt första parti Crazy 8s!", "tr": "İlk Crazy 8s oyununuzu kazandınız!", "vi": "Bạn đã thắng ván Crazy 8s đầu tiên!", "zh-Hans": "你赢得了第一局疯狂8！", "zh-Hant": "你贏得了第一局瘋狂8！"
       }
     },
     "deckedout.first_win.golf": {
@@ -117,25 +117,241 @@
         "_max_chars": 30,
         "_tone": "Punchy, ideally clever. Game-specific name for winning Golf for the first time.",
         "en": "Tee Off",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Udslag", "de": "Abschlag", "es": "Golpe de Salida", "fr": "Coup de Départ", "hi": "टी ऑफ", "it": "Colpo d'Inizio",
+        "ja": "ティーオフ", "ko": "티 오프", "nb": "Utslag", "nl": "Afslag", "pt-BR": "Tacada Inicial", "ru": "Первый Удар",
+        "sv": "Utslag", "tr": "İlk Vuruş", "vi": "Phát Bóng", "zh-Hans": "开球", "zh-Hant": "開球"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do. Imperative.",
         "en": "Win your first game of Golf.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind dit første spil Golf.", "de": "Gewinne dein erstes Spiel Golf.", "es": "Gana tu primera partida de Golf.", "fr": "Gagnez votre première partie de Golf.", "hi": "गोल्फ का अपना पहला गेम जीतें।", "it": "Vinci la tua prima partita di Golf.",
+        "ja": "ゴルフで初めて勝利しましょう。", "ko": "골프에서 첫 게임을 승리하세요.", "nb": "Vinn ditt første spill Golf.", "nl": "Win je eerste spelletje Golf.", "pt-BR": "Vença sua primeira partida de Golf.", "ru": "Выиграйте свою первую партию в гольф.",
+        "sv": "Vinn ditt första parti Golf.", "tr": "İlk Golf oyununuzu kazanın.", "vi": "Thắng ván Golf đầu tiên của bạn.", "zh-Hans": "赢得你的第一局高尔夫。", "zh-Hant": "贏得你的第一局高爾夫。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment. Past tense.",
         "en": "You won your first game of Golf!",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt dit første spil Golf!", "de": "Du hast dein erstes Spiel Golf gewonnen!", "es": "¡Ganaste tu primera partida de Golf!", "fr": "Vous avez gagné votre première partie de Golf !", "hi": "आपने गोल्फ का अपना पहला गेम जीत लिया!", "it": "Hai vinto la tua prima partita di Golf!",
+        "ja": "ゴルフで初勝利を挙げました！", "ko": "골프에서 첫 승리를 거뒀습니다!", "nb": "Du vant ditt første spill Golf!", "nl": "Je hebt je eerste spelletje Golf gewonnen!", "pt-BR": "Você venceu sua primeira partida de Golf!", "ru": "Вы выиграли свою первую партию в гольф!",
+        "sv": "Du vann ditt första parti Golf!", "tr": "İlk Golf oyununuzu kazandınız!", "vi": "Bạn đã thắng ván Golf đầu tiên!", "zh-Hans": "你赢得了第一局高尔夫！", "zh-Hant": "你贏得了第一局高爾夫！"
+      }
+    },
+    "deckedout.gin.master": {
+      "_default_image": "achievement_images/master_gin.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Marks the rarest Gin Rummy win — the entire hand is one unbroken same-suit run (a perfect straight).",
+        "en": "Straight Shooter",
+        "da": "Ren Stribe", "de": "Glatte Reihe", "es": "Escalera Perfecta", "fr": "Suite Parfaite", "hi": "परफेक्ट स्ट्रेट", "it": "Scala Perfetta",
+        "ja": "完璧なストレート", "ko": "완벽한 스트레이트", "nb": "Ren Rekke", "nl": "Strakke Reeks", "pt-BR": "Sequência Perfeita", "ru": "Чистая Серия",
+        "sv": "Ren Stege", "tr": "Kusursuz Dizi", "vi": "Sảnh Hoàn Hảo", "zh-Hans": "完美顺子", "zh-Hant": "完美順子"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Win a game of Gin Rummy with your entire hand forming a single run of the same suit.",
+        "da": "Vind et spil Gin Rummy, hvor hele din hånd danner én sammenhængende række i samme kulør.", "de": "Gewinne ein Spiel Gin Rummy, bei dem dein gesamtes Blatt eine einzige Folge derselben Farbe bildet.", "es": "Gana una partida de Gin Rummy con toda tu mano formando una sola escalera del mismo palo.", "fr": "Gagnez une partie de Gin Rami avec toute votre main formant une seule suite de la même couleur.", "hi": "जिन रम्मी का एक गेम जीतें जिसमें आपका पूरा हाथ एक ही सूट की एक सीधी क्रम बनाता हो।", "it": "Vinci una partita di Gin Rummy con tutta la tua mano che forma un'unica scala dello stesso seme.",
+        "ja": "手札すべてが同じスートの一続きの並びになった状態でジンラミーに勝利しましょう。", "ko": "전체 패가 같은 무늬의 하나의 연속된 런을 이루는 상태로 진 러미에서 승리하세요.", "nb": "Vinn et spill Gin Rummy der hele hånden din danner én sammenhengende rekke i samme farge.", "nl": "Win een spelletje Gin Rummy waarbij je hele hand één aaneengesloten reeks van dezelfde kleur vormt.", "pt-BR": "Vença uma partida de Gin Rummy com toda a sua mão formando uma única sequência do mesmo naipe.", "ru": "Выиграйте партию в джин-рамми, когда вся ваша рука образует одну непрерывную последовательность одной масти.",
+        "sv": "Vinn ett parti Gin Rummy där hela din hand bildar en enda svit i samma färg.", "tr": "Tüm eliniz aynı türden tek bir diziden oluşacak şekilde bir Gin Rummy oyunu kazanın.", "vi": "Thắng một ván Gin Rummy với toàn bộ bài trên tay tạo thành một dãy liên tiếp cùng chất.", "zh-Hans": "在金拉米中获胜，且整手牌构成同花色的一条完整顺子。", "zh-Hant": "在金拉米中獲勝，且整手牌構成同花色的一條完整順子。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You won Gin Rummy with one perfect run — nothing but a straight!",
+        "da": "Du vandt Gin Rummy med én perfekt række — intet andet end en stribe!", "de": "Du hast Gin Rummy mit einer perfekten Folge gewonnen — nichts als eine Reihe!", "es": "¡Ganaste el Gin Rummy con una escalera perfecta y nada más!", "fr": "Vous avez gagné le Gin Rami avec une suite parfaite, rien d'autre !", "hi": "आपने जिन रम्मी सिर्फ एक परफेक्ट स्ट्रेट के साथ जीता!", "it": "Hai vinto a Gin Rummy con un'unica scala perfetta, niente di più!",
+        "ja": "完璧なストレート1本だけでジンラミーに勝利しました！", "ko": "완벽한 런 하나, 오직 스트레이트만으로 진 러미에서 승리했습니다!", "nb": "Du vant Gin Rummy med én perfekt rekke — ikke noe annet enn en stige!", "nl": "Je won Gin Rummy met één perfecte reeks — niets dan een rechte!", "pt-BR": "Você venceu o Gin Rummy com uma sequência perfeita e nada mais!", "ru": "Вы выиграли джин-рамми одной идеальной последовательностью — ничего, кроме стрита!",
+        "sv": "Du vann Gin Rummy med en enda perfekt svit — inget annat än en stege!", "tr": "Gin Rummy'yi tek bir kusursuz diziyle kazandınız — düz diziden başka bir şey yok!", "vi": "Bạn đã thắng Gin Rummy chỉ với một sảnh hoàn hảo!", "zh-Hans": "你仅凭一条完美顺子赢得了金拉米！", "zh-Hant": "你僅憑一條完美順子贏得了金拉米！"
+      }
+    },
+    "deckedout.crazy8s.eight": {
+      "_default_image": "achievement_images/first_8.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Crazy 8s achievement for discarding an 8 — the wild card that lets you change the suit.",
+        "en": "Wild Thing",
+        "da": "Vildkort", "de": "Wildes Ding", "es": "Comodín Salvaje", "fr": "Bête Sauvage", "hi": "वाइल्ड कार्ड", "it": "Jolly Selvaggio",
+        "ja": "ワイルドカード", "ko": "와일드 카드", "nb": "Villkort", "nl": "Wilde Kaart", "pt-BR": "Coringa Selvagem", "ru": "Дикая Карта",
+        "sv": "Vildkort", "tr": "Vahşi Joker", "vi": "Lá Bài Dại", "zh-Hans": "百搭狂徒", "zh-Hant": "百搭狂徒"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Discard an 8 in Crazy 8s.",
+        "da": "Smid et 8'er i Crazy 8s.", "de": "Lege in Crazy 8s eine 8 ab.", "es": "Descarta un 8 en Crazy 8s.", "fr": "Défaussez un 8 dans Crazy 8s.", "hi": "क्रेज़ी 8s में एक 8 का पत्ता फेंकें।", "it": "Scarta un 8 in Crazy 8s.",
+        "ja": "クレイジーエイトで8を捨てましょう。", "ko": "크레이지 8s에서 8을 버리세요.", "nb": "Kast en 8-er i Crazy 8s.", "nl": "Leg een 8 af in Crazy 8s.", "pt-BR": "Descarte um 8 em Crazy 8s.", "ru": "Сбросьте восьмёрку в Crazy 8s.",
+        "sv": "Lägg av en 8:a i Crazy 8s.", "tr": "Crazy 8s'te bir 8 atın.", "vi": "Đánh ra một lá 8 trong Crazy 8s.", "zh-Hans": "在疯狂8中打出一张8。", "zh-Hant": "在瘋狂8中打出一張8。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You played a wild 8 and called the suit!",
+        "da": "Du spillede et vildt 8'er og valgte kuløren!", "de": "Du hast eine wilde 8 gespielt und die Farbe bestimmt!", "es": "¡Jugaste un 8 comodín y elegiste el palo!", "fr": "Vous avez joué un 8 sauvage et choisi la couleur !", "hi": "आपने एक वाइल्ड 8 खेला और सूट चुना!", "it": "Hai giocato un 8 jolly e scelto il seme!",
+        "ja": "ワイルドな8を出してスートを指定しました！", "ko": "와일드 8을 내고 무늬를 정했습니다!", "nb": "Du spilte en vill 8-er og valgte fargen!", "nl": "Je speelde een wilde 8 en koos de kleur!", "pt-BR": "Você jogou um 8 coringa e escolheu o naipe!", "ru": "Вы сыграли дикую восьмёрку и выбрали масть!",
+        "sv": "Du spelade en vild 8:a och valde färgen!", "tr": "Vahşi bir 8 oynayıp türü belirlediniz!", "vi": "Bạn đã đánh lá 8 đầy quyền năng và chọn chất!", "zh-Hans": "你打出一张百搭8并指定了花色！", "zh-Hant": "你打出一張百搭8並指定了花色！"
+      }
+    },
+    "deckedout.crazy8s.two": {
+      "_default_image": "achievement_images/first_two.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Crazy 8s achievement for discarding a 2 — forces the next player to draw two cards.",
+        "en": "Take Two",
+        "da": "Træk To", "de": "Zieh Zwei", "es": "Toma Dos", "fr": "Pioche Deux", "hi": "दो उठाओ", "it": "Pesca Due",
+        "ja": "2枚引き", "ko": "두 장 뽑기", "nb": "Trekk To", "nl": "Pak Twee", "pt-BR": "Compre Duas", "ru": "Возьми Две",
+        "sv": "Ta Två", "tr": "İki Çek", "vi": "Bốc Hai", "zh-Hans": "拿两张", "zh-Hant": "拿兩張"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Discard a 2 in Crazy 8s.",
+        "da": "Smid et 2'er i Crazy 8s.", "de": "Lege in Crazy 8s eine 2 ab.", "es": "Descarta un 2 en Crazy 8s.", "fr": "Défaussez un 2 dans Crazy 8s.", "hi": "क्रेज़ी 8s में एक 2 का पत्ता फेंकें।", "it": "Scarta un 2 in Crazy 8s.",
+        "ja": "クレイジーエイトで2を捨てましょう。", "ko": "크레이지 8s에서 2를 버리세요.", "nb": "Kast en 2-er i Crazy 8s.", "nl": "Leg een 2 af in Crazy 8s.", "pt-BR": "Descarte um 2 em Crazy 8s.", "ru": "Сбросьте двойку в Crazy 8s.",
+        "sv": "Lägg av en 2:a i Crazy 8s.", "tr": "Crazy 8s'te bir 2 atın.", "vi": "Đánh ra một lá 2 trong Crazy 8s.", "zh-Hans": "在疯狂8中打出一张2。", "zh-Hant": "在瘋狂8中打出一張2。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You played a 2 and made someone draw!",
+        "da": "Du spillede et 2'er og fik nogen til at trække kort!", "de": "Du hast eine 2 gespielt und jemanden zum Ziehen gezwungen!", "es": "¡Jugaste un 2 e hiciste que alguien robara cartas!", "fr": "Vous avez joué un 2 et forcé quelqu'un à piocher !", "hi": "आपने एक 2 खेला और किसी को पत्ते उठाने पर मजबूर किया!", "it": "Hai giocato un 2 e fatto pescare qualcuno!",
+        "ja": "2を出して相手にカードを引かせました！", "ko": "2를 내서 상대가 카드를 뽑게 했습니다!", "nb": "Du spilte en 2-er og tvang noen til å trekke kort!", "nl": "Je speelde een 2 en liet iemand kaarten pakken!", "pt-BR": "Você jogou um 2 e fez alguém comprar cartas!", "ru": "Вы сыграли двойку и заставили кого-то взять карты!",
+        "sv": "Du spelade en 2:a och tvingade någon att dra kort!", "tr": "Bir 2 oynayıp birine kart çektirdiniz!", "vi": "Bạn đã đánh lá 2 và bắt người khác bốc bài!", "zh-Hans": "你打出一张2，让别人摸牌！", "zh-Hant": "你打出一張2，讓別人摸牌！"
+      }
+    },
+    "deckedout.crazy8s.queen": {
+      "_default_image": "achievement_images/first_queen.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Crazy 8s achievement for discarding a queen — skips the next player's turn.",
+        "en": "Royal Rejection",
+        "da": "Kongelig Afvisning", "de": "Königliche Abfuhr", "es": "Rechazo Real", "fr": "Refus Royal", "hi": "शाही इनकार", "it": "Rifiuto Reale",
+        "ja": "クイーンの拒絶", "ko": "여왕의 거절", "nb": "Kongelig Avvisning", "nl": "Koninklijke Afwijzing", "pt-BR": "Rejeição Real", "ru": "Королевский Отказ",
+        "sv": "Kunglig Avvisning", "tr": "Kraliyet Reddi", "vi": "Lời Khước Từ Hoàng Gia", "zh-Hans": "皇室拒绝", "zh-Hant": "皇室拒絕"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Discard a queen in Crazy 8s.",
+        "da": "Smid en dame i Crazy 8s.", "de": "Lege in Crazy 8s eine Dame ab.", "es": "Descarta una reina en Crazy 8s.", "fr": "Défaussez une dame dans Crazy 8s.", "hi": "क्रेज़ी 8s में एक क्वीन फेंकें।", "it": "Scarta una regina in Crazy 8s.",
+        "ja": "クレイジーエイトでクイーンを捨てましょう。", "ko": "크레이지 8s에서 퀸을 버리세요.", "nb": "Kast en dame i Crazy 8s.", "nl": "Leg een vrouw af in Crazy 8s.", "pt-BR": "Descarte uma dama em Crazy 8s.", "ru": "Сбросьте даму в Crazy 8s.",
+        "sv": "Lägg av en dam i Crazy 8s.", "tr": "Crazy 8s'te bir kız atın.", "vi": "Đánh ra một lá Q (đầm) trong Crazy 8s.", "zh-Hans": "在疯狂8中打出一张Q。", "zh-Hant": "在瘋狂8中打出一張Q。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You played a queen and skipped a turn!",
+        "da": "Du spillede en dame og sprang en tur over!", "de": "Du hast eine Dame gespielt und einen Zug übersprungen!", "es": "¡Jugaste una reina y saltaste un turno!", "fr": "Vous avez joué une dame et sauté un tour !", "hi": "आपने एक क्वीन खेली और एक बारी छोड़ दी!", "it": "Hai giocato una regina e saltato un turno!",
+        "ja": "クイーンを出して相手のターンを飛ばしました！", "ko": "퀸을 내서 차례를 건너뛰게 했습니다!", "nb": "Du spilte en dame og hoppet over en tur!", "nl": "Je speelde een vrouw en sloeg een beurt over!", "pt-BR": "Você jogou uma dama e pulou um turno!", "ru": "Вы сыграли даму и пропустили ход соперника!",
+        "sv": "Du spelade en dam och hoppade över en tur!", "tr": "Bir kız oynayıp bir sırayı atlattınız!", "vi": "Bạn đã đánh lá đầm và bỏ qua một lượt!", "zh-Hans": "你打出一张Q，跳过了一个回合！", "zh-Hant": "你打出一張Q，跳過了一個回合！"
+      }
+    },
+    "deckedout.crazy8s.ace": {
+      "_default_image": "achievement_images/first_ace.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Crazy 8s achievement for discarding an ace in a group chat game — reverses the turn order.",
+        "en": "Plot Twist",
+        "da": "Plottwist", "de": "Plot-Twist", "es": "Giro Inesperado", "fr": "Coup de Théâtre", "hi": "अप्रत्याशित मोड़", "it": "Colpo di Scena",
+        "ja": "どんでん返し", "ko": "반전", "nb": "Plottvist", "nl": "Plotwending", "pt-BR": "Reviravolta", "ru": "Неожиданный Поворот",
+        "sv": "Oväntad Vändning", "tr": "Beklenmedik Dönüş", "vi": "Cú Lật Kèo", "zh-Hans": "剧情反转", "zh-Hant": "劇情反轉"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Discard an ace in a group chat game of Crazy 8s to reverse the turn order.",
+        "da": "Smid et es i et gruppechat-spil Crazy 8s for at vende rækkefølgen.", "de": "Lege in einem Gruppenchat-Spiel Crazy 8s ein Ass ab, um die Zugreihenfolge umzukehren.", "es": "Descarta un as en una partida de Crazy 8s en chat grupal para invertir el orden de los turnos.", "fr": "Défaussez un as dans une partie de Crazy 8s en discussion de groupe pour inverser l'ordre des tours.", "hi": "टर्न का क्रम उलटने के लिए ग्रुप चैट के क्रेज़ी 8s गेम में एक इक्का फेंकें।", "it": "Scarta un asso in una partita di Crazy 8s in chat di gruppo per invertire l'ordine dei turni.",
+        "ja": "グループチャットのクレイジーエイトでエースを捨てて手番の順序を逆にしましょう。", "ko": "그룹 채팅 크레이지 8s 게임에서 에이스를 버려 차례 순서를 뒤집으세요.", "nb": "Kast et ess i et gruppechat-spill Crazy 8s for å snu rekkefølgen.", "nl": "Leg een aas af in een groepschat-spel Crazy 8s om de beurtvolgorde om te keren.", "pt-BR": "Descarte um ás em uma partida de Crazy 8s em conversa em grupo para inverter a ordem dos turnos.", "ru": "Сбросьте туза в групповом чате Crazy 8s, чтобы изменить порядок ходов.",
+        "sv": "Lägg av ett ess i ett gruppchatt-parti Crazy 8s för att vända turordningen.", "tr": "Sıra düzenini tersine çevirmek için grup sohbetindeki bir Crazy 8s oyununda bir as atın.", "vi": "Đánh ra một lá Át trong ván Crazy 8s ở nhóm chat để đảo ngược thứ tự lượt.", "zh-Hans": "在群聊的疯狂8游戏中打出一张A以反转出牌顺序。", "zh-Hant": "在群聊的瘋狂8遊戲中打出一張A以反轉出牌順序。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You played an ace and flipped the table around!",
+        "da": "Du spillede et es og vendte bordet på hovedet!", "de": "Du hast ein Ass gespielt und den Spieß umgedreht!", "es": "¡Jugaste un as y le diste la vuelta a la mesa!", "fr": "Vous avez joué un as et renversé la table !", "hi": "आपने एक इक्का खेला और पूरा खेल पलट दिया!", "it": "Hai giocato un asso e ribaltato il tavolo!",
+        "ja": "エースを出して場をひっくり返しました！", "ko": "에이스를 내서 판을 뒤집었습니다!", "nb": "Du spilte et ess og snudde bordet på hodet!", "nl": "Je speelde een aas en draaide de tafel om!", "pt-BR": "Você jogou um ás e virou a mesa!", "ru": "Вы сыграли туза и перевернули игру!",
+        "sv": "Du spelade ett ess och vände på hela bordet!", "tr": "Bir as oynayıp masayı tersine çevirdiniz!", "vi": "Bạn đã đánh lá Át và lật ngược cả bàn chơi!", "zh-Hans": "你打出一张A，扭转了整个牌局！", "zh-Hant": "你打出一張A，扭轉了整個牌局！"
+      }
+    },
+    "deckedout.crazy8s.master": {
+      "_default_image": "achievement_images/master_8.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Marks a skillful Crazy 8s win — emptying your hand on exactly your eighth turn.",
+        "en": "Eight Is Enough",
+        "da": "Otte Er Nok", "de": "Acht Genügt", "es": "Ocho Bastan", "fr": "Huit Suffisent", "hi": "आठ ही काफी", "it": "Otto Bastano",
+        "ja": "8回で十分", "ko": "여덟이면 충분", "nb": "Åtte Er Nok", "nl": "Acht Is Genoeg", "pt-BR": "Oito Bastam", "ru": "Восьми Достаточно",
+        "sv": "Åtta Räcker", "tr": "Sekiz Yeter", "vi": "Tám Là Đủ", "zh-Hans": "八次足矣", "zh-Hant": "八次足矣"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Win a game of Crazy 8s on exactly your eighth turn.",
+        "da": "Vind et spil Crazy 8s på præcis din ottende tur.", "de": "Gewinne ein Spiel Crazy 8s in genau deinem achten Zug.", "es": "Gana una partida de Crazy 8s exactamente en tu octavo turno.", "fr": "Gagnez une partie de Crazy 8s exactement à votre huitième tour.", "hi": "ठीक अपनी आठवीं बारी पर क्रेज़ी 8s का एक गेम जीतें।", "it": "Vinci una partita di Crazy 8s esattamente al tuo ottavo turno.",
+        "ja": "ちょうど8回目の手番でクレイジーエイトに勝利しましょう。", "ko": "정확히 여덟 번째 차례에 크레이지 8s 게임을 승리하세요.", "nb": "Vinn et spill Crazy 8s på nøyaktig din åttende tur.", "nl": "Win een spelletje Crazy 8s op precies je achtste beurt.", "pt-BR": "Vença uma partida de Crazy 8s exatamente no seu oitavo turno.", "ru": "Выиграйте партию в Crazy 8s ровно на восьмом ходу.",
+        "sv": "Vinn ett parti Crazy 8s på exakt din åttonde tur.", "tr": "Tam olarak sekizinci sıranızda bir Crazy 8s oyunu kazanın.", "vi": "Thắng một ván Crazy 8s đúng vào lượt thứ tám của bạn.", "zh-Hans": "在恰好第八个回合赢得一局疯狂8。", "zh-Hant": "在恰好第八個回合贏得一局瘋狂8。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You won Crazy 8s in exactly eight turns!",
+        "da": "Du vandt Crazy 8s på præcis otte ture!", "de": "Du hast Crazy 8s in genau acht Zügen gewonnen!", "es": "¡Ganaste Crazy 8s en exactamente ocho turnos!", "fr": "Vous avez gagné Crazy 8s en exactement huit tours !", "hi": "आपने ठीक आठ बारियों में क्रेज़ी 8s जीता!", "it": "Hai vinto a Crazy 8s in esattamente otto turni!",
+        "ja": "ちょうど8回の手番でクレイジーエイトに勝利しました！", "ko": "정확히 여덟 번의 차례 만에 크레이지 8s에서 승리했습니다!", "nb": "Du vant Crazy 8s på nøyaktig åtte turer!", "nl": "Je won Crazy 8s in precies acht beurten!", "pt-BR": "Você venceu Crazy 8s em exatamente oito turnos!", "ru": "Вы выиграли Crazy 8s ровно за восемь ходов!",
+        "sv": "Du vann Crazy 8s på exakt åtta turer!", "tr": "Crazy 8s'i tam olarak sekiz sırada kazandınız!", "vi": "Bạn đã thắng Crazy 8s đúng trong tám lượt!", "zh-Hans": "你恰好用八个回合赢得了疯狂8！", "zh-Hant": "你恰好用八個回合贏得了瘋狂8！"
+      }
+    },
+    "deckedout.golf.score0": {
+      "_default_image": "achievement_images/golf_0_points.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Golf achievement for winning with a perfect final score of 0 — the lowest possible.",
+        "en": "Hole in One",
+        "da": "Hole in One", "de": "Hole-in-One", "es": "Hoyo en Uno", "fr": "Trou en Un", "hi": "होल इन वन", "it": "Buca in Uno",
+        "ja": "ホールインワン", "ko": "홀인원", "nb": "Hole in One", "nl": "Hole-in-one", "pt-BR": "Hole in One", "ru": "Хоул-ин-уан",
+        "sv": "Hole in One", "tr": "Hole in One", "vi": "Hole in One", "zh-Hans": "一杆进洞", "zh-Hant": "一桿進洞"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Win a game of Golf with a final score of 0.",
+        "da": "Vind et spil Golf med en slutscore på 0.", "de": "Gewinne ein Spiel Golf mit einem Endstand von 0.", "es": "Gana una partida de Golf con una puntuación final de 0.", "fr": "Gagnez une partie de Golf avec un score final de 0.", "hi": "0 के अंतिम स्कोर के साथ गोल्फ का एक गेम जीतें।", "it": "Vinci una partita di Golf con un punteggio finale di 0.",
+        "ja": "最終スコア0でゴルフに勝利しましょう。", "ko": "최종 점수 0점으로 골프 게임을 승리하세요.", "nb": "Vinn et spill Golf med en sluttscore på 0.", "nl": "Win een spelletje Golf met een eindscore van 0.", "pt-BR": "Vença uma partida de Golf com pontuação final de 0.", "ru": "Выиграйте партию в гольф с итоговым счётом 0.",
+        "sv": "Vinn ett parti Golf med slutpoängen 0.", "tr": "Golf oyununu 0 puanla bitirip kazanın.", "vi": "Thắng một ván Golf với điểm số cuối cùng là 0.", "zh-Hans": "以最终得分0赢得一局高尔夫。", "zh-Hant": "以最終得分0贏得一局高爾夫。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You won Golf with a flawless score of 0!",
+        "da": "Du vandt Golf med en fejlfri score på 0!", "de": "Du hast Golf mit einem makellosen Ergebnis von 0 gewonnen!", "es": "¡Ganaste el Golf con una puntuación impecable de 0!", "fr": "Vous avez gagné le Golf avec un score parfait de 0 !", "hi": "आपने 0 के बेदाग स्कोर के साथ गोल्फ जीता!", "it": "Hai vinto a Golf con un punteggio impeccabile di 0!",
+        "ja": "完璧なスコア0でゴルフに勝利しました！", "ko": "완벽한 0점으로 골프에서 승리했습니다!", "nb": "Du vant Golf med en feilfri score på 0!", "nl": "Je won Golf met een vlekkeloze score van 0!", "pt-BR": "Você venceu o Golf com uma pontuação impecável de 0!", "ru": "Вы выиграли гольф с безупречным счётом 0!",
+        "sv": "Du vann Golf med felfria 0 poäng!", "tr": "Golf'ü kusursuz 0 puanla kazandınız!", "vi": "Bạn đã thắng Golf với điểm số hoàn hảo là 0!", "zh-Hans": "你以完美的0分赢得了高尔夫！", "zh-Hant": "你以完美的0分贏得了高爾夫！"
+      }
+    },
+    "deckedout.golf.master": {
+      "_default_image": "achievement_images/master_golf.png",
+      "title": {
+        "_max_chars": 30,
+        "_tone": "Punchy, ideally clever. Marks the rarest Golf win — emptying the round holding only royal cards (jacks, queens, kings). Slightly baffling, 'how is that even possible?' energy.",
+        "en": "Holding Court",
+        "da": "Hofholdning", "de": "Hofhaltung", "es": "Corte Real", "fr": "Tenir Cour", "hi": "शाही दरबार", "it": "Tenere Corte",
+        "ja": "宮廷の支配者", "ko": "궁정의 지배자", "nb": "Holde Hoff", "nl": "Hof Houden", "pt-BR": "Segurando a Corte", "ru": "Королевский Двор",
+        "sv": "Hålla Hov", "tr": "Saray Düzeni", "vi": "Triều Đình Trong Tay", "zh-Hans": "满手王牌", "zh-Hant": "滿手王牌"
+      },
+      "before_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Tells the player what they need to do. Imperative.",
+        "en": "Win a game of Golf with a hand of only royal cards — jacks, queens, and kings.",
+        "da": "Vind et spil Golf med en hånd bestående udelukkende af billedkort — knægte, damer og konger.", "de": "Gewinne ein Spiel Golf mit einem Blatt aus ausschließlich Bildkarten — Buben, Damen und Königen.", "es": "Gana una partida de Golf con una mano de solo figuras: jotas, reinas y reyes.", "fr": "Gagnez une partie de Golf avec une main composée uniquement de figures — valets, dames et rois.", "hi": "केवल शाही पत्तों — गुलाम, क्वीन और बादशाह — के हाथ के साथ गोल्फ का एक गेम जीतें।", "it": "Vinci una partita di Golf con una mano di sole figure — fanti, regine e re.",
+        "ja": "絵札（ジャック、クイーン、キング）だけの手札でゴルフに勝利しましょう。", "ko": "그림 카드(잭, 퀸, 킹)만으로 이루어진 패로 골프 게임을 승리하세요.", "nb": "Vinn et spill Golf med en hånd bestående kun av billedkort — knekter, damer og konger.", "nl": "Win een spelletje Golf met een hand van alleen plaatjeskaarten — boeren, vrouwen en heren.", "pt-BR": "Vença uma partida de Golf com uma mão só de figuras — valetes, damas e reis.", "ru": "Выиграйте партию в гольф с рукой только из фигурных карт — валетов, дам и королей.",
+        "sv": "Vinn ett parti Golf med en hand som bara består av klädda kort — knektar, damer och kungar.", "tr": "Yalnızca taşlı kartlardan — valeler, kızlar ve papazlar — oluşan bir elle Golf oyunu kazanın.", "vi": "Thắng một ván Golf với bộ bài chỉ toàn lá hình — J, Q và K.", "zh-Hans": "以一手全是花牌（J、Q、K）赢得一局高尔夫。", "zh-Hant": "以一手全是花牌（J、Q、K）贏得一局高爾夫。"
+      },
+      "after_earned_description": {
+        "_max_chars": 256,
+        "_tone": "Celebrates the player's accomplishment. Past tense.",
+        "en": "You won Golf holding nothing but royals.",
+        "da": "Du vandt Golf med intet andet end billedkort på hånden.", "de": "Du hast Golf mit nichts als Bildkarten auf der Hand gewonnen.", "es": "Ganaste el Golf sin nada más que figuras en la mano.", "fr": "Vous avez gagné le Golf avec rien d'autre que des figures en main.", "hi": "आपने हाथ में सिर्फ शाही पत्तों के साथ गोल्फ जीता।", "it": "Hai vinto a Golf con in mano solo figure.",
+        "ja": "絵札だけを手にゴルフに勝利しました。", "ko": "그림 카드만 손에 쥔 채 골프에서 승리했습니다.", "nb": "Du vant Golf med ikke noe annet enn billedkort på hånden.", "nl": "Je won Golf met niets dan plaatjeskaarten in je hand.", "pt-BR": "Você venceu o Golf segurando apenas figuras.", "ru": "Вы выиграли гольф, держа в руке одни лишь фигурные карты.",
+        "sv": "Du vann Golf med inget annat än klädda kort på hand.", "tr": "Golf'ü elinizde yalnızca taşlı kartlarla kazandınız.", "vi": "Bạn đã thắng Golf khi trên tay chỉ toàn lá hình.", "zh-Hans": "你满手只剩花牌赢得了高尔夫。", "zh-Hant": "你滿手只剩花牌贏得了高爾夫。"
       }
     },
     "deckedout.wins.total.1": {
@@ -144,25 +360,25 @@
         "_max_chars": 30,
         "_tone": "Punchy. Marks the player's very first win across any game.",
         "en": "First Blood",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Første Blod", "de": "Erstes Blut", "es": "Primera Sangre", "fr": "Premier Sang", "hi": "पहला ख़ून", "it": "Primo Sangue",
+        "ja": "ファーストブラッド", "ko": "퍼스트 블러드", "nb": "Første Blod", "nl": "Eerste Bloed", "pt-BR": "Primeiro Sangue", "ru": "Первая Кровь",
+        "sv": "Första Blodet", "tr": "İlk Kan", "vi": "Máu Đầu Tiên", "zh-Hans": "首杀", "zh-Hant": "首殺"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do.",
         "en": "Win a game for the first time.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind et spil for første gang.", "de": "Gewinne zum ersten Mal ein Spiel.", "es": "Gana una partida por primera vez.", "fr": "Gagnez une partie pour la première fois.", "hi": "पहली बार कोई गेम जीतें।", "it": "Vinci una partita per la prima volta.",
+        "ja": "初めてゲームに勝利しましょう。", "ko": "처음으로 게임을 승리하세요.", "nb": "Vinn et spill for første gang.", "nl": "Win voor het eerst een spel.", "pt-BR": "Vença uma partida pela primeira vez.", "ru": "Выиграйте игру впервые.",
+        "sv": "Vinn ett spel för första gången.", "tr": "İlk kez bir oyun kazanın.", "vi": "Thắng một ván đấu lần đầu tiên.", "zh-Hans": "首次赢得一局游戏。", "zh-Hant": "首次贏得一局遊戲。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment.",
         "en": "You won your first game!",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt dit første spil!", "de": "Du hast dein erstes Spiel gewonnen!", "es": "¡Ganaste tu primera partida!", "fr": "Vous avez gagné votre première partie !", "hi": "आपने अपना पहला गेम जीत लिया!", "it": "Hai vinto la tua prima partita!",
+        "ja": "初めてのゲームに勝利しました！", "ko": "첫 게임을 승리했습니다!", "nb": "Du vant ditt første spill!", "nl": "Je hebt je eerste spel gewonnen!", "pt-BR": "Você venceu sua primeira partida!", "ru": "Вы выиграли свою первую игру!",
+        "sv": "Du vann ditt första spel!", "tr": "İlk oyununuzu kazandınız!", "vi": "Bạn đã thắng ván đầu tiên!", "zh-Hans": "你赢得了第一局游戏！", "zh-Hant": "你贏得了第一局遊戲！"
       }
     },
     "deckedout.wins.total.2": {
@@ -171,25 +387,25 @@
         "_max_chars": 30,
         "_tone": "Punchy. Marks the player's second win — they're getting the hang of it.",
         "en": "Doubling Down",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Fordobling", "de": "Verdoppeln", "es": "Doblar la Apuesta", "fr": "Doubler la Mise", "hi": "दांव दोगुना", "it": "Raddoppio",
+        "ja": "ダブルダウン", "ko": "더블 다운", "nb": "Doble Innsatsen", "nl": "Verdubbelen", "pt-BR": "Dobrando a Aposta", "ru": "Удвоение Ставки",
+        "sv": "Dubbla Insatsen", "tr": "İkiye Katlama", "vi": "Gấp Đôi", "zh-Hans": "加倍下注", "zh-Hant": "加倍下注"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do.",
         "en": "Win 2 games total.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind 2 spil i alt.", "de": "Gewinne insgesamt 2 Spiele.", "es": "Gana 2 partidas en total.", "fr": "Gagnez 2 parties au total.", "hi": "कुल 2 गेम जीतें।", "it": "Vinci 2 partite in totale.",
+        "ja": "通算2勝しましょう。", "ko": "총 2게임을 승리하세요.", "nb": "Vinn 2 spill totalt.", "nl": "Win in totaal 2 spellen.", "pt-BR": "Vença 2 partidas no total.", "ru": "Выиграйте 2 игры в общей сложности.",
+        "sv": "Vinn 2 spel totalt.", "tr": "Toplam 2 oyun kazanın.", "vi": "Thắng tổng cộng 2 ván.", "zh-Hans": "累计赢得2局游戏。", "zh-Hant": "累計贏得2局遊戲。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment.",
         "en": "You won 2 games!",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt 2 spil!", "de": "Du hast 2 Spiele gewonnen!", "es": "¡Ganaste 2 partidas!", "fr": "Vous avez gagné 2 parties !", "hi": "आपने 2 गेम जीते!", "it": "Hai vinto 2 partite!",
+        "ja": "2勝しました！", "ko": "2게임을 승리했습니다!", "nb": "Du vant 2 spill!", "nl": "Je hebt 2 spellen gewonnen!", "pt-BR": "Você venceu 2 partidas!", "ru": "Вы выиграли 2 игры!",
+        "sv": "Du vann 2 spel!", "tr": "2 oyun kazandınız!", "vi": "Bạn đã thắng 2 ván!", "zh-Hans": "你赢得了2局游戏！", "zh-Hant": "你贏得了2局遊戲！"
       }
     },
     "deckedout.wins.total.10": {
@@ -198,25 +414,25 @@
         "_max_chars": 30,
         "_tone": "Punchy. Marks 10 total wins — a respectable milestone.",
         "en": "Ten Out of Ten",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Ti Ud Af Ti", "de": "Zehn von Zehn", "es": "Diez de Diez", "fr": "Dix sur Dix", "hi": "दस में से दस", "it": "Dieci e Lode",
+        "ja": "十点満点", "ko": "십점 만점", "nb": "Ti Av Ti", "nl": "Tien uit Tien", "pt-BR": "Dez de Dez", "ru": "Десять из Десяти",
+        "sv": "Tio av Tio", "tr": "Onda On", "vi": "Mười Trên Mười", "zh-Hans": "满分十分", "zh-Hant": "滿分十分"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do.",
         "en": "Win 10 games total.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind 10 spil i alt.", "de": "Gewinne insgesamt 10 Spiele.", "es": "Gana 10 partidas en total.", "fr": "Gagnez 10 parties au total.", "hi": "कुल 10 गेम जीतें।", "it": "Vinci 10 partite in totale.",
+        "ja": "通算10勝しましょう。", "ko": "총 10게임을 승리하세요.", "nb": "Vinn 10 spill totalt.", "nl": "Win in totaal 10 spellen.", "pt-BR": "Vença 10 partidas no total.", "ru": "Выиграйте 10 игр в общей сложности.",
+        "sv": "Vinn 10 spel totalt.", "tr": "Toplam 10 oyun kazanın.", "vi": "Thắng tổng cộng 10 ván.", "zh-Hans": "累计赢得10局游戏。", "zh-Hant": "累計贏得10局遊戲。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment.",
         "en": "You won 10 games!",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt 10 spil!", "de": "Du hast 10 Spiele gewonnen!", "es": "¡Ganaste 10 partidas!", "fr": "Vous avez gagné 10 parties !", "hi": "आपने 10 गेम जीते!", "it": "Hai vinto 10 partite!",
+        "ja": "10勝しました！", "ko": "10게임을 승리했습니다!", "nb": "Du vant 10 spill!", "nl": "Je hebt 10 spellen gewonnen!", "pt-BR": "Você venceu 10 partidas!", "ru": "Вы выиграли 10 игр!",
+        "sv": "Du vann 10 spel!", "tr": "10 oyun kazandınız!", "vi": "Bạn đã thắng 10 ván!", "zh-Hans": "你赢得了10局游戏！", "zh-Hant": "你贏得了10局遊戲！"
       }
     },
     "deckedout.wins.total.20": {
@@ -225,25 +441,25 @@
         "_max_chars": 30,
         "_tone": "Punchy. Marks 20 total wins.",
         "en": "Card Shark",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Korthaj", "de": "Kartenhai", "es": "Tiburón de las Cartas", "fr": "Requin des Cartes", "hi": "कार्ड शार्क", "it": "Squalo delle Carte",
+        "ja": "カードの達人", "ko": "카드의 달인", "nb": "Korthai", "nl": "Kaarthaai", "pt-BR": "Tubarão das Cartas", "ru": "Карточный Ас",
+        "sv": "Korthaj", "tr": "Kart Ustası", "vi": "Cao Thủ Bài", "zh-Hans": "纸牌高手", "zh-Hant": "紙牌高手"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do.",
         "en": "Win 20 games total.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind 20 spil i alt.", "de": "Gewinne insgesamt 20 Spiele.", "es": "Gana 20 partidas en total.", "fr": "Gagnez 20 parties au total.", "hi": "कुल 20 गेम जीतें।", "it": "Vinci 20 partite in totale.",
+        "ja": "通算20勝しましょう。", "ko": "총 20게임을 승리하세요.", "nb": "Vinn 20 spill totalt.", "nl": "Win in totaal 20 spellen.", "pt-BR": "Vença 20 partidas no total.", "ru": "Выиграйте 20 игр в общей сложности.",
+        "sv": "Vinn 20 spel totalt.", "tr": "Toplam 20 oyun kazanın.", "vi": "Thắng tổng cộng 20 ván.", "zh-Hans": "累计赢得20局游戏。", "zh-Hant": "累計贏得20局遊戲。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment.",
         "en": "You won 20 games!",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt 20 spil!", "de": "Du hast 20 Spiele gewonnen!", "es": "¡Ganaste 20 partidas!", "fr": "Vous avez gagné 20 parties !", "hi": "आपने 20 गेम जीते!", "it": "Hai vinto 20 partite!",
+        "ja": "20勝しました！", "ko": "20게임을 승리했습니다!", "nb": "Du vant 20 spill!", "nl": "Je hebt 20 spellen gewonnen!", "pt-BR": "Você venceu 20 partidas!", "ru": "Вы выиграли 20 игр!",
+        "sv": "Du vann 20 spel!", "tr": "20 oyun kazandınız!", "vi": "Bạn đã thắng 20 ván!", "zh-Hans": "你赢得了20局游戏！", "zh-Hant": "你贏得了20局遊戲！"
       }
     },
     "deckedout.wins.total.100": {
@@ -252,25 +468,25 @@
         "_max_chars": 30,
         "_tone": "Punchy. Marks 100 total wins — a major milestone, slightly grand.",
         "en": "Decked Out",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Decked Out", "de": "Decked Out", "es": "Decked Out", "fr": "Decked Out", "hi": "Decked Out", "it": "Decked Out",
+        "ja": "Decked Out", "ko": "Decked Out", "nb": "Decked Out", "nl": "Decked Out", "pt-BR": "Decked Out", "ru": "Decked Out",
+        "sv": "Decked Out", "tr": "Decked Out", "vi": "Decked Out", "zh-Hans": "Decked Out", "zh-Hant": "Decked Out"
       },
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do.",
         "en": "Win 100 games total.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Vind 100 spil i alt.", "de": "Gewinne insgesamt 100 Spiele.", "es": "Gana 100 partidas en total.", "fr": "Gagnez 100 parties au total.", "hi": "कुल 100 गेम जीतें।", "it": "Vinci 100 partite in totale.",
+        "ja": "通算100勝しましょう。", "ko": "총 100게임을 승리하세요.", "nb": "Vinn 100 spill totalt.", "nl": "Win in totaal 100 spellen.", "pt-BR": "Vença 100 partidas no total.", "ru": "Выиграйте 100 игр в общей сложности.",
+        "sv": "Vinn 100 spel totalt.", "tr": "Toplam 100 oyun kazanın.", "vi": "Thắng tổng cộng 100 ván.", "zh-Hans": "累计赢得100局游戏。", "zh-Hant": "累計贏得100局遊戲。"
       },
       "after_earned_description": {
         "_max_chars": 256,
         "_tone": "Celebrates the player's accomplishment.",
         "en": "You won 100 games. Legendary.",
-        "da": null, "de": null, "es": null, "fr": null, "hi": null, "it": null,
-        "ja": null, "ko": null, "nb": null, "nl": null, "pt-BR": null, "ru": null,
-        "sv": null, "tr": null, "vi": null, "zh-Hans": null, "zh-Hant": null
+        "da": "Du vandt 100 spil. Legendarisk.", "de": "Du hast 100 Spiele gewonnen. Legendär.", "es": "Ganaste 100 partidas. Legendario.", "fr": "Vous avez gagné 100 parties. Légendaire.", "hi": "आपने 100 गेम जीते। पौराणिक।", "it": "Hai vinto 100 partite. Leggendario.",
+        "ja": "100勝を達成。まさに伝説。", "ko": "100게임을 승리했습니다. 전설적입니다.", "nb": "Du vant 100 spill. Legendarisk.", "nl": "Je won 100 spellen. Legendarisch.", "pt-BR": "Você venceu 100 partidas. Lendário.", "ru": "Вы выиграли 100 игр. Легендарно.",
+        "sv": "Du vann 100 spel. Legendariskt.", "tr": "100 oyun kazandınız. Efsanevi.", "vi": "Bạn đã thắng 100 ván. Huyền thoại.", "zh-Hans": "你赢得了100局游戏。传奇。", "zh-Hant": "你贏得了100局遊戲。傳奇。"
       }
     }
   }

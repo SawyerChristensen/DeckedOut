@@ -249,42 +249,78 @@ def require_env(name: str) -> str:
 
 
 class ASCClient:
+    # App Store Connect caps token lifetime at 20 minutes. A full achievement
+    # upload (hundreds of localizations + image uploads) runs longer than that,
+    # so refresh the token well before it expires rather than minting it once.
+    TOKEN_TTL = 15 * 60  # seconds before we re-mint the JWT
+
     def __init__(self, dry_run: bool = False) -> None:
+        self.dry_run = dry_run
+        self.session = requests.Session()
+        self._refresh_token()
+
+    def _refresh_token(self) -> None:
         self.token = make_jwt()
+        self.token_minted_at = time.time()
         self.headers = {
             "Authorization": f"Bearer {self.token}",
             "Content-Type": "application/json",
         }
-        self.dry_run = dry_run
-        self.session = requests.Session()
+
+    def _ensure_fresh_token(self) -> None:
+        """Re-mint the JWT if it's close to App Store Connect's 20-minute limit."""
+        if time.time() - self.token_minted_at >= self.TOKEN_TTL:
+            self._refresh_token()
+
+    def _send(self, method: str, url: str, label: str, *, params: dict | None = None,
+              body: dict | None = None) -> requests.Response:
+        """Issue a request, retrying transient 5xx/429 responses with backoff.
+
+        App Store Connect intermittently returns 500 UNEXPECTED_ERROR and 429
+        rate-limit responses that succeed on retry. Anything else is fatal.
+        """
+        max_attempts = 5
+        for attempt in range(1, max_attempts + 1):
+            self._ensure_fresh_token()
+            r = self.session.request(method, url, headers=self.headers,
+                                     params=params, json=body, timeout=60)
+            if r.ok:
+                return r
+            if r.status_code in (429, 500, 502, 503, 504) and attempt < max_attempts:
+                wait = 2 ** attempt  # 2, 4, 8, 16s
+                print(f"    ⚠ {method} {label} -> {r.status_code}, retrying in {wait}s "
+                      f"(attempt {attempt}/{max_attempts - 1})")
+                time.sleep(wait)
+                continue
+            sys.exit(f"{method} {label} failed ({r.status_code}): {r.text}")
+        # unreachable
+        sys.exit(f"{method} {label} failed after {max_attempts} attempts")
 
     def get(self, url: str, params: dict | None = None) -> dict:
         if not url.startswith("http"):
             url = f"{ASC_BASE}/{url.lstrip('/')}"
-        r = self.session.get(url, headers=self.headers, params=params, timeout=30)
-        if not r.ok:
-            sys.exit(f"GET {url} failed ({r.status_code}): {r.text}")
-        return r.json()
+        return self._send("GET", url, url, params=params).json()
 
     def patch(self, path: str, body: dict) -> dict:
         url = f"{ASC_BASE}/{path.lstrip('/')}"
         if self.dry_run:
             print(f"    [dry-run] PATCH {path}")
             return {}
-        r = self.session.patch(url, headers=self.headers, json=body, timeout=30)
-        if not r.ok:
-            sys.exit(f"PATCH {path} failed ({r.status_code}): {r.text}")
-        return r.json()
+        return self._send("PATCH", url, path, body=body).json()
 
     def post(self, path: str, body: dict) -> dict:
         url = f"{ASC_BASE}/{path.lstrip('/')}"
         if self.dry_run:
             print(f"    [dry-run] POST {path}")
             return {"data": {"id": "dry-run-id"}}
-        r = self.session.post(url, headers=self.headers, json=body, timeout=30)
-        if not r.ok:
-            sys.exit(f"POST {path} failed ({r.status_code}): {r.text}")
-        return r.json()
+        return self._send("POST", url, path, body=body).json()
+
+    def delete(self, path: str) -> None:
+        url = f"{ASC_BASE}/{path.lstrip('/')}"
+        if self.dry_run:
+            print(f"    [dry-run] DELETE {path}")
+            return
+        self._send("DELETE", url, path)
 
 
 def find_app_id(client: ASCClient, bundle_id: str) -> str:
@@ -360,6 +396,10 @@ def upload_version_localizations(client: ASCClient, app_id: str, version_id: str
         for json_key, asc_attr in VERSION_ATTR_MAP.items():
             override = vloc[json_key].get(xcode_loc)
             if override:
+                # Skip if the live value is already identical — re-writing it is a
+                # no-op edit that can trigger an App Store search re-index.
+                if current_attrs.get(asc_loc, {}).get(asc_attr) == override:
+                    continue
                 attributes[asc_attr] = override
                 sources.append(f"{asc_attr}=metadata")
             elif json_key == "whats_new":
@@ -412,6 +452,23 @@ def resolve_image_path(image_field: str | None) -> Path | None:
     return path
 
 
+def _image_is_complete(img: dict) -> bool:
+    """True if a gameCenterAchievementImage finished uploading and processing.
+
+    A reserved-but-unfinished image (bytes PUT but the final 'uploaded' PATCH
+    never landed) reports uploaded=False / an incomplete assetDeliveryState and
+    has no rendered imageAsset. Treat anything not fully COMPLETE as incomplete
+    so the caller can replace it.
+    """
+    attrs = img.get("attributes", {})
+    if attrs.get("uploaded") is False:
+        return False
+    state = (attrs.get("assetDeliveryState") or {}).get("state")
+    if state and state != "COMPLETE":
+        return False
+    return True
+
+
 def upload_achievement_image(client: ASCClient, loc_id: str, image_path: Path) -> None:
     """Upload an image and attach it to a gameCenterAchievementLocalization."""
     if client.dry_run:
@@ -444,8 +501,15 @@ def upload_achievement_image(client: ASCClient, loc_id: str, image_path: Path) -
     for op in upload_operations:
         headers = {h["name"]: h["value"] for h in op["requestHeaders"]}
         chunk = image_bytes[op["offset"]:op["offset"] + op["length"]]
-        r = requests.put(op["url"], headers=headers, data=chunk, timeout=60)
-        if not r.ok:
+        for attempt in range(1, 5):
+            r = requests.put(op["url"], headers=headers, data=chunk, timeout=120)
+            if r.ok:
+                break
+            if r.status_code in (429, 500, 502, 503, 504) and attempt < 4:
+                wait = 2 ** attempt
+                print(f"    ⚠ image PUT -> {r.status_code}, retrying in {wait}s")
+                time.sleep(wait)
+                continue
             sys.exit(f"Image upload PUT failed ({r.status_code}): {r.text}")
 
     # 3. Mark as uploaded
@@ -506,6 +570,22 @@ def upload_achievements(client: ASCClient, app_id: str, metadata: dict) -> None:
                         "attributes": attributes,
                     }
                 })
+                # Self-heal: a localization created on a prior run may be missing
+                # its image, or have an image that was reserved but never finished
+                # uploading (e.g. the token expired before the final "uploaded"
+                # PATCH). Attach the default image if none is present; replace it
+                # if it's stuck in an incomplete state.
+                if image_path and not client.dry_run:
+                    img = client.get(
+                        f"gameCenterAchievementLocalizations/{loc_id}/gameCenterAchievementImage"
+                    ).get("data")
+                    if img and not _image_is_complete(img):
+                        print(f"  [{asc_loc}] image incomplete, replacing {image_path.name}")
+                        client.delete(f"gameCenterAchievementImages/{img['id']}")
+                        img = None
+                    if not img:
+                        print(f"  [{asc_loc}] no image present, uploading {image_path.name}")
+                        upload_achievement_image(client, loc_id, image_path)
             else:
                 if not image_path:
                     print(f"  [{asc_loc}] missing and no _default_image set for "

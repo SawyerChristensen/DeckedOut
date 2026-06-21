@@ -70,10 +70,8 @@ class MessagesViewController: MSMessagesAppViewController {
         }
 
         Task.detached(priority: .utility) { //authenticate Game Center on background thread
-            // The bundle-id override is installed synchronously in viewDidLoad,
-            // before this task runs, so GameKit always sees the parent app's id.
-            GameCenterManager.shared.authenticate()
-            GameCenterManager.shared.syncAchievementsWithWinCounts()
+            //GameCenterManager.shared.authenticate()
+            //GameCenterManager.shared.syncAchievementsWithWinCounts()
         }
     }
 
