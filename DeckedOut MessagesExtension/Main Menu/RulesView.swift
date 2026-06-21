@@ -128,9 +128,10 @@ struct RulesView: View {
                 (.custom("colored.rectangle.3.group"), "Melds", "Arrange your cards into sets (same rank) or runs (consecutive cards of the same suit) of 3 or more.")
             ]
             if showsGinKnockRules {
-                ginPages.append((.custom("hand.knocking.fill"), "Knocking", "In 1v1 10-card Gin, you can knock if discarding would leave you with 10 or less deadwood."))
-                ginPages.append((.custom("person.fill.checkmark.and.xmark.mono"), "Layoffs", "After a knock, your opponent may lay off deadwood onto your melds. If their deadwood ties or beats yours, they undercut and win.")) //could use symbol: sharedwithyou
-                ginPages.append((.system("crown.fill"), "How to Win", "Win by going Gin, or by knocking successfully before your opponent."))
+                //ginPages.append((.custom("hand.knocking.fill"), "Knocking", "In 1v1 Gin, you can knock if discarding would leave you with 10 or less deadwood. Your opponent may undercut you."))
+                //ginPages.append((.custom("person.fill.checkmark.and.xmark.mono"), "Layoffs", "After a knock, your opponent may lay off deadwood onto your melds. If their deadwood ties or beats yours, they undercut and win.")) //could use symbol: sharedwithyou
+                ginPages.append((.system("crown.fill"), "How to Win", "Once all your cards form valid melds, you win! You can also knock with 10 or less deadwood to end the round early. If you do, your opponent may undercut you."))
+                //ginPages.append((.custom("hand.knocking.fill"), "Knocking", "In 1v1 Gin, you can knock if discarding would leave you with 10 or less deadwood. Your opponent may undercut you."))
             } else {
                 ginPages.append((.system("crown.fill"), "How to Win", "Once all your cards form valid melds, you win! The fewer turns it takes, the better."))
             }

@@ -1874,112 +1874,6 @@
         }
       }
     },
-    "After a knock, your opponent may lay off deadwood onto your melds. If their deadwood ties or beats yours, they undercut and win." : {
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Efter en bank kan din modstander lægge overskydende kort til dine kombinationer. Hvis modstanderens overskydende kort er lige med eller færre end dine, vinder modstanderen ved underbud."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Nach dem Klopfen darf dein Gegner überschüssige Karten (Deadwood) an deine Kombinationen anlegen. Ist sein Deadwood gleich hoch wie deins oder niedriger, unterschneidet er dich und gewinnt."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Tras un golpe, tu oponente puede descargar su deadwood (cartas sueltas) en tus combinaciones. Si su deadwood iguala o supera al tuyo, hace un subcorte y gana."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Après un knock, votre adversaire peut ajouter ses cartes mortes (deadwood) à vos combinaisons. Si son deadwood égale ou dépasse le vôtre, il vous contre et gagne."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "नॉक के बाद, आपका प्रतिद्वंद्वी अपना डेडवुड (बची हुई कार्ड) आपके मेल्ड्स पर जोड़ सकता है। यदि उसका डेडवुड आपके बराबर या उससे कम है, तो वह अंडरकट करके जीत जाता है।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Dopo una bussata, l’avversario può scaricare le proprie carte morte (deadwood) sulle tue combinazioni. Se le sue carte morte pareggiano o superano le tue, fa un undercut e vince."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "ノックのあと、対戦相手は自分のデッドウッド（余り札）をこちらのメルズに付けることができます。相手のデッドウッドが同点か下回った場合は、アンダーカットで勝利します。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "노크 후, 상대방은 자신의 데드우드(짝이 없는 카드)를 당신의 조합에 붙일 수 있습니다. 상대방의 데드우드가 당신과 같거나 더 적으면, 언더컷으로 승리합니다."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Etter en banking kan motstanderen legge løse kort (deadwood) på kombinasjonene dine. Hvis motstanderens deadwood er likt eller lavere enn ditt, vinner motstanderen med en underkutt."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Na een klop mag je tegenstander overtollige kaarten (deadwood) aan jouw combinaties aanleggen. Als hun deadwood gelijk is aan of lager is dan dat van jou, maken ze een undercut en winnen ze."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Após uma batida, seu oponente pode anexar cartas soltas (deadwood) aos seus jogos. Se as cartas soltas dele empatarem ou superarem as suas, ele faz um undercut e vence."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "После стука соперник может подкладывать свой дедвуд (лишние карты) к вашим комбинациям. Если его дедвуд равен вашему или меньше, он делает андеркат и побеждает."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Efter en knackning får din motståndare lägga av lösa kort (deadwood) på dina kombinationer. Om motståndarens deadwood är lika med eller lägre än ditt vinner hen genom underskärning."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Kapı çalındıktan sonra rakibiniz, eşleşmeyen kartlarını (deadwood) sizin eşleşmelerinize ekleyebilir. Rakibin eşleşmeyen kartları sizinkiyle eşitse veya daha azsa, sizi alttan keser ve kazanır."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Sau khi gõ bài, đối thủ có thể ghép thêm bài thừa (deadwood) vào các bộ của bạn. Nếu số bài thừa của họ bằng hoặc ít hơn của bạn, họ sẽ phản đòn và giành chiến thắng."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "敲牌后，对手可将自己的废牌（未组合的牌）搭到你的牌组上。如果对手的废牌与你相同或比你更少，便能反敲获胜。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "敲牌之後，對手可將自己的廢牌（未組合的牌）搭到你的組合上。若對手的廢牌與你相同或比你更少，便能反敲獲勝。"
-          }
-        }
-      }
-    },
     "Another player joined at the same time you did. Please try again." : {
       "comment" : "A message displayed when another player attempts to join a game at the same time the user is trying to join.",
       "isCommentAutoGenerated" : true,
@@ -10893,114 +10787,6 @@
         }
       }
     },
-    "In 1v1 10-card Gin, you can knock if discarding would leave you with 10 or less deadwood." : {
-      "comment" : "Text displayed in a notification when a user can knock in a 1v1 10-card Gin game.",
-      "isCommentAutoGenerated" : true,
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "I 1-mod-1 Gin med 10 kort kan du banke, hvis du efter at have lagt et kort ender med 10 eller færre point i overskydende kort."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Im 1-gegen-1-Gin mit 10 Karten kannst du klopfen, wenn dir nach dem Ablegen 10 oder weniger Deadwood-Punkte bleiben."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "En el Gin 1 contra 1 de 10 cartas, puedes golpear si al descartar te quedan 10 puntos o menos de deadwood (cartas sueltas)."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Au Gin 1 contre 1 à 10 cartes, vous pouvez frapper si, après votre défausse, il vous reste 10 points ou moins de cartes mortes (deadwood)."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "1 बनाम 1, 10-कार्ड जिन में, आप नॉक कर सकते हैं यदि कार्ड फेंकने के बाद आपके पास 10 या उससे कम डेडवुड (बची हुई कार्ड) बचे।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Nel Gin 1 contro 1 con 10 carte, puoi bussare se, scartando, ti rimangono 10 o meno punti morti (deadwood)."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "1対1の10枚ジンでは、カードを1枚捨てたあとにデッドウッド（余り札）が10点以下になる場合にノックできます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "1대1 10장 진에서는, 카드를 버린 후 데드우드(짝이 없는 카드)가 10점 이하로 남으면 노크할 수 있습니다."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "I 1-mot-1 Gin med 10 kort kan du banke hvis du etter å ha kastet et kort sitter igjen med 10 eller færre poeng i løse kort (deadwood)."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "In 1-tegen-1 Gin met 10 kaarten kun je kloppen als je na het wegleggen 10 of minder deadwood-punten (overtollige kaarten) overhoudt."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "No Gin 1 contra 1 com 10 cartas, você pode bater se, ao descartar, ficar com 10 ou menos pontos de cartas soltas (deadwood)."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "В Джине 1 на 1 с 10 картами вы можете постучать, если после сброса у вас останется 10 или меньше очков дедвуда (лишних карт)."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "I Gin 1 mot 1 med 10 kort kan du knacka om du efter att ha slängt ett kort har 10 eller färre poäng i lösa kort (deadwood)."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Birebir 10 kartlı Gin'de, bir kart attığınızda elinizde 10 veya daha az eşleşmeyen kart puanı (deadwood) kalacaksa kapı çalabilirsiniz."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Trong Gin 1 đấu 1 với 10 lá bài, bạn có thể gõ bài nếu sau khi bỏ một lá, số điểm bài thừa (deadwood) của bạn còn 10 hoặc ít hơn."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "在1对1的10张金拉米中，若弃牌后你的废牌（未组合的牌）剩下10点或更少，便可敲牌。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "在 1 對 1 的 10 張金拉米中，若棄牌後你的廢牌（未組合的牌）剩下 10 點或更少，便可敲牌。"
-          }
-        }
-      }
-    },
     "Jack" : {
       "comment" : "Card rank: Jack",
       "localizations" : {
@@ -12292,112 +12078,6 @@
         }
       }
     },
-    "Knocking" : {
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "At banke"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Klopfen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "El golpe"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Le knock"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "नॉक करना"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "La bussata"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "ノック"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "노크하기"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Banking"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Kloppen"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Bater"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Стук"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Knackning"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Kapı Çalma"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Gõ bài"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "敲牌"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "敲牌"
-          }
-        }
-      }
-    },
     "Koi" : {
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
@@ -12609,112 +12289,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "高爾夫紙牌最後一輪！"
-          }
-        }
-      }
-    },
-    "Layoffs" : {
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Tillæg"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Anlegen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Descargar cartas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Ajouts de cartes"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "कार्ड जोड़ना"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Scarico delle carte"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "レイオフ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "카드 붙이기"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Påleggskort"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Aanleggen"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Anexar Cartas"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Подкладывание карт"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Avläggning"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Kart Ekleme"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Ghép thêm bài"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "搭牌"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "搭牌"
           }
         }
       }
@@ -13889,6 +13463,114 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一旦您所有的牌都組成有效的組合，您就贏了！回合數越少越好。"
+          }
+        }
+      }
+    },
+    "Once all your cards form valid melds, you win! You can also knock with 10 or less deadwood to end the round early. If you do, your opponent may undercut you." : {
+      "comment" : "Text displayed in a notification when a user has won a round.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Når alle dine kort danner gyldige kombinationer, vinder du! Du kan også banke med 10 eller mindre deadwood for at afslutte runden tidligt. Hvis du gør det, kan din modstander give underbud."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sobald alle deine Karten gültige Kombinationen bilden, hast du gewonnen! Du kannst auch mit 10 oder weniger Strafpunkten klopfen, um die Runde vorzeitig zu beenden. Wenn du das tust, kann dein Gegner dich unterschneiden."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "¡Una vez que todas tus cartas formen combinaciones válidas, habrás ganado! También puedes golpear con 10 o menos puntos muertos para terminar la ronda antes. Si lo haces, tu oponente puede hacerte un subcorte."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Une fois que toutes vos cartes forment des combinaisons valides, vous gagnez ! Vous pouvez aussi faire un knock avec 10 points morts ou moins pour terminer la manche plus tôt. Si vous le faites, votre adversaire peut vous contrer."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "एक बार जब आपके सभी कार्ड मान्य मेल्ड्स बना लेते हैं, तो आप जीत जाते हैं! आप 10 या उससे कम डेडवुड के साथ नॉक करके राउंड को जल्दी समाप्त भी कर सकते हैं। अगर आप ऐसा करते हैं, तो आपका प्रतिद्वंद्वी आपको अंडरकट कर सकता है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Una volta che tutte le tue carte formano combinazioni valide, hai vinto! Puoi anche bussare con 10 o meno punti di deadwood per terminare la mano in anticipo. Se lo fai, il tuo avversario può farti un undercut."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すべてのカードで有効なメルズを構成できれば勝利です！また、デッドウッド（余り札の合計点）が10点以下のときにノックして、ラウンドを早めに終了することもできます。その場合、対戦相手にアンダーカットされることがあります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "모든 카드가 유효한 족보(메드)가 되면 승리합니다! 데드우드가 10점 이하일 때 노크하여 라운드를 일찍 끝낼 수도 있습니다. 그렇게 하면 상대방이 언더컷할 수 있습니다."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Når alle kortene dine danner gyldige kombinasjoner, vinner du! Du kan også banke med 10 eller mindre deadwood for å avslutte runden tidlig. Hvis du gjør det, kan motstanderen din underkutte deg."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zodra al je kaarten geldige combinaties vormen, heb je gewonnen! Je kunt ook kloppen met 10 of minder strafpunten om de ronde vroegtijdig te beëindigen. Als je dat doet, kan je tegenstander je undercutten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Assim que todas as suas cartas formarem jogos válidos, você vence! Você também pode bater com 10 ou menos de deadwood para encerrar a rodada mais cedo. Se fizer isso, seu oponente pode fazer um undercut em você."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Как только все ваши карты образуют верные комбинации, вы побеждаете! Вы также можете постучать, имея 10 или меньше очков дедвуда, чтобы завершить раунд досрочно. Если вы это сделаете, ваш соперник может сделать вам андеркат."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "När alla dina kort bildar giltiga kombinationer vinner du! Du kan också knacka med 10 eller mindre deadwood för att avsluta ronden tidigare. Om du gör det kan din motståndare skära under dig."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tüm kartlarınız geçerli eşleşmeler oluşturduğunda kazanırsınız! Ayrıca 10 veya daha az ölü puanla kapı çalarak turu erken bitirebilirsiniz. Bunu yaparsanız rakibiniz sizi alttan kesebilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Khi tất cả các lá bài của bạn tạo thành các bộ hợp lệ, bạn sẽ thắng! Bạn cũng có thể gõ bài khi còn 10 điểm bài thừa trở xuống để kết thúc ván sớm. Nếu làm vậy, đối thủ của bạn có thể phản đòn."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "一旦你所有的牌都组成了有效的牌组，你就赢啦！你也可以在余牌不超过10分时敲牌，提前结束本回合。如果你这么做，对手可能会反敲你。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "一旦您所有的牌都組成有效的組合，您就贏了！您也可以在死牌（剩餘牌的點數總和）為 10 點或更少時敲牌，以提早結束本回合。若您這麼做，對手有可能反敲您。"
           }
         }
       }
@@ -19597,114 +19279,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "贏一局"
-          }
-        }
-      }
-    },
-    "Win by going Gin, or by knocking successfully before your opponent." : {
-      "comment" : "Text displayed in a notification when a user has won by going Gin or by knocking successfully before their opponent.",
-      "isCommentAutoGenerated" : true,
-      "localizations" : {
-        "da" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Vind ved at melde Gin eller ved at banke med succes før din modstander."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Gewinne, indem du Gin machst oder erfolgreich klopfst, bevor dein Gegner es tut."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Gana haciendo Gin o golpeando con éxito antes que tu oponente."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Gagnez en faisant Gin ou en frappant avec succès avant votre adversaire."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "जिन बनाकर जीतें, या अपने प्रतिद्वंद्वी से पहले सफलतापूर्वक नॉक करके।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Vinci facendo Gin o bussando con successo prima dell’avversario."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "ジンを宣言するか、対戦相手より先にノックを成功させると勝利します。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "진을 선언하거나, 상대방보다 먼저 노크에 성공하여 승리하세요."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Vinn ved å gå Gin, eller ved å banke før motstanderen."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Win door Gin te gaan, of door succesvol te kloppen vóór je tegenstander."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Vença fazendo Gin ou batendo com sucesso antes do seu oponente."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Победите, объявив Джин, или успешно постучав раньше соперника."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Vinn genom att gå Gin eller genom att knacka före din motståndare."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Gin yaparak ya da rakibinden önce başarıyla kapı çalarak kazan."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Chiến thắng bằng cách hô Gin, hoặc gõ bài thành công trước đối thủ."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "凑成“金”，或抢在对手之前成功敲牌，即可获胜。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "宣告「金」獲勝，或搶在對手之前成功敲牌即可獲勝。"
           }
         }
       }

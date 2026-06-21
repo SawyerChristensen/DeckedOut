@@ -19,11 +19,6 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Make the main bundle report the parent app's id so GameKit can resolve
-        // our Game Center title from inside the extension. Must run synchronously
-        // and before any GameKit API is touched — installing this on a low-priority
-        // background task races GameKit's bundle-id capture and intermittently
-        // fails with GKError code 15. See MainBundleIdentifierOverride for caveats.
         //MainBundleIdentifierOverride.install()
         setupFeedbackSystems()
         updateAccessibilityModal(for: presentationStyle)
@@ -82,7 +77,11 @@ class MessagesViewController: MSMessagesAppViewController {
         guard let message = conversation.selectedMessage, // Do we have a message? Can we decode it?
             let gameInfo = extractGameInfo(from: message) else { //No message to decode, the user is opening the main menu
             if presentationStyle != .transcript && children.isEmpty {
-                presentMenuView(for: presentationStyle)
+                presentMenuView(for: presentationStyle, conversation: conversation)
+            } else if let menuViewModel = menuViewModel {
+                // The menu may have been presented during viewWillAppear before the conversation
+                // was available, baking in a stale is1v1. Correct it now that we have the conversation.
+                menuViewModel.is1v1 = isOneOnOneChat(conversation: conversation)
             }
             return
         }
@@ -333,8 +332,11 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
-    private func presentMenuView(for presentationStyle: MSMessagesAppPresentationStyle) {
-        let viewModel = MenuViewModel(presentationStyle: presentationStyle)
+    private func presentMenuView(for presentationStyle: MSMessagesAppPresentationStyle, conversation: MSConversation? = nil) {
+        // During willBecomeActive(with:) the conversation is only available as the passed-in
+        // parameter — self.activeConversation is still nil — so callers forward it explicitly.
+        let resolvedConversation = conversation ?? activeConversation
+        let viewModel = MenuViewModel(presentationStyle: presentationStyle, is1v1: isOneOnOneChat(conversation: resolvedConversation))
         self.menuViewModel = viewModel
 
         let menuView = MainMenuView(viewModel: viewModel) { [weak self] gameType, selectedSize in
@@ -625,6 +627,15 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
     
+    // A chat is "1v1" when there are at most two unique participants. This covers a normal
+    // one-on-one conversation (local + one remote) and texting yourself for testing (only the
+    // local participant). Three or more unique participants means a group chat. Mirrors the
+    // seat logic used to build game state in normalizedSeats(for:).
+    private func isOneOnOneChat(conversation: MSConversation?) -> Bool {
+        guard let conversation = conversation else { return true }
+        return normalizedSeats(for: conversation).count == 2
+    }
+
     private func normalizedSeats(for conversation: MSConversation) -> [UUID] {
         var uniqueSeats: [UUID] = []
         for participantID in [conversation.localParticipantIdentifier] + conversation.remoteParticipantIdentifiers {

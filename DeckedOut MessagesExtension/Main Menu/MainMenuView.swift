@@ -26,9 +26,16 @@ struct MainMenuView: View {
     @State private var hiddenAnimatedAwayCards = 0
     @State private var isPulsating = false //for the "state game" text
     @State private var isBubblePulsating = false //for the joker's reminder bubble
+    @State private var jokerIsRed = Bool.random() //50/50 red/black flip, re-rolled when the deck resets
     @State private var card7Image: String = "7Spades"
     @State private var card10Image: String = "10Clubs"
     let suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
+
+    /// Joker shown when the deck animates away. Matched to the equipped theme's fronts the same
+    /// way playing-card fronts are (e.g. `jokerRed` → `jokerRedEnchanted`), with a 50/50 red/black flip.
+    private var jokerCardName: String {
+        cardBackSelection.themedFrontName(for: jokerIsRed ? "jokerRed" : "jokerBlack")
+    }
     
     @State private var titleTransitionEdge: Edge = .trailing
     @State private var themeTitleTransitionEdge: Edge = .trailing
@@ -117,7 +124,7 @@ struct MainMenuView: View {
         .accessibilityHidden(showingRules)
         .overlay {
             if showingRules {
-                RulesView(gameType: availableGames[activeGameIndex].type, isExpanded: isExpanded) {
+                RulesView(gameType: availableGames[activeGameIndex].type, showsGinKnockRules: viewModel.is1v1, isExpanded: isExpanded) {
                     withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
                         showingRules = false
                     }
@@ -924,7 +931,7 @@ struct MainMenuView: View {
                         
                         ZStack {
                             if animationRank == 5 {
-                                Image("JokerCard")
+                                Image(jokerCardName)
                                     .resizable()
                                     .aspectRatio(0.7, contentMode: .fit)
                                     .frame(height: 145)
@@ -1005,6 +1012,7 @@ struct MainMenuView: View {
                 try? await Task.sleep(nanoseconds: UInt64(200_000_000.0 / speed))
                 cardsAnimatedAway = 0
                 hiddenAnimatedAwayCards = 0
+                jokerIsRed = Bool.random() //fresh red/black flip for the next reveal
                 golfAnimationOrder = [0, 1, 2, 3, 5].shuffled() + [4]
             }
         }) {
@@ -1029,7 +1037,7 @@ struct MainMenuView: View {
     
     private var deckSection: some View {
         ZStack {
-            Image("JokerCard")
+            Image(jokerCardName)
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
                 .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145)
@@ -1207,11 +1215,13 @@ struct MainMenuView: View {
 }
 
 // MARK: - Init & Helper structs/classes
-class MenuViewModel: ObservableObject { //only tracks presentation style
+class MenuViewModel: ObservableObject { //tracks presentation style and chat type
     @Published var presentationStyle: MSMessagesAppPresentationStyle
+    @Published var is1v1: Bool //true in a 1-on-1 chat (or when texting yourself for testing); false in a group chat
 
-    init(presentationStyle: MSMessagesAppPresentationStyle) {
+    init(presentationStyle: MSMessagesAppPresentationStyle, is1v1: Bool = true) {
         self.presentationStyle = presentationStyle
+        self.is1v1 = is1v1
     }
 }
 

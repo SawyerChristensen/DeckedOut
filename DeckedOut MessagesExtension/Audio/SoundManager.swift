@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES HAPTICS (seperate later?)
+nonisolated class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES HAPTICS (seperate later?)
     static let instance = SoundManager()
     
     // Background Music Playlist Config

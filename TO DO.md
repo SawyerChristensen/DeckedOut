@@ -6,24 +6,24 @@
 ### Update 3.5.2 - Enchantment Cards release
 - [x] Implement Enchantment card asset recognition
 - [x] Compress Enchantment cards
-- [x] Make sure knocking rules notice are always present in 1v1 Gin. See if main menu rules view has access to current chat size
-- [ ] Add National Flag card backs to backend
+- [x] Add enchanted joker and make joker paired to deck fronts, also add red/black jokers?
+- [x] Make sure knocking rules notice are always present in 1v1 Gin. Make the main menu aware of current chat size
+- [x] Add National Flag card backs to backend
 - [x] Enable 120hz in Info.plist
+- [ ] Get rid of jacks queens and kings explanation in golf win text (when 3.5.1 is released)
 - [ ] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
   - [ ] Figure out how to make GC work 100% of the time
   - [ ] Move assets if neccesary
 
 
 ### Update 3.5.3 - July 4 National Cards release
-- [ ] Adjust pricing in ASC after 3.5.2 goes live
+- [ ] Adjust pricing in ASC after 3.5.2 goes live (Enchantment cards released)
 - [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
 - [ ] Make national flag cards available in frontend
   - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
 
 ### Update 3.6.0 - Crazy 8s QOL
-- [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
-  - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
-- [ ] Add Mau Mau variant of Crazy 8s (Jack logo card)
+- [ ] Finalize Mau Mau variant of Crazy 8s (Jack logo card)
   - [ ] Already done? Verify it works?
   - [ ] Review stacking 7s, and if we should change the stacking 2s rule in normal Crazy 8s
 - [ ] Add Turkish variant of Crazy 8s (Jack? logo card)
@@ -32,7 +32,10 @@
 - [ ] Localize official full listing (relatively easy)
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   * *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
-- [ ] Organize and refactor project structure
+
+### Update 3.6.1
+- [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
+  - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
 
 
 ### Update 4.0.0: 4th Game Expansion
@@ -59,6 +62,7 @@
   - [ ] Roll out more localized storefronts *(Post max-conversion rate design confirmed)*
 - [ ] UI Polish
   - [ ] Create a unique, better win screen for each game
+- [ ] Organize and refactor project structure
 
 ---
 
@@ -144,6 +148,7 @@
 - [ ] Dynamic card sizing: Grow card frame constraints when system accessibility text scaling is active.
 
 ### UI & Aesthetics Polish
+- [ ] Rework themes menu to add a "Preview" button. (next to price?) (can push to later)
 - [ ] Adjust colors of default deck
 - [ ] Have the main menu submenus revealed instead of pulled up
 - [ ] Add a Game Center rocket shortcut button directly to the main menu view.
