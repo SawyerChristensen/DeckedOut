@@ -59,12 +59,12 @@ extension DeckTheme {
                   primaryColor: Color(red: 100/255, green: 200/255, blue: 200/255), //blue
                   secondaryColor: Color(red: 251/255, green: 250/255, blue: 204/255)), //orangeish red
         
-        DeckTheme(title: "Enchanted", /// $1.99
+        /*DeckTheme(title: "Enchanted", /// $1.99
                   logoCard: "cardBackEnchanted",
                   fronts: "Enchanted",
                   productID: "Sawyer.DeckedOut.Theme.RedFoxEnchanted",
-                  primaryColor: Color(red: 225/255, green: 30/255, blue: 40/255), //red
-                  secondaryColor: Color(red: 121/255, green: 202/255, blue: 242/255)), //light blue
+                  primaryColor: Color(red: 121/255, green: 202/255, blue: 242/255), //light blue
+                  secondaryColor: Color(red: 255/255, green: 255/255, blue: 255/255)), //white*/
         
         DeckTheme(title: "Web", /// $1.99  ->  $0.99
                   logoCard: "cardBackWeb",

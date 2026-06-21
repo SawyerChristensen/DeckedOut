@@ -3,35 +3,28 @@
 
 ## 🚀 Active Release Milestones
 
-### Update 3.5.1 - Game Center Achievements 2 (if v1 launch is successful)
-- [x] Add 20 & 100 win count achievements
-  - [x] Local backend
-  - [x] App Store Connect
-  - [x] Images (via Photoshop)
-- [x] Implement achievements set as TODO in GameCenterManager
-  - [x] Local backend
-  - [x] App Store Connect
-  - [x] Images (via Photoshop)
-- [x] Localize all achievement titles & descriptions in metadata file (via Claude)
-- [x] Localize new version notice
-- [x] Add Enchantment assets to backend
-  - [x] Card back
-  - [x] Card fronts
-- [x] Add sorting to Crazy 8s
-
 ### Update 3.5.2 - Enchantment Cards release
 - [x] Implement Enchantment card asset recognition
-- [ ] Disable Game Center auth for now if found swizzling definititevly does \*not\* work :(
-- [ ] Compress Enchantment cards
-- [ ] Review sound manager warning
 - [ ] Make sure knocking rules notice are always present in 1v1 Gin. See if main menu rules view has access to current chat size
-- [ ] Adjust colors of default deck?
-- [ ] Adjust pricing in ASC
+- [x] Compress Enchantment cards
+- [ ] Add National Flag card backs to backend
+- [ ] See if 120hz can be enabled in plist, test frame rate
+  - [ ] Use texture atlas if neccesary to increase
+- [ ] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
+  - [ ] Figure out how to make GC work 100% of the time
+  - [ ] Move assets if neccesary
+- [ ] Adjust colors of default deck? (only if we need to reexport for a texture atlas anyway)
+- [ ] Adjust pricing in ASC. Match what is in DeckTheme. Consider organizing those files
+
+### Update 3.5.3 - July 4 National Cards release
+- [ ] Make national flag cards available in frontend
+- [ ] Review sound manager warning
 
 ### Update 3.6.0 - Crazy 8s QOL
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
   - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
 - [ ] Add Mau Mau variant of Crazy 8s (Jack logo card)
+  - [ ] Already done? Verify it works?
   - [ ] Review stacking 7s, and if we should change the stacking 2s rule in normal Crazy 8s
 - [ ] Add Turkish variant of Crazy 8s (Jack? logo card)
 - [ ] Add more localized game assets (at least for Traditional Chinese)
@@ -39,6 +32,7 @@
 - [ ] Localize official full listing (relatively easy)
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   * *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
+- [ ] Organize and refactor project structure
 
 
 ### Update 4.0.0: 4th Game Expansion
