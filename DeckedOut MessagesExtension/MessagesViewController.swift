@@ -505,7 +505,7 @@ class MessagesViewController: MSMessagesAppViewController {
             
             switch gameType {
             case .ginRummy:
-                templateLayout.image = UIImage(named: "GinGameWon")
+                //templateLayout.image = UIImage(named: "GinGameWon")
                 if let ginManager = activeGameEngine as? GinRummyManager,
                    let roundWinType = ginManager.currentRoundWinType {
                     switch roundWinType {

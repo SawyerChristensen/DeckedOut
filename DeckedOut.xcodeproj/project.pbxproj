@@ -198,6 +198,7 @@
 				da,
 				nb,
 				vi,
+				zh,
 			);
 			mainGroup = BECF99992E04746E007B89C0;
 			minimizedProjectReferenceProxies = 1;

@@ -10,6 +10,8 @@
 - [x] Make sure knocking rules notice are always present in 1v1 Gin. Make the main menu aware of current chat size
 - [x] Add National Flag card backs to backend
 - [x] Enable 120hz in Info.plist
+- [ ] Add product key in ASC
+- [ ] Adjust pricing of Koi & Web
 - [ ] Get rid of jacks queens and kings explanation in golf win text (when 3.5.1 is released)
 - [ ] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
   - [ ] Figure out how to make GC work 100% of the time
@@ -17,7 +19,6 @@
 
 
 ### Update 3.5.3 - July 4 National Cards release
-- [ ] Adjust pricing in ASC after 3.5.2 goes live (Enchantment cards released)
 - [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
 - [ ] Make national flag cards available in frontend
   - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
@@ -27,7 +28,8 @@
   - [ ] Already done? Verify it works?
   - [ ] Review stacking 7s, and if we should change the stacking 2s rule in normal Crazy 8s
 - [ ] Add Turkish variant of Crazy 8s (Jack? logo card)
-- [ ] Add more localized game assets (at least for Traditional Chinese)
+- [ ] Switch variant for Ireland/UK?
+- [x] Add more localized game assets (at least for Traditional Chinese)
   - [ ] Full German & Turkish versions including their Crazy 8s variant
 - [ ] Localize official full listing (relatively easy)
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
