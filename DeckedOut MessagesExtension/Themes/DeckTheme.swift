@@ -61,7 +61,7 @@ extension DeckTheme {
                   primaryColor: Color(red: 100/255, green: 200/255, blue: 200/255), //blue
                   secondaryColor: Color(red: 251/255, green: 250/255, blue: 204/255)), //orangeish red
         
-        DeckTheme(title: "Web", /// $1
+        DeckTheme(title: "Spider's Web", /// $1
                   logoCard: "cardBackWeb",
                   productID: "Sawyer.DeckedOut.Theme.Web",
                   primaryColor: Color(red: 0.10, green: 0.10, blue: 0.10)),

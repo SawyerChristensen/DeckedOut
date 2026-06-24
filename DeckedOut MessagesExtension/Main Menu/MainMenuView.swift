@@ -656,11 +656,11 @@ struct MainMenuView: View {
     //distills the priceText into a stable key — identical labels (e.g. two Owned themes) share an id so no slide fires
     private var priceTextKey: String {
         let theme = themes[activeThemeIndex]
+        guard let productID = theme.productID else { return "owned" }
+        if store.isOwned(productID) { return "owned" }
         if let required = theme.requiredWins, WinTracker.shared.totalWins < required {
             return "winlock:\(required)"
         }
-        guard let productID = theme.productID else { return "owned" }
-        if store.isOwned(productID) { return "owned" }
         if isRestoring { return "restoring" }
         if showingRestore { return "restore" }
         if let price = store.displayPrice(for: productID) { return "price:\(price)" }
@@ -722,12 +722,10 @@ struct MainMenuView: View {
                             showingRestore = true
                         }
                     } label: {
-                        if price == "$0.99" {
-                            Text("$0.99 - Card Back")
-                        } else if price == "$1.99" || price == "1.99" { // Added safety for string formatting
-                            Text("$1.99 - Full Deck")
+                        if theme.fronts == nil {
+                            Text("\(price) - Card Back")
                         } else {
-                            Text(price)
+                            Text("\(price) - Full Deck")
                         }
                     }
                     .buttonStyle(.plain)

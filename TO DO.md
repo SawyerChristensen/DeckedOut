@@ -5,6 +5,7 @@
 
 ### Update 3.5.2 - Enchantment Cards release
 - [x] Implement Enchantment card asset recognition
+    - [x] When revealed, the opponents hand should have their own deck front
 - [x] Compress Enchantment cards
 - [x] Add enchanted joker and make joker paired to deck fronts, also add red/black jokers?
 - [x] Make sure knocking rules notice are always present in 1v1 Gin. Make the main menu aware of current chat size
@@ -16,7 +17,7 @@
 - [x] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
 
 ### Update 3.5.3 - July 4 National Cards release
-- [ ] Localize price clarifications and make them more robust
+- [ ] Look into better transitions between the card fronts. (Move out of CardView, into discard piles in game views? Cards in opponents hand should instantly transition if they are starting to reveal themselves anyway)
 - [ ] Make national flag cards available in frontend
   - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
 
