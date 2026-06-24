@@ -110,6 +110,12 @@ final class StoreManager: ObservableObject {
     /// Localized price for a product ID, or nil if products haven't loaded yet or IAPs are disabled.
     func displayPrice(for productID: String) -> String? {
         if isChinaStorefront { return nil }
+        //guard let product = products[productID] else { return nil}
+            
+        // Reformat $1.00 -> $1
+        //return product.price.formatted(
+        //    product.priceFormatStyle.precision(.fractionLength(0...2))
+        //)
         return products[productID]?.displayPrice
     }
 

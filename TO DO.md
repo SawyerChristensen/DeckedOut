@@ -10,16 +10,13 @@
 - [x] Make sure knocking rules notice are always present in 1v1 Gin. Make the main menu aware of current chat size
 - [x] Add National Flag card backs to backend
 - [x] Enable 120hz in Info.plist
-- [ ] Add product key in ASC
-- [ ] Adjust pricing of Koi & Web
-- [ ] Get rid of jacks queens and kings explanation in golf win text (when 3.5.1 is released)
-- [ ] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
-  - [ ] Figure out how to make GC work 100% of the time
-  - [ ] Move assets if neccesary
-
+- [x] Add product key in ASC
+- [x] Adjust pricing of Koi & Web (introduce rounding when displaying prices)
+  - [x] Update price clarifications
+- [x] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
 
 ### Update 3.5.3 - July 4 National Cards release
-- [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
+- [ ] Localize price clarifications and make them more robust
 - [ ] Make national flag cards available in frontend
   - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
 
@@ -27,10 +24,8 @@
 - [ ] Finalize Mau Mau variant of Crazy 8s (Jack logo card)
   - [ ] Already done? Verify it works?
   - [ ] Review stacking 7s, and if we should change the stacking 2s rule in normal Crazy 8s
-- [ ] Add Turkish variant of Crazy 8s (Jack? logo card)
 - [ ] Switch variant for Ireland/UK?
-- [x] Add more localized game assets (at least for Traditional Chinese)
-  - [ ] Full German & Turkish versions including their Crazy 8s variant
+- [ ] Localized German title cards
 - [ ] Localize official full listing (relatively easy)
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   * *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
@@ -57,6 +52,8 @@
   - [x] Entitlements are present in both the extension and parent stub
   - [x] Game Center capability is enabled as an identifier in another ASC section somewhere (cant remember where)
   - [ ] Thought the bundle ID swizzle was working but it does not appear to work in production, and also messages with the bundled asset lookups. Work with apple to figure out a straightforward way to support Game Center achievements in iMessage
+  - [ ] Get rid of jacks queens and kings explanation in golf master gc text (translate/upload with claude) (doesnt really matter now)
+  - [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
 - [ ] Monetization Strategy
   - [ ] Add more Card Back IAPs
   - [ ] Add IAP localizations in App Store Connect (automate w/script?)
@@ -150,6 +147,7 @@
 - [ ] Dynamic card sizing: Grow card frame constraints when system accessibility text scaling is active.
 
 ### UI & Aesthetics Polish
+- [ ] Replace feltBackgroundDark with the light one & a dark opacity overlay to save 1.4 MB of space
 - [ ] Rework themes menu to add a "Preview" button. (next to price?) (can push to later)
 - [ ] Adjust colors of default deck
 - [ ] Have the main menu submenus revealed instead of pulled up
@@ -206,3 +204,4 @@
 - [ ] Clean up initialization code: Move custom `init` logic inside `PlayerHandView` out of the extension and into the main declaration body wrapper.
 - [ ] Debug audio layer warning: Trace and eliminate the "audio session failure" print statement occurring in console streams.
 - [ ] Does "isFaceUp" need to be a passed variable?
+

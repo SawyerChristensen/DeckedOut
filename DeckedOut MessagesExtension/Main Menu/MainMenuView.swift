@@ -722,7 +722,13 @@ struct MainMenuView: View {
                             showingRestore = true
                         }
                     } label: {
-                        Text(price)//.underline()
+                        if price == "$0.99" {
+                            Text("$0.99 - Card Back")
+                        } else if price == "$1.99" || price == "1.99" { // Added safety for string formatting
+                            Text("$1.99 - Full Deck")
+                        } else {
+                            Text(price)
+                        }
                     }
                     .buttonStyle(.plain)
                 } else {

@@ -340,7 +340,7 @@
       "before_earned_description": {
         "_max_chars": 256,
         "_tone": "Tells the player what they need to do. Imperative.",
-        "en": "Win a game of Golf with a hand of only royal cards — jacks, queens, and kings.",
+        "en": "Win a game of Golf with a hand of only royal cards.",
         "da": "Vind et spil Golf med en hånd bestående udelukkende af billedkort — knægte, damer og konger.", "de": "Gewinne ein Spiel Golf mit einem Blatt aus ausschließlich Bildkarten — Buben, Damen und Königen.", "es": "Gana una partida de Golf con una mano de solo figuras: jotas, reinas y reyes.", "fr": "Gagnez une partie de Golf avec une main composée uniquement de figures — valets, dames et rois.", "hi": "केवल शाही पत्तों — गुलाम, क्वीन और बादशाह — के हाथ के साथ गोल्फ का एक गेम जीतें।", "it": "Vinci una partita di Golf con una mano di sole figure — fanti, regine e re.",
         "ja": "絵札（ジャック、クイーン、キング）だけの手札でゴルフに勝利しましょう。", "ko": "그림 카드(잭, 퀸, 킹)만으로 이루어진 패로 골프 게임을 승리하세요.", "nb": "Vinn et spill Golf med en hånd bestående kun av billedkort — knekter, damer og konger.", "nl": "Win een spelletje Golf met een hand van alleen plaatjeskaarten — boeren, vrouwen en heren.", "pt-BR": "Vença uma partida de Golf com uma mão só de figuras — valetes, damas e reis.", "ru": "Выиграйте партию в гольф с рукой только из фигурных карт — валетов, дам и королей.",
         "sv": "Vinn ett parti Golf med en hand som bara består av klädda kort — knektar, damer och kungar.", "tr": "Yalnızca taşlı kartlardan — valeler, kızlar ve papazlar — oluşan bir elle Golf oyunu kazanın.", "vi": "Thắng một ván Golf với bộ bài chỉ toàn lá hình — J, Q và K.", "zh-Hans": "以一手全是花牌（J、Q、K）赢得一局高尔夫。", "zh-Hant": "以一手全是花牌（J、Q、K）贏得一局高爾夫。"

@@ -55,18 +55,18 @@ extension DeckTheme {
                   requiredWins: 2,
                   primaryColor: Color(red: 35/255, green: 170/255, blue: 235/255)),
         
-        DeckTheme(title: "Koi", /// $1.99   ->  $1
+        DeckTheme(title: "Koi", /// $1
                   logoCard: "cardBackKoi",
                   productID: "Sawyer.DeckedOut.Theme.Koi",
                   primaryColor: Color(red: 100/255, green: 200/255, blue: 200/255), //blue
                   secondaryColor: Color(red: 251/255, green: 250/255, blue: 204/255)), //orangeish red
         
-        DeckTheme(title: "Web", /// $1.99  ->  $1
+        DeckTheme(title: "Web", /// $1
                   logoCard: "cardBackWeb",
                   productID: "Sawyer.DeckedOut.Theme.Web",
                   primaryColor: Color(red: 0.10, green: 0.10, blue: 0.10)),
         
-        DeckTheme(title: "Enchanted", /// $1.99
+        DeckTheme(title: "Enchanted", /// $2
                   logoCard: "cardBackEnchanted",
                   fronts: "Enchanted",
                   productID: "Sawyer.DeckedOut.Theme.RedFoxEnchanted",

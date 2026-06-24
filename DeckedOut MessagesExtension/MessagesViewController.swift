@@ -19,7 +19,6 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: – View Life-Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //MainBundleIdentifierOverride.install()
         setupFeedbackSystems()
         updateAccessibilityModal(for: presentationStyle)
         NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)), name: UIScene.willDeactivateNotification, object: nil)
