@@ -1,0 +1,3965 @@
+{
+  "meta" : {
+    "version" : "2024-11-15"
+  },
+  "resources" : {
+    "achievementImages" : {
+      "deckedout.crazy8s.ace-da" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-da",
+          "url" : "da\/AchievementImage-deckedout.crazy8s.ace-da.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-de-DE" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.crazy8s.ace-de-DE.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-en-US" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.crazy8s.ace-en-US.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-es-ES" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.crazy8s.ace-es-ES.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-fr-FR" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.crazy8s.ace-fr-FR.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-hi" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-hi",
+          "url" : "hi\/AchievementImage-deckedout.crazy8s.ace-hi.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-it" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-it",
+          "url" : "it\/AchievementImage-deckedout.crazy8s.ace-it.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-ja" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-ja",
+          "url" : "ja\/AchievementImage-deckedout.crazy8s.ace-ja.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-ko" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-ko",
+          "url" : "ko\/AchievementImage-deckedout.crazy8s.ace-ko.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-nl-NL" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.crazy8s.ace-nl-NL.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-no" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-no",
+          "url" : "no\/AchievementImage-deckedout.crazy8s.ace-no.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-pt-BR" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.crazy8s.ace-pt-BR.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-ru" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-ru",
+          "url" : "ru\/AchievementImage-deckedout.crazy8s.ace-ru.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-sv" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-sv",
+          "url" : "sv\/AchievementImage-deckedout.crazy8s.ace-sv.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-tr" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-tr",
+          "url" : "tr\/AchievementImage-deckedout.crazy8s.ace-tr.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-vi" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-vi",
+          "url" : "vi\/AchievementImage-deckedout.crazy8s.ace-vi.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-zh-Hans" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.crazy8s.ace-zh-Hans.png"
+        }
+      ],
+      "deckedout.crazy8s.ace-zh-Hant" : [
+        {
+          "localID" : "deckedout.crazy8s.ace-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.crazy8s.ace-zh-Hant.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-da" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-da",
+          "url" : "da\/AchievementImage-deckedout.crazy8s.eight-da.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-de-DE" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.crazy8s.eight-de-DE.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-en-US" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.crazy8s.eight-en-US.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-es-ES" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.crazy8s.eight-es-ES.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-fr-FR" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.crazy8s.eight-fr-FR.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-hi" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-hi",
+          "url" : "hi\/AchievementImage-deckedout.crazy8s.eight-hi.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-it" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-it",
+          "url" : "it\/AchievementImage-deckedout.crazy8s.eight-it.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-ja" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-ja",
+          "url" : "ja\/AchievementImage-deckedout.crazy8s.eight-ja.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-ko" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-ko",
+          "url" : "ko\/AchievementImage-deckedout.crazy8s.eight-ko.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-nl-NL" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.crazy8s.eight-nl-NL.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-no" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-no",
+          "url" : "no\/AchievementImage-deckedout.crazy8s.eight-no.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-pt-BR" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.crazy8s.eight-pt-BR.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-ru" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-ru",
+          "url" : "ru\/AchievementImage-deckedout.crazy8s.eight-ru.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-sv" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-sv",
+          "url" : "sv\/AchievementImage-deckedout.crazy8s.eight-sv.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-tr" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-tr",
+          "url" : "tr\/AchievementImage-deckedout.crazy8s.eight-tr.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-vi" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-vi",
+          "url" : "vi\/AchievementImage-deckedout.crazy8s.eight-vi.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-zh-Hans" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.crazy8s.eight-zh-Hans.png"
+        }
+      ],
+      "deckedout.crazy8s.eight-zh-Hant" : [
+        {
+          "localID" : "deckedout.crazy8s.eight-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.crazy8s.eight-zh-Hant.png"
+        }
+      ],
+      "deckedout.crazy8s.master-da" : [
+        {
+          "localID" : "deckedout.crazy8s.master-da",
+          "url" : "da\/AchievementImage-deckedout.crazy8s.master-da.png"
+        }
+      ],
+      "deckedout.crazy8s.master-de-DE" : [
+        {
+          "localID" : "deckedout.crazy8s.master-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.crazy8s.master-de-DE.png"
+        }
+      ],
+      "deckedout.crazy8s.master-en-US" : [
+        {
+          "localID" : "deckedout.crazy8s.master-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.crazy8s.master-en-US.png"
+        }
+      ],
+      "deckedout.crazy8s.master-es-ES" : [
+        {
+          "localID" : "deckedout.crazy8s.master-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.crazy8s.master-es-ES.png"
+        }
+      ],
+      "deckedout.crazy8s.master-fr-FR" : [
+        {
+          "localID" : "deckedout.crazy8s.master-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.crazy8s.master-fr-FR.png"
+        }
+      ],
+      "deckedout.crazy8s.master-hi" : [
+        {
+          "localID" : "deckedout.crazy8s.master-hi",
+          "url" : "hi\/AchievementImage-deckedout.crazy8s.master-hi.png"
+        }
+      ],
+      "deckedout.crazy8s.master-it" : [
+        {
+          "localID" : "deckedout.crazy8s.master-it",
+          "url" : "it\/AchievementImage-deckedout.crazy8s.master-it.png"
+        }
+      ],
+      "deckedout.crazy8s.master-ja" : [
+        {
+          "localID" : "deckedout.crazy8s.master-ja",
+          "url" : "ja\/AchievementImage-deckedout.crazy8s.master-ja.png"
+        }
+      ],
+      "deckedout.crazy8s.master-ko" : [
+        {
+          "localID" : "deckedout.crazy8s.master-ko",
+          "url" : "ko\/AchievementImage-deckedout.crazy8s.master-ko.png"
+        }
+      ],
+      "deckedout.crazy8s.master-nl-NL" : [
+        {
+          "localID" : "deckedout.crazy8s.master-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.crazy8s.master-nl-NL.png"
+        }
+      ],
+      "deckedout.crazy8s.master-no" : [
+        {
+          "localID" : "deckedout.crazy8s.master-no",
+          "url" : "no\/AchievementImage-deckedout.crazy8s.master-no.png"
+        }
+      ],
+      "deckedout.crazy8s.master-pt-BR" : [
+        {
+          "localID" : "deckedout.crazy8s.master-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.crazy8s.master-pt-BR.png"
+        }
+      ],
+      "deckedout.crazy8s.master-ru" : [
+        {
+          "localID" : "deckedout.crazy8s.master-ru",
+          "url" : "ru\/AchievementImage-deckedout.crazy8s.master-ru.png"
+        }
+      ],
+      "deckedout.crazy8s.master-sv" : [
+        {
+          "localID" : "deckedout.crazy8s.master-sv",
+          "url" : "sv\/AchievementImage-deckedout.crazy8s.master-sv.png"
+        }
+      ],
+      "deckedout.crazy8s.master-tr" : [
+        {
+          "localID" : "deckedout.crazy8s.master-tr",
+          "url" : "tr\/AchievementImage-deckedout.crazy8s.master-tr.png"
+        }
+      ],
+      "deckedout.crazy8s.master-vi" : [
+        {
+          "localID" : "deckedout.crazy8s.master-vi",
+          "url" : "vi\/AchievementImage-deckedout.crazy8s.master-vi.png"
+        }
+      ],
+      "deckedout.crazy8s.master-zh-Hans" : [
+        {
+          "localID" : "deckedout.crazy8s.master-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.crazy8s.master-zh-Hans.png"
+        }
+      ],
+      "deckedout.crazy8s.master-zh-Hant" : [
+        {
+          "localID" : "deckedout.crazy8s.master-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.crazy8s.master-zh-Hant.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-da" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-da",
+          "url" : "da\/AchievementImage-deckedout.crazy8s.queen-da.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-de-DE" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.crazy8s.queen-de-DE.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-en-US" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.crazy8s.queen-en-US.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-es-ES" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.crazy8s.queen-es-ES.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-fr-FR" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.crazy8s.queen-fr-FR.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-hi" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-hi",
+          "url" : "hi\/AchievementImage-deckedout.crazy8s.queen-hi.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-it" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-it",
+          "url" : "it\/AchievementImage-deckedout.crazy8s.queen-it.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-ja" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-ja",
+          "url" : "ja\/AchievementImage-deckedout.crazy8s.queen-ja.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-ko" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-ko",
+          "url" : "ko\/AchievementImage-deckedout.crazy8s.queen-ko.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-nl-NL" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.crazy8s.queen-nl-NL.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-no" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-no",
+          "url" : "no\/AchievementImage-deckedout.crazy8s.queen-no.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-pt-BR" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.crazy8s.queen-pt-BR.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-ru" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-ru",
+          "url" : "ru\/AchievementImage-deckedout.crazy8s.queen-ru.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-sv" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-sv",
+          "url" : "sv\/AchievementImage-deckedout.crazy8s.queen-sv.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-tr" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-tr",
+          "url" : "tr\/AchievementImage-deckedout.crazy8s.queen-tr.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-vi" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-vi",
+          "url" : "vi\/AchievementImage-deckedout.crazy8s.queen-vi.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-zh-Hans" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.crazy8s.queen-zh-Hans.png"
+        }
+      ],
+      "deckedout.crazy8s.queen-zh-Hant" : [
+        {
+          "localID" : "deckedout.crazy8s.queen-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.crazy8s.queen-zh-Hant.png"
+        }
+      ],
+      "deckedout.crazy8s.two-da" : [
+        {
+          "localID" : "deckedout.crazy8s.two-da",
+          "url" : "da\/AchievementImage-deckedout.crazy8s.two-da.png"
+        }
+      ],
+      "deckedout.crazy8s.two-de-DE" : [
+        {
+          "localID" : "deckedout.crazy8s.two-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.crazy8s.two-de-DE.png"
+        }
+      ],
+      "deckedout.crazy8s.two-en-US" : [
+        {
+          "localID" : "deckedout.crazy8s.two-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.crazy8s.two-en-US.png"
+        }
+      ],
+      "deckedout.crazy8s.two-es-ES" : [
+        {
+          "localID" : "deckedout.crazy8s.two-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.crazy8s.two-es-ES.png"
+        }
+      ],
+      "deckedout.crazy8s.two-fr-FR" : [
+        {
+          "localID" : "deckedout.crazy8s.two-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.crazy8s.two-fr-FR.png"
+        }
+      ],
+      "deckedout.crazy8s.two-hi" : [
+        {
+          "localID" : "deckedout.crazy8s.two-hi",
+          "url" : "hi\/AchievementImage-deckedout.crazy8s.two-hi.png"
+        }
+      ],
+      "deckedout.crazy8s.two-it" : [
+        {
+          "localID" : "deckedout.crazy8s.two-it",
+          "url" : "it\/AchievementImage-deckedout.crazy8s.two-it.png"
+        }
+      ],
+      "deckedout.crazy8s.two-ja" : [
+        {
+          "localID" : "deckedout.crazy8s.two-ja",
+          "url" : "ja\/AchievementImage-deckedout.crazy8s.two-ja.png"
+        }
+      ],
+      "deckedout.crazy8s.two-ko" : [
+        {
+          "localID" : "deckedout.crazy8s.two-ko",
+          "url" : "ko\/AchievementImage-deckedout.crazy8s.two-ko.png"
+        }
+      ],
+      "deckedout.crazy8s.two-nl-NL" : [
+        {
+          "localID" : "deckedout.crazy8s.two-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.crazy8s.two-nl-NL.png"
+        }
+      ],
+      "deckedout.crazy8s.two-no" : [
+        {
+          "localID" : "deckedout.crazy8s.two-no",
+          "url" : "no\/AchievementImage-deckedout.crazy8s.two-no.png"
+        }
+      ],
+      "deckedout.crazy8s.two-pt-BR" : [
+        {
+          "localID" : "deckedout.crazy8s.two-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.crazy8s.two-pt-BR.png"
+        }
+      ],
+      "deckedout.crazy8s.two-ru" : [
+        {
+          "localID" : "deckedout.crazy8s.two-ru",
+          "url" : "ru\/AchievementImage-deckedout.crazy8s.two-ru.png"
+        }
+      ],
+      "deckedout.crazy8s.two-sv" : [
+        {
+          "localID" : "deckedout.crazy8s.two-sv",
+          "url" : "sv\/AchievementImage-deckedout.crazy8s.two-sv.png"
+        }
+      ],
+      "deckedout.crazy8s.two-tr" : [
+        {
+          "localID" : "deckedout.crazy8s.two-tr",
+          "url" : "tr\/AchievementImage-deckedout.crazy8s.two-tr.png"
+        }
+      ],
+      "deckedout.crazy8s.two-vi" : [
+        {
+          "localID" : "deckedout.crazy8s.two-vi",
+          "url" : "vi\/AchievementImage-deckedout.crazy8s.two-vi.png"
+        }
+      ],
+      "deckedout.crazy8s.two-zh-Hans" : [
+        {
+          "localID" : "deckedout.crazy8s.two-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.crazy8s.two-zh-Hans.png"
+        }
+      ],
+      "deckedout.crazy8s.two-zh-Hant" : [
+        {
+          "localID" : "deckedout.crazy8s.two-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.crazy8s.two-zh-Hant.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-da" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-da",
+          "url" : "da\/AchievementImage-deckedout.first_win.crazy8s-da.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-de-DE" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.first_win.crazy8s-de-DE.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-en-US" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.first_win.crazy8s-en-US.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-es-ES" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.first_win.crazy8s-es-ES.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-fr-FR" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.first_win.crazy8s-fr-FR.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-hi" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-hi",
+          "url" : "hi\/AchievementImage-deckedout.first_win.crazy8s-hi.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-it" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-it",
+          "url" : "it\/AchievementImage-deckedout.first_win.crazy8s-it.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-ja" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-ja",
+          "url" : "ja\/AchievementImage-deckedout.first_win.crazy8s-ja.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-ko" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-ko",
+          "url" : "ko\/AchievementImage-deckedout.first_win.crazy8s-ko.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-nl-NL" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.first_win.crazy8s-nl-NL.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-no" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-no",
+          "url" : "no\/AchievementImage-deckedout.first_win.crazy8s-no.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-pt-BR" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.first_win.crazy8s-pt-BR.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-ru" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-ru",
+          "url" : "ru\/AchievementImage-deckedout.first_win.crazy8s-ru.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-sv" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-sv",
+          "url" : "sv\/AchievementImage-deckedout.first_win.crazy8s-sv.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-tr" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-tr",
+          "url" : "tr\/AchievementImage-deckedout.first_win.crazy8s-tr.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-vi" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-vi",
+          "url" : "vi\/AchievementImage-deckedout.first_win.crazy8s-vi.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-zh-Hans" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.first_win.crazy8s-zh-Hans.png"
+        }
+      ],
+      "deckedout.first_win.crazy8s-zh-Hant" : [
+        {
+          "localID" : "deckedout.first_win.crazy8s-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.first_win.crazy8s-zh-Hant.png"
+        }
+      ],
+      "deckedout.first_win.gin-da" : [
+        {
+          "localID" : "deckedout.first_win.gin-da",
+          "url" : "da\/AchievementImage-deckedout.first_win.gin-da.png"
+        }
+      ],
+      "deckedout.first_win.gin-de-DE" : [
+        {
+          "localID" : "deckedout.first_win.gin-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.first_win.gin-de-DE.png"
+        }
+      ],
+      "deckedout.first_win.gin-en-US" : [
+        {
+          "localID" : "deckedout.first_win.gin-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.first_win.gin-en-US.png"
+        }
+      ],
+      "deckedout.first_win.gin-es-ES" : [
+        {
+          "localID" : "deckedout.first_win.gin-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.first_win.gin-es-ES.png"
+        }
+      ],
+      "deckedout.first_win.gin-fr-FR" : [
+        {
+          "localID" : "deckedout.first_win.gin-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.first_win.gin-fr-FR.png"
+        }
+      ],
+      "deckedout.first_win.gin-hi" : [
+        {
+          "localID" : "deckedout.first_win.gin-hi",
+          "url" : "hi\/AchievementImage-deckedout.first_win.gin-hi.png"
+        }
+      ],
+      "deckedout.first_win.gin-it" : [
+        {
+          "localID" : "deckedout.first_win.gin-it",
+          "url" : "it\/AchievementImage-deckedout.first_win.gin-it.png"
+        }
+      ],
+      "deckedout.first_win.gin-ja" : [
+        {
+          "localID" : "deckedout.first_win.gin-ja",
+          "url" : "ja\/AchievementImage-deckedout.first_win.gin-ja.png"
+        }
+      ],
+      "deckedout.first_win.gin-ko" : [
+        {
+          "localID" : "deckedout.first_win.gin-ko",
+          "url" : "ko\/AchievementImage-deckedout.first_win.gin-ko.png"
+        }
+      ],
+      "deckedout.first_win.gin-nl-NL" : [
+        {
+          "localID" : "deckedout.first_win.gin-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.first_win.gin-nl-NL.png"
+        }
+      ],
+      "deckedout.first_win.gin-no" : [
+        {
+          "localID" : "deckedout.first_win.gin-no",
+          "url" : "no\/AchievementImage-deckedout.first_win.gin-no.png"
+        }
+      ],
+      "deckedout.first_win.gin-pt-BR" : [
+        {
+          "localID" : "deckedout.first_win.gin-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.first_win.gin-pt-BR.png"
+        }
+      ],
+      "deckedout.first_win.gin-ru" : [
+        {
+          "localID" : "deckedout.first_win.gin-ru",
+          "url" : "ru\/AchievementImage-deckedout.first_win.gin-ru.png"
+        }
+      ],
+      "deckedout.first_win.gin-sv" : [
+        {
+          "localID" : "deckedout.first_win.gin-sv",
+          "url" : "sv\/AchievementImage-deckedout.first_win.gin-sv.png"
+        }
+      ],
+      "deckedout.first_win.gin-tr" : [
+        {
+          "localID" : "deckedout.first_win.gin-tr",
+          "url" : "tr\/AchievementImage-deckedout.first_win.gin-tr.png"
+        }
+      ],
+      "deckedout.first_win.gin-vi" : [
+        {
+          "localID" : "deckedout.first_win.gin-vi",
+          "url" : "vi\/AchievementImage-deckedout.first_win.gin-vi.png"
+        }
+      ],
+      "deckedout.first_win.gin-zh-Hans" : [
+        {
+          "localID" : "deckedout.first_win.gin-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.first_win.gin-zh-Hans.png"
+        }
+      ],
+      "deckedout.first_win.gin-zh-Hant" : [
+        {
+          "localID" : "deckedout.first_win.gin-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.first_win.gin-zh-Hant.png"
+        }
+      ],
+      "deckedout.first_win.golf-da" : [
+        {
+          "localID" : "deckedout.first_win.golf-da",
+          "url" : "da\/AchievementImage-deckedout.first_win.golf-da.png"
+        }
+      ],
+      "deckedout.first_win.golf-de-DE" : [
+        {
+          "localID" : "deckedout.first_win.golf-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.first_win.golf-de-DE.png"
+        }
+      ],
+      "deckedout.first_win.golf-en-US" : [
+        {
+          "localID" : "deckedout.first_win.golf-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.first_win.golf-en-US.png"
+        }
+      ],
+      "deckedout.first_win.golf-es-ES" : [
+        {
+          "localID" : "deckedout.first_win.golf-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.first_win.golf-es-ES.png"
+        }
+      ],
+      "deckedout.first_win.golf-fr-FR" : [
+        {
+          "localID" : "deckedout.first_win.golf-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.first_win.golf-fr-FR.png"
+        }
+      ],
+      "deckedout.first_win.golf-hi" : [
+        {
+          "localID" : "deckedout.first_win.golf-hi",
+          "url" : "hi\/AchievementImage-deckedout.first_win.golf-hi.png"
+        }
+      ],
+      "deckedout.first_win.golf-it" : [
+        {
+          "localID" : "deckedout.first_win.golf-it",
+          "url" : "it\/AchievementImage-deckedout.first_win.golf-it.png"
+        }
+      ],
+      "deckedout.first_win.golf-ja" : [
+        {
+          "localID" : "deckedout.first_win.golf-ja",
+          "url" : "ja\/AchievementImage-deckedout.first_win.golf-ja.png"
+        }
+      ],
+      "deckedout.first_win.golf-ko" : [
+        {
+          "localID" : "deckedout.first_win.golf-ko",
+          "url" : "ko\/AchievementImage-deckedout.first_win.golf-ko.png"
+        }
+      ],
+      "deckedout.first_win.golf-nl-NL" : [
+        {
+          "localID" : "deckedout.first_win.golf-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.first_win.golf-nl-NL.png"
+        }
+      ],
+      "deckedout.first_win.golf-no" : [
+        {
+          "localID" : "deckedout.first_win.golf-no",
+          "url" : "no\/AchievementImage-deckedout.first_win.golf-no.png"
+        }
+      ],
+      "deckedout.first_win.golf-pt-BR" : [
+        {
+          "localID" : "deckedout.first_win.golf-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.first_win.golf-pt-BR.png"
+        }
+      ],
+      "deckedout.first_win.golf-ru" : [
+        {
+          "localID" : "deckedout.first_win.golf-ru",
+          "url" : "ru\/AchievementImage-deckedout.first_win.golf-ru.png"
+        }
+      ],
+      "deckedout.first_win.golf-sv" : [
+        {
+          "localID" : "deckedout.first_win.golf-sv",
+          "url" : "sv\/AchievementImage-deckedout.first_win.golf-sv.png"
+        }
+      ],
+      "deckedout.first_win.golf-tr" : [
+        {
+          "localID" : "deckedout.first_win.golf-tr",
+          "url" : "tr\/AchievementImage-deckedout.first_win.golf-tr.png"
+        }
+      ],
+      "deckedout.first_win.golf-vi" : [
+        {
+          "localID" : "deckedout.first_win.golf-vi",
+          "url" : "vi\/AchievementImage-deckedout.first_win.golf-vi.png"
+        }
+      ],
+      "deckedout.first_win.golf-zh-Hans" : [
+        {
+          "localID" : "deckedout.first_win.golf-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.first_win.golf-zh-Hans.png"
+        }
+      ],
+      "deckedout.first_win.golf-zh-Hant" : [
+        {
+          "localID" : "deckedout.first_win.golf-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.first_win.golf-zh-Hant.png"
+        }
+      ],
+      "deckedout.gin.master-da" : [
+        {
+          "localID" : "deckedout.gin.master-da",
+          "url" : "da\/AchievementImage-deckedout.gin.master-da.png"
+        }
+      ],
+      "deckedout.gin.master-de-DE" : [
+        {
+          "localID" : "deckedout.gin.master-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.gin.master-de-DE.png"
+        }
+      ],
+      "deckedout.gin.master-en-US" : [
+        {
+          "localID" : "deckedout.gin.master-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.gin.master-en-US.png"
+        }
+      ],
+      "deckedout.gin.master-es-ES" : [
+        {
+          "localID" : "deckedout.gin.master-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.gin.master-es-ES.png"
+        }
+      ],
+      "deckedout.gin.master-fr-FR" : [
+        {
+          "localID" : "deckedout.gin.master-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.gin.master-fr-FR.png"
+        }
+      ],
+      "deckedout.gin.master-hi" : [
+        {
+          "localID" : "deckedout.gin.master-hi",
+          "url" : "hi\/AchievementImage-deckedout.gin.master-hi.png"
+        }
+      ],
+      "deckedout.gin.master-it" : [
+        {
+          "localID" : "deckedout.gin.master-it",
+          "url" : "it\/AchievementImage-deckedout.gin.master-it.png"
+        }
+      ],
+      "deckedout.gin.master-ja" : [
+        {
+          "localID" : "deckedout.gin.master-ja",
+          "url" : "ja\/AchievementImage-deckedout.gin.master-ja.png"
+        }
+      ],
+      "deckedout.gin.master-ko" : [
+        {
+          "localID" : "deckedout.gin.master-ko",
+          "url" : "ko\/AchievementImage-deckedout.gin.master-ko.png"
+        }
+      ],
+      "deckedout.gin.master-nl-NL" : [
+        {
+          "localID" : "deckedout.gin.master-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.gin.master-nl-NL.png"
+        }
+      ],
+      "deckedout.gin.master-no" : [
+        {
+          "localID" : "deckedout.gin.master-no",
+          "url" : "no\/AchievementImage-deckedout.gin.master-no.png"
+        }
+      ],
+      "deckedout.gin.master-pt-BR" : [
+        {
+          "localID" : "deckedout.gin.master-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.gin.master-pt-BR.png"
+        }
+      ],
+      "deckedout.gin.master-ru" : [
+        {
+          "localID" : "deckedout.gin.master-ru",
+          "url" : "ru\/AchievementImage-deckedout.gin.master-ru.png"
+        }
+      ],
+      "deckedout.gin.master-sv" : [
+        {
+          "localID" : "deckedout.gin.master-sv",
+          "url" : "sv\/AchievementImage-deckedout.gin.master-sv.png"
+        }
+      ],
+      "deckedout.gin.master-tr" : [
+        {
+          "localID" : "deckedout.gin.master-tr",
+          "url" : "tr\/AchievementImage-deckedout.gin.master-tr.png"
+        }
+      ],
+      "deckedout.gin.master-vi" : [
+        {
+          "localID" : "deckedout.gin.master-vi",
+          "url" : "vi\/AchievementImage-deckedout.gin.master-vi.png"
+        }
+      ],
+      "deckedout.gin.master-zh-Hans" : [
+        {
+          "localID" : "deckedout.gin.master-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.gin.master-zh-Hans.png"
+        }
+      ],
+      "deckedout.gin.master-zh-Hant" : [
+        {
+          "localID" : "deckedout.gin.master-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.gin.master-zh-Hant.png"
+        }
+      ],
+      "deckedout.golf.master-da" : [
+        {
+          "localID" : "deckedout.golf.master-da",
+          "url" : "da\/AchievementImage-deckedout.golf.master-da.png"
+        }
+      ],
+      "deckedout.golf.master-de-DE" : [
+        {
+          "localID" : "deckedout.golf.master-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.golf.master-de-DE.png"
+        }
+      ],
+      "deckedout.golf.master-en-US" : [
+        {
+          "localID" : "deckedout.golf.master-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.golf.master-en-US.png"
+        }
+      ],
+      "deckedout.golf.master-es-ES" : [
+        {
+          "localID" : "deckedout.golf.master-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.golf.master-es-ES.png"
+        }
+      ],
+      "deckedout.golf.master-fr-FR" : [
+        {
+          "localID" : "deckedout.golf.master-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.golf.master-fr-FR.png"
+        }
+      ],
+      "deckedout.golf.master-hi" : [
+        {
+          "localID" : "deckedout.golf.master-hi",
+          "url" : "hi\/AchievementImage-deckedout.golf.master-hi.png"
+        }
+      ],
+      "deckedout.golf.master-it" : [
+        {
+          "localID" : "deckedout.golf.master-it",
+          "url" : "it\/AchievementImage-deckedout.golf.master-it.png"
+        }
+      ],
+      "deckedout.golf.master-ja" : [
+        {
+          "localID" : "deckedout.golf.master-ja",
+          "url" : "ja\/AchievementImage-deckedout.golf.master-ja.png"
+        }
+      ],
+      "deckedout.golf.master-ko" : [
+        {
+          "localID" : "deckedout.golf.master-ko",
+          "url" : "ko\/AchievementImage-deckedout.golf.master-ko.png"
+        }
+      ],
+      "deckedout.golf.master-nl-NL" : [
+        {
+          "localID" : "deckedout.golf.master-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.golf.master-nl-NL.png"
+        }
+      ],
+      "deckedout.golf.master-no" : [
+        {
+          "localID" : "deckedout.golf.master-no",
+          "url" : "no\/AchievementImage-deckedout.golf.master-no.png"
+        }
+      ],
+      "deckedout.golf.master-pt-BR" : [
+        {
+          "localID" : "deckedout.golf.master-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.golf.master-pt-BR.png"
+        }
+      ],
+      "deckedout.golf.master-ru" : [
+        {
+          "localID" : "deckedout.golf.master-ru",
+          "url" : "ru\/AchievementImage-deckedout.golf.master-ru.png"
+        }
+      ],
+      "deckedout.golf.master-sv" : [
+        {
+          "localID" : "deckedout.golf.master-sv",
+          "url" : "sv\/AchievementImage-deckedout.golf.master-sv.png"
+        }
+      ],
+      "deckedout.golf.master-tr" : [
+        {
+          "localID" : "deckedout.golf.master-tr",
+          "url" : "tr\/AchievementImage-deckedout.golf.master-tr.png"
+        }
+      ],
+      "deckedout.golf.master-vi" : [
+        {
+          "localID" : "deckedout.golf.master-vi",
+          "url" : "vi\/AchievementImage-deckedout.golf.master-vi.png"
+        }
+      ],
+      "deckedout.golf.master-zh-Hans" : [
+        {
+          "localID" : "deckedout.golf.master-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.golf.master-zh-Hans.png"
+        }
+      ],
+      "deckedout.golf.master-zh-Hant" : [
+        {
+          "localID" : "deckedout.golf.master-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.golf.master-zh-Hant.png"
+        }
+      ],
+      "deckedout.golf.score0-da" : [
+        {
+          "localID" : "deckedout.golf.score0-da",
+          "url" : "da\/AchievementImage-deckedout.golf.score0-da.png"
+        }
+      ],
+      "deckedout.golf.score0-de-DE" : [
+        {
+          "localID" : "deckedout.golf.score0-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.golf.score0-de-DE.png"
+        }
+      ],
+      "deckedout.golf.score0-en-US" : [
+        {
+          "localID" : "deckedout.golf.score0-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.golf.score0-en-US.png"
+        }
+      ],
+      "deckedout.golf.score0-es-ES" : [
+        {
+          "localID" : "deckedout.golf.score0-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.golf.score0-es-ES.png"
+        }
+      ],
+      "deckedout.golf.score0-fr-FR" : [
+        {
+          "localID" : "deckedout.golf.score0-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.golf.score0-fr-FR.png"
+        }
+      ],
+      "deckedout.golf.score0-hi" : [
+        {
+          "localID" : "deckedout.golf.score0-hi",
+          "url" : "hi\/AchievementImage-deckedout.golf.score0-hi.png"
+        }
+      ],
+      "deckedout.golf.score0-it" : [
+        {
+          "localID" : "deckedout.golf.score0-it",
+          "url" : "it\/AchievementImage-deckedout.golf.score0-it.png"
+        }
+      ],
+      "deckedout.golf.score0-ja" : [
+        {
+          "localID" : "deckedout.golf.score0-ja",
+          "url" : "ja\/AchievementImage-deckedout.golf.score0-ja.png"
+        }
+      ],
+      "deckedout.golf.score0-ko" : [
+        {
+          "localID" : "deckedout.golf.score0-ko",
+          "url" : "ko\/AchievementImage-deckedout.golf.score0-ko.png"
+        }
+      ],
+      "deckedout.golf.score0-nl-NL" : [
+        {
+          "localID" : "deckedout.golf.score0-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.golf.score0-nl-NL.png"
+        }
+      ],
+      "deckedout.golf.score0-no" : [
+        {
+          "localID" : "deckedout.golf.score0-no",
+          "url" : "no\/AchievementImage-deckedout.golf.score0-no.png"
+        }
+      ],
+      "deckedout.golf.score0-pt-BR" : [
+        {
+          "localID" : "deckedout.golf.score0-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.golf.score0-pt-BR.png"
+        }
+      ],
+      "deckedout.golf.score0-ru" : [
+        {
+          "localID" : "deckedout.golf.score0-ru",
+          "url" : "ru\/AchievementImage-deckedout.golf.score0-ru.png"
+        }
+      ],
+      "deckedout.golf.score0-sv" : [
+        {
+          "localID" : "deckedout.golf.score0-sv",
+          "url" : "sv\/AchievementImage-deckedout.golf.score0-sv.png"
+        }
+      ],
+      "deckedout.golf.score0-tr" : [
+        {
+          "localID" : "deckedout.golf.score0-tr",
+          "url" : "tr\/AchievementImage-deckedout.golf.score0-tr.png"
+        }
+      ],
+      "deckedout.golf.score0-vi" : [
+        {
+          "localID" : "deckedout.golf.score0-vi",
+          "url" : "vi\/AchievementImage-deckedout.golf.score0-vi.png"
+        }
+      ],
+      "deckedout.golf.score0-zh-Hans" : [
+        {
+          "localID" : "deckedout.golf.score0-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.golf.score0-zh-Hans.png"
+        }
+      ],
+      "deckedout.golf.score0-zh-Hant" : [
+        {
+          "localID" : "deckedout.golf.score0-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.golf.score0-zh-Hant.png"
+        }
+      ],
+      "deckedout.wins.total.1-da" : [
+        {
+          "localID" : "deckedout.wins.total.1-da",
+          "url" : "da\/AchievementImage-deckedout.wins.total.1-da.png"
+        }
+      ],
+      "deckedout.wins.total.1-de-DE" : [
+        {
+          "localID" : "deckedout.wins.total.1-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.wins.total.1-de-DE.png"
+        }
+      ],
+      "deckedout.wins.total.1-en-US" : [
+        {
+          "localID" : "deckedout.wins.total.1-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.wins.total.1-en-US.png"
+        }
+      ],
+      "deckedout.wins.total.1-es-ES" : [
+        {
+          "localID" : "deckedout.wins.total.1-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.wins.total.1-es-ES.png"
+        }
+      ],
+      "deckedout.wins.total.1-fr-FR" : [
+        {
+          "localID" : "deckedout.wins.total.1-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.wins.total.1-fr-FR.png"
+        }
+      ],
+      "deckedout.wins.total.1-hi" : [
+        {
+          "localID" : "deckedout.wins.total.1-hi",
+          "url" : "hi\/AchievementImage-deckedout.wins.total.1-hi.png"
+        }
+      ],
+      "deckedout.wins.total.1-it" : [
+        {
+          "localID" : "deckedout.wins.total.1-it",
+          "url" : "it\/AchievementImage-deckedout.wins.total.1-it.png"
+        }
+      ],
+      "deckedout.wins.total.1-ja" : [
+        {
+          "localID" : "deckedout.wins.total.1-ja",
+          "url" : "ja\/AchievementImage-deckedout.wins.total.1-ja.png"
+        }
+      ],
+      "deckedout.wins.total.1-ko" : [
+        {
+          "localID" : "deckedout.wins.total.1-ko",
+          "url" : "ko\/AchievementImage-deckedout.wins.total.1-ko.png"
+        }
+      ],
+      "deckedout.wins.total.1-nl-NL" : [
+        {
+          "localID" : "deckedout.wins.total.1-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.wins.total.1-nl-NL.png"
+        }
+      ],
+      "deckedout.wins.total.1-no" : [
+        {
+          "localID" : "deckedout.wins.total.1-no",
+          "url" : "no\/AchievementImage-deckedout.wins.total.1-no.png"
+        }
+      ],
+      "deckedout.wins.total.1-pt-BR" : [
+        {
+          "localID" : "deckedout.wins.total.1-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.wins.total.1-pt-BR.png"
+        }
+      ],
+      "deckedout.wins.total.1-ru" : [
+        {
+          "localID" : "deckedout.wins.total.1-ru",
+          "url" : "ru\/AchievementImage-deckedout.wins.total.1-ru.png"
+        }
+      ],
+      "deckedout.wins.total.1-sv" : [
+        {
+          "localID" : "deckedout.wins.total.1-sv",
+          "url" : "sv\/AchievementImage-deckedout.wins.total.1-sv.png"
+        }
+      ],
+      "deckedout.wins.total.1-tr" : [
+        {
+          "localID" : "deckedout.wins.total.1-tr",
+          "url" : "tr\/AchievementImage-deckedout.wins.total.1-tr.png"
+        }
+      ],
+      "deckedout.wins.total.1-vi" : [
+        {
+          "localID" : "deckedout.wins.total.1-vi",
+          "url" : "vi\/AchievementImage-deckedout.wins.total.1-vi.png"
+        }
+      ],
+      "deckedout.wins.total.1-zh-Hans" : [
+        {
+          "localID" : "deckedout.wins.total.1-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.wins.total.1-zh-Hans.png"
+        }
+      ],
+      "deckedout.wins.total.1-zh-Hant" : [
+        {
+          "localID" : "deckedout.wins.total.1-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.wins.total.1-zh-Hant.png"
+        }
+      ],
+      "deckedout.wins.total.2-da" : [
+        {
+          "localID" : "deckedout.wins.total.2-da",
+          "url" : "da\/AchievementImage-deckedout.wins.total.2-da.png"
+        }
+      ],
+      "deckedout.wins.total.2-de-DE" : [
+        {
+          "localID" : "deckedout.wins.total.2-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.wins.total.2-de-DE.png"
+        }
+      ],
+      "deckedout.wins.total.2-en-US" : [
+        {
+          "localID" : "deckedout.wins.total.2-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.wins.total.2-en-US.png"
+        }
+      ],
+      "deckedout.wins.total.2-es-ES" : [
+        {
+          "localID" : "deckedout.wins.total.2-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.wins.total.2-es-ES.png"
+        }
+      ],
+      "deckedout.wins.total.2-fr-FR" : [
+        {
+          "localID" : "deckedout.wins.total.2-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.wins.total.2-fr-FR.png"
+        }
+      ],
+      "deckedout.wins.total.2-hi" : [
+        {
+          "localID" : "deckedout.wins.total.2-hi",
+          "url" : "hi\/AchievementImage-deckedout.wins.total.2-hi.png"
+        }
+      ],
+      "deckedout.wins.total.2-it" : [
+        {
+          "localID" : "deckedout.wins.total.2-it",
+          "url" : "it\/AchievementImage-deckedout.wins.total.2-it.png"
+        }
+      ],
+      "deckedout.wins.total.2-ja" : [
+        {
+          "localID" : "deckedout.wins.total.2-ja",
+          "url" : "ja\/AchievementImage-deckedout.wins.total.2-ja.png"
+        }
+      ],
+      "deckedout.wins.total.2-ko" : [
+        {
+          "localID" : "deckedout.wins.total.2-ko",
+          "url" : "ko\/AchievementImage-deckedout.wins.total.2-ko.png"
+        }
+      ],
+      "deckedout.wins.total.2-nl-NL" : [
+        {
+          "localID" : "deckedout.wins.total.2-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.wins.total.2-nl-NL.png"
+        }
+      ],
+      "deckedout.wins.total.2-no" : [
+        {
+          "localID" : "deckedout.wins.total.2-no",
+          "url" : "no\/AchievementImage-deckedout.wins.total.2-no.png"
+        }
+      ],
+      "deckedout.wins.total.2-pt-BR" : [
+        {
+          "localID" : "deckedout.wins.total.2-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.wins.total.2-pt-BR.png"
+        }
+      ],
+      "deckedout.wins.total.2-ru" : [
+        {
+          "localID" : "deckedout.wins.total.2-ru",
+          "url" : "ru\/AchievementImage-deckedout.wins.total.2-ru.png"
+        }
+      ],
+      "deckedout.wins.total.2-sv" : [
+        {
+          "localID" : "deckedout.wins.total.2-sv",
+          "url" : "sv\/AchievementImage-deckedout.wins.total.2-sv.png"
+        }
+      ],
+      "deckedout.wins.total.2-tr" : [
+        {
+          "localID" : "deckedout.wins.total.2-tr",
+          "url" : "tr\/AchievementImage-deckedout.wins.total.2-tr.png"
+        }
+      ],
+      "deckedout.wins.total.2-vi" : [
+        {
+          "localID" : "deckedout.wins.total.2-vi",
+          "url" : "vi\/AchievementImage-deckedout.wins.total.2-vi.png"
+        }
+      ],
+      "deckedout.wins.total.2-zh-Hans" : [
+        {
+          "localID" : "deckedout.wins.total.2-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.wins.total.2-zh-Hans.png"
+        }
+      ],
+      "deckedout.wins.total.2-zh-Hant" : [
+        {
+          "localID" : "deckedout.wins.total.2-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.wins.total.2-zh-Hant.png"
+        }
+      ],
+      "deckedout.wins.total.10-da" : [
+        {
+          "localID" : "deckedout.wins.total.10-da",
+          "url" : "da\/AchievementImage-deckedout.wins.total.10-da.png"
+        }
+      ],
+      "deckedout.wins.total.10-de-DE" : [
+        {
+          "localID" : "deckedout.wins.total.10-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.wins.total.10-de-DE.png"
+        }
+      ],
+      "deckedout.wins.total.10-en-US" : [
+        {
+          "localID" : "deckedout.wins.total.10-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.wins.total.10-en-US.png"
+        }
+      ],
+      "deckedout.wins.total.10-es-ES" : [
+        {
+          "localID" : "deckedout.wins.total.10-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.wins.total.10-es-ES.png"
+        }
+      ],
+      "deckedout.wins.total.10-fr-FR" : [
+        {
+          "localID" : "deckedout.wins.total.10-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.wins.total.10-fr-FR.png"
+        }
+      ],
+      "deckedout.wins.total.10-hi" : [
+        {
+          "localID" : "deckedout.wins.total.10-hi",
+          "url" : "hi\/AchievementImage-deckedout.wins.total.10-hi.png"
+        }
+      ],
+      "deckedout.wins.total.10-it" : [
+        {
+          "localID" : "deckedout.wins.total.10-it",
+          "url" : "it\/AchievementImage-deckedout.wins.total.10-it.png"
+        }
+      ],
+      "deckedout.wins.total.10-ja" : [
+        {
+          "localID" : "deckedout.wins.total.10-ja",
+          "url" : "ja\/AchievementImage-deckedout.wins.total.10-ja.png"
+        }
+      ],
+      "deckedout.wins.total.10-ko" : [
+        {
+          "localID" : "deckedout.wins.total.10-ko",
+          "url" : "ko\/AchievementImage-deckedout.wins.total.10-ko.png"
+        }
+      ],
+      "deckedout.wins.total.10-nl-NL" : [
+        {
+          "localID" : "deckedout.wins.total.10-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.wins.total.10-nl-NL.png"
+        }
+      ],
+      "deckedout.wins.total.10-no" : [
+        {
+          "localID" : "deckedout.wins.total.10-no",
+          "url" : "no\/AchievementImage-deckedout.wins.total.10-no.png"
+        }
+      ],
+      "deckedout.wins.total.10-pt-BR" : [
+        {
+          "localID" : "deckedout.wins.total.10-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.wins.total.10-pt-BR.png"
+        }
+      ],
+      "deckedout.wins.total.10-ru" : [
+        {
+          "localID" : "deckedout.wins.total.10-ru",
+          "url" : "ru\/AchievementImage-deckedout.wins.total.10-ru.png"
+        }
+      ],
+      "deckedout.wins.total.10-sv" : [
+        {
+          "localID" : "deckedout.wins.total.10-sv",
+          "url" : "sv\/AchievementImage-deckedout.wins.total.10-sv.png"
+        }
+      ],
+      "deckedout.wins.total.10-tr" : [
+        {
+          "localID" : "deckedout.wins.total.10-tr",
+          "url" : "tr\/AchievementImage-deckedout.wins.total.10-tr.png"
+        }
+      ],
+      "deckedout.wins.total.10-vi" : [
+        {
+          "localID" : "deckedout.wins.total.10-vi",
+          "url" : "vi\/AchievementImage-deckedout.wins.total.10-vi.png"
+        }
+      ],
+      "deckedout.wins.total.10-zh-Hans" : [
+        {
+          "localID" : "deckedout.wins.total.10-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.wins.total.10-zh-Hans.png"
+        }
+      ],
+      "deckedout.wins.total.10-zh-Hant" : [
+        {
+          "localID" : "deckedout.wins.total.10-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.wins.total.10-zh-Hant.png"
+        }
+      ],
+      "deckedout.wins.total.20-da" : [
+        {
+          "localID" : "deckedout.wins.total.20-da",
+          "url" : "da\/AchievementImage-deckedout.wins.total.20-da.png"
+        }
+      ],
+      "deckedout.wins.total.20-de-DE" : [
+        {
+          "localID" : "deckedout.wins.total.20-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.wins.total.20-de-DE.png"
+        }
+      ],
+      "deckedout.wins.total.20-en-US" : [
+        {
+          "localID" : "deckedout.wins.total.20-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.wins.total.20-en-US.png"
+        }
+      ],
+      "deckedout.wins.total.20-es-ES" : [
+        {
+          "localID" : "deckedout.wins.total.20-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.wins.total.20-es-ES.png"
+        }
+      ],
+      "deckedout.wins.total.20-fr-FR" : [
+        {
+          "localID" : "deckedout.wins.total.20-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.wins.total.20-fr-FR.png"
+        }
+      ],
+      "deckedout.wins.total.20-hi" : [
+        {
+          "localID" : "deckedout.wins.total.20-hi",
+          "url" : "hi\/AchievementImage-deckedout.wins.total.20-hi.png"
+        }
+      ],
+      "deckedout.wins.total.20-it" : [
+        {
+          "localID" : "deckedout.wins.total.20-it",
+          "url" : "it\/AchievementImage-deckedout.wins.total.20-it.png"
+        }
+      ],
+      "deckedout.wins.total.20-ja" : [
+        {
+          "localID" : "deckedout.wins.total.20-ja",
+          "url" : "ja\/AchievementImage-deckedout.wins.total.20-ja.png"
+        }
+      ],
+      "deckedout.wins.total.20-ko" : [
+        {
+          "localID" : "deckedout.wins.total.20-ko",
+          "url" : "ko\/AchievementImage-deckedout.wins.total.20-ko.png"
+        }
+      ],
+      "deckedout.wins.total.20-nl-NL" : [
+        {
+          "localID" : "deckedout.wins.total.20-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.wins.total.20-nl-NL.png"
+        }
+      ],
+      "deckedout.wins.total.20-no" : [
+        {
+          "localID" : "deckedout.wins.total.20-no",
+          "url" : "no\/AchievementImage-deckedout.wins.total.20-no.png"
+        }
+      ],
+      "deckedout.wins.total.20-pt-BR" : [
+        {
+          "localID" : "deckedout.wins.total.20-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.wins.total.20-pt-BR.png"
+        }
+      ],
+      "deckedout.wins.total.20-ru" : [
+        {
+          "localID" : "deckedout.wins.total.20-ru",
+          "url" : "ru\/AchievementImage-deckedout.wins.total.20-ru.png"
+        }
+      ],
+      "deckedout.wins.total.20-sv" : [
+        {
+          "localID" : "deckedout.wins.total.20-sv",
+          "url" : "sv\/AchievementImage-deckedout.wins.total.20-sv.png"
+        }
+      ],
+      "deckedout.wins.total.20-tr" : [
+        {
+          "localID" : "deckedout.wins.total.20-tr",
+          "url" : "tr\/AchievementImage-deckedout.wins.total.20-tr.png"
+        }
+      ],
+      "deckedout.wins.total.20-vi" : [
+        {
+          "localID" : "deckedout.wins.total.20-vi",
+          "url" : "vi\/AchievementImage-deckedout.wins.total.20-vi.png"
+        }
+      ],
+      "deckedout.wins.total.20-zh-Hans" : [
+        {
+          "localID" : "deckedout.wins.total.20-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.wins.total.20-zh-Hans.png"
+        }
+      ],
+      "deckedout.wins.total.20-zh-Hant" : [
+        {
+          "localID" : "deckedout.wins.total.20-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.wins.total.20-zh-Hant.png"
+        }
+      ],
+      "deckedout.wins.total.100-da" : [
+        {
+          "localID" : "deckedout.wins.total.100-da",
+          "url" : "da\/AchievementImage-deckedout.wins.total.100-da.png"
+        }
+      ],
+      "deckedout.wins.total.100-de-DE" : [
+        {
+          "localID" : "deckedout.wins.total.100-de-DE",
+          "url" : "de-DE\/AchievementImage-deckedout.wins.total.100-de-DE.png"
+        }
+      ],
+      "deckedout.wins.total.100-en-US" : [
+        {
+          "localID" : "deckedout.wins.total.100-en-US",
+          "url" : "en-US\/AchievementImage-deckedout.wins.total.100-en-US.png"
+        }
+      ],
+      "deckedout.wins.total.100-es-ES" : [
+        {
+          "localID" : "deckedout.wins.total.100-es-ES",
+          "url" : "es-ES\/AchievementImage-deckedout.wins.total.100-es-ES.png"
+        }
+      ],
+      "deckedout.wins.total.100-fr-FR" : [
+        {
+          "localID" : "deckedout.wins.total.100-fr-FR",
+          "url" : "fr-FR\/AchievementImage-deckedout.wins.total.100-fr-FR.png"
+        }
+      ],
+      "deckedout.wins.total.100-hi" : [
+        {
+          "localID" : "deckedout.wins.total.100-hi",
+          "url" : "hi\/AchievementImage-deckedout.wins.total.100-hi.png"
+        }
+      ],
+      "deckedout.wins.total.100-it" : [
+        {
+          "localID" : "deckedout.wins.total.100-it",
+          "url" : "it\/AchievementImage-deckedout.wins.total.100-it.png"
+        }
+      ],
+      "deckedout.wins.total.100-ja" : [
+        {
+          "localID" : "deckedout.wins.total.100-ja",
+          "url" : "ja\/AchievementImage-deckedout.wins.total.100-ja.png"
+        }
+      ],
+      "deckedout.wins.total.100-ko" : [
+        {
+          "localID" : "deckedout.wins.total.100-ko",
+          "url" : "ko\/AchievementImage-deckedout.wins.total.100-ko.png"
+        }
+      ],
+      "deckedout.wins.total.100-nl-NL" : [
+        {
+          "localID" : "deckedout.wins.total.100-nl-NL",
+          "url" : "nl-NL\/AchievementImage-deckedout.wins.total.100-nl-NL.png"
+        }
+      ],
+      "deckedout.wins.total.100-no" : [
+        {
+          "localID" : "deckedout.wins.total.100-no",
+          "url" : "no\/AchievementImage-deckedout.wins.total.100-no.png"
+        }
+      ],
+      "deckedout.wins.total.100-pt-BR" : [
+        {
+          "localID" : "deckedout.wins.total.100-pt-BR",
+          "url" : "pt-BR\/AchievementImage-deckedout.wins.total.100-pt-BR.png"
+        }
+      ],
+      "deckedout.wins.total.100-ru" : [
+        {
+          "localID" : "deckedout.wins.total.100-ru",
+          "url" : "ru\/AchievementImage-deckedout.wins.total.100-ru.png"
+        }
+      ],
+      "deckedout.wins.total.100-sv" : [
+        {
+          "localID" : "deckedout.wins.total.100-sv",
+          "url" : "sv\/AchievementImage-deckedout.wins.total.100-sv.png"
+        }
+      ],
+      "deckedout.wins.total.100-tr" : [
+        {
+          "localID" : "deckedout.wins.total.100-tr",
+          "url" : "tr\/AchievementImage-deckedout.wins.total.100-tr.png"
+        }
+      ],
+      "deckedout.wins.total.100-vi" : [
+        {
+          "localID" : "deckedout.wins.total.100-vi",
+          "url" : "vi\/AchievementImage-deckedout.wins.total.100-vi.png"
+        }
+      ],
+      "deckedout.wins.total.100-zh-Hans" : [
+        {
+          "localID" : "deckedout.wins.total.100-zh-Hans",
+          "url" : "zh-Hans\/AchievementImage-deckedout.wins.total.100-zh-Hans.png"
+        }
+      ],
+      "deckedout.wins.total.100-zh-Hant" : [
+        {
+          "localID" : "deckedout.wins.total.100-zh-Hant",
+          "url" : "zh-Hant\/AchievementImage-deckedout.wins.total.100-zh-Hant.png"
+        }
+      ]
+    },
+    "achievementLocalizations" : {
+      "deckedout.crazy8s.ace" : [
+        {
+          "afterEarnedDescription" : "Du spillede et es og vendte bordet på hovedet!",
+          "beforeEarnedDescription" : "Smid et es i et gruppechat-spil Crazy 8s for at vende rækkefølgen.",
+          "locale" : "da",
+          "localID" : "deckedout.crazy8s.ace-da",
+          "name" : "Plottwist"
+        },
+        {
+          "afterEarnedDescription" : "Du hast ein Ass gespielt und den Spieß umgedreht!",
+          "beforeEarnedDescription" : "Lege in einem Gruppenchat-Spiel Crazy 8s ein Ass ab, um die Zugreihenfolge umzukehren.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.crazy8s.ace-de-DE",
+          "name" : "Plot-Twist"
+        },
+        {
+          "afterEarnedDescription" : "You played an ace and flipped the table around!",
+          "beforeEarnedDescription" : "Discard an ace in a group chat game of Crazy 8s to reverse the turn order.",
+          "locale" : "en-US",
+          "localID" : "deckedout.crazy8s.ace-en-US",
+          "name" : "Plot Twist"
+        },
+        {
+          "afterEarnedDescription" : "¡Jugaste un as y le diste la vuelta a la mesa!",
+          "beforeEarnedDescription" : "Descarta un as en una partida de Crazy 8s en chat grupal para invertir el orden de los turnos.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.crazy8s.ace-es-ES",
+          "name" : "Giro Inesperado"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez joué un as et renversé la table !",
+          "beforeEarnedDescription" : "Défaussez un as dans une partie de Crazy 8s en discussion de groupe pour inverser l'ordre des tours.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.crazy8s.ace-fr-FR",
+          "name" : "Coup de Théâtre"
+        },
+        {
+          "afterEarnedDescription" : "आपने एक इक्का खेला और पूरा खेल पलट दिया!",
+          "beforeEarnedDescription" : "टर्न का क्रम उलटने के लिए ग्रुप चैट के क्रेज़ी 8s गेम में एक इक्का फेंकें।",
+          "locale" : "hi",
+          "localID" : "deckedout.crazy8s.ace-hi",
+          "name" : "अप्रत्याशित मोड़"
+        },
+        {
+          "afterEarnedDescription" : "Hai giocato un asso e ribaltato il tavolo!",
+          "beforeEarnedDescription" : "Scarta un asso in una partita di Crazy 8s in chat di gruppo per invertire l'ordine dei turni.",
+          "locale" : "it",
+          "localID" : "deckedout.crazy8s.ace-it",
+          "name" : "Colpo di Scena"
+        },
+        {
+          "afterEarnedDescription" : "エースを出して場をひっくり返しました！",
+          "beforeEarnedDescription" : "グループチャットのクレイジーエイトでエースを捨てて手番の順序を逆にしましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.crazy8s.ace-ja",
+          "name" : "どんでん返し"
+        },
+        {
+          "afterEarnedDescription" : "에이스를 내서 판을 뒤집었습니다!",
+          "beforeEarnedDescription" : "그룹 채팅 크레이지 8s 게임에서 에이스를 버려 차례 순서를 뒤집으세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.crazy8s.ace-ko",
+          "name" : "반전"
+        },
+        {
+          "afterEarnedDescription" : "Je speelde een aas en draaide de tafel om!",
+          "beforeEarnedDescription" : "Leg een aas af in een groepschat-spel Crazy 8s om de beurtvolgorde om te keren.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.crazy8s.ace-nl-NL",
+          "name" : "Plotwending"
+        },
+        {
+          "afterEarnedDescription" : "Du spilte et ess og snudde bordet på hodet!",
+          "beforeEarnedDescription" : "Kast et ess i et gruppechat-spill Crazy 8s for å snu rekkefølgen.",
+          "locale" : "no",
+          "localID" : "deckedout.crazy8s.ace-no",
+          "name" : "Plottvist"
+        },
+        {
+          "afterEarnedDescription" : "Você jogou um ás e virou a mesa!",
+          "beforeEarnedDescription" : "Descarte um ás em uma partida de Crazy 8s em conversa em grupo para inverter a ordem dos turnos.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.crazy8s.ace-pt-BR",
+          "name" : "Reviravolta"
+        },
+        {
+          "afterEarnedDescription" : "Вы сыграли туза и перевернули игру!",
+          "beforeEarnedDescription" : "Сбросьте туза в групповом чате Crazy 8s, чтобы изменить порядок ходов.",
+          "locale" : "ru",
+          "localID" : "deckedout.crazy8s.ace-ru",
+          "name" : "Неожиданный Поворот"
+        },
+        {
+          "afterEarnedDescription" : "Du spelade ett ess och vände på hela bordet!",
+          "beforeEarnedDescription" : "Lägg av ett ess i ett gruppchatt-parti Crazy 8s för att vända turordningen.",
+          "locale" : "sv",
+          "localID" : "deckedout.crazy8s.ace-sv",
+          "name" : "Oväntad Vändning"
+        },
+        {
+          "afterEarnedDescription" : "Bir as oynayıp masayı tersine çevirdiniz!",
+          "beforeEarnedDescription" : "Sıra düzenini tersine çevirmek için grup sohbetindeki bir Crazy 8s oyununda bir as atın.",
+          "locale" : "tr",
+          "localID" : "deckedout.crazy8s.ace-tr",
+          "name" : "Beklenmedik Dönüş"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã đánh lá Át và lật ngược cả bàn chơi!",
+          "beforeEarnedDescription" : "Đánh ra một lá Át trong ván Crazy 8s ở nhóm chat để đảo ngược thứ tự lượt.",
+          "locale" : "vi",
+          "localID" : "deckedout.crazy8s.ace-vi",
+          "name" : "Cú Lật Kèo"
+        },
+        {
+          "afterEarnedDescription" : "你打出一张A，扭转了整个牌局！",
+          "beforeEarnedDescription" : "在群聊的疯狂8游戏中打出一张A以反转出牌顺序。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.crazy8s.ace-zh-Hans",
+          "name" : "剧情反转"
+        },
+        {
+          "afterEarnedDescription" : "你打出一張A，扭轉了整個牌局！",
+          "beforeEarnedDescription" : "在群聊的瘋狂8遊戲中打出一張A以反轉出牌順序。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.crazy8s.ace-zh-Hant",
+          "name" : "劇情反轉"
+        }
+      ],
+      "deckedout.crazy8s.eight" : [
+        {
+          "afterEarnedDescription" : "Du spillede et vildt 8'er og valgte kuløren!",
+          "beforeEarnedDescription" : "Smid et 8'er i Crazy 8s.",
+          "locale" : "da",
+          "localID" : "deckedout.crazy8s.eight-da",
+          "name" : "Vildkort"
+        },
+        {
+          "afterEarnedDescription" : "Du hast eine wilde 8 gespielt und die Farbe bestimmt!",
+          "beforeEarnedDescription" : "Lege in Crazy 8s eine 8 ab.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.crazy8s.eight-de-DE",
+          "name" : "Wildes Ding"
+        },
+        {
+          "afterEarnedDescription" : "You played a wild 8 and called the suit!",
+          "beforeEarnedDescription" : "Discard an 8 in Crazy 8s.",
+          "locale" : "en-US",
+          "localID" : "deckedout.crazy8s.eight-en-US",
+          "name" : "Wild Thing"
+        },
+        {
+          "afterEarnedDescription" : "¡Jugaste un 8 comodín y elegiste el palo!",
+          "beforeEarnedDescription" : "Descarta un 8 en Crazy 8s.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.crazy8s.eight-es-ES",
+          "name" : "Comodín Salvaje"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez joué un 8 sauvage et choisi la couleur !",
+          "beforeEarnedDescription" : "Défaussez un 8 dans Crazy 8s.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.crazy8s.eight-fr-FR",
+          "name" : "Bête Sauvage"
+        },
+        {
+          "afterEarnedDescription" : "आपने एक वाइल्ड 8 खेला और सूट चुना!",
+          "beforeEarnedDescription" : "क्रेज़ी 8s में एक 8 का पत्ता फेंकें।",
+          "locale" : "hi",
+          "localID" : "deckedout.crazy8s.eight-hi",
+          "name" : "वाइल्ड कार्ड"
+        },
+        {
+          "afterEarnedDescription" : "Hai giocato un 8 jolly e scelto il seme!",
+          "beforeEarnedDescription" : "Scarta un 8 in Crazy 8s.",
+          "locale" : "it",
+          "localID" : "deckedout.crazy8s.eight-it",
+          "name" : "Jolly Selvaggio"
+        },
+        {
+          "afterEarnedDescription" : "ワイルドな8を出してスートを指定しました！",
+          "beforeEarnedDescription" : "クレイジーエイトで8を捨てましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.crazy8s.eight-ja",
+          "name" : "ワイルドカード"
+        },
+        {
+          "afterEarnedDescription" : "와일드 8을 내고 무늬를 정했습니다!",
+          "beforeEarnedDescription" : "크레이지 8s에서 8을 버리세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.crazy8s.eight-ko",
+          "name" : "와일드 카드"
+        },
+        {
+          "afterEarnedDescription" : "Je speelde een wilde 8 en koos de kleur!",
+          "beforeEarnedDescription" : "Leg een 8 af in Crazy 8s.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.crazy8s.eight-nl-NL",
+          "name" : "Wilde Kaart"
+        },
+        {
+          "afterEarnedDescription" : "Du spilte en vill 8-er og valgte fargen!",
+          "beforeEarnedDescription" : "Kast en 8-er i Crazy 8s.",
+          "locale" : "no",
+          "localID" : "deckedout.crazy8s.eight-no",
+          "name" : "Villkort"
+        },
+        {
+          "afterEarnedDescription" : "Você jogou um 8 coringa e escolheu o naipe!",
+          "beforeEarnedDescription" : "Descarte um 8 em Crazy 8s.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.crazy8s.eight-pt-BR",
+          "name" : "Coringa Selvagem"
+        },
+        {
+          "afterEarnedDescription" : "Вы сыграли дикую восьмёрку и выбрали масть!",
+          "beforeEarnedDescription" : "Сбросьте восьмёрку в Crazy 8s.",
+          "locale" : "ru",
+          "localID" : "deckedout.crazy8s.eight-ru",
+          "name" : "Дикая Карта"
+        },
+        {
+          "afterEarnedDescription" : "Du spelade en vild 8:a och valde färgen!",
+          "beforeEarnedDescription" : "Lägg av en 8:a i Crazy 8s.",
+          "locale" : "sv",
+          "localID" : "deckedout.crazy8s.eight-sv",
+          "name" : "Vildkort"
+        },
+        {
+          "afterEarnedDescription" : "Vahşi bir 8 oynayıp türü belirlediniz!",
+          "beforeEarnedDescription" : "Crazy 8s'te bir 8 atın.",
+          "locale" : "tr",
+          "localID" : "deckedout.crazy8s.eight-tr",
+          "name" : "Vahşi Joker"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã đánh lá 8 đầy quyền năng và chọn chất!",
+          "beforeEarnedDescription" : "Đánh ra một lá 8 trong Crazy 8s.",
+          "locale" : "vi",
+          "localID" : "deckedout.crazy8s.eight-vi",
+          "name" : "Lá Bài Dại"
+        },
+        {
+          "afterEarnedDescription" : "你打出一张百搭8并指定了花色！",
+          "beforeEarnedDescription" : "在疯狂8中打出一张8。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.crazy8s.eight-zh-Hans",
+          "name" : "百搭狂徒"
+        },
+        {
+          "afterEarnedDescription" : "你打出一張百搭8並指定了花色！",
+          "beforeEarnedDescription" : "在瘋狂8中打出一張8。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.crazy8s.eight-zh-Hant",
+          "name" : "百搭狂徒"
+        }
+      ],
+      "deckedout.crazy8s.master" : [
+        {
+          "afterEarnedDescription" : "Du vandt Crazy 8s på præcis otte ture!",
+          "beforeEarnedDescription" : "Vind et spil Crazy 8s på præcis din ottende tur.",
+          "locale" : "da",
+          "localID" : "deckedout.crazy8s.master-da",
+          "name" : "Otte Er Nok"
+        },
+        {
+          "afterEarnedDescription" : "Du hast Crazy 8s in genau acht Zügen gewonnen!",
+          "beforeEarnedDescription" : "Gewinne ein Spiel Crazy 8s in genau deinem achten Zug.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.crazy8s.master-de-DE",
+          "name" : "Acht Genügt"
+        },
+        {
+          "afterEarnedDescription" : "You won Crazy 8s in exactly eight turns!",
+          "beforeEarnedDescription" : "Win a game of Crazy 8s on exactly your eighth turn.",
+          "locale" : "en-US",
+          "localID" : "deckedout.crazy8s.master-en-US",
+          "name" : "Eight Is Enough"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste Crazy 8s en exactamente ocho turnos!",
+          "beforeEarnedDescription" : "Gana una partida de Crazy 8s exactamente en tu octavo turno.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.crazy8s.master-es-ES",
+          "name" : "Ocho Bastan"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné Crazy 8s en exactement huit tours !",
+          "beforeEarnedDescription" : "Gagnez une partie de Crazy 8s exactement à votre huitième tour.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.crazy8s.master-fr-FR",
+          "name" : "Huit Suffisent"
+        },
+        {
+          "afterEarnedDescription" : "आपने ठीक आठ बारियों में क्रेज़ी 8s जीता!",
+          "beforeEarnedDescription" : "ठीक अपनी आठवीं बारी पर क्रेज़ी 8s का एक गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.crazy8s.master-hi",
+          "name" : "आठ ही काफी"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto a Crazy 8s in esattamente otto turni!",
+          "beforeEarnedDescription" : "Vinci una partita di Crazy 8s esattamente al tuo ottavo turno.",
+          "locale" : "it",
+          "localID" : "deckedout.crazy8s.master-it",
+          "name" : "Otto Bastano"
+        },
+        {
+          "afterEarnedDescription" : "ちょうど8回の手番でクレイジーエイトに勝利しました！",
+          "beforeEarnedDescription" : "ちょうど8回目の手番でクレイジーエイトに勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.crazy8s.master-ja",
+          "name" : "8回で十分"
+        },
+        {
+          "afterEarnedDescription" : "정확히 여덟 번의 차례 만에 크레이지 8s에서 승리했습니다!",
+          "beforeEarnedDescription" : "정확히 여덟 번째 차례에 크레이지 8s 게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.crazy8s.master-ko",
+          "name" : "여덟이면 충분"
+        },
+        {
+          "afterEarnedDescription" : "Je won Crazy 8s in precies acht beurten!",
+          "beforeEarnedDescription" : "Win een spelletje Crazy 8s op precies je achtste beurt.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.crazy8s.master-nl-NL",
+          "name" : "Acht Is Genoeg"
+        },
+        {
+          "afterEarnedDescription" : "Du vant Crazy 8s på nøyaktig åtte turer!",
+          "beforeEarnedDescription" : "Vinn et spill Crazy 8s på nøyaktig din åttende tur.",
+          "locale" : "no",
+          "localID" : "deckedout.crazy8s.master-no",
+          "name" : "Åtte Er Nok"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu Crazy 8s em exatamente oito turnos!",
+          "beforeEarnedDescription" : "Vença uma partida de Crazy 8s exatamente no seu oitavo turno.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.crazy8s.master-pt-BR",
+          "name" : "Oito Bastam"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли Crazy 8s ровно за восемь ходов!",
+          "beforeEarnedDescription" : "Выиграйте партию в Crazy 8s ровно на восьмом ходу.",
+          "locale" : "ru",
+          "localID" : "deckedout.crazy8s.master-ru",
+          "name" : "Восьми Достаточно"
+        },
+        {
+          "afterEarnedDescription" : "Du vann Crazy 8s på exakt åtta turer!",
+          "beforeEarnedDescription" : "Vinn ett parti Crazy 8s på exakt din åttonde tur.",
+          "locale" : "sv",
+          "localID" : "deckedout.crazy8s.master-sv",
+          "name" : "Åtta Räcker"
+        },
+        {
+          "afterEarnedDescription" : "Crazy 8s'i tam olarak sekiz sırada kazandınız!",
+          "beforeEarnedDescription" : "Tam olarak sekizinci sıranızda bir Crazy 8s oyunu kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.crazy8s.master-tr",
+          "name" : "Sekiz Yeter"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng Crazy 8s đúng trong tám lượt!",
+          "beforeEarnedDescription" : "Thắng một ván Crazy 8s đúng vào lượt thứ tám của bạn.",
+          "locale" : "vi",
+          "localID" : "deckedout.crazy8s.master-vi",
+          "name" : "Tám Là Đủ"
+        },
+        {
+          "afterEarnedDescription" : "你恰好用八个回合赢得了疯狂8！",
+          "beforeEarnedDescription" : "在恰好第八个回合赢得一局疯狂8。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.crazy8s.master-zh-Hans",
+          "name" : "八次足矣"
+        },
+        {
+          "afterEarnedDescription" : "你恰好用八個回合贏得了瘋狂8！",
+          "beforeEarnedDescription" : "在恰好第八個回合贏得一局瘋狂8。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.crazy8s.master-zh-Hant",
+          "name" : "八次足矣"
+        }
+      ],
+      "deckedout.crazy8s.queen" : [
+        {
+          "afterEarnedDescription" : "Du spillede en dame og sprang en tur over!",
+          "beforeEarnedDescription" : "Smid en dame i Crazy 8s.",
+          "locale" : "da",
+          "localID" : "deckedout.crazy8s.queen-da",
+          "name" : "Kongelig Afvisning"
+        },
+        {
+          "afterEarnedDescription" : "Du hast eine Dame gespielt und einen Zug übersprungen!",
+          "beforeEarnedDescription" : "Lege in Crazy 8s eine Dame ab.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.crazy8s.queen-de-DE",
+          "name" : "Königliche Abfuhr"
+        },
+        {
+          "afterEarnedDescription" : "You played a queen and skipped a turn!",
+          "beforeEarnedDescription" : "Discard a queen in Crazy 8s.",
+          "locale" : "en-US",
+          "localID" : "deckedout.crazy8s.queen-en-US",
+          "name" : "Royal Rejection"
+        },
+        {
+          "afterEarnedDescription" : "¡Jugaste una reina y saltaste un turno!",
+          "beforeEarnedDescription" : "Descarta una reina en Crazy 8s.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.crazy8s.queen-es-ES",
+          "name" : "Rechazo Real"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez joué une dame et sauté un tour !",
+          "beforeEarnedDescription" : "Défaussez une dame dans Crazy 8s.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.crazy8s.queen-fr-FR",
+          "name" : "Refus Royal"
+        },
+        {
+          "afterEarnedDescription" : "आपने एक क्वीन खेली और एक बारी छोड़ दी!",
+          "beforeEarnedDescription" : "क्रेज़ी 8s में एक क्वीन फेंकें।",
+          "locale" : "hi",
+          "localID" : "deckedout.crazy8s.queen-hi",
+          "name" : "शाही इनकार"
+        },
+        {
+          "afterEarnedDescription" : "Hai giocato una regina e saltato un turno!",
+          "beforeEarnedDescription" : "Scarta una regina in Crazy 8s.",
+          "locale" : "it",
+          "localID" : "deckedout.crazy8s.queen-it",
+          "name" : "Rifiuto Reale"
+        },
+        {
+          "afterEarnedDescription" : "クイーンを出して相手のターンを飛ばしました！",
+          "beforeEarnedDescription" : "クレイジーエイトでクイーンを捨てましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.crazy8s.queen-ja",
+          "name" : "クイーンの拒絶"
+        },
+        {
+          "afterEarnedDescription" : "퀸을 내서 차례를 건너뛰게 했습니다!",
+          "beforeEarnedDescription" : "크레이지 8s에서 퀸을 버리세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.crazy8s.queen-ko",
+          "name" : "여왕의 거절"
+        },
+        {
+          "afterEarnedDescription" : "Je speelde een vrouw en sloeg een beurt over!",
+          "beforeEarnedDescription" : "Leg een vrouw af in Crazy 8s.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.crazy8s.queen-nl-NL",
+          "name" : "Koninklijke Afwijzing"
+        },
+        {
+          "afterEarnedDescription" : "Du spilte en dame og hoppet over en tur!",
+          "beforeEarnedDescription" : "Kast en dame i Crazy 8s.",
+          "locale" : "no",
+          "localID" : "deckedout.crazy8s.queen-no",
+          "name" : "Kongelig Avvisning"
+        },
+        {
+          "afterEarnedDescription" : "Você jogou uma dama e pulou um turno!",
+          "beforeEarnedDescription" : "Descarte uma dama em Crazy 8s.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.crazy8s.queen-pt-BR",
+          "name" : "Rejeição Real"
+        },
+        {
+          "afterEarnedDescription" : "Вы сыграли даму и пропустили ход соперника!",
+          "beforeEarnedDescription" : "Сбросьте даму в Crazy 8s.",
+          "locale" : "ru",
+          "localID" : "deckedout.crazy8s.queen-ru",
+          "name" : "Королевский Отказ"
+        },
+        {
+          "afterEarnedDescription" : "Du spelade en dam och hoppade över en tur!",
+          "beforeEarnedDescription" : "Lägg av en dam i Crazy 8s.",
+          "locale" : "sv",
+          "localID" : "deckedout.crazy8s.queen-sv",
+          "name" : "Kunglig Avvisning"
+        },
+        {
+          "afterEarnedDescription" : "Bir kız oynayıp bir sırayı atlattınız!",
+          "beforeEarnedDescription" : "Crazy 8s'te bir kız atın.",
+          "locale" : "tr",
+          "localID" : "deckedout.crazy8s.queen-tr",
+          "name" : "Kraliyet Reddi"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã đánh lá đầm và bỏ qua một lượt!",
+          "beforeEarnedDescription" : "Đánh ra một lá Q (đầm) trong Crazy 8s.",
+          "locale" : "vi",
+          "localID" : "deckedout.crazy8s.queen-vi",
+          "name" : "Lời Khước Từ Hoàng Gia"
+        },
+        {
+          "afterEarnedDescription" : "你打出一张Q，跳过了一个回合！",
+          "beforeEarnedDescription" : "在疯狂8中打出一张Q。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.crazy8s.queen-zh-Hans",
+          "name" : "皇室拒绝"
+        },
+        {
+          "afterEarnedDescription" : "你打出一張Q，跳過了一個回合！",
+          "beforeEarnedDescription" : "在瘋狂8中打出一張Q。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.crazy8s.queen-zh-Hant",
+          "name" : "皇室拒絕"
+        }
+      ],
+      "deckedout.crazy8s.two" : [
+        {
+          "afterEarnedDescription" : "Du spillede et 2'er og fik nogen til at trække kort!",
+          "beforeEarnedDescription" : "Smid et 2'er i Crazy 8s.",
+          "locale" : "da",
+          "localID" : "deckedout.crazy8s.two-da",
+          "name" : "Træk To"
+        },
+        {
+          "afterEarnedDescription" : "Du hast eine 2 gespielt und jemanden zum Ziehen gezwungen!",
+          "beforeEarnedDescription" : "Lege in Crazy 8s eine 2 ab.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.crazy8s.two-de-DE",
+          "name" : "Zieh Zwei"
+        },
+        {
+          "afterEarnedDescription" : "You played a 2 and made someone draw!",
+          "beforeEarnedDescription" : "Discard a 2 in Crazy 8s.",
+          "locale" : "en-US",
+          "localID" : "deckedout.crazy8s.two-en-US",
+          "name" : "Take Two"
+        },
+        {
+          "afterEarnedDescription" : "¡Jugaste un 2 e hiciste que alguien robara cartas!",
+          "beforeEarnedDescription" : "Descarta un 2 en Crazy 8s.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.crazy8s.two-es-ES",
+          "name" : "Toma Dos"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez joué un 2 et forcé quelqu'un à piocher !",
+          "beforeEarnedDescription" : "Défaussez un 2 dans Crazy 8s.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.crazy8s.two-fr-FR",
+          "name" : "Pioche Deux"
+        },
+        {
+          "afterEarnedDescription" : "आपने एक 2 खेला और किसी को पत्ते उठाने पर मजबूर किया!",
+          "beforeEarnedDescription" : "क्रेज़ी 8s में एक 2 का पत्ता फेंकें।",
+          "locale" : "hi",
+          "localID" : "deckedout.crazy8s.two-hi",
+          "name" : "दो उठाओ"
+        },
+        {
+          "afterEarnedDescription" : "Hai giocato un 2 e fatto pescare qualcuno!",
+          "beforeEarnedDescription" : "Scarta un 2 in Crazy 8s.",
+          "locale" : "it",
+          "localID" : "deckedout.crazy8s.two-it",
+          "name" : "Pesca Due"
+        },
+        {
+          "afterEarnedDescription" : "2を出して相手にカードを引かせました！",
+          "beforeEarnedDescription" : "クレイジーエイトで2を捨てましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.crazy8s.two-ja",
+          "name" : "2枚引き"
+        },
+        {
+          "afterEarnedDescription" : "2를 내서 상대가 카드를 뽑게 했습니다!",
+          "beforeEarnedDescription" : "크레이지 8s에서 2를 버리세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.crazy8s.two-ko",
+          "name" : "두 장 뽑기"
+        },
+        {
+          "afterEarnedDescription" : "Je speelde een 2 en liet iemand kaarten pakken!",
+          "beforeEarnedDescription" : "Leg een 2 af in Crazy 8s.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.crazy8s.two-nl-NL",
+          "name" : "Pak Twee"
+        },
+        {
+          "afterEarnedDescription" : "Du spilte en 2-er og tvang noen til å trekke kort!",
+          "beforeEarnedDescription" : "Kast en 2-er i Crazy 8s.",
+          "locale" : "no",
+          "localID" : "deckedout.crazy8s.two-no",
+          "name" : "Trekk To"
+        },
+        {
+          "afterEarnedDescription" : "Você jogou um 2 e fez alguém comprar cartas!",
+          "beforeEarnedDescription" : "Descarte um 2 em Crazy 8s.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.crazy8s.two-pt-BR",
+          "name" : "Compre Duas"
+        },
+        {
+          "afterEarnedDescription" : "Вы сыграли двойку и заставили кого-то взять карты!",
+          "beforeEarnedDescription" : "Сбросьте двойку в Crazy 8s.",
+          "locale" : "ru",
+          "localID" : "deckedout.crazy8s.two-ru",
+          "name" : "Возьми Две"
+        },
+        {
+          "afterEarnedDescription" : "Du spelade en 2:a och tvingade någon att dra kort!",
+          "beforeEarnedDescription" : "Lägg av en 2:a i Crazy 8s.",
+          "locale" : "sv",
+          "localID" : "deckedout.crazy8s.two-sv",
+          "name" : "Ta Två"
+        },
+        {
+          "afterEarnedDescription" : "Bir 2 oynayıp birine kart çektirdiniz!",
+          "beforeEarnedDescription" : "Crazy 8s'te bir 2 atın.",
+          "locale" : "tr",
+          "localID" : "deckedout.crazy8s.two-tr",
+          "name" : "İki Çek"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã đánh lá 2 và bắt người khác bốc bài!",
+          "beforeEarnedDescription" : "Đánh ra một lá 2 trong Crazy 8s.",
+          "locale" : "vi",
+          "localID" : "deckedout.crazy8s.two-vi",
+          "name" : "Bốc Hai"
+        },
+        {
+          "afterEarnedDescription" : "你打出一张2，让别人摸牌！",
+          "beforeEarnedDescription" : "在疯狂8中打出一张2。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.crazy8s.two-zh-Hans",
+          "name" : "拿两张"
+        },
+        {
+          "afterEarnedDescription" : "你打出一張2，讓別人摸牌！",
+          "beforeEarnedDescription" : "在瘋狂8中打出一張2。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.crazy8s.two-zh-Hant",
+          "name" : "拿兩張"
+        }
+      ],
+      "deckedout.first_win.crazy8s" : [
+        {
+          "afterEarnedDescription" : "Du vandt dit første spil Crazy 8s!",
+          "beforeEarnedDescription" : "Vind dit første spil Crazy 8s.",
+          "locale" : "da",
+          "localID" : "deckedout.first_win.crazy8s-da",
+          "name" : "Skøreste 8'ere"
+        },
+        {
+          "afterEarnedDescription" : "Du hast dein erstes Spiel Crazy 8s gewonnen!",
+          "beforeEarnedDescription" : "Gewinne dein erstes Spiel Crazy 8s.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.first_win.crazy8s-de-DE",
+          "name" : "Verrückteste 8en"
+        },
+        {
+          "afterEarnedDescription" : "You won your first game of Crazy 8s!",
+          "beforeEarnedDescription" : "Win your first game of Crazy 8s.",
+          "locale" : "en-US",
+          "localID" : "deckedout.first_win.crazy8s-en-US",
+          "name" : "Craziest 8s"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste tu primera partida de Crazy 8s!",
+          "beforeEarnedDescription" : "Gana tu primera partida de Crazy 8s.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.first_win.crazy8s-es-ES",
+          "name" : "Los 8 más locos"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné votre première partie de Crazy 8s !",
+          "beforeEarnedDescription" : "Gagnez votre première partie de Crazy 8s.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.first_win.crazy8s-fr-FR",
+          "name" : "Le 8 le plus fou"
+        },
+        {
+          "afterEarnedDescription" : "आपने क्रेज़ी 8s का अपना पहला गेम जीत लिया!",
+          "beforeEarnedDescription" : "क्रेज़ी 8s का अपना पहला गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.first_win.crazy8s-hi",
+          "name" : "सबसे क्रेज़ी 8"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto la tua prima partita di Crazy 8s!",
+          "beforeEarnedDescription" : "Vinci la tua prima partita di Crazy 8s.",
+          "locale" : "it",
+          "localID" : "deckedout.first_win.crazy8s-it",
+          "name" : "8 Pazzeschi"
+        },
+        {
+          "afterEarnedDescription" : "クレイジーエイトで初勝利を挙げました！",
+          "beforeEarnedDescription" : "クレイジーエイトで初めて勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.first_win.crazy8s-ja",
+          "name" : "最高にクレイジーな8"
+        },
+        {
+          "afterEarnedDescription" : "크레이지 8s에서 첫 승리를 거뒀습니다!",
+          "beforeEarnedDescription" : "크레이지 8s에서 첫 게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.first_win.crazy8s-ko",
+          "name" : "최고로 크레이지한 8"
+        },
+        {
+          "afterEarnedDescription" : "Je hebt je eerste spelletje Crazy 8s gewonnen!",
+          "beforeEarnedDescription" : "Win je eerste spelletje Crazy 8s.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.first_win.crazy8s-nl-NL",
+          "name" : "Gekste 8'en"
+        },
+        {
+          "afterEarnedDescription" : "Du vant ditt første spill Crazy 8s!",
+          "beforeEarnedDescription" : "Vinn ditt første spill Crazy 8s.",
+          "locale" : "no",
+          "localID" : "deckedout.first_win.crazy8s-no",
+          "name" : "Sprøeste 8-ere"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu sua primeira partida de Crazy 8s!",
+          "beforeEarnedDescription" : "Vença sua primeira partida de Crazy 8s.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.first_win.crazy8s-pt-BR",
+          "name" : "8 Mais Loucos"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли свою первую партию в Crazy 8s!",
+          "beforeEarnedDescription" : "Выиграйте свою первую партию в Crazy 8s.",
+          "locale" : "ru",
+          "localID" : "deckedout.first_win.crazy8s-ru",
+          "name" : "Безумные восьмёрки"
+        },
+        {
+          "afterEarnedDescription" : "Du vann ditt första parti Crazy 8s!",
+          "beforeEarnedDescription" : "Vinn ditt första parti Crazy 8s.",
+          "locale" : "sv",
+          "localID" : "deckedout.first_win.crazy8s-sv",
+          "name" : "Galnaste 8:orna"
+        },
+        {
+          "afterEarnedDescription" : "İlk Crazy 8s oyununuzu kazandınız!",
+          "beforeEarnedDescription" : "İlk Crazy 8s oyununuzu kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.first_win.crazy8s-tr",
+          "name" : "En Çılgın 8'ler"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng ván Crazy 8s đầu tiên!",
+          "beforeEarnedDescription" : "Thắng ván Crazy 8s đầu tiên của bạn.",
+          "locale" : "vi",
+          "localID" : "deckedout.first_win.crazy8s-vi",
+          "name" : "8 Điên Nhất"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了第一局疯狂8！",
+          "beforeEarnedDescription" : "赢得你的第一局疯狂8。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.first_win.crazy8s-zh-Hans",
+          "name" : "最疯狂的8"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了第一局瘋狂8！",
+          "beforeEarnedDescription" : "贏得你的第一局瘋狂8。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.first_win.crazy8s-zh-Hant",
+          "name" : "最瘋狂的8"
+        }
+      ],
+      "deckedout.first_win.gin" : [
+        {
+          "afterEarnedDescription" : "Du vandt dit første spil Gin Rummy!",
+          "beforeEarnedDescription" : "Vind dit første spil Gin Rummy.",
+          "locale" : "da",
+          "localID" : "deckedout.first_win.gin-da",
+          "name" : "Gin-debutant"
+        },
+        {
+          "afterEarnedDescription" : "Du hast dein erstes Spiel Gin Rummy gewonnen!",
+          "beforeEarnedDescription" : "Gewinne dein erstes Spiel Gin Rummy.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.first_win.gin-de-DE",
+          "name" : "Gin-Neuling"
+        },
+        {
+          "afterEarnedDescription" : "You won your first game of Gin Rummy!",
+          "beforeEarnedDescription" : "Win your first game of Gin Rummy.",
+          "locale" : "en-US",
+          "localID" : "deckedout.first_win.gin-en-US",
+          "name" : "Gin Rookie"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste tu primera partida de Gin Rummy!",
+          "beforeEarnedDescription" : "Gana tu primera partida de Gin Rummy.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.first_win.gin-es-ES",
+          "name" : "Novato del Gin"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné votre première partie de Gin Rami !",
+          "beforeEarnedDescription" : "Gagnez votre première partie de Gin Rami.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.first_win.gin-fr-FR",
+          "name" : "Débutant au Gin"
+        },
+        {
+          "afterEarnedDescription" : "आपने जिन रम्मी का अपना पहला गेम जीत लिया!",
+          "beforeEarnedDescription" : "जिन रम्मी का अपना पहला गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.first_win.gin-hi",
+          "name" : "जिन नौसिखिया"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto la tua prima partita di Gin Rummy!",
+          "beforeEarnedDescription" : "Vinci la tua prima partita di Gin Rummy.",
+          "locale" : "it",
+          "localID" : "deckedout.first_win.gin-it",
+          "name" : "Esordiente al Gin"
+        },
+        {
+          "afterEarnedDescription" : "ジンラミーで初勝利を挙げました！",
+          "beforeEarnedDescription" : "ジンラミーで初めて勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.first_win.gin-ja",
+          "name" : "ジンの新人"
+        },
+        {
+          "afterEarnedDescription" : "진 러미에서 첫 승리를 거뒀습니다!",
+          "beforeEarnedDescription" : "진 러미에서 첫 게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.first_win.gin-ko",
+          "name" : "진 신참"
+        },
+        {
+          "afterEarnedDescription" : "Je hebt je eerste spelletje Gin Rummy gewonnen!",
+          "beforeEarnedDescription" : "Win je eerste spelletje Gin Rummy.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.first_win.gin-nl-NL",
+          "name" : "Gin-groentje"
+        },
+        {
+          "afterEarnedDescription" : "Du vant ditt første spill Gin Rummy!",
+          "beforeEarnedDescription" : "Vinn ditt første spill Gin Rummy.",
+          "locale" : "no",
+          "localID" : "deckedout.first_win.gin-no",
+          "name" : "Gin-debutant"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu sua primeira partida de Gin Rummy!",
+          "beforeEarnedDescription" : "Vença sua primeira partida de Gin Rummy.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.first_win.gin-pt-BR",
+          "name" : "Novato no Gin"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли свою первую партию в джин-рамми!",
+          "beforeEarnedDescription" : "Выиграйте свою первую партию в джин-рамми.",
+          "locale" : "ru",
+          "localID" : "deckedout.first_win.gin-ru",
+          "name" : "Новичок в джине"
+        },
+        {
+          "afterEarnedDescription" : "Du vann ditt första parti Gin Rummy!",
+          "beforeEarnedDescription" : "Vinn ditt första parti Gin Rummy.",
+          "locale" : "sv",
+          "localID" : "deckedout.first_win.gin-sv",
+          "name" : "Gin-nybörjare"
+        },
+        {
+          "afterEarnedDescription" : "İlk Gin Rummy oyununuzu kazandınız!",
+          "beforeEarnedDescription" : "İlk Gin Rummy oyununuzu kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.first_win.gin-tr",
+          "name" : "Gin Çaylağı"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng ván Gin Rummy đầu tiên!",
+          "beforeEarnedDescription" : "Thắng ván Gin Rummy đầu tiên của bạn.",
+          "locale" : "vi",
+          "localID" : "deckedout.first_win.gin-vi",
+          "name" : "Tân binh Gin"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了第一局金拉米！",
+          "beforeEarnedDescription" : "赢得你的第一局金拉米。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.first_win.gin-zh-Hans",
+          "name" : "金拉米新手"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了第一局金拉米！",
+          "beforeEarnedDescription" : "贏得你的第一局金拉米。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.first_win.gin-zh-Hant",
+          "name" : "金拉米新手"
+        }
+      ],
+      "deckedout.first_win.golf" : [
+        {
+          "afterEarnedDescription" : "Du vandt dit første spil Golf!",
+          "beforeEarnedDescription" : "Vind dit første spil Golf.",
+          "locale" : "da",
+          "localID" : "deckedout.first_win.golf-da",
+          "name" : "Udslag"
+        },
+        {
+          "afterEarnedDescription" : "Du hast dein erstes Spiel Golf gewonnen!",
+          "beforeEarnedDescription" : "Gewinne dein erstes Spiel Golf.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.first_win.golf-de-DE",
+          "name" : "Abschlag"
+        },
+        {
+          "afterEarnedDescription" : "You won your first game of Golf!",
+          "beforeEarnedDescription" : "Win your first game of Golf.",
+          "locale" : "en-US",
+          "localID" : "deckedout.first_win.golf-en-US",
+          "name" : "Tee Off"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste tu primera partida de Golf!",
+          "beforeEarnedDescription" : "Gana tu primera partida de Golf.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.first_win.golf-es-ES",
+          "name" : "Golpe de Salida"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné votre première partie de Golf !",
+          "beforeEarnedDescription" : "Gagnez votre première partie de Golf.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.first_win.golf-fr-FR",
+          "name" : "Coup de Départ"
+        },
+        {
+          "afterEarnedDescription" : "आपने गोल्फ का अपना पहला गेम जीत लिया!",
+          "beforeEarnedDescription" : "गोल्फ का अपना पहला गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.first_win.golf-hi",
+          "name" : "टी ऑफ"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto la tua prima partita di Golf!",
+          "beforeEarnedDescription" : "Vinci la tua prima partita di Golf.",
+          "locale" : "it",
+          "localID" : "deckedout.first_win.golf-it",
+          "name" : "Colpo d'Inizio"
+        },
+        {
+          "afterEarnedDescription" : "ゴルフで初勝利を挙げました！",
+          "beforeEarnedDescription" : "ゴルフで初めて勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.first_win.golf-ja",
+          "name" : "ティーオフ"
+        },
+        {
+          "afterEarnedDescription" : "골프에서 첫 승리를 거뒀습니다!",
+          "beforeEarnedDescription" : "골프에서 첫 게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.first_win.golf-ko",
+          "name" : "티 오프"
+        },
+        {
+          "afterEarnedDescription" : "Je hebt je eerste spelletje Golf gewonnen!",
+          "beforeEarnedDescription" : "Win je eerste spelletje Golf.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.first_win.golf-nl-NL",
+          "name" : "Afslag"
+        },
+        {
+          "afterEarnedDescription" : "Du vant ditt første spill Golf!",
+          "beforeEarnedDescription" : "Vinn ditt første spill Golf.",
+          "locale" : "no",
+          "localID" : "deckedout.first_win.golf-no",
+          "name" : "Utslag"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu sua primeira partida de Golf!",
+          "beforeEarnedDescription" : "Vença sua primeira partida de Golf.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.first_win.golf-pt-BR",
+          "name" : "Tacada Inicial"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли свою первую партию в гольф!",
+          "beforeEarnedDescription" : "Выиграйте свою первую партию в гольф.",
+          "locale" : "ru",
+          "localID" : "deckedout.first_win.golf-ru",
+          "name" : "Первый Удар"
+        },
+        {
+          "afterEarnedDescription" : "Du vann ditt första parti Golf!",
+          "beforeEarnedDescription" : "Vinn ditt första parti Golf.",
+          "locale" : "sv",
+          "localID" : "deckedout.first_win.golf-sv",
+          "name" : "Utslag"
+        },
+        {
+          "afterEarnedDescription" : "İlk Golf oyununuzu kazandınız!",
+          "beforeEarnedDescription" : "İlk Golf oyununuzu kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.first_win.golf-tr",
+          "name" : "İlk Vuruş"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng ván Golf đầu tiên!",
+          "beforeEarnedDescription" : "Thắng ván Golf đầu tiên của bạn.",
+          "locale" : "vi",
+          "localID" : "deckedout.first_win.golf-vi",
+          "name" : "Phát Bóng"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了第一局高尔夫！",
+          "beforeEarnedDescription" : "赢得你的第一局高尔夫。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.first_win.golf-zh-Hans",
+          "name" : "开球"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了第一局高爾夫！",
+          "beforeEarnedDescription" : "贏得你的第一局高爾夫。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.first_win.golf-zh-Hant",
+          "name" : "開球"
+        }
+      ],
+      "deckedout.gin.master" : [
+        {
+          "afterEarnedDescription" : "Du vandt Gin Rummy med én perfekt række — intet andet end en stribe!",
+          "beforeEarnedDescription" : "Vind et spil Gin Rummy, hvor hele din hånd danner én sammenhængende række i samme kulør.",
+          "locale" : "da",
+          "localID" : "deckedout.gin.master-da",
+          "name" : "Ren Stribe"
+        },
+        {
+          "afterEarnedDescription" : "Du hast Gin Rummy mit einer perfekten Folge gewonnen — nichts als eine Reihe!",
+          "beforeEarnedDescription" : "Gewinne ein Spiel Gin Rummy, bei dem dein gesamtes Blatt eine einzige Folge derselben Farbe bildet.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.gin.master-de-DE",
+          "name" : "Glatte Reihe"
+        },
+        {
+          "afterEarnedDescription" : "You won Gin Rummy with one perfect run — nothing but a straight!",
+          "beforeEarnedDescription" : "Win a game of Gin Rummy with your entire hand forming a single run of the same suit.",
+          "locale" : "en-US",
+          "localID" : "deckedout.gin.master-en-US",
+          "name" : "Straight Shooter"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste el Gin Rummy con una escalera perfecta y nada más!",
+          "beforeEarnedDescription" : "Gana una partida de Gin Rummy con toda tu mano formando una sola escalera del mismo palo.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.gin.master-es-ES",
+          "name" : "Escalera Perfecta"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné le Gin Rami avec une suite parfaite, rien d'autre !",
+          "beforeEarnedDescription" : "Gagnez une partie de Gin Rami avec toute votre main formant une seule suite de la même couleur.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.gin.master-fr-FR",
+          "name" : "Suite Parfaite"
+        },
+        {
+          "afterEarnedDescription" : "आपने जिन रम्मी सिर्फ एक परफेक्ट स्ट्रेट के साथ जीता!",
+          "beforeEarnedDescription" : "जिन रम्मी का एक गेम जीतें जिसमें आपका पूरा हाथ एक ही सूट की एक सीधी क्रम बनाता हो।",
+          "locale" : "hi",
+          "localID" : "deckedout.gin.master-hi",
+          "name" : "परफेक्ट स्ट्रेट"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto a Gin Rummy con un'unica scala perfetta, niente di più!",
+          "beforeEarnedDescription" : "Vinci una partita di Gin Rummy con tutta la tua mano che forma un'unica scala dello stesso seme.",
+          "locale" : "it",
+          "localID" : "deckedout.gin.master-it",
+          "name" : "Scala Perfetta"
+        },
+        {
+          "afterEarnedDescription" : "完璧なストレート1本だけでジンラミーに勝利しました！",
+          "beforeEarnedDescription" : "手札すべてが同じスートの一続きの並びになった状態でジンラミーに勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.gin.master-ja",
+          "name" : "完璧なストレート"
+        },
+        {
+          "afterEarnedDescription" : "완벽한 런 하나, 오직 스트레이트만으로 진 러미에서 승리했습니다!",
+          "beforeEarnedDescription" : "전체 패가 같은 무늬의 하나의 연속된 런을 이루는 상태로 진 러미에서 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.gin.master-ko",
+          "name" : "완벽한 스트레이트"
+        },
+        {
+          "afterEarnedDescription" : "Je won Gin Rummy met één perfecte reeks — niets dan een rechte!",
+          "beforeEarnedDescription" : "Win een spelletje Gin Rummy waarbij je hele hand één aaneengesloten reeks van dezelfde kleur vormt.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.gin.master-nl-NL",
+          "name" : "Strakke Reeks"
+        },
+        {
+          "afterEarnedDescription" : "Du vant Gin Rummy med én perfekt rekke — ikke noe annet enn en stige!",
+          "beforeEarnedDescription" : "Vinn et spill Gin Rummy der hele hånden din danner én sammenhengende rekke i samme farge.",
+          "locale" : "no",
+          "localID" : "deckedout.gin.master-no",
+          "name" : "Ren Rekke"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu o Gin Rummy com uma sequência perfeita e nada mais!",
+          "beforeEarnedDescription" : "Vença uma partida de Gin Rummy com toda a sua mão formando uma única sequência do mesmo naipe.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.gin.master-pt-BR",
+          "name" : "Sequência Perfeita"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли джин-рамми одной идеальной последовательностью — ничего, кроме стрита!",
+          "beforeEarnedDescription" : "Выиграйте партию в джин-рамми, когда вся ваша рука образует одну непрерывную последовательность одной масти.",
+          "locale" : "ru",
+          "localID" : "deckedout.gin.master-ru",
+          "name" : "Чистая Серия"
+        },
+        {
+          "afterEarnedDescription" : "Du vann Gin Rummy med en enda perfekt svit — inget annat än en stege!",
+          "beforeEarnedDescription" : "Vinn ett parti Gin Rummy där hela din hand bildar en enda svit i samma färg.",
+          "locale" : "sv",
+          "localID" : "deckedout.gin.master-sv",
+          "name" : "Ren Stege"
+        },
+        {
+          "afterEarnedDescription" : "Gin Rummy'yi tek bir kusursuz diziyle kazandınız — düz diziden başka bir şey yok!",
+          "beforeEarnedDescription" : "Tüm eliniz aynı türden tek bir diziden oluşacak şekilde bir Gin Rummy oyunu kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.gin.master-tr",
+          "name" : "Kusursuz Dizi"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng Gin Rummy chỉ với một sảnh hoàn hảo!",
+          "beforeEarnedDescription" : "Thắng một ván Gin Rummy với toàn bộ bài trên tay tạo thành một dãy liên tiếp cùng chất.",
+          "locale" : "vi",
+          "localID" : "deckedout.gin.master-vi",
+          "name" : "Sảnh Hoàn Hảo"
+        },
+        {
+          "afterEarnedDescription" : "你仅凭一条完美顺子赢得了金拉米！",
+          "beforeEarnedDescription" : "在金拉米中获胜，且整手牌构成同花色的一条完整顺子。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.gin.master-zh-Hans",
+          "name" : "完美顺子"
+        },
+        {
+          "afterEarnedDescription" : "你僅憑一條完美順子贏得了金拉米！",
+          "beforeEarnedDescription" : "在金拉米中獲勝，且整手牌構成同花色的一條完整順子。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.gin.master-zh-Hant",
+          "name" : "完美順子"
+        }
+      ],
+      "deckedout.golf.master" : [
+        {
+          "afterEarnedDescription" : "Du vandt Golf med intet andet end billedkort på hånden.",
+          "beforeEarnedDescription" : "Vind et spil Golf med en hånd bestående udelukkende af billedkort — knægte, damer og konger.",
+          "locale" : "da",
+          "localID" : "deckedout.golf.master-da",
+          "name" : "Hofholdning"
+        },
+        {
+          "afterEarnedDescription" : "Du hast Golf mit nichts als Bildkarten auf der Hand gewonnen.",
+          "beforeEarnedDescription" : "Gewinne ein Spiel Golf mit einem Blatt aus ausschließlich Bildkarten — Buben, Damen und Königen.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.golf.master-de-DE",
+          "name" : "Hofhaltung"
+        },
+        {
+          "afterEarnedDescription" : "You won Golf holding nothing but royals.",
+          "beforeEarnedDescription" : "Win a game of Golf with a hand of only royal cards — jacks, queens, and kings.",
+          "locale" : "en-US",
+          "localID" : "deckedout.golf.master-en-US",
+          "name" : "Holding Court"
+        },
+        {
+          "afterEarnedDescription" : "Ganaste el Golf sin nada más que figuras en la mano.",
+          "beforeEarnedDescription" : "Gana una partida de Golf con una mano de solo figuras: jotas, reinas y reyes.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.golf.master-es-ES",
+          "name" : "Corte Real"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné le Golf avec rien d'autre que des figures en main.",
+          "beforeEarnedDescription" : "Gagnez une partie de Golf avec une main composée uniquement de figures — valets, dames et rois.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.golf.master-fr-FR",
+          "name" : "Tenir Cour"
+        },
+        {
+          "afterEarnedDescription" : "आपने हाथ में सिर्फ शाही पत्तों के साथ गोल्फ जीता।",
+          "beforeEarnedDescription" : "केवल शाही पत्तों — गुलाम, क्वीन और बादशाह — के हाथ के साथ गोल्फ का एक गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.golf.master-hi",
+          "name" : "शाही दरबार"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto a Golf con in mano solo figure.",
+          "beforeEarnedDescription" : "Vinci una partita di Golf con una mano di sole figure — fanti, regine e re.",
+          "locale" : "it",
+          "localID" : "deckedout.golf.master-it",
+          "name" : "Tenere Corte"
+        },
+        {
+          "afterEarnedDescription" : "絵札だけを手にゴルフに勝利しました。",
+          "beforeEarnedDescription" : "絵札（ジャック、クイーン、キング）だけの手札でゴルフに勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.golf.master-ja",
+          "name" : "宮廷の支配者"
+        },
+        {
+          "afterEarnedDescription" : "그림 카드만 손에 쥔 채 골프에서 승리했습니다.",
+          "beforeEarnedDescription" : "그림 카드(잭, 퀸, 킹)만으로 이루어진 패로 골프 게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.golf.master-ko",
+          "name" : "궁정의 지배자"
+        },
+        {
+          "afterEarnedDescription" : "Je won Golf met niets dan plaatjeskaarten in je hand.",
+          "beforeEarnedDescription" : "Win een spelletje Golf met een hand van alleen plaatjeskaarten — boeren, vrouwen en heren.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.golf.master-nl-NL",
+          "name" : "Hof Houden"
+        },
+        {
+          "afterEarnedDescription" : "Du vant Golf med ikke noe annet enn billedkort på hånden.",
+          "beforeEarnedDescription" : "Vinn et spill Golf med en hånd bestående kun av billedkort — knekter, damer og konger.",
+          "locale" : "no",
+          "localID" : "deckedout.golf.master-no",
+          "name" : "Holde Hoff"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu o Golf segurando apenas figuras.",
+          "beforeEarnedDescription" : "Vença uma partida de Golf com uma mão só de figuras — valetes, damas e reis.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.golf.master-pt-BR",
+          "name" : "Segurando a Corte"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли гольф, держа в руке одни лишь фигурные карты.",
+          "beforeEarnedDescription" : "Выиграйте партию в гольф с рукой только из фигурных карт — валетов, дам и королей.",
+          "locale" : "ru",
+          "localID" : "deckedout.golf.master-ru",
+          "name" : "Королевский Двор"
+        },
+        {
+          "afterEarnedDescription" : "Du vann Golf med inget annat än klädda kort på hand.",
+          "beforeEarnedDescription" : "Vinn ett parti Golf med en hand som bara består av klädda kort — knektar, damer och kungar.",
+          "locale" : "sv",
+          "localID" : "deckedout.golf.master-sv",
+          "name" : "Hålla Hov"
+        },
+        {
+          "afterEarnedDescription" : "Golf'ü elinizde yalnızca taşlı kartlarla kazandınız.",
+          "beforeEarnedDescription" : "Yalnızca taşlı kartlardan — valeler, kızlar ve papazlar — oluşan bir elle Golf oyunu kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.golf.master-tr",
+          "name" : "Saray Düzeni"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng Golf khi trên tay chỉ toàn lá hình.",
+          "beforeEarnedDescription" : "Thắng một ván Golf với bộ bài chỉ toàn lá hình — J, Q và K.",
+          "locale" : "vi",
+          "localID" : "deckedout.golf.master-vi",
+          "name" : "Triều Đình Trong Tay"
+        },
+        {
+          "afterEarnedDescription" : "你满手只剩花牌赢得了高尔夫。",
+          "beforeEarnedDescription" : "以一手全是花牌（J、Q、K）赢得一局高尔夫。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.golf.master-zh-Hans",
+          "name" : "满手王牌"
+        },
+        {
+          "afterEarnedDescription" : "你滿手只剩花牌贏得了高爾夫。",
+          "beforeEarnedDescription" : "以一手全是花牌（J、Q、K）贏得一局高爾夫。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.golf.master-zh-Hant",
+          "name" : "滿手王牌"
+        }
+      ],
+      "deckedout.golf.score0" : [
+        {
+          "afterEarnedDescription" : "Du vandt Golf med en fejlfri score på 0!",
+          "beforeEarnedDescription" : "Vind et spil Golf med en slutscore på 0.",
+          "locale" : "da",
+          "localID" : "deckedout.golf.score0-da",
+          "name" : "Hole in One"
+        },
+        {
+          "afterEarnedDescription" : "Du hast Golf mit einem makellosen Ergebnis von 0 gewonnen!",
+          "beforeEarnedDescription" : "Gewinne ein Spiel Golf mit einem Endstand von 0.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.golf.score0-de-DE",
+          "name" : "Hole-in-One"
+        },
+        {
+          "afterEarnedDescription" : "You won Golf with a flawless score of 0!",
+          "beforeEarnedDescription" : "Win a game of Golf with a final score of 0.",
+          "locale" : "en-US",
+          "localID" : "deckedout.golf.score0-en-US",
+          "name" : "Hole in One"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste el Golf con una puntuación impecable de 0!",
+          "beforeEarnedDescription" : "Gana una partida de Golf con una puntuación final de 0.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.golf.score0-es-ES",
+          "name" : "Hoyo en Uno"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné le Golf avec un score parfait de 0 !",
+          "beforeEarnedDescription" : "Gagnez une partie de Golf avec un score final de 0.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.golf.score0-fr-FR",
+          "name" : "Trou en Un"
+        },
+        {
+          "afterEarnedDescription" : "आपने 0 के बेदाग स्कोर के साथ गोल्फ जीता!",
+          "beforeEarnedDescription" : "0 के अंतिम स्कोर के साथ गोल्फ का एक गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.golf.score0-hi",
+          "name" : "होल इन वन"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto a Golf con un punteggio impeccabile di 0!",
+          "beforeEarnedDescription" : "Vinci una partita di Golf con un punteggio finale di 0.",
+          "locale" : "it",
+          "localID" : "deckedout.golf.score0-it",
+          "name" : "Buca in Uno"
+        },
+        {
+          "afterEarnedDescription" : "完璧なスコア0でゴルフに勝利しました！",
+          "beforeEarnedDescription" : "最終スコア0でゴルフに勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.golf.score0-ja",
+          "name" : "ホールインワン"
+        },
+        {
+          "afterEarnedDescription" : "완벽한 0점으로 골프에서 승리했습니다!",
+          "beforeEarnedDescription" : "최종 점수 0점으로 골프 게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.golf.score0-ko",
+          "name" : "홀인원"
+        },
+        {
+          "afterEarnedDescription" : "Je won Golf met een vlekkeloze score van 0!",
+          "beforeEarnedDescription" : "Win een spelletje Golf met een eindscore van 0.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.golf.score0-nl-NL",
+          "name" : "Hole-in-one"
+        },
+        {
+          "afterEarnedDescription" : "Du vant Golf med en feilfri score på 0!",
+          "beforeEarnedDescription" : "Vinn et spill Golf med en sluttscore på 0.",
+          "locale" : "no",
+          "localID" : "deckedout.golf.score0-no",
+          "name" : "Hole in One"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu o Golf com uma pontuação impecável de 0!",
+          "beforeEarnedDescription" : "Vença uma partida de Golf com pontuação final de 0.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.golf.score0-pt-BR",
+          "name" : "Hole in One"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли гольф с безупречным счётом 0!",
+          "beforeEarnedDescription" : "Выиграйте партию в гольф с итоговым счётом 0.",
+          "locale" : "ru",
+          "localID" : "deckedout.golf.score0-ru",
+          "name" : "Хоул-ин-уан"
+        },
+        {
+          "afterEarnedDescription" : "Du vann Golf med felfria 0 poäng!",
+          "beforeEarnedDescription" : "Vinn ett parti Golf med slutpoängen 0.",
+          "locale" : "sv",
+          "localID" : "deckedout.golf.score0-sv",
+          "name" : "Hole in One"
+        },
+        {
+          "afterEarnedDescription" : "Golf'ü kusursuz 0 puanla kazandınız!",
+          "beforeEarnedDescription" : "Golf oyununu 0 puanla bitirip kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.golf.score0-tr",
+          "name" : "Hole in One"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng Golf với điểm số hoàn hảo là 0!",
+          "beforeEarnedDescription" : "Thắng một ván Golf với điểm số cuối cùng là 0.",
+          "locale" : "vi",
+          "localID" : "deckedout.golf.score0-vi",
+          "name" : "Hole in One"
+        },
+        {
+          "afterEarnedDescription" : "你以完美的0分赢得了高尔夫！",
+          "beforeEarnedDescription" : "以最终得分0赢得一局高尔夫。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.golf.score0-zh-Hans",
+          "name" : "一杆进洞"
+        },
+        {
+          "afterEarnedDescription" : "你以完美的0分贏得了高爾夫！",
+          "beforeEarnedDescription" : "以最終得分0贏得一局高爾夫。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.golf.score0-zh-Hant",
+          "name" : "一桿進洞"
+        }
+      ],
+      "deckedout.wins.total.1" : [
+        {
+          "afterEarnedDescription" : "Du vandt dit første spil!",
+          "beforeEarnedDescription" : "Vind et spil for første gang.",
+          "locale" : "da",
+          "localID" : "deckedout.wins.total.1-da",
+          "name" : "Første Blod"
+        },
+        {
+          "afterEarnedDescription" : "Du hast dein erstes Spiel gewonnen!",
+          "beforeEarnedDescription" : "Gewinne zum ersten Mal ein Spiel.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.wins.total.1-de-DE",
+          "name" : "Erstes Blut"
+        },
+        {
+          "afterEarnedDescription" : "You won your first game!",
+          "beforeEarnedDescription" : "Win a game for the first time.",
+          "locale" : "en-US",
+          "localID" : "deckedout.wins.total.1-en-US",
+          "name" : "First Blood"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste tu primera partida!",
+          "beforeEarnedDescription" : "Gana una partida por primera vez.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.wins.total.1-es-ES",
+          "name" : "Primera Sangre"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné votre première partie !",
+          "beforeEarnedDescription" : "Gagnez une partie pour la première fois.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.wins.total.1-fr-FR",
+          "name" : "Premier Sang"
+        },
+        {
+          "afterEarnedDescription" : "आपने अपना पहला गेम जीत लिया!",
+          "beforeEarnedDescription" : "पहली बार कोई गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.wins.total.1-hi",
+          "name" : "पहला ख़ून"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto la tua prima partita!",
+          "beforeEarnedDescription" : "Vinci una partita per la prima volta.",
+          "locale" : "it",
+          "localID" : "deckedout.wins.total.1-it",
+          "name" : "Primo Sangue"
+        },
+        {
+          "afterEarnedDescription" : "初めてのゲームに勝利しました！",
+          "beforeEarnedDescription" : "初めてゲームに勝利しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.wins.total.1-ja",
+          "name" : "ファーストブラッド"
+        },
+        {
+          "afterEarnedDescription" : "첫 게임을 승리했습니다!",
+          "beforeEarnedDescription" : "처음으로 게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.wins.total.1-ko",
+          "name" : "퍼스트 블러드"
+        },
+        {
+          "afterEarnedDescription" : "Je hebt je eerste spel gewonnen!",
+          "beforeEarnedDescription" : "Win voor het eerst een spel.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.wins.total.1-nl-NL",
+          "name" : "Eerste Bloed"
+        },
+        {
+          "afterEarnedDescription" : "Du vant ditt første spill!",
+          "beforeEarnedDescription" : "Vinn et spill for første gang.",
+          "locale" : "no",
+          "localID" : "deckedout.wins.total.1-no",
+          "name" : "Første Blod"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu sua primeira partida!",
+          "beforeEarnedDescription" : "Vença uma partida pela primeira vez.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.wins.total.1-pt-BR",
+          "name" : "Primeiro Sangue"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли свою первую игру!",
+          "beforeEarnedDescription" : "Выиграйте игру впервые.",
+          "locale" : "ru",
+          "localID" : "deckedout.wins.total.1-ru",
+          "name" : "Первая Кровь"
+        },
+        {
+          "afterEarnedDescription" : "Du vann ditt första spel!",
+          "beforeEarnedDescription" : "Vinn ett spel för första gången.",
+          "locale" : "sv",
+          "localID" : "deckedout.wins.total.1-sv",
+          "name" : "Första Blodet"
+        },
+        {
+          "afterEarnedDescription" : "İlk oyununuzu kazandınız!",
+          "beforeEarnedDescription" : "İlk kez bir oyun kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.wins.total.1-tr",
+          "name" : "İlk Kan"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng ván đầu tiên!",
+          "beforeEarnedDescription" : "Thắng một ván đấu lần đầu tiên.",
+          "locale" : "vi",
+          "localID" : "deckedout.wins.total.1-vi",
+          "name" : "Máu Đầu Tiên"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了第一局游戏！",
+          "beforeEarnedDescription" : "首次赢得一局游戏。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.wins.total.1-zh-Hans",
+          "name" : "首杀"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了第一局遊戲！",
+          "beforeEarnedDescription" : "首次贏得一局遊戲。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.wins.total.1-zh-Hant",
+          "name" : "首殺"
+        }
+      ],
+      "deckedout.wins.total.2" : [
+        {
+          "afterEarnedDescription" : "Du vandt 2 spil!",
+          "beforeEarnedDescription" : "Vind 2 spil i alt.",
+          "locale" : "da",
+          "localID" : "deckedout.wins.total.2-da",
+          "name" : "Fordobling"
+        },
+        {
+          "afterEarnedDescription" : "Du hast 2 Spiele gewonnen!",
+          "beforeEarnedDescription" : "Gewinne insgesamt 2 Spiele.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.wins.total.2-de-DE",
+          "name" : "Verdoppeln"
+        },
+        {
+          "afterEarnedDescription" : "You won 2 games!",
+          "beforeEarnedDescription" : "Win 2 games total.",
+          "locale" : "en-US",
+          "localID" : "deckedout.wins.total.2-en-US",
+          "name" : "Doubling Down"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste 2 partidas!",
+          "beforeEarnedDescription" : "Gana 2 partidas en total.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.wins.total.2-es-ES",
+          "name" : "Doblar la Apuesta"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné 2 parties !",
+          "beforeEarnedDescription" : "Gagnez 2 parties au total.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.wins.total.2-fr-FR",
+          "name" : "Doubler la Mise"
+        },
+        {
+          "afterEarnedDescription" : "आपने 2 गेम जीते!",
+          "beforeEarnedDescription" : "कुल 2 गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.wins.total.2-hi",
+          "name" : "दांव दोगुना"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto 2 partite!",
+          "beforeEarnedDescription" : "Vinci 2 partite in totale.",
+          "locale" : "it",
+          "localID" : "deckedout.wins.total.2-it",
+          "name" : "Raddoppio"
+        },
+        {
+          "afterEarnedDescription" : "2勝しました！",
+          "beforeEarnedDescription" : "通算2勝しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.wins.total.2-ja",
+          "name" : "ダブルダウン"
+        },
+        {
+          "afterEarnedDescription" : "2게임을 승리했습니다!",
+          "beforeEarnedDescription" : "총 2게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.wins.total.2-ko",
+          "name" : "더블 다운"
+        },
+        {
+          "afterEarnedDescription" : "Je hebt 2 spellen gewonnen!",
+          "beforeEarnedDescription" : "Win in totaal 2 spellen.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.wins.total.2-nl-NL",
+          "name" : "Verdubbelen"
+        },
+        {
+          "afterEarnedDescription" : "Du vant 2 spill!",
+          "beforeEarnedDescription" : "Vinn 2 spill totalt.",
+          "locale" : "no",
+          "localID" : "deckedout.wins.total.2-no",
+          "name" : "Doble Innsatsen"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu 2 partidas!",
+          "beforeEarnedDescription" : "Vença 2 partidas no total.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.wins.total.2-pt-BR",
+          "name" : "Dobrando a Aposta"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли 2 игры!",
+          "beforeEarnedDescription" : "Выиграйте 2 игры в общей сложности.",
+          "locale" : "ru",
+          "localID" : "deckedout.wins.total.2-ru",
+          "name" : "Удвоение Ставки"
+        },
+        {
+          "afterEarnedDescription" : "Du vann 2 spel!",
+          "beforeEarnedDescription" : "Vinn 2 spel totalt.",
+          "locale" : "sv",
+          "localID" : "deckedout.wins.total.2-sv",
+          "name" : "Dubbla Insatsen"
+        },
+        {
+          "afterEarnedDescription" : "2 oyun kazandınız!",
+          "beforeEarnedDescription" : "Toplam 2 oyun kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.wins.total.2-tr",
+          "name" : "İkiye Katlama"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng 2 ván!",
+          "beforeEarnedDescription" : "Thắng tổng cộng 2 ván.",
+          "locale" : "vi",
+          "localID" : "deckedout.wins.total.2-vi",
+          "name" : "Gấp Đôi"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了2局游戏！",
+          "beforeEarnedDescription" : "累计赢得2局游戏。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.wins.total.2-zh-Hans",
+          "name" : "加倍下注"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了2局遊戲！",
+          "beforeEarnedDescription" : "累計贏得2局遊戲。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.wins.total.2-zh-Hant",
+          "name" : "加倍下注"
+        }
+      ],
+      "deckedout.wins.total.10" : [
+        {
+          "afterEarnedDescription" : "Du vandt 10 spil!",
+          "beforeEarnedDescription" : "Vind 10 spil i alt.",
+          "locale" : "da",
+          "localID" : "deckedout.wins.total.10-da",
+          "name" : "Ti Ud Af Ti"
+        },
+        {
+          "afterEarnedDescription" : "Du hast 10 Spiele gewonnen!",
+          "beforeEarnedDescription" : "Gewinne insgesamt 10 Spiele.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.wins.total.10-de-DE",
+          "name" : "Zehn von Zehn"
+        },
+        {
+          "afterEarnedDescription" : "You won 10 games!",
+          "beforeEarnedDescription" : "Win 10 games total.",
+          "locale" : "en-US",
+          "localID" : "deckedout.wins.total.10-en-US",
+          "name" : "Ten Out of Ten"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste 10 partidas!",
+          "beforeEarnedDescription" : "Gana 10 partidas en total.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.wins.total.10-es-ES",
+          "name" : "Diez de Diez"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné 10 parties !",
+          "beforeEarnedDescription" : "Gagnez 10 parties au total.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.wins.total.10-fr-FR",
+          "name" : "Dix sur Dix"
+        },
+        {
+          "afterEarnedDescription" : "आपने 10 गेम जीते!",
+          "beforeEarnedDescription" : "कुल 10 गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.wins.total.10-hi",
+          "name" : "दस में से दस"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto 10 partite!",
+          "beforeEarnedDescription" : "Vinci 10 partite in totale.",
+          "locale" : "it",
+          "localID" : "deckedout.wins.total.10-it",
+          "name" : "Dieci e Lode"
+        },
+        {
+          "afterEarnedDescription" : "10勝しました！",
+          "beforeEarnedDescription" : "通算10勝しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.wins.total.10-ja",
+          "name" : "十点満点"
+        },
+        {
+          "afterEarnedDescription" : "10게임을 승리했습니다!",
+          "beforeEarnedDescription" : "총 10게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.wins.total.10-ko",
+          "name" : "십점 만점"
+        },
+        {
+          "afterEarnedDescription" : "Je hebt 10 spellen gewonnen!",
+          "beforeEarnedDescription" : "Win in totaal 10 spellen.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.wins.total.10-nl-NL",
+          "name" : "Tien uit Tien"
+        },
+        {
+          "afterEarnedDescription" : "Du vant 10 spill!",
+          "beforeEarnedDescription" : "Vinn 10 spill totalt.",
+          "locale" : "no",
+          "localID" : "deckedout.wins.total.10-no",
+          "name" : "Ti Av Ti"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu 10 partidas!",
+          "beforeEarnedDescription" : "Vença 10 partidas no total.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.wins.total.10-pt-BR",
+          "name" : "Dez de Dez"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли 10 игр!",
+          "beforeEarnedDescription" : "Выиграйте 10 игр в общей сложности.",
+          "locale" : "ru",
+          "localID" : "deckedout.wins.total.10-ru",
+          "name" : "Десять из Десяти"
+        },
+        {
+          "afterEarnedDescription" : "Du vann 10 spel!",
+          "beforeEarnedDescription" : "Vinn 10 spel totalt.",
+          "locale" : "sv",
+          "localID" : "deckedout.wins.total.10-sv",
+          "name" : "Tio av Tio"
+        },
+        {
+          "afterEarnedDescription" : "10 oyun kazandınız!",
+          "beforeEarnedDescription" : "Toplam 10 oyun kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.wins.total.10-tr",
+          "name" : "Onda On"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng 10 ván!",
+          "beforeEarnedDescription" : "Thắng tổng cộng 10 ván.",
+          "locale" : "vi",
+          "localID" : "deckedout.wins.total.10-vi",
+          "name" : "Mười Trên Mười"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了10局游戏！",
+          "beforeEarnedDescription" : "累计赢得10局游戏。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.wins.total.10-zh-Hans",
+          "name" : "满分十分"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了10局遊戲！",
+          "beforeEarnedDescription" : "累計贏得10局遊戲。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.wins.total.10-zh-Hant",
+          "name" : "滿分十分"
+        }
+      ],
+      "deckedout.wins.total.20" : [
+        {
+          "afterEarnedDescription" : "Du vandt 20 spil!",
+          "beforeEarnedDescription" : "Vind 20 spil i alt.",
+          "locale" : "da",
+          "localID" : "deckedout.wins.total.20-da",
+          "name" : "Korthaj"
+        },
+        {
+          "afterEarnedDescription" : "Du hast 20 Spiele gewonnen!",
+          "beforeEarnedDescription" : "Gewinne insgesamt 20 Spiele.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.wins.total.20-de-DE",
+          "name" : "Kartenhai"
+        },
+        {
+          "afterEarnedDescription" : "You won 20 games!",
+          "beforeEarnedDescription" : "Win 20 games total.",
+          "locale" : "en-US",
+          "localID" : "deckedout.wins.total.20-en-US",
+          "name" : "Card Shark"
+        },
+        {
+          "afterEarnedDescription" : "¡Ganaste 20 partidas!",
+          "beforeEarnedDescription" : "Gana 20 partidas en total.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.wins.total.20-es-ES",
+          "name" : "Tiburón de las Cartas"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné 20 parties !",
+          "beforeEarnedDescription" : "Gagnez 20 parties au total.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.wins.total.20-fr-FR",
+          "name" : "Requin des Cartes"
+        },
+        {
+          "afterEarnedDescription" : "आपने 20 गेम जीते!",
+          "beforeEarnedDescription" : "कुल 20 गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.wins.total.20-hi",
+          "name" : "कार्ड शार्क"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto 20 partite!",
+          "beforeEarnedDescription" : "Vinci 20 partite in totale.",
+          "locale" : "it",
+          "localID" : "deckedout.wins.total.20-it",
+          "name" : "Squalo delle Carte"
+        },
+        {
+          "afterEarnedDescription" : "20勝しました！",
+          "beforeEarnedDescription" : "通算20勝しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.wins.total.20-ja",
+          "name" : "カードの達人"
+        },
+        {
+          "afterEarnedDescription" : "20게임을 승리했습니다!",
+          "beforeEarnedDescription" : "총 20게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.wins.total.20-ko",
+          "name" : "카드의 달인"
+        },
+        {
+          "afterEarnedDescription" : "Je hebt 20 spellen gewonnen!",
+          "beforeEarnedDescription" : "Win in totaal 20 spellen.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.wins.total.20-nl-NL",
+          "name" : "Kaarthaai"
+        },
+        {
+          "afterEarnedDescription" : "Du vant 20 spill!",
+          "beforeEarnedDescription" : "Vinn 20 spill totalt.",
+          "locale" : "no",
+          "localID" : "deckedout.wins.total.20-no",
+          "name" : "Korthai"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu 20 partidas!",
+          "beforeEarnedDescription" : "Vença 20 partidas no total.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.wins.total.20-pt-BR",
+          "name" : "Tubarão das Cartas"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли 20 игр!",
+          "beforeEarnedDescription" : "Выиграйте 20 игр в общей сложности.",
+          "locale" : "ru",
+          "localID" : "deckedout.wins.total.20-ru",
+          "name" : "Карточный Ас"
+        },
+        {
+          "afterEarnedDescription" : "Du vann 20 spel!",
+          "beforeEarnedDescription" : "Vinn 20 spel totalt.",
+          "locale" : "sv",
+          "localID" : "deckedout.wins.total.20-sv",
+          "name" : "Korthaj"
+        },
+        {
+          "afterEarnedDescription" : "20 oyun kazandınız!",
+          "beforeEarnedDescription" : "Toplam 20 oyun kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.wins.total.20-tr",
+          "name" : "Kart Ustası"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng 20 ván!",
+          "beforeEarnedDescription" : "Thắng tổng cộng 20 ván.",
+          "locale" : "vi",
+          "localID" : "deckedout.wins.total.20-vi",
+          "name" : "Cao Thủ Bài"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了20局游戏！",
+          "beforeEarnedDescription" : "累计赢得20局游戏。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.wins.total.20-zh-Hans",
+          "name" : "纸牌高手"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了20局遊戲！",
+          "beforeEarnedDescription" : "累計贏得20局遊戲。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.wins.total.20-zh-Hant",
+          "name" : "紙牌高手"
+        }
+      ],
+      "deckedout.wins.total.100" : [
+        {
+          "afterEarnedDescription" : "Du vandt 100 spil. Legendarisk.",
+          "beforeEarnedDescription" : "Vind 100 spil i alt.",
+          "locale" : "da",
+          "localID" : "deckedout.wins.total.100-da",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Du hast 100 Spiele gewonnen. Legendär.",
+          "beforeEarnedDescription" : "Gewinne insgesamt 100 Spiele.",
+          "locale" : "de-DE",
+          "localID" : "deckedout.wins.total.100-de-DE",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "You won 100 games. Legendary.",
+          "beforeEarnedDescription" : "Win 100 games total.",
+          "locale" : "en-US",
+          "localID" : "deckedout.wins.total.100-en-US",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Ganaste 100 partidas. Legendario.",
+          "beforeEarnedDescription" : "Gana 100 partidas en total.",
+          "locale" : "es-ES",
+          "localID" : "deckedout.wins.total.100-es-ES",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Vous avez gagné 100 parties. Légendaire.",
+          "beforeEarnedDescription" : "Gagnez 100 parties au total.",
+          "locale" : "fr-FR",
+          "localID" : "deckedout.wins.total.100-fr-FR",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "आपने 100 गेम जीते। पौराणिक।",
+          "beforeEarnedDescription" : "कुल 100 गेम जीतें।",
+          "locale" : "hi",
+          "localID" : "deckedout.wins.total.100-hi",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Hai vinto 100 partite. Leggendario.",
+          "beforeEarnedDescription" : "Vinci 100 partite in totale.",
+          "locale" : "it",
+          "localID" : "deckedout.wins.total.100-it",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "100勝を達成。まさに伝説。",
+          "beforeEarnedDescription" : "通算100勝しましょう。",
+          "locale" : "ja",
+          "localID" : "deckedout.wins.total.100-ja",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "100게임을 승리했습니다. 전설적입니다.",
+          "beforeEarnedDescription" : "총 100게임을 승리하세요.",
+          "locale" : "ko",
+          "localID" : "deckedout.wins.total.100-ko",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Je won 100 spellen. Legendarisch.",
+          "beforeEarnedDescription" : "Win in totaal 100 spellen.",
+          "locale" : "nl-NL",
+          "localID" : "deckedout.wins.total.100-nl-NL",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Du vant 100 spill. Legendarisk.",
+          "beforeEarnedDescription" : "Vinn 100 spill totalt.",
+          "locale" : "no",
+          "localID" : "deckedout.wins.total.100-no",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Você venceu 100 partidas. Lendário.",
+          "beforeEarnedDescription" : "Vença 100 partidas no total.",
+          "locale" : "pt-BR",
+          "localID" : "deckedout.wins.total.100-pt-BR",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Вы выиграли 100 игр. Легендарно.",
+          "beforeEarnedDescription" : "Выиграйте 100 игр в общей сложности.",
+          "locale" : "ru",
+          "localID" : "deckedout.wins.total.100-ru",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Du vann 100 spel. Legendariskt.",
+          "beforeEarnedDescription" : "Vinn 100 spel totalt.",
+          "locale" : "sv",
+          "localID" : "deckedout.wins.total.100-sv",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "100 oyun kazandınız. Efsanevi.",
+          "beforeEarnedDescription" : "Toplam 100 oyun kazanın.",
+          "locale" : "tr",
+          "localID" : "deckedout.wins.total.100-tr",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "Bạn đã thắng 100 ván. Huyền thoại.",
+          "beforeEarnedDescription" : "Thắng tổng cộng 100 ván.",
+          "locale" : "vi",
+          "localID" : "deckedout.wins.total.100-vi",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "你赢得了100局游戏。传奇。",
+          "beforeEarnedDescription" : "累计赢得100局游戏。",
+          "locale" : "zh-Hans",
+          "localID" : "deckedout.wins.total.100-zh-Hans",
+          "name" : "Decked Out"
+        },
+        {
+          "afterEarnedDescription" : "你贏得了100局遊戲。傳奇。",
+          "beforeEarnedDescription" : "累計贏得100局遊戲。",
+          "locale" : "zh-Hant",
+          "localID" : "deckedout.wins.total.100-zh-Hant",
+          "name" : "Decked Out"
+        }
+      ]
+    },
+    "achievements" : [
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 10,
+        "referenceName" : "First Win Gin",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.first_win.gin"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 10,
+        "referenceName" : "First Win Crazy 8s",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.first_win.crazy8s"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 10,
+        "referenceName" : "First Win Golf",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.first_win.golf"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 25,
+        "referenceName" : "Gin Master",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.gin.master"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 8,
+        "referenceName" : "Crazy 8s Discard an 8",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.crazy8s.eight"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 2,
+        "referenceName" : "Crazys 8s Discard a 2",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.crazy8s.two"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 9,
+        "referenceName" : "Crazy 8s Discard a Queen",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.crazy8s.queen"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 1,
+        "referenceName" : "Crazy 8s Discard an Ace",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.crazy8s.ace"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 25,
+        "referenceName" : "Crazy 8s Master",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.crazy8s.master"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 0,
+        "referenceName" : "Golf Score 0",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.golf.score0"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 25,
+        "referenceName" : "Golf Master",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.golf.master"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 10,
+        "referenceName" : "1st Win",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.wins.total.1"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 20,
+        "referenceName" : "2nd Win",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "deckedout.wins.total.2"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 30,
+        "referenceName" : "10th Win",
+        "repeatable" : false,
+        "showBeforeEarned" : false,
+        "vendorIdentifier" : "deckedout.wins.total.10"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 40,
+        "referenceName" : "20th Win",
+        "repeatable" : false,
+        "showBeforeEarned" : false,
+        "vendorIdentifier" : "deckedout.wins.total.20"
+      },
+      {
+        "activityProperties" : {
+
+        },
+        "archived" : false,
+        "points" : 50,
+        "referenceName" : "100th Win",
+        "repeatable" : false,
+        "showBeforeEarned" : false,
+        "vendorIdentifier" : "deckedout.wins.total.100"
+      }
+    ]
+  }
+}

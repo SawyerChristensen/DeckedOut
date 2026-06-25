@@ -64,8 +64,8 @@ class MessagesViewController: MSMessagesAppViewController {
         }
 
         Task.detached(priority: .utility) { //authenticate Game Center on background thread
-            //GameCenterManager.shared.authenticate()
-            //GameCenterManager.shared.syncAchievementsWithWinCounts()
+            GameCenterManager.shared.authenticate()
+            GameCenterManager.shared.syncAchievementsWithWinCounts()
         }
     }
 

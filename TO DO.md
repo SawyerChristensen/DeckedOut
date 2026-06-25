@@ -3,19 +3,6 @@
 
 ## 🚀 Active Release Milestones
 
-### Update 3.5.2 - Enchantment Cards release
-- [x] Implement Enchantment card asset recognition
-    - [x] When revealed, the opponents hand should have their own deck front
-- [x] Compress Enchantment cards
-- [x] Add enchanted joker and make joker paired to deck fronts, also add red/black jokers?
-- [x] Make sure knocking rules notice are always present in 1v1 Gin. Make the main menu aware of current chat size
-- [x] Add National Flag card backs to backend
-- [x] Enable 120hz in Info.plist
-- [x] Add product key in ASC
-- [x] Adjust pricing of Koi & Web (introduce rounding when displaying prices)
-  - [x] Update price clarifications
-- [x] Disable Game Center auth for now if swizzling definitively does \*not\* work :(
-
 ### Update 3.5.3 - July 4 National Cards release
 - [ ] Look into better transitions between the card fronts. (Move out of CardView, into discard piles in game views? Cards in opponents hand should instantly transition if they are starting to reveal themselves anyway)
 - [ ] Make national flag cards available in frontend
