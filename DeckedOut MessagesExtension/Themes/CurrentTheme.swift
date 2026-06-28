@@ -46,32 +46,34 @@ final class CurrentTheme: ObservableObject {
         return Self.imageExists(candidate) ? candidate : selectedName
     }
 
-    /// Applies the selected theme's front-card suffix (e.g. `aceClubs` → `aceClubsEnchanted`)
-    /// *without* validating that the asset exists. Use in trusted/local contexts (the menu,
-    /// the local player's own deck) where the themed asset is guaranteed present in this build,
-    /// to avoid a main-thread image decode during layout. Returns `base` when the theme defines
-    /// no front suffix.
+    /// Applies the selected theme's front-card suffix (e.g. `aceClubs` → `aceClubsEnchanted`),
+    /// falling back to the un-themed `base` when the theme defines no suffix *or* when the themed
+    /// asset doesn't exist in this build. The per-card existence check is memoized by `imageExists`,
+    /// so it costs at most one decode per unique name. This lets a theme ship a *partial* set of
+    /// custom fronts — e.g. the American Flag theme themes only the jokers and leaves every other
+    /// card on the default artwork. Returns `base` when the theme defines no front suffix.
     func themedFrontName(for base: String) -> String {
         guard let suffix = DeckTheme.theme(forLogoCard: selectedName)?.fronts else { return base }
-        return base + suffix
+        let themed = base + suffix
+        return Self.imageExists(themed) ? themed : base
     }
 
-    /// Validated variant of `themedFrontName(for:)` for untrusted contexts (transcript/game
-    /// views that may render a name from a newer version): falls back to `base` when the themed
-    /// asset isn't present in this build.
+    /// Resolves the themed front name for `base`, falling back to the default artwork when the
+    /// theme defines no front suffix or the themed asset is absent. Equivalent to
+    /// `themedFrontName(for:)` — which now validates per card — and kept for untrusted contexts
+    /// (transcript/game views that may render a name sent by a newer version).
     func frontName(for base: String) -> String {
-        let themed = themedFrontName(for: base)
-        return themed == base ? base : (Self.imageExists(themed) ? themed : base)
+        return themedFrontName(for: base)
     }
 
     /// Accent color of the currently selected theme. Falls back to `salmonRed` if the
     /// stored card-back name doesn't match a known theme (e.g. a removed/renamed asset).
     var selectedColor: Color {
-        return DeckTheme.theme(forLogoCard: selectedName)?.primaryColor ?? Palette.salmonRed
+        return DeckTheme.theme(forLogoCard: selectedName)?.rulesColor ?? Palette.salmonRed
     }
     
     var textColor: Color {
-        return DeckTheme.theme(forLogoCard: selectedName)?.secondaryColor ?? Color(.white)
+        return DeckTheme.theme(forLogoCard: selectedName)?.textColor ?? Color(.white)
     }
 
     private init() {

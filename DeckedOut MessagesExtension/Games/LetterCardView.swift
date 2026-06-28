@@ -20,7 +20,11 @@ struct LetterCardImage: View {
         return UIImage(named: candidate) != nil ? candidate : effectiveName
     }
     private var effectiveTextColor: Color {
-        return DeckTheme.theme(forLogoCard: effectiveName)?.secondaryColor ?? Color(.white)
+        return DeckTheme.theme(forLogoCard: effectiveName)?.textColor ?? Color(.white)
+    }
+    private var effectiveGlowColor: Color {
+        let theme = DeckTheme.theme(forLogoCard: effectiveName)
+        return theme?.outlineColor ?? theme?.textColor ?? Color(.white)
     }
 
     private var font: Font {
@@ -43,15 +47,17 @@ struct LetterCardImage: View {
             return .custom("SuperShake", fixedSize: 26)
         } else if effectiveName == "cardBackEnchanted" {
             return .custom("BoecklinsUniverse", fixedSize: 32)
+        } else if effectiveName == "cardBackRed" || effectiveName == "cardBackBlue" || effectiveName == "cardBackPurple" {
+            return .custom("Holtzschue-Regular", fixedSize: 33) //originally size 30
         }
-        return .custom("Holtzschue-Regular", fixedSize: 33) //originally size 30
+        return .system(size: 30, weight: .bold, design: .serif)
     }
     
     private var isHoltzschue: Bool {
         return font == .custom("Holtzschue-Regular", fixedSize: 33)
     }
 
-    private var isExclamation: Bool {
+    private var isHoltzschueExclamation: Bool {
         isHoltzschue && character == "!"
     }
     
@@ -68,9 +74,29 @@ struct LetterCardImage: View {
             return -2
         } else if effectiveName == "cardBackEnchanted" {
             return 3
+        } else if effectiveName == "cardBackSweden" || effectiveName == "cardBackNorway" {
+            return -17
+        } else if effectiveName == "cardBackFinland" {
+            return -19
+        } else if effectiveName == "cardBackDenmark" {
+            return -15
+        } else if effectiveName == "cardBackSpain" {
+            return 5
+        } else if effectiveName == "cardBackCanada" {
+            return 3
+        } else if effectiveName == "cardBackAmerica" {
+            return -2
         } else {
             return 0
         }
+    }
+    
+    // Width of the text outline (in points). 0 = no stroke.
+    private var strokeWidth: CGFloat {
+        if effectiveName == "cardBackAmerica" || effectiveName == "cardBackPoland" || effectiveName == "cardBackSweden" || effectiveName == "cardBackNorway" || effectiveName == "cardBackDenmark" || effectiveName == "cardBackFinland" || effectiveName == "cardBackAustria" || effectiveName == "cardBackSpain" || effectiveName == "cardBackUK" || effectiveName == "cardBackSwitzerland" {
+            return 2
+        }
+        return 0
     }
 
     var body: some View {
@@ -78,15 +104,30 @@ struct LetterCardImage: View {
             .resizable()
             .aspectRatio(0.7, contentMode: .fit)
             .overlay {
-                if isExclamation {
+                if isHoltzschueExclamation {
                     Image("\(character)Card")
                         .resizable()
                         .aspectRatio(0.7, contentMode: .fit)
                 } else {
-                    Text(character)
-                        .font(font)
-                        .offset(y: verticalCentering)
-                        .foregroundStyle(effectiveTextColor)
+                    ZStack {
+                        // Stroke: draw the character in the glow color, offset in a ring around the fill to fake an outline (Text has no native stroke).
+                        if strokeWidth > 0 {
+                            ForEach(0..<8, id: \.self) { i in
+                                let angle = Double(i) / 8 * 2 * .pi
+                                Text(character)
+                                    .font(font)
+                                    .foregroundStyle(effectiveGlowColor)
+                                    .offset(x: cos(angle) * strokeWidth,
+                                            y: sin(angle) * strokeWidth + verticalCentering)
+                            }
+                        }
+                        // Character on top of stroke
+                        Text(character)
+                            .font(font)
+                            .offset(y: verticalCentering)
+                            .foregroundStyle(effectiveTextColor)
+                            //.shadow(color: effectiveGlowColor, radius: glowRadius)
+                    }
                 }
             }
     }

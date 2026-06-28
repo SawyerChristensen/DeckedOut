@@ -4,9 +4,11 @@
 ## 🚀 Active Release Milestones
 
 ### Update 3.5.3 - July 4 National Cards release
-- [ ] Look into better transitions between the card fronts. (Move out of CardView, into discard piles in game views? Cards in opponents hand should instantly transition if they are starting to reveal themselves anyway)
 - [ ] Make national flag cards available in frontend
-  - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
+  - [x] Test region check
+  - [ ] Refactor & clean up LetterCardView
+  - [ ] Add all country flag IAPs to ASC
+- [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
 
 ### Update 3.6.0 - Crazy 8s QOL
 - [ ] Finalize Mau Mau variant of Crazy 8s (Jack logo card)
@@ -136,7 +138,9 @@
 
 ### UI & Aesthetics Polish
 - [ ] Replace feltBackgroundDark with the light one & a dark opacity overlay to save 1.4 MB of space
+- [ ] Look into better transitions between the card fronts. (Move out of CardView, into discard piles in game views? Cards in opponents hand should instantly transition if they are starting to reveal themselves anyway)
 - [ ] Rework themes menu to add a "Preview" button. (next to price?) (can push to later)
+- [ ] When swiping between main title cards, sometimes the title animates in from the wrong direction if the user is swiping fast
 - [ ] Adjust colors of default deck
 - [ ] Have the main menu submenus revealed instead of pulled up
 - [ ] Add a Game Center rocket shortcut button directly to the main menu view.
@@ -159,6 +163,7 @@
 - [ ] Look into deprecating the `isSinglePlayer` flag globally across views and replacing it with direct `seats.count` checks.
 - [ ] Refactor and organize main menu submenu layouts (minimize current dependency on opacity toggles for compact/extended view logic).
 - [ ] Evaluate the exact utility of `isFromMe` in transcript views; evaluate if it can be stripped or if it is strictly required for legacy transcripts.
+- [ ] Modify or duplicate the metadata file to just modify the local game center file, then we push manually after reviewing it
 - [ ] Clean up `GameManager`: Audit and remove unnecessary occurrences of `self` for cleaner syntax.
 - [ ] Review `GameManager` state variables: Identify exactly which properties require `@Published` attributes to optimize object-will-change cycles.
 - [ ] Investigate background threading optimization for core game logic computation vs. keeping UI renders isolated to the Main Thread.

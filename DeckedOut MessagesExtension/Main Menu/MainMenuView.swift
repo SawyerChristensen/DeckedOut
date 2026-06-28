@@ -49,8 +49,8 @@ struct MainMenuView: View {
         MenuGame(type: .crazy8s, title: "Crazy 8s", logoCard: "crazy8sCard"),
         MenuGame(type: .golf, title: "Golf", logoCard: "golfCard")
     ]
-    private static var themes: [DeckTheme] { DeckTheme.all }
-    private var themes: [DeckTheme] { DeckTheme.all }
+    private static var themes: [DeckTheme] { DeckTheme.available }
+    private var themes: [DeckTheme] { DeckTheme.available }
     private var isThemeSelected: Bool { activeThemeIndex == selectedThemeIndex }
     private var isActiveThemeWinLocked: Bool {
         guard let required = themes[activeThemeIndex].requiredWins else { return false }

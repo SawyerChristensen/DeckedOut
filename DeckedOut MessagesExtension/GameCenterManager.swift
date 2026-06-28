@@ -78,6 +78,13 @@ final class GameCenterManager {
         guard !hasStartedAuthentication else { return }
         hasStartedAuthentication = true
 
+        // The bundle identifier GameKit keys off is the SMOKING GUN for extension issues:
+        // Game Center looks up "the game" by the *running process's* bundle ID. For an iMessage
+        // extension that is `<app>.MessagesExtension`, NOT the main app's ID. Game Center is only
+        // enabled in ASC on the main app's bundle ID, so the extension's ID is "unrecognized".
+        print("🎮 [GCAuth] starting authentication — running bundle ID = \(Bundle.main.bundleIdentifier ?? "nil")")
+        print("🎮 [GCAuth] GKLocalPlayer.local.isAuthenticated (pre-handler) = \(GKLocalPlayer.local.isAuthenticated)")
+
         let localPlayer = GKLocalPlayer.local
         localPlayer.authenticateHandler = { [weak self] viewController, error in
             // GameKit invokes this on the main thread.
@@ -114,6 +121,16 @@ final class GameCenterManager {
         }
         isAuthenticated = true
 
+        // Authenticated successfully (this is why the signed-in banner appears). Auth is ACCOUNT-level
+        // and succeeds regardless of whether THIS bundle ID is a recognized game — so a green banner
+        // here does NOT mean reporting will work. The scoped IDs below identify the player/game pairing;
+        // an empty gamePlayerID/teamPlayerID alongside a blank "Now Playing" means GameKit could not
+        // match the running bundle ID to a Game Center-enabled game.
+        print("✅ [GCAuth] AUTHENTICATED — alias=\(player.alias)")
+        print("   ↳ gamePlayerID=\(player.gamePlayerID.isEmpty ? "EMPTY" : player.gamePlayerID), teamPlayerID=\(player.teamPlayerID.isEmpty ? "EMPTY" : player.teamPlayerID)")
+        print("   ↳ isUnderage=\(player.isUnderage), isMultiplayerGamingRestricted=\(player.isMultiplayerGamingRestricted), isPersonalizedCommunicationRestricted=\(player.isPersonalizedCommunicationRestricted)")
+        print("   ↳ running bundle ID = \(Bundle.main.bundleIdentifier ?? "nil") (must be a Game-Center-enabled game in ASC for reports to land)")
+
         Task { await loadAchievements() }
         flushPendingReports()
     }
@@ -121,6 +138,7 @@ final class GameCenterManager {
     private func loadAchievements() async {
         do {
             let loaded = try await GKAchievement.loadAchievements()
+            print("📥 [GameCenter] loadAchievements SUCCEEDED — \(loaded.count) achievement(s) returned from server")
             for achievement in loaded {
                 // Don't clobber a locally-bumped value that hasn't been reported yet.
                 if let existing = cachedAchievements[achievement.identifier],
@@ -130,7 +148,12 @@ final class GameCenterManager {
                 cachedAchievements[achievement.identifier] = achievement
             }
         } catch {
-            //print("Game Center: failed to load achievements: \(error.localizedDescription)")
+            // Loading fails with the SAME gameUnrecognized error (code 15) when the running bundle ID
+            // isn't a Game-Center-enabled game — a clean signal of the extension/bundle-ID mismatch,
+            // independent of any report call. Surface it instead of swallowing.
+            let ns = error as NSError
+            print("❌ [GameCenter] loadAchievements FAILED — domain=\(ns.domain) code=\(ns.code) — \(ns.localizedDescription)")
+            print("   ↳ userInfo: \(ns.userInfo)")
         }
     }
 
@@ -225,7 +248,14 @@ final class GameCenterManager {
             } catch {
                 let ns = error as NSError
                 // code 15 == GKError.gameUnrecognized (the "no game matching descriptor" failure)
-                print("❌ [GameCenter] REPORT FAILED (code \(ns.code)) — \(ids) — \(ns.localizedDescription)")
+                print("❌ [GameCenter] REPORT FAILED (domain=\(ns.domain) code=\(ns.code)) — \(ids) — \(ns.localizedDescription)")
+                print("   ↳ running bundle ID = \(Bundle.main.bundleIdentifier ?? "nil")")
+                print("   ↳ userInfo: \(ns.userInfo)")
+                if ns.code == 15 {
+                    print("   ↳ ⛔️ code 15 = GKError.gameUnrecognized: GameKit can't match this bundle ID to a Game-Center-enabled game.")
+                    print("      Either the EXTENSION's bundle ID isn't Game-Center-enabled in ASC, or the local .gamekit config")
+                    print("      isn't active (enable Scheme ▸ Run ▸ Options ▸ GameKit Configuration ▸ Debug Mode to test locally).")
+                }
             }
         }
     }
