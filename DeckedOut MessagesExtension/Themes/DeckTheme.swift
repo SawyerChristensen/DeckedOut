@@ -80,6 +80,14 @@ extension DeckTheme {
                   regionCode: "US",
                   rulesColor: Color(red: 179/255, green: 25/255, blue: 66/255), //red
                   outlineColor: Color(red: 179/255, green: 25/255, blue: 66/255)), //red
+        
+        DeckTheme(title: "Australian Flag", /// $1
+                  logoCard: "cardBackAustralia",
+                  productID: "Sawyer.DeckedOut.Theme.AustralianFlag",
+                  regionCode: "AU",
+                  rulesColor: Color(red: 1/255, green: 33/255, blue: 105/255), //union jack blue
+                  textColor: Color(red: 1/255, green: 33/255, blue: 105/255), //union jack blue
+                  outlineColor: Color(red: 255/255, green: 255/255, blue: 255/255)), //white
 
         DeckTheme(title: "Austrian Flag", /// $1
                   logoCard: "cardBackAustria",
@@ -122,8 +130,8 @@ extension DeckTheme {
                   logoCard: "cardBackNetherlands",
                   productID: "Sawyer.DeckedOut.Theme.DutchFlag",
                   regionCode: "NL",
-                  rulesColor: Color(red: 174/255, green: 28/255, blue: 40/255), //red
-                  textColor: Color(red: 0/255, green: 0/255, blue: 0/255)),
+                  rulesColor: Color(red: 173/255, green: 29/255, blue: 37/255), //Dutch red
+                  textColor: Color(red: 0/255, green: 0/255, blue: 0/255)), //black
                   //glowColor: Color(red: 174/255, green: 28/255, blue: 40/255)), //Color(red: 33/255, green: 70/255, blue: 139/255)), //blue
 
         DeckTheme(title: "Finnish Flag", /// $1
@@ -251,6 +259,7 @@ extension DeckTheme {
         let currentRegion = Locale.current.region?.identifier
         let store = StoreManager.shared
         return all.filter { theme in
+            return true
             guard let region = theme.regionCode else { return true }
             if region == currentRegion { return true }
             return store.isOwned(theme.productID)

@@ -2553,6 +2553,18 @@
         }
       }
     },
+    "Austrian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bindenschild"
+          }
+        }
+      }
+    },
     "Back" : {
       "comment" : "Voice Control input label – back button\nVoiceOver accessibility label – back button to leave themes mode\nVoiceOver accessibility label – back button to return to the main menu",
       "localizations" : {
@@ -2893,6 +2905,30 @@
         }
       }
     },
+    "Brazilian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auriverde"
+          }
+        }
+      }
+    },
+    "British Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Union Jack"
+          }
+        }
+      }
+    },
     "Call knock" : {
       "comment" : "Voice Control input label for declaring a knock in Gin Rummy",
       "localizations" : {
@@ -3002,6 +3038,24 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "叫敲牌"
+          }
+        }
+      }
+    },
+    "Canadian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Maple Leaf"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "l’Unifolié"
           }
         }
       }
@@ -5276,6 +5330,18 @@
         }
       }
     },
+    "Danish Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dannebrog"
+          }
+        }
+      }
+    },
     "Deck" : {
       "comment" : "Voice Control input label\nVoice Control label for drawing a card from the deck",
       "localizations" : {
@@ -7440,6 +7506,18 @@
         }
       }
     },
+    "Dutch Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statenvlag"
+          }
+        }
+      }
+    },
     "Each player gets 6 cards arranged in a grid. Most start face down, with 2 cards randomly revealed." : {
       "localizations" : {
         "da" : {
@@ -8688,6 +8766,18 @@
         }
       }
     },
+    "Finnish Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siniristilippu"
+          }
+        }
+      }
+    },
     "first" : {
       "comment" : "Ordinal word used in Voice Control input labels (Golf grid positions)",
       "localizations" : {
@@ -8797,6 +8887,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "第一"
+          }
+        }
+      }
+    },
+    "French Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le Tricolore"
           }
         }
       }
@@ -9023,6 +9125,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "遊戲選擇轉盤"
+          }
+        }
+      }
+    },
+    "German Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schwarz-Rot-Gold"
           }
         }
       }
@@ -11739,6 +11853,30 @@
         }
       }
     },
+    "Irish Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Tricolour"
+          }
+        }
+      }
+    },
+    "Italian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il Tricolore"
+          }
+        }
+      }
+    },
     "Jack" : {
       "comment" : "Card rank: Jack",
       "localizations" : {
@@ -11848,6 +11986,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "J"
+          }
+        }
+      }
+    },
+    "Japanese Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日の丸"
           }
         }
       }
@@ -13222,6 +13372,18 @@
         }
       }
     },
+    "Korean Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "태극기"
+          }
+        }
+      }
+    },
     "Last turn in Golf!" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -13899,6 +14061,18 @@
         }
       }
     },
+    "Mexican Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El Lábaro Patrio"
+          }
+        }
+      }
+    },
     "New" : {
       "comment" : "Voice Control input label – new game button shorthand",
       "localizations" : {
@@ -14345,6 +14519,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此遊戲目前無可用規則。"
+          }
+        }
+      }
+    },
+    "Norwegian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det Rene Flagg"
           }
         }
       }
@@ -15707,6 +15893,18 @@
         }
       }
     },
+    "Polish Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biało-Czerwona"
+          }
+        }
+      }
+    },
     "Queen" : {
       "comment" : "Card rank: Queen",
       "localizations" : {
@@ -16276,6 +16474,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "規則"
+          }
+        }
+      }
+    },
+    "Russian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Триколор"
           }
         }
       }
@@ -17982,6 +18192,18 @@
         }
       }
     },
+    "Spanish Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La Rojigualda"
+          }
+        }
+      }
+    },
     "Spider's Web" : {
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
@@ -18557,6 +18779,18 @@
         }
       }
     },
+    "Swedish Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den Blågula"
+          }
+        }
+      }
+    },
     "Swipe up or down to change game. Double tap to open the %@ menu." : {
       "comment" : "VoiceOver accessibility hint for the game-selection carousel, %@ is the selected game name",
       "localizations" : {
@@ -18666,6 +18900,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "向上或向下滑動以更換遊戲。輕點兩下開啟%@選單。"
+          }
+        }
+      }
+    },
+    "Swiss Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schweizerkreuz"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Croix Fédérale"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Croce Svizzera"
           }
         }
       }

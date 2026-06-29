@@ -6,8 +6,13 @@
 ### Update 3.5.3 - July 4 National Cards release
 - [ ] Make national flag cards available in frontend
   - [x] Test region check
-  - [ ] Refactor & clean up LetterCardView
-  - [ ] Add all country flag IAPs to ASC
+  - [x] Refactor & clean up LetterCardView
+  - [x] Add all country flag IAPs to ASC
+  - [x] Add Australia to storekit
+  - [x] Further organize and alphabatize letter card view
+  - [x] Add localized titles for EACH name (ie Old Glory) (50% done)
+  - [ ] Add emojis to the IAP titles?
+  - [ ] Undo return true for availability gate
 - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
 
 ### Update 3.6.0 - Crazy 8s QOL
@@ -52,6 +57,18 @@
 - [ ] UI Polish
   - [ ] Create a unique, better win screen for each game
 - [ ] Organize and refactor project structure
+
+### Localization
+- [ ] Polish
+  - [ ] Migrate the translated Polish flag name from the English localization to a Polish localization
+- [ ] Finnish
+  - [ ] Migrate the translated Finnish flag name from the English localization to a Finnish localization
+- [ ] RTL Support for:
+  - [ ] Arabic
+  - [ ] Hebrew
+- [ ] Bengali
+- [ ] Flags for India, Pakistan, Nepal, Bangladesh
+- [ ] 
 
 ---
 
@@ -179,6 +196,7 @@
 - [ ] Implement groupchat configuration features to support user-entered usernames. (Custom or Game Center?)
 
 ### Minor Fixes & Data Optimization
+- [ ] Shrink shipped Joker cards for storage optimization
 - [ ] Review sound manager warning. It's init should still probably be on a background thread to keep main clear.
 - [ ] Add an interface onboarding notice clarifying that Aces are not high cards in Gin Rummy.
 - [ ] Force invite views to pause/wait when a "GIN!" state is declared.

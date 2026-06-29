@@ -12,128 +12,138 @@ struct LetterCardImage: View {
     var overrideCardBackName: String? = nil //if set, overrides the user's selected card back (e.g. show inviter's theme in transcripts)
 
     @ObservedObject private var cardBackSelection = CurrentTheme.shared
-    let currentLanguage = Locale.preferredLanguages.first ?? "en"
+    private let currentLanguage = Locale.preferredLanguages.first ?? "en"
 
+    // MARK: - Per-card-back styling
+    /// Describes how a card back renders its letter: which font, how it's
+    /// nudged vertically to look centered, and how wide its outline stroke is.
+    private struct CardBackStyle {
+        var fontName: String? = nil      // nil → default serif system font
+        var fontSize: CGFloat = 30
+        var verticalOffset: CGFloat = 0  // points to shift the letter for visual centering
+        var strokeWidth: CGFloat = 0     // outline width in points; 0 = no stroke
+    }
+
+    private static let holtzschueFontName = "Holtzschue-Regular"
+
+    /// Styling overrides keyed by card-back name. Any card back not listed here
+    /// uses the default serif font with no offset and no stroke.
+    private static let cardBackStyles: [String: CardBackStyle] = [
+        // Card backs with a custom display font
+        "cardBackWeb":       CardBackStyle(fontName: "KingthingsWidow", fontSize: 42, verticalOffset: 1),
+        "cardBackKoi":       CardBackStyle(fontName: "SuperShake", fontSize: 26, verticalOffset: -2),
+        "cardBackEnchanted": CardBackStyle(fontName: "BoecklinsUniverse", fontSize: 32, verticalOffset: 3),
+        "cardBackRed":       CardBackStyle(fontName: holtzschueFontName, fontSize: 33, verticalOffset: 3),
+        "cardBackBlue":      CardBackStyle(fontName: holtzschueFontName, fontSize: 33, verticalOffset: 3),
+        "cardBackPurple":    CardBackStyle(fontName: holtzschueFontName, fontSize: 33, verticalOffset: 3),
+        // Flag card backs: default serif font drawn with an outline stroke
+        "cardBackAmerica":     CardBackStyle(verticalOffset: -2, strokeWidth: 2),
+        "cardBackAustralia":   CardBackStyle(verticalOffset: -6, strokeWidth: 2),
+        "cardBackAustria":     CardBackStyle(strokeWidth: 2),
+        "cardBackCanada":      CardBackStyle(verticalOffset: 3),
+        "cardBackDenmark":     CardBackStyle(verticalOffset: -15, strokeWidth: 2),
+        "cardBackFinland":     CardBackStyle(verticalOffset: -19, strokeWidth: 2),
+        "cardBackNorway":      CardBackStyle(verticalOffset: -17, strokeWidth: 2),
+        "cardBackPoland":      CardBackStyle(strokeWidth: 2),
+        "cardBackSpain":       CardBackStyle(verticalOffset: 5, strokeWidth: 2),
+        "cardBackSweden":      CardBackStyle(verticalOffset: -17, strokeWidth: 2),
+        "cardBackSwitzerland": CardBackStyle(strokeWidth: 2),
+        "cardBackUK":          CardBackStyle(strokeWidth: 2),
+    ]
+
+    /// The card-back style after applying language overrides. Chinese locales
+    /// force their own font and vertical offset (but leave the stroke alone).
+    private var style: CardBackStyle {
+        var resolved = Self.cardBackStyles[effectiveName] ?? CardBackStyle()
+        if currentLanguage.hasPrefix("zh-Hans") { // Simplified Chinese
+            resolved.fontName = "baotuxiaobaiti"
+            resolved.fontSize = 30
+            resolved.verticalOffset = -2
+        } else if currentLanguage.hasPrefix("zh-Hant") { // Traditional Chinese
+            resolved.fontName = "GenRyuMinJP-Bold"
+            resolved.fontSize = 30
+            resolved.verticalOffset = 2
+        }
+        // Future per-language fonts (Hindi, Japanese, Korean, Russian) can be
+        // layered in here the same way.
+        return resolved
+    }
+
+    // MARK: - Derived appearance
     private var effectiveName: String { CurrentTheme.existingBackName(overrideCardBackName ?? cardBackSelection.selectedName) }
+
     private var effectiveBaseName: String {
         let candidate = effectiveName + "Base"
         return UIImage(named: candidate) != nil ? candidate : effectiveName
     }
+
     private var effectiveTextColor: Color {
-        return DeckTheme.theme(forLogoCard: effectiveName)?.textColor ?? Color(.white)
+        DeckTheme.theme(forLogoCard: effectiveName)?.textColor ?? Color(.white)
     }
+
     private var effectiveGlowColor: Color {
         let theme = DeckTheme.theme(forLogoCard: effectiveName)
         return theme?.outlineColor ?? theme?.textColor ?? Color(.white)
     }
 
     private var font: Font {
-        if currentLanguage.hasPrefix("zh-Hans") { // Simplified Chinese
-            return .custom("baotuxiaobaiti", fixedSize: 30)
-        } else if currentLanguage.hasPrefix("zh-Hant") { // Traditional Chinese
-            return .custom("GenRyuMinJP-Bold", fixedSize: 30)
-        //} else if currentLanguage.hasPrefix("hi") { // Hindi
-            //return .system(size: 30, weight: .regular, design: .serif)
-        //} else if currentLanguage.hasPrefix("ja") { // Japanese
-            //return .custom("GenRyuMinJP-Bold", size: 30)
-        //} else if currentLanguage.hasPrefix("ko") { // Korean
-            //return .custom("AppleSDGothicNeo-SemiBold", size: 28)
-            //return .system(size: 30, weight: .regular, design: .serif)
-        //} else if currentLanguage.hasPrefix("ru") { // Russian
-            //return .system(size: 30, weight: .regular, design: .serif)
-        } else if effectiveName == "cardBackWeb" {
-            return .custom("KingthingsWidow", fixedSize: 42)
-        } else if effectiveName == "cardBackKoi" {
-            return .custom("SuperShake", fixedSize: 26)
-        } else if effectiveName == "cardBackEnchanted" {
-            return .custom("BoecklinsUniverse", fixedSize: 32)
-        } else if effectiveName == "cardBackRed" || effectiveName == "cardBackBlue" || effectiveName == "cardBackPurple" {
-            return .custom("Holtzschue-Regular", fixedSize: 33) //originally size 30
+        if let name = style.fontName {
+            return .custom(name, fixedSize: style.fontSize)
         }
         return .system(size: 30, weight: .bold, design: .serif)
     }
-    
-    private var isHoltzschue: Bool {
-        return font == .custom("Holtzschue-Regular", fixedSize: 33)
-    }
 
+    /// The Holtzschue "!" has its own pre-rendered artwork. This is only true
+    /// for the Holtzschue card backs (red/blue/purple) in non-Chinese locales,
+    /// since Chinese overrides the font above.
     private var isHoltzschueExclamation: Bool {
-        isHoltzschue && character == "!"
-    }
-    
-    private var verticalCentering: CGFloat {
-        if currentLanguage.hasPrefix("zh-Hans") {
-            return -2
-        } else if currentLanguage.hasPrefix("zh-Hant") {
-            return 2
-        } else if isHoltzschue {
-            return 3
-        } else if effectiveName == "cardBackWeb" {
-            return 1
-        } else if effectiveName == "cardBackKoi" {
-            return -2
-        } else if effectiveName == "cardBackEnchanted" {
-            return 3
-        } else if effectiveName == "cardBackSweden" || effectiveName == "cardBackNorway" {
-            return -17
-        } else if effectiveName == "cardBackFinland" {
-            return -19
-        } else if effectiveName == "cardBackDenmark" {
-            return -15
-        } else if effectiveName == "cardBackSpain" {
-            return 5
-        } else if effectiveName == "cardBackCanada" {
-            return 3
-        } else if effectiveName == "cardBackAmerica" {
-            return -2
-        } else {
-            return 0
-        }
-    }
-    
-    // Width of the text outline (in points). 0 = no stroke.
-    private var strokeWidth: CGFloat {
-        if effectiveName == "cardBackAmerica" || effectiveName == "cardBackPoland" || effectiveName == "cardBackSweden" || effectiveName == "cardBackNorway" || effectiveName == "cardBackDenmark" || effectiveName == "cardBackFinland" || effectiveName == "cardBackAustria" || effectiveName == "cardBackSpain" || effectiveName == "cardBackUK" || effectiveName == "cardBackSwitzerland" {
-            return 2
-        }
-        return 0
+        style.fontName == Self.holtzschueFontName && character == "!"
     }
 
+    // MARK: - Body
     var body: some View {
         Image(effectiveBaseName)
             .resizable()
             .aspectRatio(0.7, contentMode: .fit)
-            .overlay {
-                if isHoltzschueExclamation {
-                    Image("\(character)Card")
-                        .resizable()
-                        .aspectRatio(0.7, contentMode: .fit)
-                } else {
-                    ZStack {
-                        // Stroke: draw the character in the glow color, offset in a ring around the fill to fake an outline (Text has no native stroke).
-                        if strokeWidth > 0 {
-                            ForEach(0..<8, id: \.self) { i in
-                                let angle = Double(i) / 8 * 2 * .pi
-                                Text(character)
-                                    .font(font)
-                                    .foregroundStyle(effectiveGlowColor)
-                                    .offset(x: cos(angle) * strokeWidth,
-                                            y: sin(angle) * strokeWidth + verticalCentering)
-                            }
-                        }
-                        // Character on top of stroke
-                        Text(character)
-                            .font(font)
-                            .offset(y: verticalCentering)
-                            .foregroundStyle(effectiveTextColor)
-                            //.shadow(color: effectiveGlowColor, radius: glowRadius)
-                    }
-                }
+            .overlay { letterOverlay }
+    }
+
+    @ViewBuilder
+    private var letterOverlay: some View {
+        if isHoltzschueExclamation {
+            Image("\(character)Card")
+                .resizable()
+                .aspectRatio(0.7, contentMode: .fit)
+        } else {
+            ZStack {
+                strokeOutline
+                // Character on top of stroke
+                Text(character)
+                    .font(font)
+                    .offset(y: style.verticalOffset)
+                    .foregroundStyle(effectiveTextColor)
             }
+        }
+    }
+
+    /// Fakes a text outline by drawing the character in the glow color eight
+    /// times in a ring around the fill (SwiftUI Text has no native stroke).
+    @ViewBuilder
+    private var strokeOutline: some View {
+        if style.strokeWidth > 0 {
+            ForEach(0..<8, id: \.self) { i in
+                let angle = Double(i) / 8 * 2 * .pi
+                Text(character)
+                    .font(font)
+                    .foregroundStyle(effectiveGlowColor)
+                    .offset(x: cos(angle) * style.strokeWidth,
+                            y: sin(angle) * style.strokeWidth + style.verticalOffset)
+            }
+        }
     }
 }
 
-struct LetterCardView: View { //where both sides are letters
+struct LetterCardView: View { //cards where both sides are letters
     let frontChar: String
     let backChar: String
     let isFlipped: Bool
