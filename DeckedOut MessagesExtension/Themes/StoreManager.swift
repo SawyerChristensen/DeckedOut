@@ -16,6 +16,9 @@ final class StoreManager: ObservableObject {
     @Published private(set) var ownedProductIDs: Set<String> = []
     @Published private(set) var purchaseInFlight: String? = nil // productID currently being purchased, if any
     @Published private(set) var isChinaStorefront: Bool = false
+    /// The App Store storefront's country, as an ISO 3166-1 *alpha-3* code (e.g. `"AUS"`). `nil` until
+    /// `start()` has resolved the storefront. Used as an additional signal for region-gated themes.
+    @Published private(set) var storefrontCountryCode: String? = nil
 
     /// Non-consumable IAP that grants every other paid IAP.
     static let masterUnlockProductID = "Sawyer.DeckedOut.MasterUnlock"
@@ -31,6 +34,7 @@ final class StoreManager: ObservableObject {
         guard !hasStarted else { return }
         hasStarted = true
         if let storefront = await Storefront.current {
+            storefrontCountryCode = storefront.countryCode
             isChinaStorefront = storefront.countryCode == "CHN"
         }
         guard !isChinaStorefront else { return }

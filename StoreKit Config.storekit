@@ -305,14 +305,14 @@
           "locale" : "ja"
         },
         {
-          "description" : "寧靜的錦鯉圖案卡背",
-          "displayName" : "錦鯉主題",
-          "locale" : "zh_Hant"
-        },
-        {
           "description" : "A beautiful Koi fish patterned card back.",
           "displayName" : "Koi Fish Theme",
           "locale" : "en_US"
+        },
+        {
+          "description" : "寧靜的錦鯉圖案卡背",
+          "displayName" : "錦鯉主題",
+          "locale" : "zh_Hant"
         },
         {
           "description" : "평온한 비단잉어 패턴의 카드 뒷면",
@@ -545,14 +545,14 @@
           "locale" : "de"
         },
         {
-          "description" : "The national flag of Switzerland!",
-          "displayName" : "Swiss Flag Theme",
-          "locale" : "en_US"
-        },
-        {
           "description" : "La bandiera nazionale della Svizzera!",
           "displayName" : "Croce Svizzera",
           "locale" : "it"
+        },
+        {
+          "description" : "The national flag of Switzerland!",
+          "displayName" : "Swiss Flag Theme",
+          "locale" : "en_US"
         }
       ],
       "productID" : "Sawyer.DeckedOut.Theme.SwissFlag",
@@ -603,7 +603,7 @@
     "_developerTeamID" : "4X76DT8A23",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 804466070.39360702,
+    "_lastSynchronizedDate" : 804480318.85909104,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",

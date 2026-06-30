@@ -19,8 +19,8 @@ struct DeckTheme: Identifiable {
     /// Total wins (across all games) required to unlock this theme. `nil` means no win gate.
     var requiredWins: Int? = nil
     /// ISO 3166-1 alpha-2 country code this theme is region-gated to (e.g. `"US"`). `nil` means the
-    /// theme is shown everywhere. Flag themes are only visible when the device region matches, so
-    /// players only ever see the flag of the country they're currently in.
+    /// theme is shown everywhere. Flag themes are only visible when the device region OR the App Store
+    /// storefront matches, so players generally only see the flag of the country they're tied to.
     var regionCode: String? = nil
     var rulesColor: Color //accent color used in Rules view
     var textColor: Color = .white //color used for text in
@@ -246,22 +246,35 @@ extension DeckTheme {
                   textColor: Color(red: 255/255, green: 255/255, blue: 255/255)), //white
     ]
 
-    /// Themes available to show in the menu. Region-gated themes (the country flags) are included
-    /// when their `regionCode` matches the device's current region — so players see the flag of the
-    /// country they're currently in — OR when the player already owns that flag, so a flag purchased
-    /// abroad never disappears when they travel out of that region. Non-gated themes are always
-    /// included.
+    
+    // MARK: - Region Availability Check
+    
+    /// Maps the ISO 3166-1 *alpha-3* codes reported by the App Store storefront to the *alpha-2* codes
+    /// used by `regionCode` (and by `Locale.region`). Only needs to cover the countries that have flag
+    /// themes — when adding a new flag theme, add its alpha-3 → alpha-2 entry here too.
+    private static let storefrontAlpha3ToAlpha2: [String: String] = [
+        "USA": "US", "AUS": "AU", "AUT": "AT", "BRA": "BR", "GBR": "GB", "CAN": "CA",
+        "DNK": "DK", "NLD": "NL", "FIN": "FI", "FRA": "FR", "DEU": "DE", "IRL": "IE",
+        "ITA": "IT", "JPN": "JP", "KOR": "KR", "MEX": "MX", "NOR": "NO", "POL": "PL",
+        "RUS": "RU", "ESP": "ES", "SWE": "SE", "CHE": "CH",
+    ]
+
+    /// Themes available to show in the menu. Region-gated themes (the country flags) are included when
+    /// their `regionCode` matches EITHER the device's current region OR the App Store storefront's
+    /// country — so players see the flag of the country they're tied to — OR when the player already
+    /// owns that flag, so a flag purchased abroad never disappears when they travel out of that region.
+    /// Non-gated themes are always included.
     ///
-    /// Main-actor isolated because it reads `StoreManager` ownership state; it's only ever read from
-    /// the menu UI, which already runs on the main actor.
+    /// Main-actor isolated because it reads `StoreManager` state; it's only ever read from the menu UI,
+    /// which already runs on the main actor.
     @MainActor
     static var available: [DeckTheme] {
-        let currentRegion = Locale.current.region?.identifier
+        let deviceRegion = Locale.current.region?.identifier
         let store = StoreManager.shared
+        let storeRegion = store.storefrontCountryCode.flatMap { storefrontAlpha3ToAlpha2[$0] }
         return all.filter { theme in
-            return true
             guard let region = theme.regionCode else { return true }
-            if region == currentRegion { return true }
+            if region == deviceRegion || region == storeRegion { return true }
             return store.isOwned(theme.productID)
         }
     }

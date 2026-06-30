@@ -203,6 +203,8 @@
 				nb,
 				vi,
 				zh,
+				pl,
+				fi,
 			);
 			mainGroup = BECF99992E04746E007B89C0;
 			minimizedProjectReferenceProxies = 1;
@@ -261,7 +263,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = "DeckedOut MessagesExtension/DeckedOut MessagesExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
@@ -294,7 +296,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = "DeckedOut MessagesExtension/DeckedOut MessagesExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DeckedOut MessagesExtension/Info.plist";
@@ -454,7 +456,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DeckedOut/DeckedOut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games for iMessage";
@@ -478,7 +480,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DeckedOut/DeckedOut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4X76DT8A23;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Card Games for iMessage";

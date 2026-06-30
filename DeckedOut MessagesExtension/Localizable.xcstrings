@@ -2209,7 +2209,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Old Glory"
+            "value" : "Old Glory 🇺🇸"
           }
         }
       }
@@ -2553,6 +2553,18 @@
         }
       }
     },
+    "Australian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The True Blue 🇦🇺"
+          }
+        }
+      }
+    },
     "Austrian Flag" : {
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
@@ -2560,7 +2572,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bindenschild"
+            "value" : "Bindenschild 🇦🇹"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Austrian Flag 🇦🇹"
           }
         }
       }
@@ -2909,10 +2927,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brazilian Flag 🇧🇷"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auriverde"
+            "value" : "Auriverde 🇧🇷"
           }
         }
       }
@@ -2924,7 +2948,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Union Jack"
+            "value" : "Union Jack 🇬🇧"
           }
         }
       }
@@ -3049,13 +3073,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Maple Leaf"
+            "value" : "The Maple Leaf 🇨🇦"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "l’Unifolié"
+            "value" : "l’Unifolié 🇨🇦"
           }
         }
       }
@@ -5337,7 +5361,13 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dannebrog"
+            "value" : "Dannebrog 🇩🇰"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Danish Flag 🇩🇰"
           }
         }
       }
@@ -7510,10 +7540,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dutch Flag 🇳🇱"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Statenvlag"
+            "value" : "Statenvlag 🇳🇱"
           }
         }
       }
@@ -7973,91 +8009,97 @@
       "localizations" : {
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Fortryllet"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Verzaubert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enchanted 🦊"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Encantado"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Enchanté"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "मंत्रमुग्ध"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Incantato"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "魅惑"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "매혹"
           }
         },
         "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Fortryllet"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Betoverd"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Encantado"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Зачарованный"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Förtrollad"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Büyülü"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Huyền Bí"
           }
         },
@@ -8069,13 +8111,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "魔幻"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "魔幻"
           }
         }
@@ -8773,7 +8815,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siniristilippu"
+            "value" : "Finnish Flag 🇫🇮"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siniristilippu 🇫🇮"
           }
         }
       }
@@ -8895,10 +8943,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "French Flag 🇫🇷"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le Tricolore"
+            "value" : "Le Tricolore 🇫🇷"
           }
         }
       }
@@ -9136,7 +9190,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schwarz-Rot-Gold"
+            "value" : "Schwarz-Rot-Gold 🇩🇪"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "German Flag 🇩🇪"
           }
         }
       }
@@ -11860,7 +11920,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Tricolour"
+            "value" : "The Tricolour 🇮🇪"
           }
         }
       }
@@ -11869,10 +11929,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Italian Flag 🇮🇹"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il Tricolore"
+            "value" : "Il Tricolore 🇮🇹"
           }
         }
       }
@@ -11994,10 +12060,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Japanese Flag 🇯🇵"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日の丸"
+            "value" : "日の丸 🇯🇵"
           }
         }
       }
@@ -13258,97 +13330,97 @@
       "localizations" : {
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Koikarpe"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Koi-Karpfen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Koi Fish"
+            "value" : "Koi Fish 🎏"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Pez Koi"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Carpe Koï"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "कोई मछली"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Carpa Koi"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "錦鯉"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "비단잉어"
           }
         },
         "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Koikarpe"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Koikarper"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Carpa Koi"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Карп кои"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Koikarp"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Koi Balığı"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Cá Koi"
           }
         },
@@ -13360,13 +13432,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "锦鲤"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "錦鯉"
           }
         }
@@ -13376,10 +13448,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korean Flag 🇰🇷"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "태극기"
+            "value" : "태극기 🇰🇷"
           }
         }
       }
@@ -14065,10 +14143,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mexican Flag 🇲🇽"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El Lábaro Patrio"
+            "value" : "El Lábaro Patrio 🇲🇽"
           }
         }
       }
@@ -14527,10 +14611,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Norwegian Flag 🇳🇴"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Det Rene Flagg"
+            "value" : "Det Rene Flagg 🇳🇴"
           }
         }
       }
@@ -14541,91 +14631,97 @@
       "localizations" : {
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Hav"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Ozean"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocean 🌊"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Océano"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Océan"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "महासागर"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Oceano"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "オーシャン"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "바다"
           }
         },
         "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Hav"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Oceaan"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Oceano"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Океан"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Hav"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Okyanus"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Đại Dương"
           }
         },
@@ -14637,13 +14733,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "海洋"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "海洋"
           }
         }
@@ -15900,7 +15996,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Biało-Czerwona"
+            "value" : "Polish Flag 🇵🇱"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biało-Czerwona 🇵🇱"
           }
         }
       }
@@ -16482,10 +16584,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Russian Flag 🇷🇺"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Триколор"
+            "value" : "Триколор 🇷🇺"
           }
         }
       }
@@ -18196,10 +18304,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spanish Flag 🇪🇸"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La Rojigualda"
+            "value" : "La Rojigualda 🇪🇸"
           }
         }
       }
@@ -18210,97 +18324,97 @@
       "localizations" : {
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Edderkoppespind"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Spinnennetz"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spider’s Web"
+            "value" : "Spider’s Web 🕸️"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Telaraña"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Toile d'Araignée"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "मकड़ी का जाला"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Ragnatela"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "蜘蛛の巣"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "거미줄"
           }
         },
         "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Edderkoppnett"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Spinnenweb"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Teia de Aranha"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Паутина"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Spindelnät"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Örümcek Ağı"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Mạng Nhện"
           }
         },
@@ -18312,13 +18426,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "蜘蛛网"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "蜘蛛網"
           }
         }
@@ -18671,91 +18785,97 @@
       "localizations" : {
         "da" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Solnedgang"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Sonnenuntergang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sunset 🌅"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Atardecer"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Coucher de Soleil"
           }
         },
         "hi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "सूर्यास्त"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Tramonto"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "夕焼け"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "노을"
           }
         },
         "nb" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Solnedgang"
           }
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Zonsondergang"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Pôr do Sol"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Закат"
           }
         },
         "sv" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Solnedgång"
           }
         },
         "tr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Gün Batımı"
           }
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Hoàng Hôn"
           }
         },
@@ -18767,13 +18887,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "日落"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "日落"
           }
         }
@@ -18783,10 +18903,16 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swedish Flag 🇸🇪"
+          }
+        },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Den Blågula"
+            "value" : "Den Blågula 🇸🇪"
           }
         }
       }
@@ -18911,19 +19037,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schweizerkreuz"
+            "value" : "Schweizerkreuz 🇨🇭"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swiss Flag 🇨🇭"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Croix Fédérale"
+            "value" : "Croix Fédérale 🇨🇭"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Croce Svizzera"
+            "value" : "Croce Svizzera 🇨🇭"
           }
         }
       }
