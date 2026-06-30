@@ -156,6 +156,14 @@ extension DeckTheme {
                   rulesColor: Color(red: 0, green: 0, blue: 0),
                   textColor: Color(red: 255/255, green: 206/255, blue: 13/255)), //yellow
         
+        DeckTheme(title: "Indian Flag", /// $1
+                  logoCard: "cardBackIndia",
+                  productID: "Sawyer.DeckedOut.Theme.IndianFlag",
+                  regionCode: "IN",
+                  rulesColor: Color(red: 255/255, green: 103/255, blue: 31/255), //orange
+                  textColor: Color(red: 255/255, green: 255/255, blue: 255/255), //white
+                  outlineColor: Color(red: 6/255, green: 3/255, blue: 141/255)), //navy
+
         DeckTheme(title: "Irish Flag", /// $1
                   logoCard: "cardBackIreland",
                   productID: "Sawyer.DeckedOut.Theme.IrishFlag",
@@ -208,6 +216,14 @@ extension DeckTheme {
                   textColor: Color(red: 255/255, green: 255/255, blue: 255/255), //black
                   outlineColor: Color(red: 220/255, green: 20/255, blue: 60/255)), //red
         
+        DeckTheme(title: "Portuguese Flag", /// $1
+                  logoCard: "cardBackPortugal",
+                  productID: "Sawyer.DeckedOut.Theme.PortugueseFlag",
+                  regionCode: "PT",
+                  rulesColor: Color(red: 0/255, green: 0/255, blue: 255/255), //red
+                  textColor: Color(red: 255/255, green: 255/255, blue: 0/255)), //yellow
+                  //outlineColor: Color(red: 218/255, green: 41/255, blue: 28/255)), //red
+
         DeckTheme(title: "Russian Flag", /// $1
                   logoCard: "cardBackRussia",
                   productID: "Sawyer.DeckedOut.Theme.RussianFlag",
@@ -238,6 +254,22 @@ extension DeckTheme {
                   textColor: Color(red: 255/255, green: 255/255, blue: 255/255), //white
                   outlineColor: Color(red: 255/255, green: 0/255, blue: 0/255)), //red
         
+        DeckTheme(title: "Turkish Flag", /// $1
+                  logoCard: "cardBackTurkey",
+                  productID: "Sawyer.DeckedOut.Theme.TurkishFlag",
+                  regionCode: "TR",
+                  rulesColor: Color(red: 227/255, green: 10/255, blue: 23/255), //red
+                  textColor: Color(red: 255/255, green: 255/255, blue: 255/255), //white
+                  outlineColor: Color(red: 227/255, green: 10/255, blue: 23/255)), //red
+
+        DeckTheme(title: "Vietnamese Flag", /// $1
+                  logoCard: "cardBackVietnam",
+                  productID: "Sawyer.DeckedOut.Theme.VietnameseFlag",
+                  regionCode: "VN",
+                  rulesColor: Color(red: 218/255, green: 37/255, blue: 29/255), //red
+                  textColor: Color(red: 255/255, green: 255/255, blue: 0/255), //yellow
+                  outlineColor: Color(red: 218/255, green: 37/255, blue: 29/255)), //red
+
         DeckTheme(title: "Enchanted", /// $2
                   logoCard: "cardBackEnchanted",
                   fronts: "Enchanted",
@@ -254,9 +286,10 @@ extension DeckTheme {
     /// themes — when adding a new flag theme, add its alpha-3 → alpha-2 entry here too.
     private static let storefrontAlpha3ToAlpha2: [String: String] = [
         "USA": "US", "AUS": "AU", "AUT": "AT", "BRA": "BR", "GBR": "GB", "CAN": "CA",
-        "DNK": "DK", "NLD": "NL", "FIN": "FI", "FRA": "FR", "DEU": "DE", "IRL": "IE",
-        "ITA": "IT", "JPN": "JP", "KOR": "KR", "MEX": "MX", "NOR": "NO", "POL": "PL",
-        "RUS": "RU", "ESP": "ES", "SWE": "SE", "CHE": "CH",
+        "DNK": "DK", "NLD": "NL", "FIN": "FI", "FRA": "FR", "DEU": "DE", "IND": "IN",
+        "IRL": "IE", "ITA": "IT", "JPN": "JP", "KOR": "KR", "MEX": "MX", "NOR": "NO",
+        "POL": "PL", "PRT": "PT", "RUS": "RU", "ESP": "ES", "SWE": "SE", "CHE": "CH",
+        "TUR": "TR", "VNM": "VN",
     ]
 
     /// Themes available to show in the menu. Region-gated themes (the country flags) are included when
@@ -284,4 +317,3 @@ extension DeckTheme {
         return all.first(where: { $0.logoCard == name })
     }
 }
-

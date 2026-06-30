@@ -11913,6 +11913,24 @@
         }
       }
     },
+    "Indian Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indian Flag 🇮🇳"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "तिरंगा 🇮🇳"
+          }
+        }
+      }
+    },
     "Irish Flag" : {
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
@@ -16580,6 +16598,24 @@
         }
       }
     },
+    "Portuguese Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portuguese Flag 🇵🇹"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bandeira das Quinas 🇵🇹"
+          }
+        }
+      }
+    },
     "Russian Flag" : {
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
@@ -19056,6 +19092,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Croce Svizzera 🇨🇭"
+          }
+        }
+      }
+    },
+    "Turkish Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turkish Flag 🇹🇷"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ay Yıldız 🇹🇷"
+          }
+        }
+      }
+    },
+    "Vietnamese Flag" : {
+      "comment" : "Card back theme name displayed on the main menu",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vietnamese Flag 🇻🇳"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cờ đỏ sao vàng 🇻🇳"
           }
         }
       }

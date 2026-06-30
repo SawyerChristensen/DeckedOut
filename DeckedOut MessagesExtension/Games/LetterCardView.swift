@@ -43,12 +43,16 @@ struct LetterCardImage: View {
         "cardBackCanada":      CardBackStyle(verticalOffset: 3),
         "cardBackDenmark":     CardBackStyle(verticalOffset: -15, strokeWidth: 2),
         "cardBackFinland":     CardBackStyle(verticalOffset: -19, strokeWidth: 2),
+        "cardBackIndia":       CardBackStyle(strokeWidth: 2),
         "cardBackNorway":      CardBackStyle(verticalOffset: -17, strokeWidth: 2),
         "cardBackPoland":      CardBackStyle(strokeWidth: 2),
+        "cardBackPortugal":    CardBackStyle(verticalOffset: 4),
         "cardBackSpain":       CardBackStyle(verticalOffset: 5, strokeWidth: 2),
         "cardBackSweden":      CardBackStyle(verticalOffset: -17, strokeWidth: 2),
         "cardBackSwitzerland": CardBackStyle(strokeWidth: 2),
+        "cardBackTurkey":      CardBackStyle(verticalOffset: -13, strokeWidth: 2),
         "cardBackUK":          CardBackStyle(strokeWidth: 2),
+        "cardBackVietnam":     CardBackStyle(strokeWidth: 2),
     ]
 
     /// The card-back style after applying language overrides. Chinese locales

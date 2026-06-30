@@ -4,15 +4,6 @@
 ## 🚀 Active Release Milestones
 
 ### Update 3.5.3 - July 4 National Cards release
-- [x] Make national flag cards available in frontend
-  - [x] Test region check
-  - [x] Refactor & clean up LetterCardView
-  - [x] Add all country flag IAPs to ASC
-  - [x] Add Australia to storekit
-  - [x] Further organize and alphabatize letter card view
-  - [x] Add localized titles for EACH name (ie Old Glory) (50% done)
-  - [x] Add emojis to the IAP title
-  - [x] Undo return true for availability gate
 - [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
 
 ### Update 3.6.0 - Crazy 8s QOL
@@ -21,7 +12,6 @@
   - [ ] Review stacking 7s, and if we should change the stacking 2s rule in normal Crazy 8s
 - [ ] Switch variant for Ireland/UK?
 - [ ] Localized German title cards
-- [ ] Add Indian Flag, Turkish Flag, Vietnamese Flag, others?
 - [ ] Localize official full listing (relatively easy)
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   * *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
@@ -61,14 +51,12 @@
 
 ### Localization
 - [ ] Polish
-  - [ ] Migrate the translated Polish flag name from the English localization to a Polish localization
 - [ ] Finnish
-  - [ ] Migrate the translated Finnish flag name from the English localization to a Finnish localization
 - [ ] RTL Support for:
   - [ ] Arabic
   - [ ] Hebrew
 - [ ] Bengali
-- [ ] Flags for India, Pakistan, Nepal, Bangladesh
+- [ ] Flags for Belgium, Ukraine, other European coountries, Pakistan, Nepal, Bangladesh, others?
 
 ---
 
