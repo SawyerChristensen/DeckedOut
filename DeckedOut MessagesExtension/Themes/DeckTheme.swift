@@ -13,7 +13,14 @@ struct DeckTheme: Identifiable {
     var logoCard: String
     /// Suffix appended to default card-front asset names to look up this theme's custom fronts
     /// (e.g. `"Enchanted"` turns `aceClubs` into `aceClubsEnchanted`). `nil` uses the default fronts.
+    /// Note: a theme can set this to swap in only *some* custom fronts (e.g. American Flag themes just
+    /// the jokers) — so this is NOT a reliable signal for whether the whole deck is themed. Use
+    /// `isFullDeck` for that.
     var fronts: String? = nil
+    /// Whether this theme provides custom artwork for *every* card front (a "Full Deck"), as opposed to
+    /// just a themed card back (and possibly a few themed fronts like the jokers). Drives the store's
+    /// "Card Back" vs "Full Deck" label.
+    var isFullDeck: Bool = false
     /// App Store Connect non-consumable IAP product ID. `nil` means this theme is free.
     var productID: String?
     /// Total wins (across all games) required to unlock this theme. `nil` means no win gate.
@@ -273,6 +280,7 @@ extension DeckTheme {
         DeckTheme(title: "Enchanted", /// $2
                   logoCard: "cardBackEnchanted",
                   fronts: "Enchanted",
+                  isFullDeck: true,
                   productID: "Sawyer.DeckedOut.Theme.RedFoxEnchanted",
                   rulesColor: Color(red: 121/255, green: 202/255, blue: 242/255), //light blue
                   textColor: Color(red: 255/255, green: 255/255, blue: 255/255)), //white
@@ -308,7 +316,9 @@ extension DeckTheme {
         return all.filter { theme in
             guard let region = theme.regionCode else { return true }
             if region == deviceRegion || region == storeRegion { return true }
-            return store.isOwned(theme.productID)
+            // Only a flag purchased directly follows the player out of its region. Master unlock
+            // does NOT reveal out-of-region flags — those reappear when the player's region matches.
+            return store.directlyOwns(theme.productID)
         }
     }
 

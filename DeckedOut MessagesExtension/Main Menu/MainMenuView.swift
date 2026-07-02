@@ -460,25 +460,8 @@ struct MainMenuView: View {
                     showingThemes = true
                 }
                 
-            } else if !isThemeSelected { // Selecting a NEW theme
-                let theme = themes[activeThemeIndex]
-                if let required = theme.requiredWins, WinTracker.shared.totalWins < required { //the user is attempting to select a win-locked theme
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.notificationOccurred(.error)
-                } else if store.isOwned(theme.productID) { //if its owned, select it
-                    commitThemeSelection()
-                } else if let productID = theme.productID { //user is purchasing a new theme!
-                    Task {
-                        let success = await store.purchase(productID)
-                        if success, themes[activeThemeIndex].productID == productID {
-                            commitThemeSelection()
-                        }
-                    }
-                }
-            } else {
-                // Trying to select the ALREADY SELECTED theme (Error haptic)
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.error)
+            } else { // In themes mode: equip the active theme (handles win-lock, ownership, purchase, and already-selected)
+                selectTheme(at: activeThemeIndex)
             }
         }) {
             HStack(spacing: 16) {
@@ -627,19 +610,9 @@ struct MainMenuView: View {
                 }
             },
             onThemeSelected: { selectedIndex in
-                let theme = themes[selectedIndex]
-
-                if let required = theme.requiredWins, WinTracker.shared.totalWins < required {
-                    return // Theme is locked! Add haptic error buzz?
-                }
-
-                cardBackSelection.selectedName = theme.logoCard // Commit the theme change to the global store
-
-                // Update the local UI state and animate the menu closing
-                withAnimation(.spring(response: 1, dampingFraction: 0.7).speed(motionSpeed)) {
-                    selectedThemeIndex = selectedIndex
-                    showingThemes = false
-                }
+                // Routes through the same endpoint as the Select button so tapping a card
+                // can't bypass the win-lock / ownership / purchase checks.
+                selectTheme(at: selectedIndex)
             }
         )
     }
@@ -667,13 +640,48 @@ struct MainMenuView: View {
         return "loading"
     }
 
-    private func commitThemeSelection() {
+    /// Single entry point for equipping a theme, shared by the Select button, tapping the
+    /// center card, and VoiceOver activation. Enforces win-locks and IAP ownership before
+    /// committing, and kicks off a purchase when the theme is paid and not yet owned.
+    private func selectTheme(at index: Int) {
+        let theme = themes[index]
+
+        // Win-locked: reject with an error haptic.
+        if let required = theme.requiredWins, WinTracker.shared.totalWins < required {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+            return
+        }
+
+        // Already the equipped theme: nothing to do.
+        if index == selectedThemeIndex {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+            return
+        }
+
+        // Owned (or free — nil productID reads as owned): equip immediately.
+        if store.isOwned(theme.productID) {
+            commitThemeSelection(index: index)
+            return
+        }
+
+        // Paid and not yet owned: purchase, then equip on success.
+        if let productID = theme.productID {
+            Task {
+                let success = await store.purchase(productID)
+                if success, themes[index].productID == productID {
+                    commitThemeSelection(index: index)
+                }
+            }
+        }
+    }
+
+    private func commitThemeSelection(index: Int) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
         withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
-            selectedThemeIndex = activeThemeIndex
+            selectedThemeIndex = index
         }
-        cardBackSelection.selectedName = themes[activeThemeIndex].logoCard
+        cardBackSelection.selectedName = themes[index].logoCard
 
         withAnimation(.spring(response: 1, dampingFraction: 0.7).speed(motionSpeed)) { //send the user back to the main menu
             showingThemes = false
@@ -722,10 +730,10 @@ struct MainMenuView: View {
                             showingRestore = true
                         }
                     } label: {
-                        if theme.fronts == nil {
-                            Text("\(price) - Card Back")
-                        } else {
+                        if theme.isFullDeck {
                             Text("\(price) - Full Deck")
+                        } else {
+                            Text("\(price) - Card Back")
                         }
                     }
                     .buttonStyle(.plain)

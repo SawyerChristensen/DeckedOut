@@ -3,28 +3,35 @@
 
 ## 🚀 Active Release Milestones
 
-### Update 3.5.3 - July 4 National Cards release
-- [ ] Advertise on App Store as July 4th for US Storefront, World Cup for others
-
 ### Update 3.6.0 - Crazy 8s QOL
+- [ ] Make stacking 2s automatic in the normal version of Crazy 8s. If the opponent has a 2, do not end the turn. Instead make the opponent play their 2, and so the user draws 4 unless they have a second 2. Then check if the opponent has the 4th 2, although will be rare. The last player to have a 2 played at them draws 2, 4, 6, or 8 depending on the amount of 2s played. 
 - [ ] Finalize Mau Mau variant of Crazy 8s (Jack logo card)
-  - [ ] Already done? Verify it works?
-  - [ ] Review stacking 7s, and if we should change the stacking 2s rule in normal Crazy 8s
+  - [ ] Make sure stacking 7s works the same as stacking 2s
+  - [ ] Make sure a user cannot play a jack (the wild card) on top of another jack if playing Mau Mau
 - [ ] Switch variant for Ireland/UK?
+- [ ] Look into other Crazy 8s regional variants
 - [ ] Localized German title cards
-- [ ] Localize official full listing (relatively easy)
-- [ ] Review legacy load states functions (pre-3.0 groupchat update)
-  * *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
+  - [ ] Look into seperating the main menu card text from the card art in assets and using UIImage to combine them at launch. will save app size
+- [ ] Localize official full listing into German
+- [ ] Review existing localizations and see if theres oppurtunites to add regional dialects for better language support*
 
 ### Update 3.6.1
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
   - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
+- [ ] Review legacy load states functions (pre-3.0 groupchat update)
+  - *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
+  - Might be advisable to unify the loading architecture for both single and multiplayer to allow for easier building of Cribbage
 
 
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Implement Cribbage
   - [ ] Backend
+    - [ ] Single Player
+    - [ ] Multiplayer
   - [ ] Frontend
+    - [ ] Opponent(s) hand, gauge, deck/crib, rules and sort button, player hand
+    - [ ] Single Player
+    - [ ] Multiplayer
 
 ### Update 5.0.0: 5th Game & Progression
 - [ ] Implement Spades
@@ -32,24 +39,25 @@
   - [ ] Frontend
 
 ### General Updates
-- [ ] MAKE GAME CENTER WORK! 99% Done!
+- [ ] Work with Apple to make Game Center work with iMessage (99% implemented already! Need official support!)
   - [x] Achievements are implemented in ASC
   - [x] Game Center is enabled in ASC
   - [x] Entitlements are present in both the extension and parent stub
   - [x] Game Center capability is enabled as an identifier in another ASC section somewhere (cant remember where)
-  - [ ] Thought the bundle ID swizzle was working but it does not appear to work in production, and also messages with the bundled asset lookups. Work with apple to figure out a straightforward way to support Game Center achievements in iMessage
+  - [ ] Bundle ID swizzle was "working" but it does not appear to work in production, and also messages with the bundled asset lookups.
   - [ ] Get rid of jacks queens and kings explanation in golf master gc text (translate/upload with claude) (doesnt really matter now)
   - [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
 - [ ] Monetization Strategy
   - [ ] Add more Card Back IAPs
-  - [ ] Add IAP localizations in App Store Connect (automate w/script?)
+  - [ ] Add IAP localizations in ASC (automate w/script?)
   - [ ] Integrate Ads mechanism ($$$)
-  - [ ] Roll out more localized storefronts *(Post max-conversion rate design confirmed)*
+  - [ ] Roll out more localized AS listings *(Post max-conversion rate design confirmed)*
 - [ ] UI Polish
   - [ ] Create a unique, better win screen for each game
 - [ ] Organize and refactor project structure
 
 ### Localization
+- [ ] Dialects of already localized languages
 - [ ] Polish
 - [ ] Finnish
 - [ ] RTL Support for:
