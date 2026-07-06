@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct CardView: View { //where only one side is a (letter?)
-    let frontImage: String
+    var frontImage: String = ""
+    /// A pre-baked front bitmap (e.g. the main menu's composited game-logo cards). When set, it's
+    /// drawn directly and the string-based theming/validation of `frontImage` is skipped — the card
+    /// is already a flattened image, so there's no themed variant or asset name to resolve.
+    var frontUIImage: UIImage? = nil
     var backLetter: String?
     var backImageName: String? = nil //custom card-back image; overrides the user's selected card back
     var cardHeight : CGFloat = 145
@@ -79,11 +83,17 @@ struct CardView: View { //where only one side is a (letter?)
             // FRONT VIEW — cross-fades when `resolvedFrontName` changes (e.g. user swaps decks)
             // at the same speed/duration as the deck's back-to-back fade in the game views.
             ZStack {
-                Image(resolvedFrontName)
-                    .resizable()
-                    .aspectRatio(0.7, contentMode: .fit)
-                    .id(resolvedFrontName)
-                    .transition(.opacity)
+                if let frontUIImage {
+                    Image(uiImage: frontUIImage)
+                        .resizable()
+                        .aspectRatio(0.7, contentMode: .fit)
+                } else {
+                    Image(resolvedFrontName)
+                        .resizable()
+                        .aspectRatio(0.7, contentMode: .fit)
+                        .id(resolvedFrontName)
+                        .transition(.opacity)
+                }
             }
             .animation(.easeInOut(duration: 0.4).speed(motionSpeed), value: resolvedFrontName)
             .frame(height: cardHeight)

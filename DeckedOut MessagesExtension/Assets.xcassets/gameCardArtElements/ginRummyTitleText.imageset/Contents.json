@@ -1,0 +1,104 @@
+{
+  "images" : [
+    {
+      "filename" : "ginRummyTitleTextEnglish.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "ginRummyTitleTextChinese.png",
+      "idiom" : "universal",
+      "locale" : "zh",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "zh",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "zh",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "ginRummyTitleTextFrench.png",
+      "idiom" : "universal",
+      "locale" : "fr",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "fr",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "fr",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "ginRummyTitleTextKorean.png",
+      "idiom" : "universal",
+      "locale" : "ko",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "ko",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "ko",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "ginRummyTitleTextRussian.png",
+      "idiom" : "universal",
+      "locale" : "ru",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "ru",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "ru",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "ginRummyTitleTextVietnamese.png",
+      "idiom" : "universal",
+      "locale" : "vi",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "vi",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "locale" : "vi",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}

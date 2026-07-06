@@ -65,6 +65,12 @@
             "value" : "…"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "…"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -176,6 +182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ - Kaartachterkant"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ - Rewers karty"
           }
         },
         "pt-BR" : {
@@ -291,6 +303,12 @@
             "value" : "%@ - Volledig kaartspel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ - Pełna talia"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -402,6 +420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@-kaart"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karta %@"
           }
         },
         "pt-BR" : {
@@ -523,6 +547,12 @@
             "value" : "%1$@ kolom %2$@ rij"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "kolumna %1$@ wiersz %2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -639,6 +669,12 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "%1$@ %2$@"
           }
         },
@@ -761,6 +797,12 @@
             "value" : "%1$@ %2$@, rij %3$lld kolom %4$lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@ %2$@, wiersz %3$lld kolumna %4$lld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -878,6 +920,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ rij %2$@ kolom"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "wiersz %1$@ kolumna %2$@"
           }
         },
         "pt-BR" : {
@@ -999,6 +1047,46 @@
             "value" : "%1$@ overwinningen: %2$lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@ – %#@wins@"
+          },
+          "substitutions" : {
+            "wins" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "few" : {
+                    "stringUnit" : {
+                      "state" : "machine_translated",
+                      "value" : "%arg wygrane"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "machine_translated",
+                      "value" : "%arg wygranych"
+                    }
+                  },
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "machine_translated",
+                      "value" : "%arg wygrana"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "machine_translated",
+                      "value" : "%arg wygranej"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1110,6 +1198,12 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "%@..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "%@..."
           }
         },
@@ -1233,6 +1327,12 @@
             "value" : "%1$@%2$@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@%2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1343,6 +1443,12 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "%lld"
           }
         },
@@ -1466,6 +1572,12 @@
             "value" : "%lld / %lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$lld / %2$lld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1526,21 +1638,75 @@
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Karten"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Karte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Karten"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld card"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld cards"
+                }
+              }
+            }
           }
         },
         "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld cartas"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld carta"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld cartas"
+                }
+              }
+            }
           }
         },
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld cartes"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld carte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld cartes"
+                }
+              }
+            }
           }
         },
         "hi" : {
@@ -1550,9 +1716,21 @@
           }
         },
         "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld carte"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld carta"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld carte"
+                }
+              }
+            }
           }
         },
         "ja" : {
@@ -1574,21 +1752,99 @@
           }
         },
         "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kaarten"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld kaart"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld kaarten"
+                }
+              }
+            }
+          }
+        },
+        "pl" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld karty"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld kart"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld karta"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld karty"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld cartas"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld carta"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld cartas"
+                }
+              }
+            }
           }
         },
         "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld карт"
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld карты"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld карт"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld карта"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld карты"
+                }
+              }
+            }
           }
         },
         "sv" : {
@@ -1698,6 +1954,12 @@
             "value" : "%1$lld %2$@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$lld %2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1753,27 +2015,93 @@
       "isCommentAutoGenerated" : true,
       "localizations" : {
         "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Sejre"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Sejr"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Sejre"
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Siege"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Sieg"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Siege"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Win"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Wins"
+                }
+              }
+            }
           }
         },
         "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld victorias"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld victoria"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld victorias"
+                }
+              }
+            }
           }
         },
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld victoires"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld victoire"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld victoires"
+                }
+              }
+            }
           }
         },
         "hi" : {
@@ -1783,9 +2111,21 @@
           }
         },
         "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Vittorie"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Vittoria"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Vittorie"
+                }
+              }
+            }
           }
         },
         "ja" : {
@@ -1801,33 +2141,135 @@
           }
         },
         "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld seiere"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld seier"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld seiere"
+                }
+              }
+            }
           }
         },
         "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld overwinningen"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld overwinning"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld overwinningen"
+                }
+              }
+            }
+          }
+        },
+        "pl" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld wygrane"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld wygranych"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld wygrana"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld wygranej"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld Vitórias"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Vitória"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld Vitórias"
+                }
+              }
+            }
           }
         },
         "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld побед"
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld победы"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld побед"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld победа"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld победы"
+                }
+              }
+            }
           }
         },
         "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld vinster"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld vinst"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld vinster"
+                }
+              }
+            }
           }
         },
         "tr" : {
@@ -1923,6 +2365,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aas"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "As"
           }
         },
         "pt-BR" : {
@@ -2039,6 +2487,12 @@
             "value" : "Azen zijn 1 punt waard, cijferkaarten tellen voor hun eigen waarde, Boeren en Vrouwen zijn 10 en Heren zijn 0. Gelijke paren in dezelfde kolom vallen tegen elkaar weg!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Asy są warte 1 punkt, karty numeryczne mają wartość nominalną, walety i damy są warte 10, a króle 0. Pasujące pary w tej samej kolumnie znoszą się nawzajem!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2152,6 +2606,12 @@
             "value" : "Actieve kleur: %@."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Aktywny kolor: %@."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2206,10 +2666,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det amerikanske flag 🇺🇸"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sternenbanner 🇺🇸"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Old Glory 🇺🇸"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Vieja Gloria 🇺🇸"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bannière étoilée 🇺🇸"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vecchia Gloria 🇺🇸"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga USA 🇺🇸"
           }
         }
       }
@@ -2276,6 +2772,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Een andere speler is tegelijk met jou toegetreden. Probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Inny gracz dołączył w tym samym momencie co ty. Spróbuj ponownie."
           }
         },
         "pt-BR" : {
@@ -2388,6 +2890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Leg je kaarten in sets (dezelfde waarde) of rijtjes (opeenvolgend, zelfde kleur) van 3 of meer."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ułóż swoje karty w zestawy (tej samej wartości) lub sekwensy (kolejne karty tego samego koloru) po 3 lub więcej."
           }
         },
         "pt-BR" : {
@@ -2503,6 +3011,12 @@
             "value" : "Voegt het spel toe aan je bericht zodat je het kunt versturen."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołącza grę do twojej wiadomości, abyś mógł ją wysłać."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2557,10 +3071,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det australske flag 🇦🇺"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kreuz des Südens 🇦🇺"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "The True Blue 🇦🇺"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Australia 🇦🇺"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Croix du Sud 🇦🇺"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ऑस्ट्रेलिया का झंडा 🇦🇺"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Australii 🇦🇺"
           }
         }
       }
@@ -2569,6 +3119,12 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det østrigske flag 🇦🇹"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2579,6 +3135,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Austrian Flag 🇦🇹"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Austria 🇦🇹"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Rouge-Blanc-Rouge 🇦🇹"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ऑस्ट्रिया का झंडा 🇦🇹"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Austrii 🇦🇹"
           }
         }
       }
@@ -2644,6 +3224,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terug"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wstecz"
           }
         },
         "pt-BR" : {
@@ -2757,6 +3343,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terug naar hoofdmenu"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Powrót do menu głównego"
           }
         },
         "pt-BR" : {
@@ -2873,6 +3465,12 @@
             "value" : "Wees de eerste speler die al zijn kaarten kwijtraakt!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bądź pierwszym graczem, który pozbędzie się wszystkich swoich kart!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2927,10 +3525,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det brasilianske flag 🇧🇷"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Grün-Gold 🇧🇷"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Brazilian Flag 🇧🇷"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Auriverde 🇧🇷"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "L’Auriverde 🇧🇷"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ब्राज़ील का झंडा 🇧🇷"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Brazylii 🇧🇷"
           }
         },
         "pt-BR" : {
@@ -2945,10 +3579,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Union Jack 🇬🇧"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Union Jack 🇬🇧"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Union Jack 🇬🇧"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Union Jack 🇬🇧"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "L’Union Jack 🇬🇧"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Union Jack 🇬🇧"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Wielkiej Brytanii 🇬🇧"
           }
         }
       }
@@ -3016,6 +3686,12 @@
             "value" : "Klop aankondigen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ogłoś pukanie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -3070,16 +3746,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det canadiske flag 🇨🇦"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ahornblatt 🇨🇦"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "The Maple Leaf 🇨🇦"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Hoja de Arce 🇨🇦"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "l’Unifolié 🇨🇦"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Foglia d’Acero 🇨🇦"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Kanady 🇨🇦"
           }
         }
       }
@@ -3145,6 +3851,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kaartspel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gra karciana"
           }
         },
         "pt-BR" : {
@@ -3261,6 +3973,12 @@
             "value" : "Kies een kleur"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybierz kolor"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3373,6 +4091,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klassiek Blauw"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klasyczny błękit"
           }
         },
         "pt-BR" : {
@@ -3489,6 +4213,12 @@
             "value" : "Klassiek Paars"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klasyczny fiolet"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3601,6 +4331,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klassiek Rood"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Klasyczna czerwień"
           }
         },
         "pt-BR" : {
@@ -3716,6 +4452,12 @@
             "value" : "Sluiten"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zamknij"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3827,6 +4569,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Regels sluiten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zamknij zasady"
           }
         },
         "pt-BR" : {
@@ -3942,6 +4690,12 @@
             "value" : "Sluit het regelvenster"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zamyka okno zasad"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4053,6 +4807,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klaveren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Trefl"
           }
         },
         "pt-BR" : {
@@ -4174,6 +4934,12 @@
             "value" : "Kolom %1$lld rij %2$lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kolumna %1$lld wiersz %2$lld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4286,6 +5052,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pesten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Crazy 8s"
           }
         },
         "pt-BR" : {
@@ -4401,6 +5173,12 @@
             "value" : "Pesten kaartspel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karciana gra Crazy 8s"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4512,6 +5290,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pesten spel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gra Crazy 8s"
           }
         },
         "pt-BR" : {
@@ -4627,6 +5411,12 @@
             "value" : "Pesten spel-uitnodiging"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zaproszenie do gry Crazy 8s"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4740,6 +5530,12 @@
             "value" : "Pesten uitnodiging"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zaproszenie do Crazy 8s"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4850,6 +5646,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spelregels Pesten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zasady Crazy 8s"
           }
         },
         "pt-BR" : {
@@ -4965,6 +5767,12 @@
             "value" : "Achten!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Crazy 8s!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5076,6 +5884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spel maken"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Utwórz grę"
           }
         },
         "pt-BR" : {
@@ -5191,6 +6005,12 @@
             "value" : "Huidig spel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Bieżąca gra"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5304,6 +6124,12 @@
             "value" : "Wisselt tussen de oorspronkelijke volgorde, gesorteerd op kleur en waarde, en gesorteerd op waarde."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Przełącza między pierwotną kolejnością, sortowaniem według koloru i wartości oraz sortowaniem według wartości."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -5364,10 +6190,46 @@
             "value" : "Dannebrog 🇩🇰"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dannebrog 🇩🇰"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Danish Flag 🇩🇰"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "El Dannebrog 🇩🇰"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Dannebrog 🇩🇰"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "डैनेब्रॉग 🇩🇰"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Il Dannebrog 🇩🇰"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Danii 🇩🇰"
           }
         }
       }
@@ -5433,6 +6295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stapel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Talia"
           }
         },
         "pt-BR" : {
@@ -5546,6 +6414,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kaartspel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Talia kart"
           }
         },
         "pt-BR" : {
@@ -5667,6 +6541,12 @@
             "value" : "Kondig een klop aan en gooi vervolgens een kaart weg om de ronde te beëindigen."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ogłoś pukanie, a następnie odrzuć kartę, aby zakończyć rundę."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -5786,6 +6666,12 @@
             "value" : "Klop verklaren"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ogłoś pukanie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -5897,6 +6783,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ruiten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karo"
           }
         },
         "pt-BR" : {
@@ -6013,6 +6905,12 @@
             "value" : "Gooi een kaart weg die qua waarde of kleur overeenkomt met de bovenste kaart. Als dit niet kan, trek je een kaart. Als je na drie kaarten nog niet kunt, wordt je beurt overgeslagen."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Odrzuć kartę zgodną z wartością lub kolorem wierzchniej karty na stosie kart odrzuconych. Jeśli nie możesz, dobierz z talii. Jeśli dobierzesz trzy karty i nadal nie możesz nic odrzucić, twoja tura zostaje pominięta."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6124,6 +7022,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aflegstapel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Stos kart odrzuconych"
           }
         },
         "pt-BR" : {
@@ -6245,6 +7149,12 @@
             "value" : "%1$@ van %2$@ weggegooid"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Odrzucono %1$@ %2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6356,6 +7266,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sluiten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zamknij"
           }
         },
         "pt-BR" : {
@@ -6471,6 +7387,12 @@
             "value" : "Regels sluiten"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zamknij zasady"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6584,6 +7506,12 @@
             "value" : "Swipe de hand links/rechts"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Przeciągnij karty w lewo lub w prawo"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6694,6 +7622,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pak een kaart van de stapel of de aflegstapel en ruil deze vervolgens om met een willekeurige kaart in je raster. De omgeruilde kaart wordt weggegooid."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobierz kartę z talii lub ze stosu kart odrzuconych, a następnie zamień ją z dowolną kartą w swojej siatce. Zamieniona karta trafia na stos kart odrzuconych."
           }
         },
         "pt-BR" : {
@@ -6809,6 +7743,12 @@
             "value" : "Trek van stapel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobierz z talii"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6920,6 +7860,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trek van aflegstapel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobierz ze stosu kart odrzuconych"
           }
         },
         "pt-BR" : {
@@ -7035,6 +7981,12 @@
             "value" : "Trek van de stapel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobierz z talii"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7148,6 +8100,12 @@
             "value" : "Trek van de aflegstapel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobierz ze stosu kart odrzuconych"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7258,6 +8216,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pak één kaart van de trekstapel of de aflegstapel en gooi vervolgens één kaart uit je hand weg."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobierz jedną kartę z talii lub ze stosu kart odrzuconych, a następnie odrzuć jedną kartę z ręki."
           }
         },
         "pt-BR" : {
@@ -7373,6 +8337,12 @@
             "value" : "Trekt een kaart in je hand."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobiera kartę do twojej ręki."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7486,6 +8456,12 @@
             "value" : "Trekt een kaart."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dobiera kartę."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7540,16 +8516,58 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det hollandske flag 🇳🇱"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rot-Weiß-Blau 🇳🇱"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dutch Flag 🇳🇱"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de los Países Bajos 🇳🇱"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Rouge-Blanc-Bleu 🇳🇱"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नीदरलैंड का झंडा 🇳🇱"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rosso-Bianco-Blu 🇳🇱"
+          }
+        },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Statenvlag 🇳🇱"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Holandii 🇳🇱"
           }
         }
       }
@@ -7614,6 +8632,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Iedere speler krijgt 6 kaarten die in een raster zijn gelegd. De meeste beginnen gedekt, waarbij er willekeurig 2 kaarten worden omgedraaid."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Każdy gracz otrzymuje 6 kart ułożonych w siatkę. Większość zaczyna zakryta, a 2 karty są odsłaniane losowo."
           }
         },
         "pt-BR" : {
@@ -7728,6 +8752,12 @@
             "value" : "Iedere speler krijgt een aantal kaarten gedeeld. De resterende kaarten vormen de trekstapel en de bovenste kaart vormt het begin van de aflegstapel."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Każdy gracz otrzymuje rozdaną rękę kart. Pozostałe karty tworzą stos do dobierania, a wierzchnia karta rozpoczyna stos kart odrzuconych."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7838,6 +8868,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Achten zijn jokers (wild)! Tweeën zorgen ervoor dat de volgende tegenstander twee kaarten moet pakken, vrouwen (of Q's) slaan een beurt over, azen draaien de speelrichting om."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ósemki są dzikie! Dwójki zmuszają następnego przeciwnika do dobrania dwóch kart, damy pomijają turę, asy odwracają kierunek gry."
           }
         },
         "pt-BR" : {
@@ -7951,6 +8987,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lege aflegstapel."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pusty stos kart odrzuconych."
           }
         },
         "pt-BR" : {
@@ -8073,6 +9115,12 @@
             "value" : "Betoverd 🦊"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zaczarowany 🦊"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8186,6 +9234,12 @@
             "value" : "%@ uitrusten"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Użyj %@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8297,6 +9351,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thema uitrusten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Użyj motywu"
           }
         },
         "pt-BR" : {
@@ -8413,6 +9473,12 @@
             "value" : "Fout bij het laden van spelgegevens."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Błąd wczytywania danych gry."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8526,6 +9592,12 @@
             "value" : "Sluiten"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wyjdź"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8637,6 +9709,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Regels verlaten"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wyjdź z zasad"
           }
         },
         "pt-BR" : {
@@ -8758,6 +9836,12 @@
             "value" : "Dichte kaart, rij %1$lld kolom %2$lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zakryta karta, wiersz %1$lld kolumna %2$lld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8812,16 +9896,58 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det finske flag 🇫🇮"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Blaukreuzflagge 🇫🇮"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finnish Flag 🇫🇮"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Finlandia 🇫🇮"
+          }
+        },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Siniristilippu 🇫🇮"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Croix bleue 🇫🇮"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "फ़िनलैंड का झंडा 🇫🇮"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Croce Azzurra 🇫🇮"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Finlandii 🇫🇮"
           }
         }
       }
@@ -8889,6 +10015,12 @@
             "value" : "eerste"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "pierwsza"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8943,16 +10075,52 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det franske flag 🇫🇷"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Die Trikolore 🇫🇷"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "French Flag 🇫🇷"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Tricolor Francesa 🇫🇷"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le Tricolore 🇫🇷"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "फ़्रांस का झंडा 🇫🇷"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Il Tricolore Francese 🇫🇷"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Francji 🇫🇷"
           }
         }
       }
@@ -9018,6 +10186,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spelregels"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zasady gry"
           }
         },
         "pt-BR" : {
@@ -9133,6 +10307,12 @@
             "value" : "Spelkeuze-carrousel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karuzela wyboru gry"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9187,6 +10367,12 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det tyske flag 🇩🇪"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9197,6 +10383,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "German Flag 🇩🇪"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Alemania 🇩🇪"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Noir-Rouge-Or 🇩🇪"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "जर्मनी का झंडा 🇩🇪"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nero-Rosso-Oro 🇩🇪"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Niemiec 🇩🇪"
           }
         }
       }
@@ -9261,6 +10477,12 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Gin"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Gin"
           }
         },
@@ -9377,6 +10599,12 @@
             "value" : "Gin kaartspel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karciana gra Gin"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9488,6 +10716,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gin-spel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gra Gin"
           }
         },
         "pt-BR" : {
@@ -9604,6 +10838,12 @@
             "value" : "Gin Rummy"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gin Rummy"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9715,6 +10955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gin Rummy kaartspel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karciana gra Gin Rummy"
           }
         },
         "pt-BR" : {
@@ -9830,6 +11076,12 @@
             "value" : "Gin Rummy-spel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gra Gin Rummy"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9941,6 +11193,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gin Rummy spel-uitnodiging"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zaproszenie do gry Gin Rummy"
           }
         },
         "pt-BR" : {
@@ -10056,6 +11314,12 @@
             "value" : "Gin Rummy uitnodiging"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zaproszenie do Gin Rummy"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10168,6 +11432,12 @@
             "value" : "Spelregels Gin Rummy"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zasady Gin Rummy"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10278,6 +11548,12 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Gin Rummy!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Gin Rummy!"
           }
         },
@@ -10395,6 +11671,12 @@
             "value" : "Golf"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Golf"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10506,6 +11788,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Golf kaartspel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karciana gra Golf"
           }
         },
         "pt-BR" : {
@@ -10621,6 +11909,12 @@
             "value" : "Golf-spel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gra Golf"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10732,6 +12026,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Golf spel-uitnodiging"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zaproszenie do gry Golf"
           }
         },
         "pt-BR" : {
@@ -10847,6 +12147,12 @@
             "value" : "Golf uitnodiging"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zaproszenie do Golfa"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10957,6 +12263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spelregels Golf"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zasady Golf"
           }
         },
         "pt-BR" : {
@@ -11073,6 +12385,12 @@
             "value" : "Handgrootte:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Liczba kart w ręce:"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11186,6 +12504,12 @@
             "value" : "Harten"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kier"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11296,6 +12620,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoe te winnen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Jak wygrać"
           }
         },
         "pt-BR" : {
@@ -11411,6 +12741,12 @@
             "value" : "Ik heb gewonnen met Gin door te kloppen!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałem przez pukanie w Gin!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -11522,6 +12858,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ik heb gewonnen met Pesten!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałem w Crazy 8s!"
           }
         },
         "pt-BR" : {
@@ -11637,6 +12979,12 @@
             "value" : "Ik heb gewonnen met Gin!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałem w Gin!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11748,6 +13096,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ik heb gewonnen met Golf!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałem w Golfa!"
           }
         },
         "pt-BR" : {
@@ -11863,6 +13217,12 @@
             "value" : "Ik heb gewonnen!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałem!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11917,16 +13277,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det indiske flag 🇮🇳"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tiranga 🇮🇳"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Indian Flag 🇮🇳"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de la India 🇮🇳"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Tiranga 🇮🇳"
+          }
+        },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "तिरंगा 🇮🇳"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Indii 🇮🇳"
           }
         }
       }
@@ -11935,10 +13325,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det irske flag 🇮🇪"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Grün-Weiß-Orange 🇮🇪"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "The Tricolour 🇮🇪"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Tricolor 🇮🇪"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Vert-Blanc-Orange 🇮🇪"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Il Tricolore Irlandese 🇮🇪"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Irlandii 🇮🇪"
           }
         }
       }
@@ -11947,16 +13373,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det italienske flag 🇮🇹"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Grün-Weiß-Rot 🇮🇹"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Italian Flag 🇮🇹"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Tricolor Italiana 🇮🇹"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Tricolore italien 🇮🇹"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Il Tricolore 🇮🇹"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Włoch 🇮🇹"
           }
         }
       }
@@ -12024,6 +13480,12 @@
             "value" : "Boer"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Walet"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12078,16 +13540,58 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det japanske flag 🇯🇵"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sonnenscheibe 🇯🇵"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Japanese Flag 🇯🇵"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "El Hinomaru 🇯🇵"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Hinomaru 🇯🇵"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "हिनोमारू 🇯🇵"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Il Sol Levante 🇯🇵"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "日の丸 🇯🇵"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Japonii 🇯🇵"
           }
         }
       }
@@ -12154,6 +13658,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deelnemen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołącz do gry"
           }
         },
         "pt-BR" : {
@@ -12269,6 +13779,12 @@
             "value" : "Meedoen met Pesten!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołączono do Crazy 8s!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12380,6 +13896,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Meegedaan aan Gin!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołączono do Gin!"
           }
         },
         "pt-BR" : {
@@ -12495,6 +14017,12 @@
             "value" : "Meegedaan aan Golf!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołączono do Golfa!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12606,6 +14134,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toegetreden tot het spel!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołączono do gry!"
           }
         },
         "pt-BR" : {
@@ -12726,6 +14260,12 @@
             "value" : "Deelnemers: %1$lld / %2$lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołączyli: %1$lld / %2$lld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12838,6 +14378,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deelnemen…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dołączanie…"
           }
         },
         "pt-BR" : {
@@ -12953,6 +14499,12 @@
             "value" : "Jokerkaart"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karta joker"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13064,6 +14616,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Heer"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Król"
           }
         },
         "pt-BR" : {
@@ -13179,6 +14737,12 @@
             "value" : "Kloppen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pukanie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -13290,6 +14854,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Kloppen is geactiveerd. Gooi een kaart weg om te kloppen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pukanie jest aktywne. Odrzuć kartę, aby zapukać."
           }
         },
         "pt-BR" : {
@@ -13412,6 +14982,12 @@
             "value" : "Koikarper 🎏"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karp koi 🎏"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13466,16 +15042,52 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det koreanske flag 🇰🇷"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Taegukgi 🇰🇷"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Korean Flag 🇰🇷"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Corea 🇰🇷"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Taegeukgi 🇰🇷"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Il Taegukgi 🇰🇷"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "태극기 🇰🇷"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Korei 🇰🇷"
           }
         }
       }
@@ -13541,6 +15153,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laatste beurt in Golf!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ostatnia tura w Golfie!"
           }
         },
         "pt-BR" : {
@@ -13656,6 +15274,12 @@
             "value" : "Pijl naar links"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Strzałka w lewo"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13767,6 +15391,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laten we Pesten spelen!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zagrajmy w Crazy 8s!"
           }
         },
         "pt-BR" : {
@@ -13882,6 +15512,12 @@
             "value" : "Laten we Gin spelen!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zagrajmy w Gin!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13993,6 +15629,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laten we Golf spelen!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zagrajmy w Golf!"
           }
         },
         "pt-BR" : {
@@ -14107,6 +15749,12 @@
             "value" : "Combinaties"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Układy"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14161,6 +15809,18 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det mexicanske flag 🇲🇽"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Adler und Schlange 🇲🇽"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14171,6 +15831,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El Lábaro Patrio 🇲🇽"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "L’Aigle et le Serpent 🇲🇽"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Aquila e Serpente 🇲🇽"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Meksyku 🇲🇽"
           }
         }
       }
@@ -14236,6 +15914,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nieuw"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nowa"
           }
         },
         "pt-BR" : {
@@ -14351,6 +16035,12 @@
             "value" : "Nieuw spel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nowa gra"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14461,6 +16151,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nieuw spel!\nWerk je app bij om te spelen!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nowa gra! \nZaktualizuj aplikację, aby zagrać!"
           }
         },
         "pt-BR" : {
@@ -14575,6 +16271,12 @@
             "value" : "Geen spelregels beschikbaar voor dit spel."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Brak dostępnych zasad dla tej gry."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14629,16 +16331,58 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det norske flag 🇳🇴"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nordkreuz 🇳🇴"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Norwegian Flag 🇳🇴"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Noruega 🇳🇴"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Rouge à la Croix 🇳🇴"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "नॉर्वे का झंडा 🇳🇴"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Croce Nordica 🇳🇴"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Det Rene Flagg 🇳🇴"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Norwegii 🇳🇴"
           }
         }
       }
@@ -14711,6 +16455,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Oceaan 🌊"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ocean 🌊"
           }
         },
         "pt-BR" : {
@@ -14823,6 +16573,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zodra al je kaarten geldige combinaties vormen, heb je gewonnen!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gdy wszystkie twoje karty utworzą poprawne układy, wygrywasz! Im mniej tur ci to zajmie, tym lepiej."
           }
         },
         "pt-BR" : {
@@ -14939,6 +16695,12 @@
             "value" : "Zodra al je kaarten geldige combinaties vormen, heb je gewonnen! Je kunt ook kloppen met 10 of minder strafpunten om de ronde vroegtijdig te beëindigen. Als je dat doet, kan je tegenstander je undercutten."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gdy wszystkie twoje karty utworzą poprawne układy, wygrywasz! Możesz też zapukać, mając 10 lub mniej deadwood, aby wcześniej zakończyć rundę. Jeśli to zrobisz, twój przeciwnik może zrobić ci undercut."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -15050,6 +16812,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ openen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Otwórz %@"
           }
         },
         "pt-BR" : {
@@ -15165,6 +16933,12 @@
             "value" : "Kaartspel openen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Otwórz grę karcianą"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15276,6 +17050,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spel openen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Otwórz grę"
           }
         },
         "pt-BR" : {
@@ -15391,6 +17171,12 @@
             "value" : "Submenu openen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Otwórz podmenu"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15502,6 +17288,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uit!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wychodzę!"
           }
         },
         "pt-BR" : {
@@ -15618,6 +17410,12 @@
             "value" : "In bezit"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Posiadane"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15729,6 +17527,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spelen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Graj"
           }
         },
         "pt-BR" : {
@@ -15844,6 +17648,12 @@
             "value" : "%@ spelen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zagraj w %@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15957,6 +17767,12 @@
             "value" : "Spel spelen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zagraj w grę"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16011,10 +17827,40 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det polske flag 🇵🇱"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Weiß-Rot 🇵🇱"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Polish Flag 🇵🇱"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Polonia 🇵🇱"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Blanc-Rouge 🇵🇱"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bianco-Rossa 🇵🇱"
           }
         },
         "pl" : {
@@ -16029,10 +17875,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det portugisiske flag 🇵🇹"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Quinas-Flagge 🇵🇹"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Portuguese Flag 🇵🇹"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de las Quinas 🇵🇹"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Drapeau des Quinas 🇵🇹"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "पुर्तगाल का झंडा 🇵🇹"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Portugalii 🇵🇹"
           }
         },
         "pt-BR" : {
@@ -16104,6 +17986,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vrouw"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Dama"
           }
         },
         "pt-BR" : {
@@ -16220,6 +18108,12 @@
             "value" : "Waarde"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wartość"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -16332,6 +18226,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aankopen herstellen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Przywróć zakupy"
           }
         },
         "pt-BR" : {
@@ -16453,6 +18353,12 @@
             "value" : "Rij %1$lld kolom %2$lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wiersz %1$lld kolumna %2$lld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16566,6 +18472,12 @@
             "value" : "Spelregels"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zasady"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16620,10 +18532,52 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det russiske flag 🇷🇺"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Weiß-Blau-Rot 🇷🇺"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Russian Flag 🇷🇺"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Rusia 🇷🇺"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Tricolore russe 🇷🇺"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "रूस का झंडा 🇷🇺"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Il Tricolore Russo 🇷🇺"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Rosji 🇷🇺"
           }
         },
         "ru" : {
@@ -16696,6 +18650,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Puntentelling"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Punktacja"
           }
         },
         "pt-BR" : {
@@ -16811,6 +18771,12 @@
             "value" : "tweede"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "drugi"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16922,6 +18888,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Selecteer"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybierz"
           }
         },
         "pt-BR" : {
@@ -17037,6 +19009,12 @@
             "value" : "%@ selecteren"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybierz %@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17148,6 +19126,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spel selecteren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybierz grę"
           }
         },
         "pt-BR" : {
@@ -17263,6 +19247,12 @@
             "value" : "Thema selecteren"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybierz motyw"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17376,6 +19366,12 @@
             "value" : "Geselecteerd spel: %@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybrana gra: %@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17487,6 +19483,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geselecteerd thema: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybrany motyw: %@"
           }
         },
         "pt-BR" : {
@@ -17608,6 +19610,12 @@
             "value" : "Geselecteerd:\n%1$@ %2$@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wybrano:\n%1$@ %2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17719,6 +19727,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spelregels tonen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pokaż zasady gry"
           }
         },
         "pt-BR" : {
@@ -17834,6 +19848,12 @@
             "value" : "Regels tonen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pokaż zasady"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17945,6 +19965,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Sorteren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortuj"
           }
         },
         "pt-BR" : {
@@ -18060,6 +20086,12 @@
             "value" : "Kaarten sorteren"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortuj karty"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -18171,6 +20203,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Hand sorteren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sortuj rękę"
           }
         },
         "pt-BR" : {
@@ -18286,6 +20324,12 @@
             "value" : "Schoppen"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pik"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18340,6 +20384,18 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det spanske flag 🇪🇸"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rot-Gelb 🇪🇸"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18350,6 +20406,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La Rojigualda 🇪🇸"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Rouge et Or 🇪🇸"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Rojigualda 🇪🇸"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Hiszpanii 🇪🇸"
           }
         }
       }
@@ -18422,6 +20496,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spinnenweb 🕸️"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Pajęczyna 🕸️"
           }
         },
         "pt-BR" : {
@@ -18535,6 +20615,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start spel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rozpocznij grę"
           }
         },
         "pt-BR" : {
@@ -18651,6 +20737,12 @@
             "value" : "Start spel!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rozpocznij grę!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18763,6 +20855,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Kleur/Waarde"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Kolor/Wartość"
           }
         },
         "pt-BR" : {
@@ -18885,6 +20983,12 @@
             "value" : "Zonsondergang 🌅"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zachód słońca 🌅"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18939,10 +21043,52 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det svenske flag 🇸🇪"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Die Blaugelbe 🇸🇪"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Swedish Flag 🇸🇪"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Suecia 🇸🇪"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bleu-et-Jaune 🇸🇪"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "स्वीडन का झंडा 🇸🇪"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Blu e Gialla 🇸🇪"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Szwecji 🇸🇪"
           }
         },
         "sv" : {
@@ -19016,6 +21162,12 @@
             "value" : "Veeg omhoog of omlaag om van spel te wisselen. Dubbeltik om het %@-menu te openen."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Przesuń w górę lub w dół, aby zmienić grę. Stuknij dwukrotnie, aby otworzyć menu %@."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19070,6 +21222,12 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det schweiziske flag 🇨🇭"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19082,16 +21240,34 @@
             "value" : "Swiss Flag 🇨🇭"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Cruz Suiza 🇨🇭"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Croix Fédérale 🇨🇭"
           }
         },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "स्विट्ज़रलैंड का झंडा 🇨🇭"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Croce Svizzera 🇨🇭"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Szwajcarii 🇨🇭"
           }
         }
       }
@@ -19157,6 +21333,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tik op een kaart"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Stuknij kartę, aby wybrać grę"
           }
         },
         "pt-BR" : {
@@ -19270,6 +21452,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "de %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@"
           }
         },
         "pt-BR" : {
@@ -19391,6 +21579,12 @@
             "value" : "de %1$@ kolom %2$@ rij"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "kolumna %1$@ wiersz %2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19510,6 +21704,12 @@
             "value" : "de %1$@ rij %2$@ kolom"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "wiersz %1$@ kolumna %2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19620,6 +21820,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Het delen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rozdanie"
           }
         },
         "pt-BR" : {
@@ -19735,6 +21941,12 @@
             "value" : "de stapel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "talia"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19848,6 +22060,12 @@
             "value" : "de aflegstapel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "stos kart odrzuconych"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19958,6 +22176,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "De opstelling"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Układ"
           }
         },
         "pt-BR" : {
@@ -20074,6 +22298,12 @@
             "value" : "De speler met de laagste totaalscore wint. Bij een gelijkspel verliest de speler die als eerste uitging."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrywa gracz z najniższym łącznym wynikiem. W przypadku remisu przegrywa gracz, który zakończył grę jako pierwszy."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20185,6 +22415,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "de regels"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "zasady"
           }
         },
         "pt-BR" : {
@@ -20300,6 +22536,12 @@
             "value" : "Themakeuze-carrousel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Karuzela wyboru motywu"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20413,6 +22655,12 @@
             "value" : "Thema's"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Motywy"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20524,6 +22772,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "derde"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "trzeci"
           }
         },
         "pt-BR" : {
@@ -20645,6 +22899,12 @@
             "value" : "Bovenste kaart: %1$@ %2$@."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wierzchnia karta: %1$@ %2$@."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20699,10 +22959,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det tyrkiske flag 🇹🇷"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Mond und Stern 🇹🇷"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Turkish Flag 🇹🇷"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Turquía 🇹🇷"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Croissant et l’Étoile 🇹🇷"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "तुर्की का झंडा 🇹🇷"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Turcji 🇹🇷"
           }
         },
         "tr" : {
@@ -20775,6 +23071,12 @@
             "value" : "Onbekend spel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Nieznana gra"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20829,10 +23131,46 @@
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
+        "da" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Det vietnamesiske flag 🇻🇳"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Goldsternflagge 🇻🇳"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vietnamese Flag 🇻🇳"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "La Bandera de Vietnam 🇻🇳"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Le Drapeau rouge à l’étoile d’or 🇻🇳"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "वियतनाम का झंडा 🇻🇳"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Flaga Wietnamu 🇻🇳"
           }
         },
         "vi" : {
@@ -20905,6 +23243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wachten op tegenstander"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Oczekiwanie na przeciwnika"
           }
         },
         "pt-BR" : {
@@ -21017,6 +23361,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wachten op tegenstanders"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Oczekiwanie na przeciwników"
           }
         },
         "pt-BR" : {
@@ -21133,6 +23483,12 @@
             "value" : "Win een spel"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygraj grę"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21245,6 +23601,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Win twee spellen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygraj dwie gry"
           }
         },
         "pt-BR" : {
@@ -21360,6 +23722,12 @@
             "value" : "Je hebt gewonnen met Gin door een undercut!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałeś przez undercut w Gin!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "machine_translated",
@@ -21471,6 +23839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Je hebt gewonnen met Golf!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałeś w Golfie!"
           }
         },
         "pt-BR" : {
@@ -21585,6 +23959,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Je hebt gewonnen!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Wygrałeś!"
           }
         },
         "pt-BR" : {
@@ -21706,6 +24086,12 @@
             "value" : "Jij: %lld\nBeste: %lld"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Ty: %lld\nNajlepszy: %lld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21818,6 +24204,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Je tegenstander heeft gewonnen!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Twój przeciwnik wygrał!"
           }
         },
         "pt-BR" : {
@@ -21933,6 +24325,12 @@
             "value" : "Jouw beurt"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Twoja tura"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22044,6 +24442,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jouw beurt in Pesten!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Twoja tura w Crazy 8s!"
           }
         },
         "pt-BR" : {
@@ -22159,6 +24563,12 @@
             "value" : "Jouw beurt in Gin!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Twoja tura w Gin!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22272,6 +24682,12 @@
             "value" : "Jouw beurt in Golf!"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Twoja tura w Golfie!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22383,6 +24799,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jouw beurt!"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Twoja tura!"
           }
         },
         "pt-BR" : {

@@ -45,9 +45,9 @@ struct MainMenuView: View {
     @StateObject private var cardBackSelection = CurrentTheme.shared
     @StateObject private var store = StoreManager.shared
     @State private var availableGames: [MenuGame] = [
-        MenuGame(type: .ginRummy, title: "Gin Rummy", logoCard: "ginRummyCard"),
-        MenuGame(type: .crazy8s, title: "Crazy 8s", logoCard: "crazy8sCard"),
-        MenuGame(type: .golf, title: "Golf", logoCard: "golfCard")
+        MenuGame(type: .ginRummy, title: "Gin Rummy", artNames: ["ginRummyArt"], titleTextName: "ginRummyTitleText"),
+        MenuGame(type: .crazy8s, title: "Crazy 8s", artNames: ["crazy8sSpiderArt"], titleTextName: "crazy8sTitleText"),
+        MenuGame(type: .golf, title: "Golf", artNames: ["golfArt"], titleTextName: "golfTitleText")
     ]
     private static var themes: [DeckTheme] { DeckTheme.available }
     private var themes: [DeckTheme] { DeckTheme.available }
@@ -1241,6 +1241,62 @@ struct MenuGame: Identifiable {
     let id = UUID()
     var type: GameType
     var title: String
-    var logoCard: String // The front of the card
+    /// Art-overlay asset name(s) baked onto the card. When more than one is listed, one is picked
+    /// at random per session for variety (currently one per game — Crazy 8s keeps a spare `knight`
+    /// layer in the catalog that can be added here to re-enable the random pick).
+    var artNames: [String]
+    /// The localized title-text overlay asset. It's a `localizable` image set, so `UIImage(named:)`
+    /// automatically resolves the correct language variant at bake time.
+    var titleTextName: String
     var wins: Int = 0
+
+    /// The composited logo card — `blankCard` base + art overlay + localized title text, baked once
+    /// into a single flattened bitmap (see ``GameLogoCard``) and cached.
+    var logoImage: UIImage { GameLogoCard.image(for: self) }
+}
+
+/// Bakes each game's main-menu title card from separate asset-catalog layers — a shared `blankCard`
+/// base, a game-specific art overlay, and a localized title-text overlay — into one flattened
+/// `UIImage`.
+///
+/// This keeps the asset catalog small: one shared base, one art layer, and one localizable text layer
+/// per game, instead of a fully pre-rendered card image for every supported language. Flattening the
+/// layers up front also means SwiftUI draws a single bitmap rather than compositing a `ZStack` of
+/// images on the GPU every frame while the card wheel animates.
+enum GameLogoCard {
+    /// Baked cards keyed by title-text asset name (unique per game). Because the random art pick and
+    /// the locale-resolved title are both resolved at bake time, caching also keeps the chosen art
+    /// and language stable for the life of the session.
+    private static var cache: [String: UIImage] = [:]
+
+    /// The shared, un-localized base layer every card is drawn on top of.
+    private static let baseCardName = "blankCard"
+
+    static func image(for game: MenuGame) -> UIImage {
+        if let cached = cache[game.titleTextName] { return cached }
+        let baked = bake(artNames: game.artNames, titleTextName: game.titleTextName)
+        cache[game.titleTextName] = baked
+        return baked
+    }
+
+    private static func bake(artNames: [String], titleTextName: String) -> UIImage {
+        // Bottom-to-top draw order: base card, art overlay, then the localized title text on top.
+        let layerNames = [baseCardName] + [artNames.randomElement()].compactMap { $0 } + [titleTextName]
+        let layers = layerNames.compactMap { UIImage(named: $0) }
+
+        // All layers are authored at the same pixel dimensions, so the base defines the canvas.
+        guard let base = layers.first else { return UIImage() }
+
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = base.scale   // preserve the source artwork's native scale
+        format.opaque = false       // cards have rounded, transparent corners
+
+        let renderer = UIGraphicsImageRenderer(size: base.size, format: format)
+        return renderer.image { _ in
+            let rect = CGRect(origin: .zero, size: base.size)
+            for layer in layers {
+                layer.draw(in: rect)
+            }
+        }
+    }
 }

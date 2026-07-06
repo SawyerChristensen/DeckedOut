@@ -4,14 +4,20 @@
 ## 🚀 Active Release Milestones
 
 ### Update 3.6.0 - Crazy 8s QOL
+- [x] Fix all plurals with wins and cards. Singular forms needed too! "1 Win" "2 Wins" "1 Card" "2 Cards"
+- [x] Fix russian plurals
+- [ ] Finalize all other languages except base Chinese (not needed, but for peace of mind. adds only several bytes)
+- [x] Make main menu image baking with UI Image work
 - [ ] Make stacking 2s automatic in the normal version of Crazy 8s. If the opponent has a 2, do not end the turn. Instead make the opponent play their 2, and so the user draws 4 unless they have a second 2. Then check if the opponent has the 4th 2, although will be rare. The last player to have a 2 played at them draws 2, 4, 6, or 8 depending on the amount of 2s played. 
+- [ ] Add a +5 wild card that is naturally disabled in Crazy 8s play, but can be enabled in some variants
 - [ ] Finalize Mau Mau variant of Crazy 8s (Jack logo card)
   - [ ] Make sure stacking 7s works the same as stacking 2s
   - [ ] Make sure a user cannot play a jack (the wild card) on top of another jack if playing Mau Mau
+- [ ] Look into other Crazy 8s regional variants (enable brazil for using the mau mau rules)
+  - [ ] change brazil local localization & asc listing to reflect change from crazy 8s to mau mau
+- [ ] Pesten variant for Dutch
 - [ ] Switch variant for Ireland/UK?
-- [ ] Look into other Crazy 8s regional variants
-- [ ] Localized German title cards
-  - [ ] Look into seperating the main menu card text from the card art in assets and using UIImage to combine them at launch. will save app size
+- [x] More localized main game title cards
 - [ ] Localize official full listing into German
 - [ ] Review existing localizations and see if theres oppurtunites to add regional dialects for better language support*
 
@@ -29,8 +35,12 @@
     - [ ] Single Player
     - [ ] Multiplayer
   - [ ] Frontend
-    - [ ] Opponent(s) hand, gauge, deck/crib, rules and sort button, player hand
     - [ ] Single Player
+      - [ ] Opponent(s) hand
+      - [ ] 121 point cribbage gauge
+      - [ ] Deck & crib
+      - [ ] Rules and sort button
+      - [ ] Player hand
     - [ ] Multiplayer
 
 ### Update 5.0.0: 5th Game & Progression
