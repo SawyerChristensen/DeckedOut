@@ -3,27 +3,45 @@
 
 ## 🚀 Active Release Milestones
 
-### Update 3.6.0 - Crazy 8s QOL
+### Update 3.6.0 - Crazy 8s Regional Variants
 - [x] Fix all plurals with wins and cards. Singular forms needed too! "1 Win" "2 Wins" "1 Card" "2 Cards"
 - [x] Fix russian plurals
-- [ ] Finalize all other languages except base Chinese (not needed, but for peace of mind. adds only several bytes)
 - [x] Make main menu image baking with UI Image work
-- [ ] Make stacking 2s automatic in the normal version of Crazy 8s. If the opponent has a 2, do not end the turn. Instead make the opponent play their 2, and so the user draws 4 unless they have a second 2. Then check if the opponent has the 4th 2, although will be rare. The last player to have a 2 played at them draws 2, 4, 6, or 8 depending on the amount of 2s played. 
-- [ ] Add a +5 wild card that is naturally disabled in Crazy 8s play, but can be enabled in some variants
-- [ ] Finalize Mau Mau variant of Crazy 8s (Jack logo card)
-  - [ ] Make sure stacking 7s works the same as stacking 2s
-  - [ ] Make sure a user cannot play a jack (the wild card) on top of another jack if playing Mau Mau
-- [ ] Look into other Crazy 8s regional variants (enable brazil for using the mau mau rules)
-  - [ ] change brazil local localization & asc listing to reflect change from crazy 8s to mau mau
-- [ ] Pesten variant for Dutch
-- [ ] Switch variant for Ireland/UK?
 - [x] More localized main game title cards
-- [ ] Localize official full listing into German
-- [ ] Review existing localizations and see if theres oppurtunites to add regional dialects for better language support*
+  - [x] Make the art argument determined by the local. crazy 8s knight art should be enabled for mau mau, other arts should always be the same regardless
+- [ ] Make stacking 2s automatic in the normal version of Crazy 8s. If the opponent has a 2, do not end the turn. Instead make the opponent play their 2, and so the user draws 4 unless they have a second 2. Then check if the opponent has the 4th 2, although will be rare. The last player to have a 2 played at them draws 2, 4, 6, or 8 depending on the amount of 2s played. 
+- [ ] Discard animation bug fixes
+  - [x] Make the discarded card animate from the correct index. it did with the old system, but not with the action log
+  - [x] The fade transition should only happen if the opponent discards  a card and the user is starting their turn
+  - [ ] Our current fade transition solution works for crazy 8s. See if it works for other game modes as well. The solution should be game-agnostic
+- [x] Add a +5 wild card that is naturally disabled in Crazy 8s play, but can be enabled in some variants
+- [ ] Mau Mau variant of Crazy 8s
+  - [x] Make sure jack logo card gets enabled for mau mau
+  - [x] Make sure a user cannot play a jack (the wild card) on top of another jack if playing Mau Mau
+  - [ ] Call it Mau Mau if the region is germany but we are using english. We should detect variants and display the title of those variants even if our region is different (ie, a british user sends their american friend a game. itll still say "crazy 8s" despite the actual rules being switch)
+  - [ ] Create new rules text for mau mau. I think it currently displays the old crazy 8s rules. make the rules view detect the current game variant and display different text.
+- [ ] Switch variant for Ireland/UK
+  - [x] Backend
+  - [ ] Rules text
+  - [ ] Test red jack cancels out black jack, then they play agian. make sure this series gets animated properly. look into how we currently convey turns and what to animate to the opponent
+- [ ] Pesten variant for the Netherlands
+  - [ ] Backend
+  - [ ] Rules text
+- [ ] Other Crazy 8s regional variants?
+- [ ] Review existing localizations
+  - [ ] All variant rules translated
+  - [ ] See if there are oppurtunites to add regional dialects for better regional language support (only requires minor additions)
+  - [ ] Finalize all other languages except base Chinese
+- [ ] Localize ASC listing graphics showing support for variants
+  - [ ] German 
+  - [ ] Portuguese
 
 ### Update 3.6.1
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
   - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
+- [ ] Deprecate the legacy Crazy 8s animation-reconstruction payload fields now that turns are conveyed via the `turnActions` action log.
+  - *Note: As of the action-log refactor, `Crazy8sManager` records an ordered `turnActions` log per turn and the receiver replays it directly (see `prepareAnimation` + `animateOpponentsTurn`). The old snapshot-reconstruction fields are still SENT purely so not-yet-updated clients can decode our messages: `cardsOpponentDrew`/`cardsDrawnByLastPlayer`, `penaltyCardsDealt`, and `switchCounters`. After 1-2 update generations, stop populating them and make them optional (or remove them). `didDiscard`/`lastPlayerDidDiscard` stay — they still drive the carried-over-suit display.*
+  - *Also remove the "snap, no animation" fallback in `loadLegacyState`/`loadV2State` (the `turnActions == nil` branch) once no in-flight games predate the action log.*
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   - *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
   - Might be advisable to unify the loading architecture for both single and multiplayer to allow for easier building of Cribbage
@@ -135,8 +153,8 @@
 - [ ] Refactor opponent hand Z-index layers: Must sit lower than the deck layer, but drawn cards must dynamically spawn on top to prevent clipping.
 
 ### Animation Glitches
-- [ ] **Crazy 8s:** Discarding a Queen and immediately executing another card as the final move skips the Queen's discard animation.
-- [ ] **1v1 Mode:** If drawing cards causes a user to receive a Queen, play it, draw more, and discard again, animations break if drawing more than 3 cards.
+- [x] **Crazy 8s:** Discarding a Queen and immediately executing another card as the final move skips the Queen's discard animation.
+- [x] **1v1 Mode:** If drawing cards causes a user to receive a Queen, play it, draw more, and discard again, animations break if drawing more than 3 cards.
 
 ### Accessibility Additions
 - [ ] Enable Voice Control users to be able to send discard and automatically send messages the same way that discarding a card via touch does
@@ -165,6 +183,7 @@
 - [ ] Rework themes menu to add a "Preview" button. (next to price?) (can push to later)
 - [ ] When swiping between main title cards, sometimes the title animates in from the wrong direction if the user is swiping fast
 - [ ] Adjust colors of default deck
+- [ ] When playing a +2 card on top of a wild card, the 2 cards being drawn animate before the current suit designation goes away. consider making the designation go away before the card draw animation
 - [ ] Have the main menu submenus revealed instead of pulled up
 - [ ] Add a Game Center rocket shortcut button directly to the main menu view.
 - [ ] Investigate why the arrow replace animation fails to mimic the native SF Symbols behavior.
@@ -200,6 +219,7 @@
 - [ ] Address differences in animation completion handlers for draw actions between Gin and Crazy 8s.
 - [ ] Optimize state bindings: Check out the `.constant` binding logic implementation inside `ginPlayerView`.
 - [ ] Implement groupchat configuration features to support user-entered usernames. (Custom or Game Center?)
+- [ ] Check if the fade between different deck fronts still happens if the theme is the same between them. currently there is no detectable visual difference. minor performance improvement
 
 ### Minor Fixes & Data Optimization
 - [ ] Shrink shipped Joker cards for storage optimization

@@ -108,13 +108,20 @@ struct Crazy8sOpponentHandView: View {
         }
         
         .onChange(of: game.opponentCardAnimatingToDiscard) { _, pendingCard in
-            if let card = pendingCard, let discardedIndex = cards.firstIndex(of: card) {
+            guard let card = pendingCard else { return }
+
+            // Wait a frame for the GeometryReader to report this hand's current slot frames.
+            // Reading synchronously here can grab a stale frame (or none) when the play is the
+            // first replayed action, launching the card from the wrong slot — the same reason the
+            // draw handler above defers. Deferring makes plain cards fly from their true slot.
+            DispatchQueue.main.async {
+                guard let discardedIndex = cards.firstIndex(of: card) else { return }
                 let discardFrame = slotFrames[discardedIndex] ?? deckZone ?? .zero
-                
+
                 // Use exact centerOffset here too!
                 let exactCenterOffset = Double(cards.count - 1) / 2.0
                 let discardAngle = Angle.degrees((Double(discardedIndex) - exactCenterOffset) * -fanningAngle)
-                
+
                 self.animatingCard = card
                 animateDiscard(card: card, cardFrame: discardFrame, fanAngle: discardAngle)
             }
@@ -163,18 +170,14 @@ struct Crazy8sOpponentHandView: View {
         animatingShadowRadius = 20
         animatingScaleCorrection = 1.0
 
-        //Only reveal the chosen suit on the final discard; queens animated earlier in a V1 1v1
-        //queen-then-card sequence shouldn't prematurely expose the suit picked after the final card.
-        let isFinalDiscard = (game.opponentCardPendingDiscard == card)
+        //The chosen suit is revealed by animateOpponentsTurn (on the .chooseSuit action and the
+        //end-of-turn reconciliation), so the discard animation itself no longer touches it.
         withAnimation(.spring(response: 0.5, dampingFraction: 0.7).speed(motionSpeed)) {
             animatingRotation = 0 //card gets discarded face up
             animationOffset = offsetToDiscard
             animationRotationCorrection = .zero
             animatingShadowRadius = 0
             animatingScaleCorrection = 1.0 / sizeScale
-            if isFinalDiscard {
-                game.activeSuitOverride = game.hiddenActiveSuitOverride
-            }
         }
 
         // Resolve animation state

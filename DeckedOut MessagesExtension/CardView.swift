@@ -33,12 +33,6 @@ struct CardView: View { //where only one side is a (letter?)
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private var motionSpeed: Double { reduceMotion ? 0.66 : 1.0 }
 
-    /// The previous front-image name during a cross-fade. While set, it's drawn *on top* of
-    /// the current image with `fadingFrontOpacity` going 1 → 0 — so the new image is always
-    /// fully visible underneath and the background never bleeds through mid-transition.
-    @State private var fadingFrontName: String? = nil
-    @State private var fadingFrontOpacity: Double = 0
-
     /// The resolved front asset name. Themed only for actual playing cards (`themesFront`);
     /// validated with fallback only when `validatesAssetNames`.
     ///
@@ -80,8 +74,8 @@ struct CardView: View { //where only one side is a (letter?)
                 .modifier(FlipOpacity(rotation: rotation + 180))
             
             
-            // FRONT VIEW — cross-fades when `resolvedFrontName` changes (e.g. user swaps decks)
-            // at the same speed/duration as the deck's back-to-back fade in the game views.
+            // FRONT VIEW — the front swaps instantly when `resolvedFrontName` changes (cross-fade
+            // disabled for now).
             ZStack {
                 if let frontUIImage {
                     Image(uiImage: frontUIImage)
@@ -91,11 +85,8 @@ struct CardView: View { //where only one side is a (letter?)
                     Image(resolvedFrontName)
                         .resizable()
                         .aspectRatio(0.7, contentMode: .fit)
-                        .id(resolvedFrontName)
-                        .transition(.opacity)
                 }
             }
-            .animation(.easeInOut(duration: 0.4).speed(motionSpeed), value: resolvedFrontName)
             .frame(height: cardHeight)
             .modifier(FlipOpacity(rotation: rotation))
         }

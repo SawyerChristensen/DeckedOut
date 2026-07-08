@@ -19,6 +19,13 @@ struct Crazy8sGameView: View {
     @State private var discardFrame: CGRect = .zero
     @State private var isHoveringDiscard: Bool = false
     @State private var isDraggedCardPlayable: Bool = false
+    // Cross-fade of the top discard card's front, from a discarding opponent's theme into the local
+    // player's theme. `crossfadeFromBack` is the opponent back whose themed front is laid over the
+    // player-themed top card; `crossfadeOpacity` fades that overlay out. `crossfadeToken` guards the
+    // deferred cleanup so a rapid second discard doesn't clear a fresh fade.
+    @State private var crossfadeFromBack: String? = nil
+    @State private var crossfadeOpacity: Double = 1
+    @State private var crossfadeToken: Int = 0
     @State private var showRules: Bool = false
     @State private var cardSortState: Int = 0 // 0 = original order, 1 = sorted by suit then rank, 2 = sorted by rank
     @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
@@ -197,11 +204,40 @@ struct Crazy8sGameView: View {
             }
             
             if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
-                CardView(frontImage: topCard.imageName)
-                    .shadow(color: isDraggedCardPlayable && isHoveringDiscard ? .white : .black.opacity(0.2),
-                            radius: isDraggedCardPlayable && isHoveringDiscard ? 15 : 5)
-                    .scaleEffect(isDraggedCardPlayable && isHoveringDiscard ? 1.05 : 1.0)
-                    .animation(.easeInOut(duration: 0.2).speed(motionSpeed), value: isHoveringDiscard)
+                ZStack {
+                    // Destination: the top card under the local player's equipped theme.
+                    CardView(frontImage: topCard.imageName)
+
+                    // Source: the same card under the discarding opponent's theme, laid on top and
+                    // faded out so the front cross-fades into the player's theme. Present only during
+                    // the brief window after an opponent's card lands — the only front fade in the app.
+                    if let fromBack = crossfadeFromBack {
+                        CardView(frontImage: topCard.imageName, backImageName: fromBack)
+                            .opacity(crossfadeOpacity)
+                    }
+                }
+                .shadow(color: isDraggedCardPlayable && isHoveringDiscard ? .white : .black.opacity(0.2),
+                        radius: isDraggedCardPlayable && isHoveringDiscard ? 15 : 5)
+                .scaleEffect(isDraggedCardPlayable && isHoveringDiscard ? 1.05 : 1.0)
+                .animation(.easeInOut(duration: 0.2).speed(motionSpeed), value: isHoveringDiscard)
+            }
+        }
+        .onChange(of: game.discardCrossfadeFromBack) { _, newBack in
+            guard let newBack else { return }
+            game.discardCrossfadeFromBack = nil // one-shot: consume the trigger
+
+            // Lay the opponent-themed front over the (already-updated) player-themed top card and
+            // fade it out, revealing the player's theme underneath.
+            crossfadeToken += 1
+            let token = crossfadeToken
+            crossfadeFromBack = newBack
+            crossfadeOpacity = 1
+            withAnimation(.easeInOut(duration: 0.4).speed(motionSpeed)) {
+                crossfadeOpacity = 0
+            }
+            // Remove the overlay once the fade completes (unless a newer fade has since started).
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 / motionSpeed) {
+                if crossfadeToken == token { crossfadeFromBack = nil }
             }
         }
         .accessibilityElement(children: .ignore)
@@ -342,77 +378,71 @@ struct Crazy8sGameView: View {
     
     
     private var hasOpponentVisualsToAnimate: Bool {
-        game.cardsOpponentDrew > 0
-            || !game.opponentQueensPendingDiscard.isEmpty
-            || game.opponentCardPendingDiscard != nil
-            || game.pendingPlayerPenaltyDraws > 0
+        !game.actionsToAnimate.isEmpty
     }
 
 
     // MARK: - Helper functions
-    private func animateOpponentsTurn() async { //modifies backend, which triggers animation in opponentHandView
-        if game.cardsOpponentDrew > 0 {
-            for _ in 0..<game.cardsOpponentDrew {
-                game.opponentDrawFromDeck()
+    // Replay the previous player's turn by walking the chronological action log in order. Each entry
+    // maps to one animation; the manager already rewound the board to its pre-turn positions, so every
+    // step just fires the matching trigger and waits for it to land. New mechanics become new cases here
+    // rather than new reconstruction branches.
+    private func animateOpponentsTurn() async {
+        var didStartPenalty = false
 
-                do { // Wait for the draw animation to finish before drawing the next one
-                    try await Task.sleep(nanoseconds: 800_000_000) // 0.8s
-                } catch { }
+        for action in game.actionsToAnimate {
+            if game.isGameOver { break } //opponent emptied their hand mid-sequence
+            switch action {
+            case .draw:
+                game.opponentDrawFromDeck() // deck → opponent hand
+                try? await Task.sleep(nanoseconds: 800_000_000) // 0.8s
+
+            case .play(let card, _):
+                game.opponentCardAnimatingToDiscard = card // opponent hand → discard (commits on landing)
+                try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
+
+            case .chooseSuit(let suit):
+                withAnimation(.easeInOut(duration: 0.3).speed(motionSpeed)) {
+                    game.activeSuitOverride = suit
+                }
+                try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
+
+            case .counterPlay(let card, _):
+                game.playerCardAnimatingToDiscard = card // local player's own auto-played card → discard
+                try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
+
+            case .forceDraw:
+                if !didStartPenalty {
+                    didStartPenalty = true
+                    // Cross-fade the deck to the user's card back before penalty cards fly out, so the card and deck share a back.
+                    game.deckShouldShowPlayerBack = true
+                    try? await Task.sleep(nanoseconds: 400_000_000) // 0.4s, matches the deck cross-fade duration
+                }
+                game.userDrawPenaltyCard() // deck → local player hand
+                try? await Task.sleep(nanoseconds: 800_000_000) // 0.8s
             }
         }
 
-        //V1 1v1: animate any queens the opponent played before their final card (queens grant another turn).
-        if !game.opponentQueensPendingDiscard.isEmpty {
-            for queen in game.opponentQueensPendingDiscard {
-                game.opponentCardAnimatingToDiscard = queen
-                do {
-                    try await Task.sleep(nanoseconds: 600_000_000) // 0.6s for discard animation
-                } catch { }
-            }
-            game.opponentQueensPendingDiscard = []
+        // Reconcile the visible suit to the authoritative post-turn value: reveals a newly chosen suit
+        // (if a .chooseSuit didn't already) and clears a stale one when the opponent played over it.
+        withAnimation(.easeInOut(duration: 0.3).speed(motionSpeed)) {
+            game.activeSuitOverride = game.hiddenActiveSuitOverride
         }
 
-        if let cardToDiscard = game.opponentCardPendingDiscard {
-            game.opponentCardAnimatingToDiscard = cardToDiscard
+        // Clear the override so the next phase change (e.g. the user playing a 2) flips the deck back.
+        if didStartPenalty { game.deckShouldShowPlayerBack = false }
 
-            do {
-                try await Task.sleep(nanoseconds: 600_000_000) // 0.6s for discard animation
-            } catch { }
-        }
-
-        // Penalty draws (e.g. opponent played a 2): animate cards from deck into the local player's hand
-        if game.pendingPlayerPenaltyDraws > 0 {
-            // Cross-fade the deck to the user's card back before the penalty cards animate out, so the card and deck share a back.
-            game.deckShouldShowPlayerBack = true
-            do {
-                try await Task.sleep(nanoseconds: 400_000_000) // 0.4s, matches the deck cross-fade duration
-            } catch { }
-
-            let count = game.pendingPlayerPenaltyDraws
-            for _ in 0..<count {
-                game.userDrawPenaltyCard()
-                do {
-                    try await Task.sleep(nanoseconds: 800_000_000) // 0.8s
-                } catch { }
-            }
-
+        // The whole turn has replayed — hand control back to the local player (or clear the spectator flag).
+        if !game.isGameOver {
             if game.isAnimatingOpponentTurn {
                 game.isAnimatingOpponentTurn = false
             } else if game.phase == .animationPhase {
                 game.phase = .mainPhase
                 game.checkHandPlayability()
             }
-            //clear the override so the next phase change (e.g. user playing a 2) flips the deck to the opponent's back
-            game.deckShouldShowPlayerBack = false
-        } else if game.opponentCardPendingDiscard == nil {
-            if game.isAnimatingOpponentTurn {
-                game.isAnimatingOpponentTurn = false
-            } else if game.phase == .animationPhase {
-                game.phase = .mainPhase
-                game.checkHandPlayability()
-            }
         }
 
+        game.actionsToAnimate = []
         game.hasPerformedInitialLoad = true
     }
     

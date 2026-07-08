@@ -39,6 +39,9 @@ struct Crazy8sPlayerHandView: View {
     @State private var voiceDiscardOffset: CGSize = .zero
     @State private var voiceDiscardRotation: Angle = .zero
 
+    // Cached global frame of each card slot; used to animate a manager-driven auto-discard (Switch red-jack counter)
+    @State private var slotFrames: [Int: CGRect] = [:]
+
     // Card sizing
     private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 } // 140 * 0.7 & 145 * 0.7
     private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
@@ -114,12 +117,16 @@ struct Crazy8sPlayerHandView: View {
                                 }
                         )
                         .onAppear { //could maybe change this to an onChange modifier, right now this works (when the view gets rerendered)
+                            slotFrames[index] = geoFrame
                             guard hasInitialLoadCompleted && index == cards.count - 1 else { return }
                             let sourceZone: CGRect? = deckZone
                             if let zone = sourceZone { //this functions as another "guard" type function. we only draw to the last index, and only draw if one of ^ becomes true
                                 animatingCard = card
                                 animateDraw(card: card, cardFrame: geoFrame, drawZone: zone, fanAngle: angle)
                             }
+                        }
+                        .onChange(of: geoFrame) { _, newFrame in
+                            slotFrames[index] = newFrame
                         }
                             
                 }
@@ -134,6 +141,43 @@ struct Crazy8sPlayerHandView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { //kind of a bandaid solution but it works
                 hasInitialLoadCompleted = true
             }
+        }
+        .onChange(of: game.playerCardAnimatingToDiscard) { _, pendingCard in
+            guard let card = pendingCard else { return }
+            animatePlayerAutoDiscard(card: card)
+        }
+    }
+
+    //Switch: fly one of the player's own cards from the hand to the discard pile, driven by the manager
+    //(used to replay the red-jack counter on the receiver's side). Reuses the voiceDiscard animation state.
+    private func animatePlayerAutoDiscard(card: Card) {
+        guard let index = cards.firstIndex(of: card),
+              let cardFrame = slotFrames[index],
+              let discardZone = discardPileZone else {
+            //missing geometry — commit immediately so state stays consistent even without the animation
+            game.playerAutoDiscardLanded(card: card)
+            game.playerCardAnimatingToDiscard = nil
+            return
+        }
+        let fanAngle = Angle.degrees((Double(index) - centerOffset) * 4)
+        let arcYOffset = abs((Double(index) - centerOffset) * 5)
+        voiceDiscardingCard = card
+        voiceDiscardRotation = fanAngle
+        // Subtract the arc's resting y-offset so the card lands centered on the discard pile
+        let offset = CGSize(
+            width: discardZone.midX - cardFrame.midX,
+            height: discardZone.midY - cardFrame.midY - arcYOffset
+        )
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.75).speed(motionSpeed)) {
+            voiceDiscardOffset = offset
+            voiceDiscardRotation = .zero
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45 / motionSpeed) {
+            game.playerAutoDiscardLanded(card: card)
+            game.playerCardAnimatingToDiscard = nil
+            voiceDiscardingCard = nil
+            voiceDiscardOffset = .zero
+            voiceDiscardRotation = .zero
         }
     }
     
@@ -177,48 +221,26 @@ struct Crazy8sPlayerHandView: View {
     }
     
     private func handleDragEnd(card: Card, value: DragGesture.Value, exactCenter: CGPoint) {
-        // Check if card dropped on discard pile, if user is in discard phase, animate!
-        /*if let discardPileZone = discardPileZone,
-            discardPileZone.contains(value.location),
-            game.phase == .discardPhase { //is checking the phase a potential race condition?
+        // When the card is dropped on the discard pile we must NOT reorder the hand: dragging to the
+        // pile (far right) drives predictedDropIndex to the rightmost slot, so a reorder here would move
+        // the card to the end before discardCard records its fromIndex — making every discard replay from
+        // the last slot on the opponent's side. Skipping the reorder lets discardCard capture the card's
+        // true slot.
+        let isDiscarding = discardPileZone?.contains(value.location) == true
 
-            // Calculate the offset needed to reach discard from card's START position
-            let cardStartLocation = CGPoint(
-                x: exactCenter.x - dragOffset.width,
-                y: exactCenter.y - dragOffset.height
-            )
-
-            let targetOffset = CGSize(
-                width: discardPileZone.midX - cardStartLocation.x,
-                height: discardPileZone.midY - cardStartLocation.y
-            )
-
-            // Animate to discard pile
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                dragOffset = targetOffset
-            }
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                draggedCard = nil
-                dragOffset = .zero
-                predictedDropIndex = nil
-
-                //onDragEnded?(card, value.location) //send discard information to parent
-            }
-            return
-        }*/
-
-        // Card going back to hand, reorder hand with new card position
-        if let sourceIndex = cards.firstIndex(of: card),
-           let targetIndex = predictedDropIndex {
-            if sourceIndex != targetIndex {
-                withAnimation(.spring().speed(motionSpeed)) {
-                    cards.move(fromOffsets: IndexSet(integer: sourceIndex),
-                        toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
+        if !isDiscarding {
+            // Card going back to hand, reorder hand with new card position
+            if let sourceIndex = cards.firstIndex(of: card),
+               let targetIndex = predictedDropIndex {
+                if sourceIndex != targetIndex {
+                    withAnimation(.spring().speed(motionSpeed)) {
+                        cards.move(fromOffsets: IndexSet(integer: sourceIndex),
+                            toOffset: targetIndex > sourceIndex ? targetIndex + 1 : targetIndex)
+                    }
                 }
             }
         }
-        
+
         draggedCard = nil
         dragOffset = .zero
         predictedDropIndex = nil

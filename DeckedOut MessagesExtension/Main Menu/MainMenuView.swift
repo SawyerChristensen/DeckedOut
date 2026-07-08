@@ -45,9 +45,9 @@ struct MainMenuView: View {
     @StateObject private var cardBackSelection = CurrentTheme.shared
     @StateObject private var store = StoreManager.shared
     @State private var availableGames: [MenuGame] = [
-        MenuGame(type: .ginRummy, title: "Gin Rummy", artNames: ["ginRummyArt"], titleTextName: "ginRummyTitleText"),
-        MenuGame(type: .crazy8s, title: "Crazy 8s", artNames: ["crazy8sSpiderArt"], titleTextName: "crazy8sTitleText"),
-        MenuGame(type: .golf, title: "Golf", artNames: ["golfArt"], titleTextName: "golfTitleText")
+        MenuGame(type: .ginRummy, title: "Gin Rummy"),
+        MenuGame(type: .crazy8s, title: "Crazy 8s"),
+        MenuGame(type: .golf, title: "Golf")
     ]
     private static var themes: [DeckTheme] { DeckTheme.available }
     private var themes: [DeckTheme] { DeckTheme.available }
@@ -1241,14 +1241,30 @@ struct MenuGame: Identifiable {
     let id = UUID()
     var type: GameType
     var title: String
-    /// Art-overlay asset name(s) baked onto the card. When more than one is listed, one is picked
-    /// at random per session for variety (currently one per game — Crazy 8s keeps a spare `knight`
-    /// layer in the catalog that can be added here to re-enable the random pick).
-    var artNames: [String]
-    /// The localized title-text overlay asset. It's a `localizable` image set, so `UIImage(named:)`
-    /// automatically resolves the correct language variant at bake time.
-    var titleTextName: String
     var wins: Int = 0
+
+    /// The localized title-text overlay for this card. Localization is handled inside the asset
+    /// catalog, so the asset name is fixed per game type and needn't be supplied at the call site.
+    var titleTextName: String {
+        switch type {
+        case .ginRummy: return "ginRummyTitleText"
+        case .crazy8s:  return "crazy8sTitleText"
+        case .golf:     return "golfTitleText"
+        case .unknown:  return ""
+        }
+    }
+
+    /// The art overlay for this card. Gin Rummy and Golf always use their single art. Crazy 8s swaps
+    /// to the knight art whenever the creator's region plays a non–Crazy 8s variant (Mau-Mau in the
+    /// German-speaking regions and Brazil, Switch in the UK/Ireland) and uses the spider art otherwise.
+    var artName: String {
+        switch type {
+        case .ginRummy: return "ginRummyArt"
+        case .golf:     return "golfArt"
+        case .crazy8s:  return Crazy8sVariant.forCurrentRegion() == .crazy8s ? "crazy8sSpiderArt" : "crazy8sKnightArt"
+        case .unknown:  return ""
+        }
+    }
 
     /// The composited logo card — `blankCard` base + art overlay + localized title text, baked once
     /// into a single flattened bitmap (see ``GameLogoCard``) and cached.
@@ -1256,17 +1272,15 @@ struct MenuGame: Identifiable {
 }
 
 /// Bakes each game's main-menu title card from separate asset-catalog layers — a shared `blankCard`
-/// base, a game-specific art overlay, and a localized title-text overlay — into one flattened
-/// `UIImage`.
+/// base, a game-specific art overlay, and a localized title-text overlay — into one flattened `UIImage`.
 ///
 /// This keeps the asset catalog small: one shared base, one art layer, and one localizable text layer
 /// per game, instead of a fully pre-rendered card image for every supported language. Flattening the
 /// layers up front also means SwiftUI draws a single bitmap rather than compositing a `ZStack` of
 /// images on the GPU every frame while the card wheel animates.
 enum GameLogoCard {
-    /// Baked cards keyed by title-text asset name (unique per game). Because the random art pick and
-    /// the locale-resolved title are both resolved at bake time, caching also keeps the chosen art
-    /// and language stable for the life of the session.
+    /// Baked cards keyed by title-text asset name (unique per game). The region-resolved art and the
+    /// locale-resolved title are both fixed for the life of the session, so caching by game is stable.
     private static var cache: [String: UIImage] = [:]
 
     /// The shared, un-localized base layer every card is drawn on top of.
@@ -1274,14 +1288,14 @@ enum GameLogoCard {
 
     static func image(for game: MenuGame) -> UIImage {
         if let cached = cache[game.titleTextName] { return cached }
-        let baked = bake(artNames: game.artNames, titleTextName: game.titleTextName)
+        let baked = bake(artName: game.artName, titleTextName: game.titleTextName)
         cache[game.titleTextName] = baked
         return baked
     }
 
-    private static func bake(artNames: [String], titleTextName: String) -> UIImage {
+    private static func bake(artName: String, titleTextName: String) -> UIImage {
         // Bottom-to-top draw order: base card, art overlay, then the localized title text on top.
-        let layerNames = [baseCardName] + [artNames.randomElement()].compactMap { $0 } + [titleTextName]
+        let layerNames = [baseCardName, artName, titleTextName]
         let layers = layerNames.compactMap { UIImage(named: $0) }
 
         // All layers are authored at the same pixel dimensions, so the base defines the canvas.
