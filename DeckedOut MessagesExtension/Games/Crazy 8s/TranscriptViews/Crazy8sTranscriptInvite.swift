@@ -24,11 +24,16 @@ struct Crazy8sTranscriptInvite: View {
         let idx = joinedPlayerCount - 1
         return backs.indices.contains(idx) ? backs[idx] : nil
     }
+    // Prefer the payload variant; the legacy 1v1 invite path carries no state, so fall back to region.
+    private var variant: Crazy8sVariant { gameState?.variant ?? Crazy8sVariant.forCurrentRegion() }
+    private var inviteCaption: String {
+        String(localized: "Let's Play \(variant.displayName)!", comment: "Crazy 8s invite caption/summary, %@ is the game/variant name")
+    }
 
     var body: some View {
         VStack() {
             
-            Crazy8sTranscriptInviteHand(cardBackName: inviterCardBack)
+            Crazy8sTranscriptInviteHand(cardBackName: inviterCardBack, variant: variant)
                 .offset(y: 40)
                 .frame(height: 150)
                 .overlay(alignment: .top) {
@@ -40,7 +45,7 @@ struct Crazy8sTranscriptInvite: View {
                     }
                 }
                 
-            CaptionTextView(isWaiting: false, altText: "Let's Play Crazy 8s!") //technically the player IS waiting, but that bool is to display "waiting for opponent..." or not
+            CaptionTextView(isWaiting: false, altText: inviteCaption, altTextIsLocalized: true) //technically the player IS waiting, but that bool is to display "waiting for opponent..." or not
             
         }
         .background( //for measuring & reporting the view height
@@ -57,7 +62,7 @@ struct Crazy8sTranscriptInvite: View {
         .background(FeltBackgroundView())
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel(Text("Crazy 8s", comment: "VoiceOver accessibility label for the Crazy 8s game invite transcript bubble"))
+        .accessibilityLabel(Text(verbatim: variant.displayName))
         .accessibilityInputLabels([
             Text("Crazy 8s", comment: "Voice Control input label – Crazy 8s game transcript bubble"),
             Text("Card Game", comment: "Voice Control input label – generic phrase for a card game"),

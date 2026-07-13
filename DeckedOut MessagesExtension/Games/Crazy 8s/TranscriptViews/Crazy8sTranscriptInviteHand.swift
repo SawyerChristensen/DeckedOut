@@ -10,27 +10,10 @@ import Combine
 
 struct Crazy8sTranscriptInviteHand: View {
     var cardBackName: String? = nil
+    /// The game's variant, from the payload. Drives which name is spelled across the card backs.
+    var variant: Crazy8sVariant = .crazy8s
 
-    var words: [String] {
-        // Get the user's top preferred language, default to English if unavailable
-        let currentLanguage = Locale.preferredLanguages.first ?? "en"
-        
-        if currentLanguage.hasPrefix("zh-Hant") { // Traditional Chinese
-            return ["讓我們", "一起玩", "瘋狂8"]
-
-        } else if currentLanguage.hasPrefix("zh-Hans") { // Simplified Chinese
-            return ["让我们", "一起玩", "疯狂8"]
-            
-        //} else if currentLanguage.hasPrefix("ja") { // Japanese
-            //return ["クレイジ", "ーエイト"]
-            
-        } else if currentLanguage.hasPrefix("es") {
-            return ["OCHOS", "LOCOS"]
-
-        } else { // Default (English)
-            return ["CRAZY", "EIGHT"]
-        }
-    }
+    var words: [String] { variant.titleWords }
     
     // State to track which word index we are on
     @State private var currentWordIndex = 0
@@ -48,9 +31,18 @@ struct Crazy8sTranscriptInviteHand: View {
     var charCount: Int {
         words.map(\.count).max() ?? 0
     }
-    
+
+    // Fan spacing: a comfortable baseline for short titles (≤ 4 cards), then a damper that
+    // pulls the cards tighter for every extra card so longer titles still fit the bubble.
+    private var spacing: CGFloat {
+        let baseSpacing: CGFloat = -25   // spacing for 4 cards or fewer
+        let damperPerCard: CGFloat = 5   // extra compression for each card beyond 4
+        let extraCards = max(0, charCount - 4)
+        return baseSpacing - CGFloat(extraCards) * damperPerCard
+    }
+
     var body: some View {
-        HStack(spacing: charCount == 5 ? -30 : -25) {
+        HStack(spacing: spacing) {
             ForEach(0..<charCount, id: \.self) { index in
                 
                 // Calculate the Current Character (Front)

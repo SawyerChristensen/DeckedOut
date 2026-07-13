@@ -26,7 +26,15 @@ struct Crazy8sTranscriptV2: View {
     private var opponentWon: Bool {
         gameState.hands.enumerated().contains { i, hand in i != mySeatIndex && hand.isEmpty }
     }
-    
+    // Name follows the payload variant so every participant sees the same game name.
+    private var variant: Crazy8sVariant { gameState.variant ?? .crazy8s }
+    private var caption: String {
+        let name = variant.displayName
+        return (playerWon || opponentWon)
+            ? String(localized: "I won in \(name)!", comment: "Crazy 8s template win caption/summary, %@ is the game/variant name")
+            : String(localized: "Your turn in \(name)!", comment: "Crazy 8s template message caption, %@ is the game/variant name")
+    }
+
     var body: some View {
         VStack {
 
@@ -38,13 +46,13 @@ struct Crazy8sTranscriptV2: View {
                     .frame(height: 150)
                     .overlay { //the crazy 8s player hand expands. making it an overlay means its width expansion does not bubble up and effect the VStacks width
                         if playersHand != [] {
-                            Crazy8sTranscriptPlayerHand(cards: playersHand)
+                            Crazy8sTranscriptPlayerHand(cards: playersHand, variant: variant)
                                 .offset(y: opponentWon ? -30 : 50)
                         }
                     }
             }
-                
-            CaptionTextView(isWaiting: !isMyTurn, altText: opponentWon || playerWon ? "I won in Crazy 8s!" : "Your turn in Crazy 8s!")
+
+            CaptionTextView(isWaiting: !isMyTurn, altText: caption, altTextIsLocalized: true, isFinalOverride: opponentWon || playerWon)
             
         }
         .background( //for measuring & reporting the view height
@@ -61,7 +69,7 @@ struct Crazy8sTranscriptV2: View {
         .background(FeltBackgroundView())
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel(Text("Crazy 8s", comment: "VoiceOver accessibility label for the Crazy 8s game transcript bubble"))
+        .accessibilityLabel(Text(verbatim: variant.displayName))
         .accessibilityInputLabels([
             Text("Crazy 8s", comment: "Voice Control input label – Crazy 8s game transcript bubble"),
             Text("Card Game", comment: "Voice Control input label – generic phrase for a card game"),

@@ -57,6 +57,91 @@ enum Crazy8sVariant: String, Codable {
         if switchRegions.contains(region) { return .irishSwitch }
         return .crazy8s
     }
+
+    /// The player-facing name of this variant, translated into the reader's language.
+    /// The name follows the *variant* (which travels in the payload), so every participant
+    /// sees the same game name regardless of their own region — a US reader opening a
+    /// German-created game still sees "Mau-Mau".
+    var displayName: String {
+        switch self {
+        case .crazy8s:     return String(localized: "Crazy 8s", comment: "Game title for Crazy 8s, displayed in the main menu")
+        case .mauMau:      return String(localized: "Mau-Mau", comment: "Game title for the German Mau-Mau variant of Crazy 8s")
+        case .irishSwitch: return String(localized: "Switch", comment: "Game title for the UK/Ireland Switch variant of Crazy 8s")
+        }
+    }
+
+    /// The name spelled out one glyph per card back across the transcript hand. Crazy 8s keeps
+    /// its hand-tuned per-language spelling; the proper-name variants spell out `displayName`
+    /// (dropping separators like the hyphen in "Mau-Mau").
+    var titleLetters: [String] {
+        switch self {
+        case .mauMau, .irishSwitch:
+            return displayName.uppercased().compactMap { $0.isLetter || $0.isNumber ? String($0) : nil }
+        case .crazy8s:
+            let currentLanguage = Locale.preferredLanguages.first ?? "en"
+            if currentLanguage.hasPrefix("zh-Hans") {
+                return ["疯", "狂", "8"]
+            } else if currentLanguage.hasPrefix("zh-Hant") {
+                return ["瘋", "狂", "8"]
+            } else if currentLanguage.hasPrefix("da") {
+                return ["O", "L", "S", "E", "N"]
+            } else if currentLanguage.hasPrefix("nl") {
+                return ["P", "E", "S", "T", "E", "N"]
+            } else if currentLanguage.hasPrefix("fr") {
+                return ["8", "A", "M", "E", "R", "I", "C", "A", "I", "N"]
+            } else if currentLanguage.hasPrefix("de") || currentLanguage.hasPrefix("pt") {
+                return ["M", "A", "U", "M", "A", "U"]
+            } else if currentLanguage.hasPrefix("hi") {
+                return ["क्रे", "ज़ी", "8", "S"]
+            } else if currentLanguage.hasPrefix("it") {
+                return ["O", "T", "T", "O"]
+            } else if currentLanguage.hasPrefix("ja") {
+                return ["ク", "レ", "イ", "ジ", "ー", "エ", "イ", "ト"]
+            } else if currentLanguage.hasPrefix("ko") {
+                return ["크", "레", "이", "지", "8"]
+            } else if currentLanguage.hasPrefix("nb") {
+                return ["V", "R", "I", "A", "T", "T", "E", "R"]
+            //} else if currentLanguage.hasPrefix("pt") {
+                //return ["O", "I", "T", "O", "M", "A", "L", "U", "C", "O"]
+            } else if currentLanguage.hasPrefix("ru") {
+                return ["В", "О", "С", "Ь", "М", "Ё", "Р", "К", "И"]
+            } else if currentLanguage.hasPrefix("es") {
+                return ["O", "C", "H", "O", "S", "L", "O", "C", "O", "S"]
+            } else if currentLanguage.hasPrefix("sv") {
+                return ["V", "A", "N", "D", "A", "T", "T", "A"]
+            } else if currentLanguage.hasPrefix("tr") {
+                return ["C", "I", "L", "G", "I", "N", "8", "L", "I"]
+            } else { // Default (English)
+                return ["C", "R", "A", "Z", "Y", "8", "S"]
+            }
+        }
+    }
+
+    /// The word "pages" the invite transcript hand flips between, one glyph per card, e.g.
+    /// Gin's `LETS / PLAY / GIN!`. Distinct from `titleLetters` (a single static spelling):
+    /// the invite cycles a flip animation across these pages.
+    ///
+    /// **Every page in a returned set must be the same character length** so the fanned hand
+    /// stays even (like `CRAZY`/`EIGHT` or `OCHOS`/`LOCOS`, both 5). Only add a
+    /// `lang.hasPrefix(...)` branch for a language whose spelling splits into equal-length
+    /// pages; anything ragged should fall through to the English default. The proper-name
+    /// variants aren't localized (Mau-Mau/Switch are the same in every language).
+    var titleWords: [String] {
+        let lang = Locale.preferredLanguages.first ?? "en"
+        switch self {
+        case .mauMau:
+            if lang.hasPrefix("de") { return ["ZEIT", "FURS", "MAU~", "MAU!"] }  // 4, 4, 4, 4
+            if lang.hasPrefix("en") { return ["LETS", "PLAY", "MAU~", "MAU!"] }  // 4, 4, 4, 4
+            return ["MAU", "MAU"]                                                // 3, 3
+        case .irishSwitch:
+            return ["~LETS~", "~PLAY~", "SWITCH"]                                // 6, 6, 6
+        case .crazy8s:
+            if lang.hasPrefix("zh-Hant") { return ["讓我們", "一起玩", "瘋狂8"] }   // 3, 3, 3
+            if lang.hasPrefix("zh-Hans") { return ["让我们", "一起玩", "疯狂8"] }   // 3, 3, 3
+            if lang.hasPrefix("es")      { return ["OCHOS", "LOCOS"] }           // 5, 5
+            return ["CRAZY", "EIGHT"]                                            // Default (English), 5, 5
+        }
+    }
 }
 
 // A Switch counter that resolved during the sender's turn: they played `switchJack`

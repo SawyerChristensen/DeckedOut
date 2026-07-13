@@ -9,27 +9,32 @@
 - [x] Make main menu image baking with UI Image work
 - [x] More localized main game title cards
   - [x] Make the art argument determined by the local. crazy 8s knight art should be enabled for mau mau, other arts should always be the same regardless
+- [x] The background audio stops after the discard sound effect (FIXED)
 - [ ] Make stacking 2s automatic in the normal version of Crazy 8s. If the opponent has a 2, do not end the turn. Instead make the opponent play their 2, and so the user draws 4 unless they have a second 2. Then check if the opponent has the 4th 2, although will be rare. The last player to have a 2 played at them draws 2, 4, 6, or 8 depending on the amount of 2s played. 
 - [ ] Discard animation bug fixes
   - [x] Make the discarded card animate from the correct index. it did with the old system, but not with the action log
   - [x] The fade transition should only happen if the opponent discards  a card and the user is starting their turn
   - [ ] Our current fade transition solution works for crazy 8s. See if it works for other game modes as well. The solution should be game-agnostic
 - [x] Add a +5 wild card that is naturally disabled in Crazy 8s play, but can be enabled in some variants
-- [ ] Mau Mau variant of Crazy 8s
+- [x] Mau Mau variant of Crazy 8s
   - [x] Make sure jack logo card gets enabled for mau mau
   - [x] Make sure a user cannot play a jack (the wild card) on top of another jack if playing Mau Mau
-  - [ ] Call it Mau Mau if the region is germany but we are using english. We should detect variants and display the title of those variants even if our region is different (ie, a british user sends their american friend a game. itll still say "crazy 8s" despite the actual rules being switch)
-  - [ ] Create new rules text for mau mau. I think it currently displays the old crazy 8s rules. make the rules view detect the current game variant and display different text.
+  - [x] Call it Mau Mau if the region is germany but we are using english. We should detect variants and display the title of those variants even if our region is different (ie, a british user sends their american friend a game. itll still say "crazy 8s" despite the actual rules being switch)
+  - [x] Create new rules text for mau mau. It probably currently displays the old crazy 8s rules. Make the rules view detect the current game variant and display different text.
+  - [x] Transcript views
 - [ ] Switch variant for Ireland/UK
   - [x] Backend
-  - [ ] Rules text
+  - [x] Transcript views
+  - [x] Rules text
   - [ ] Test red jack cancels out black jack, then they play agian. make sure this series gets animated properly. look into how we currently convey turns and what to animate to the opponent
 - [ ] Pesten variant for the Netherlands
   - [ ] Backend
+  - [ ] Transcript
   - [ ] Rules text
-- [ ] Other Crazy 8s regional variants?
+- [ ] Other Crazy 8s regional variants? Olsen?
 - [ ] Review existing localizations
   - [ ] All variant rules translated
+  - [ ] All titles/UI/main menu assets
   - [ ] See if there are oppurtunites to add regional dialects for better regional language support (only requires minor additions)
   - [ ] Finalize all other languages except base Chinese
 - [ ] Localize ASC listing graphics showing support for variants
@@ -196,6 +201,7 @@
 - [ ] Update theme titles to visually match their respective configured fonts.
 - [ ] Introduce a colored deck variant specifically for Crazy 8s.
 - [ ] Experiment with rotating an HStack/VStack configuration in the Crazy 8s submenu for dynamic transitions.
+- [ ] Allow invite hands of unequal character counts where cards on the front and end are ghosted. "\~LETS\~" \~PLAY\~" "SWITCH" -> "LETS" PLAY" "SWITCH"
 
 ---
 

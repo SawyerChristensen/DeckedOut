@@ -226,7 +226,7 @@ struct MainMenuView: View {
     }
     
     private var gameTitleFace: some View {
-        Text(LocalizedStringKey(availableGames[activeGameIndex].title))
+        Text(verbatim: availableGames[activeGameIndex].displayTitle)
             .font(.largeTitle)
             .fontWeight(.semibold)
             .fontDesign(.serif)
@@ -239,7 +239,7 @@ struct MainMenuView: View {
             ))
             .animation(.easeInOut.speed(motionSpeed), value: activeGameIndex)
             .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
-            .accessibilityLabel(Text("Selected game: \(availableGames[activeGameIndex].title)", comment: "VoiceOver accessibility label that announces the currently selected game, e.g. 'Selected game: Crazy 8s'"))
+            .accessibilityLabel(Text("Selected game: \(availableGames[activeGameIndex].displayTitle)", comment: "VoiceOver accessibility label that announces the currently selected game, e.g. 'Selected game: Crazy 8s'"))
             .accessibilityHidden(showingThemes)
     }
 
@@ -313,7 +313,7 @@ struct MainMenuView: View {
                 }
         }
         .accessibilityElement(children: .ignore) //dont count the crown as a seperate element
-        .accessibilityLabel(Text("\(availableGames[activeGameIndex].title) win count: \(availableGames[activeGameIndex].wins)", comment: "VoiceOver accessibility label that announces the win count for a specific game, e.g. 'Crazy 8s win count: 5'"))
+        .accessibilityLabel(Text("\(availableGames[activeGameIndex].displayTitle) win count: \(availableGames[activeGameIndex].wins)", comment: "VoiceOver accessibility label that announces the win count for a specific game, e.g. 'Crazy 8s win count: 5'"))
     }
 
     private var onboardingSubtitle: some View {
@@ -1240,16 +1240,33 @@ class MenuViewModel: ObservableObject { //tracks presentation style and chat typ
 struct MenuGame: Identifiable {
     let id = UUID()
     var type: GameType
+    /// Stable English identifier — used as the localization key and as the WinTracker/Game Center
+    /// key. NOT for display; use ``displayTitle`` for anything shown to the player.
     var title: String
     var wins: Int = 0
 
+    /// The player-facing title. For Crazy 8s this follows the region's rule variant
+    /// (Crazy 8s / Mau-Mau / Switch); other games resolve their localized `title`.
+    var displayTitle: String {
+        switch type {
+        case .crazy8s: return Crazy8sVariant.forCurrentRegion().displayName
+        default:       return String(localized: String.LocalizationValue(title))
+        }
+    }
+
     /// The localized title-text overlay for this card. Localization is handled inside the asset
-    /// catalog, so the asset name is fixed per game type and needn't be supplied at the call site.
+    /// catalog, so the asset name is fixed per game type. Crazy 8s additionally swaps the text
+    /// image to match the region's rule variant, mirroring ``artName``.
     var titleTextName: String {
         switch type {
         case .ginRummy: return "ginRummyTitleText"
-        case .crazy8s:  return "crazy8sTitleText"
         case .golf:     return "golfTitleText"
+        case .crazy8s:
+            switch Crazy8sVariant.forCurrentRegion() {
+            case .crazy8s:     return "crazy8sTitleText"
+            case .mauMau:      return "mauMauTitleText"
+            case .irishSwitch: return "switchTitleText"
+            }
         case .unknown:  return ""
         }
     }

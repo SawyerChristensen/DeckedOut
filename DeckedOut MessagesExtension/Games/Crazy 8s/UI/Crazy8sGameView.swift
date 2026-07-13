@@ -65,7 +65,7 @@ struct Crazy8sGameView: View {
         .accessibilityHidden(showRules)
         .overlay {
             if showRules {
-                RulesView(gameType: .crazy8s, isExpanded: true, onDismiss: { showRules = false })
+                RulesView(gameType: .crazy8s, crazy8sVariant: game.variant, isExpanded: true, onDismiss: { showRules = false })
                     .frame(maxWidth: UIScreen.main.bounds.width)
                     .transition(.opacity.animation(.easeInOut(duration: 0.2).speed(motionSpeed)))
             }

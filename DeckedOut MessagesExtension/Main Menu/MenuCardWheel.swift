@@ -39,7 +39,7 @@ struct MenuCardWheel: View {
     
     private var continuousIndex: Double { Double(currentCenterIndex) - (Double(dragTranslation) / stepWidth) - (Double(animatedOffset) / stepWidth) }
     private var activeIndex: Int { Int(round(continuousIndex)) }
-    private var activeGameTitle: String { games[gameIndex(for: currentCenterIndex)].title }
+    private var activeGameTitle: String { games[gameIndex(for: currentCenterIndex)].displayTitle }
     
     /// Maps any virtual index (can be negative or beyond games.count) to a valid game array index
     private func gameIndex(for virtualIndex: Int) -> Int {
@@ -166,7 +166,7 @@ struct MenuCardWheel: View {
             Text("Play \(activeGameTitle)", comment: "Voice Control input label – play the named game, e.g. 'Play Crazy 8s'"),
         ])
         .accessibilityValue(Text(verbatim: activeGameTitle))
-        .accessibilityHint(Text("Swipe up or down to change game. Double tap to open the \(games[gameIndex(for: currentCenterIndex)].title) menu.", comment: "VoiceOver accessibility hint for the game-selection carousel, %@ is the selected game name"))
+        .accessibilityHint(Text("Swipe up or down to change game. Double tap to open the \(activeGameTitle) menu.", comment: "VoiceOver accessibility hint for the game-selection carousel, %@ is the selected game name"))
         .accessibilityAction { // Default VoiceOver Activation Action
             withAnimation(.spring(response: 0.6, dampingFraction: 0.7).speed(motionSpeed)) {
                 hasSelectedGame = true

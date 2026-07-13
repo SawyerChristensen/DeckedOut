@@ -10,47 +10,9 @@ import Combine
 
 struct Crazy8sTranscriptPlayerHand: View {
     let cards: [Card]
-    
-    var crazy8sTitle: [String] {
-        let currentLanguage = Locale.preferredLanguages.first ?? "en"
-
-        if currentLanguage.hasPrefix("zh-Hans") {
-            return ["疯", "狂", "8"]
-        } else if currentLanguage.hasPrefix("zh-Hant") {
-            return ["瘋", "狂", "8"]
-        } else if currentLanguage.hasPrefix("da") {
-            return ["O", "L", "S", "E", "N"]
-        } else if currentLanguage.hasPrefix("nl") {
-            return ["P", "E", "S", "T", "E", "N"]
-        } else if currentLanguage.hasPrefix("fr") {
-            return ["8", "A", "M", "E", "R", "I", "C", "A", "I", "N"]
-        } else if currentLanguage.hasPrefix("de") {
-            return ["A", "C", "H", "T", "E", "N"]
-        } else if currentLanguage.hasPrefix("hi") {
-            return ["क्रे", "ज़ी", "8", "S"]
-        } else if currentLanguage.hasPrefix("it") {
-            return ["O", "T", "T", "O"]
-        } else if currentLanguage.hasPrefix("ja") {
-            return ["ク", "レ", "イ", "ジ", "ー", "エ", "イ", "ト"] //is this dash necessary?
-        } else if currentLanguage.hasPrefix("ko") {
-            return ["크", "레", "이", "지", "8"]
-        } else if currentLanguage.hasPrefix("nb") {
-            return ["V", "R", "I", "A", "T", "T", "E", "R"]
-        } else if currentLanguage.hasPrefix("pt") {
-            return ["O", "I", "T", "O", "M", "A", "L", "U", "C", "O"]
-        } else if currentLanguage.hasPrefix("ru") {
-            return ["В", "О", "С", "Ь", "М", "Ё", "Р", "К", "И"]
-        } else if currentLanguage.hasPrefix("es") {
-            return ["O", "C", "H", "O", "S", "L", "O", "C", "O", "S"]
-        } else if currentLanguage.hasPrefix("sv") {
-            return ["V", "A", "N", "D", "A", "T", "T", "A"]
-        } else if currentLanguage.hasPrefix("tr") {
-            return ["C", "I", "L", "G", "I", "N", "8", "L", "I"]
-        } else { // Default (English)
-            return ["C", "R", "A", "Z", "Y", "8", "S"]
-        }
-    }
-    
+    /// The game's variant, from the payload. Drives which name is spelled across the card backs.
+    var variant: Crazy8sVariant = .crazy8s
+    private var crazy8sTitle: [String] { variant.titleLetters }
     
     @State private var cardFlipTrigger: Bool = false
     @State private var cardsAreExpanded: Bool = false

@@ -62,22 +62,6 @@
       "scale" : "3x"
     },
     {
-      "filename" : "crazy8sTitleTextGerman.png",
-      "idiom" : "universal",
-      "locale" : "de",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "de",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "de",
-      "scale" : "3x"
-    },
-    {
       "filename" : "crazy8sTitleTextFrench.png",
       "idiom" : "universal",
       "locale" : "fr",
@@ -107,22 +91,6 @@
     {
       "idiom" : "universal",
       "locale" : "ko",
-      "scale" : "3x"
-    },
-    {
-      "filename" : "crazy8sTitleTextGerman 1.png",
-      "idiom" : "universal",
-      "locale" : "pt-BR",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "pt-BR",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "pt-BR",
       "scale" : "3x"
     },
     {

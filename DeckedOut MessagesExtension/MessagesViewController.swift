@@ -59,8 +59,8 @@ class MessagesViewController: MSMessagesAppViewController {
             //print("Could not set up audio session: \(error)")
         }
         
-        Task.detached(priority: .userInitiated) { //init audio off the main launch path
-            _ = SoundManager.instance
+        Task { @MainActor in //init audio just off the synchronous launch path, but on the main thread
+            _ = SoundManager.instance //AVAudioPlayer isn't thread-safe: create/prepare all players on main so SFX playback can't disrupt the background-music player's audio session
         }
 
         /*Task.detached(priority: .utility) { //authenticate Game Center on background thread
@@ -426,7 +426,7 @@ class MessagesViewController: MSMessagesAppViewController {
             Crazy8sManager.shared.variant = Crazy8sVariant.forCurrentRegion()
             self.activeGameEngine = Crazy8sManager.shared
             templateLayout.image = UIImage(named: "Crazy8sDefault")
-            templateLayout.caption = NSLocalizedString("Let's Play Crazy 8s!", comment: "Crazy 8s invite caption/summary")
+            templateLayout.caption = String(localized: "Let's Play \(Crazy8sManager.shared.variant.displayName)!", comment: "Crazy 8s invite caption/summary, %@ is the game/variant name")
         case .golf:
             self.activeGameEngine = GolfManager.shared
             templateLayout.image = UIImage(named: "GolfDefault")
@@ -519,7 +519,7 @@ class MessagesViewController: MSMessagesAppViewController {
                     templateLayout.caption = NSLocalizedString("I won in Gin!", comment: "Gin template win caption/summary")
                 }
             case .crazy8s:
-                templateLayout.caption = NSLocalizedString("I won in Crazy 8s!", comment: "Crazy 8s template win caption/summary")
+                templateLayout.caption = String(localized: "I won in \(Crazy8sManager.shared.variant.displayName)!", comment: "Crazy 8s template win caption/summary, %@ is the game/variant name")
             case .golf:
                 if activeGameEngine?.playerHasWon == true {
                     templateLayout.caption = NSLocalizedString("I won in Golf!", comment: "Golf template win caption/summary")
@@ -541,7 +541,7 @@ class MessagesViewController: MSMessagesAppViewController {
                 templateLayout.caption = NSLocalizedString("Your turn in Gin!", comment: "Gin Rummy template message caption")
             case .crazy8s:
                 templateLayout.image = UIImage(named: "Crazy8sDefault")
-                templateLayout.caption =  NSLocalizedString("Your turn in Crazy 8s!", comment: "Crazy 8s template message caption")
+                templateLayout.caption = String(localized: "Your turn in \(Crazy8sManager.shared.variant.displayName)!", comment: "Crazy 8s template message caption, %@ is the game/variant name")
             case .golf:
                 templateLayout.image = UIImage(named: "GolfDefault")
                 templateLayout.caption = NSLocalizedString("Your turn in Golf!", comment: "Golf template message caption")
@@ -601,7 +601,7 @@ class MessagesViewController: MSMessagesAppViewController {
             templateLayout.caption = NSLocalizedString("Joined Gin!", comment: "Gin join caption/summary")
         case .crazy8s:
             templateLayout.image = UIImage(named: "Crazy8sDefault")
-            templateLayout.caption = NSLocalizedString("Joined Crazy 8s!", comment: "Crazy 8s join caption/summary")
+            templateLayout.caption = String(localized: "Joined \(Crazy8sManager.shared.variant.displayName)!", comment: "Crazy 8s join caption/summary, %@ is the game/variant name")
         case .golf:
             templateLayout.image = UIImage(named: "GolfDefault")
             templateLayout.caption = NSLocalizedString("Joined Golf!", comment: "Golf join caption/summary")

@@ -10,6 +10,9 @@ import SwiftUI
 struct RulesView: View {
     let gameType: GameType
     var showsGinKnockRules: Bool = false
+    /// The active Crazy 8s rule variant, so the header reads the variant's name. Defaults to the
+    /// region's variant when not supplied (e.g. from the pre-game menu).
+    var crazy8sVariant: Crazy8sVariant? = nil
     var isExpanded: Bool = false
     var onDismiss: () -> Void
     
@@ -113,7 +116,10 @@ struct RulesView: View {
     private var title: LocalizedStringKey {
         switch gameType {
         case .ginRummy: return "Gin Rummy Rules"
-        case .crazy8s:  return "Crazy 8s Rules"
+        case .crazy8s:
+            // Interpolating the (already-localized) variant name yields the "%@ Rules" key.
+            let name = (crazy8sVariant ?? Crazy8sVariant.forCurrentRegion()).displayName
+            return "\(name) Rules"
         case .golf:     return "Golf Rules"
         case .unknown:  return "Rules"
         }
@@ -138,10 +144,21 @@ struct RulesView: View {
             return ginPages
             
         case .crazy8s:
+            // The deal, turn, and win pages are shared; only the wild/action-rank page differs per variant.
+            let variant = crazy8sVariant ?? Crazy8sVariant.forCurrentRegion()
+            let specialPage: (symbol: SymbolType, title: LocalizedStringKey, description: LocalizedStringKey)
+            switch variant {
+            case .crazy8s:
+                specialPage = (.system("8.circle.fill"), "Crazy 8s!", "Eights are wild! Twos make the next opponent draw two, Queens skip, Aces reverse the direction of play.")
+            case .mauMau:
+                specialPage = (.system("j.circle.fill"), "Mau-Mau!", "Jacks are wild! Sevens make the next opponent draw two, Eights skip, Nines reverse the direction of play.")
+            case .irishSwitch:
+                specialPage = (.system("a.circle.fill"), "Switch!", "Aces are wild! Twos make the next opponent draw two, and black Jacks make them draw five — unless a red Jack cancels it. Eights skip, Kings reverse the direction of play.")
+            }
             return [
                 (.custom("colored.square.stack.3d.up"), "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),
                 (.system("arrow.trianglehead.2.clockwise.rotate.90"), "Your Turn", "Discard a card that matches the discard's rank or suit. If you can't, draw from the deck. If you draw three cards and still can't discard, your turn is skipped."),
-                (.system("8.circle.fill"), "Crazy 8s!", "Eights are wild! Twos make the next opponent draw two, Queens skip, Aces reverse the direction of play."),
+                specialPage,
                 (.system("crown.fill"), "How to Win", "Be the first player to get rid of all of your cards!")
             ]
             
