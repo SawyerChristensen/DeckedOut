@@ -19,13 +19,6 @@ struct Crazy8sGameView: View {
     @State private var discardFrame: CGRect = .zero
     @State private var isHoveringDiscard: Bool = false
     @State private var isDraggedCardPlayable: Bool = false
-    // Cross-fade of the top discard card's front, from a discarding opponent's theme into the local
-    // player's theme. `crossfadeFromBack` is the opponent back whose themed front is laid over the
-    // player-themed top card; `crossfadeOpacity` fades that overlay out. `crossfadeToken` guards the
-    // deferred cleanup so a rapid second discard doesn't clear a fresh fade.
-    @State private var crossfadeFromBack: String? = nil
-    @State private var crossfadeOpacity: Double = 1
-    @State private var crossfadeToken: Int = 0
     @State private var showRules: Bool = false
     @State private var cardSortState: Int = 0 // 0 = original order, 1 = sorted by suit then rank, 2 = sorted by rank
     @ScaledMetric(relativeTo: .largeTitle) var rulesButtonSize: CGFloat = 36
@@ -204,40 +197,11 @@ struct Crazy8sGameView: View {
             }
             
             if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
-                ZStack {
-                    // Destination: the top card under the local player's equipped theme.
-                    CardView(frontImage: topCard.imageName)
-
-                    // Source: the same card under the discarding opponent's theme, laid on top and
-                    // faded out so the front cross-fades into the player's theme. Present only during
-                    // the brief window after an opponent's card lands — the only front fade in the app.
-                    if let fromBack = crossfadeFromBack {
-                        CardView(frontImage: topCard.imageName, backImageName: fromBack)
-                            .opacity(crossfadeOpacity)
-                    }
-                }
-                .shadow(color: isDraggedCardPlayable && isHoveringDiscard ? .white : .black.opacity(0.2),
-                        radius: isDraggedCardPlayable && isHoveringDiscard ? 15 : 5)
-                .scaleEffect(isDraggedCardPlayable && isHoveringDiscard ? 1.05 : 1.0)
-                .animation(.easeInOut(duration: 0.2).speed(motionSpeed), value: isHoveringDiscard)
-            }
-        }
-        .onChange(of: game.discardCrossfadeFromBack) { _, newBack in
-            guard let newBack else { return }
-            game.discardCrossfadeFromBack = nil // one-shot: consume the trigger
-
-            // Lay the opponent-themed front over the (already-updated) player-themed top card and
-            // fade it out, revealing the player's theme underneath.
-            crossfadeToken += 1
-            let token = crossfadeToken
-            crossfadeFromBack = newBack
-            crossfadeOpacity = 1
-            withAnimation(.easeInOut(duration: 0.4).speed(motionSpeed)) {
-                crossfadeOpacity = 0
-            }
-            // Remove the overlay once the fade completes (unless a newer fade has since started).
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 / motionSpeed) {
-                if crossfadeToken == token { crossfadeFromBack = nil }
+                CrossfadingDiscardCard(frontImage: topCard.imageName, crossfadeFromBack: $game.discardCrossfadeFromBack)
+                    .shadow(color: isDraggedCardPlayable && isHoveringDiscard ? .white : .black.opacity(0.2),
+                            radius: isDraggedCardPlayable && isHoveringDiscard ? 15 : 5)
+                    .scaleEffect(isDraggedCardPlayable && isHoveringDiscard ? 1.05 : 1.0)
+                    .animation(.easeInOut(duration: 0.2).speed(motionSpeed), value: isHoveringDiscard)
             }
         }
         .accessibilityElement(children: .ignore)
@@ -389,15 +353,24 @@ struct Crazy8sGameView: View {
     // rather than new reconstruction branches.
     private func animateOpponentsTurn() async {
         var didStartPenalty = false
+        // The acting (previous) player's seat, so we can return the active arc slot to them if a draw-two
+        // stack moved it onto a stacking seat before one of their own follow-up actions (wrap-around case).
+        let actingSeat = game.animatingOpponentSeat
 
         for action in game.actionsToAnimate {
             if game.isGameOver { break } //opponent emptied their hand mid-sequence
             switch action {
             case .draw:
+                if game.restoreActingSeatIfNeeded(actingSeat) {
+                    try? await Task.sleep(nanoseconds: 400_000_000) // let the arc reposition back
+                }
                 game.opponentDrawFromDeck() // deck → opponent hand
                 try? await Task.sleep(nanoseconds: 800_000_000) // 0.8s
 
             case .play(let card, _):
+                if game.restoreActingSeatIfNeeded(actingSeat) {
+                    try? await Task.sleep(nanoseconds: 400_000_000) // let the arc reposition back
+                }
                 game.opponentCardAnimatingToDiscard = card // opponent hand → discard (commits on landing)
                 try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
 
@@ -410,6 +383,20 @@ struct Crazy8sGameView: View {
             case .counterPlay(let card, _):
                 game.playerCardAnimatingToDiscard = card // local player's own auto-played card → discard
                 try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
+
+            case .seatPlay(let card, _, let seat):
+                // A non-acting seat auto-stacked a draw-two. Switch the active arc slot to that seat and fly
+                // its card to the discard, mirroring the sender. Our own past auto-play (seat == mySeatIndex)
+                // has no arc slot, so we just commit it to the discard without an arc animation.
+                if seat == game.mySeatIndex {
+                    game.commitSeatPlayWithoutAnimation(card)
+                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
+                } else {
+                    game.beginSeatPlayAnimation(forSeat: seat)
+                    try? await Task.sleep(nanoseconds: 400_000_000) // 0.4s, let the arc reposition to this seat
+                    game.opponentCardAnimatingToDiscard = card // seat's hand → discard (commits on landing)
+                    try? await Task.sleep(nanoseconds: 700_000_000) // 0.7s, covers the fly + commit
+                }
 
             case .forceDraw:
                 if !didStartPenalty {

@@ -69,7 +69,7 @@ final class CurrentTheme: ObservableObject {
     /// Accent color of the currently selected theme. Falls back to `salmonRed` if the
     /// stored card-back name doesn't match a known theme (e.g. a removed/renamed asset).
     var selectedColor: Color {
-        return DeckTheme.theme(forLogoCard: selectedName)?.rulesColor ?? Palette.salmonRed
+        return DeckTheme.theme(forLogoCard: selectedName)?.rulesColor ?? Color.salmonRed
     }
     
     var textColor: Color {

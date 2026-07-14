@@ -96,3 +96,60 @@ struct CardView: View { //where only one side is a (letter?)
         )
     }
 }
+
+/// The top card of a discard pile, whose front cross-fades from a discarding opponent's theme into
+/// the local player's equipped theme as the opponent's turn ends and the player's begins.
+///
+/// Game-agnostic: any game's discard pile can drop this in place of a bare `CardView`. The base card
+/// always renders `frontImage` under the local player's theme; when `crossfadeFromBack` is set to a
+/// discarding opponent's card-back name, the same card is briefly laid on top under *that* back's
+/// theme and faded out — so the front dissolves from the opponent's artwork into the player's, and
+/// the background never bleeds through mid-transition. The trigger is one-shot: this view consumes
+/// (nils out) `crossfadeFromBack` as it begins the fade, so a manager only has to set it.
+struct CrossfadingDiscardCard: View {
+    var frontImage: String
+    /// One-shot trigger, bound to the game manager. Set it to the discarding opponent's card-back
+    /// name to start a fade; this view immediately resets it to `nil`.
+    @Binding var crossfadeFromBack: String?
+    var cardHeight: CGFloat = 145
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var motionSpeed: Double { reduceMotion ? 0.66 : 1.0 }
+
+    /// The opponent back currently laid over the top card, and its fading opacity. `token` guards the
+    /// deferred cleanup so a rapid second discard doesn't clear a fresh fade.
+    @State private var overlayBack: String? = nil
+    @State private var overlayOpacity: Double = 1
+    @State private var token: Int = 0
+
+    var body: some View {
+        ZStack {
+            // Destination: the top card under the local player's equipped theme.
+            CardView(frontImage: frontImage, cardHeight: cardHeight)
+
+            // Source: the same card under the discarding opponent's theme, laid on top and faded out
+            // so the front cross-fades into the player's theme. Present only during the brief window
+            // after an opponent's card lands.
+            if let overlayBack {
+                CardView(frontImage: frontImage, backImageName: overlayBack, cardHeight: cardHeight)
+                    .opacity(overlayOpacity)
+            }
+        }
+        .onChange(of: crossfadeFromBack) { _, newBack in
+            guard let newBack else { return }
+            crossfadeFromBack = nil // one-shot: consume the trigger
+
+            token += 1
+            let current = token
+            overlayBack = newBack
+            overlayOpacity = 1
+            withAnimation(.easeInOut(duration: 0.4).speed(motionSpeed)) {
+                overlayOpacity = 0
+            }
+            // Remove the overlay once the fade completes (unless a newer fade has since started).
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 / motionSpeed) {
+                if token == current { overlayBack = nil }
+            }
+        }
+    }
+}

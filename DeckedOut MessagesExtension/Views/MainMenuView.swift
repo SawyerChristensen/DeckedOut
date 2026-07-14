@@ -399,7 +399,7 @@ struct MainMenuView: View {
                     .foregroundStyle(
                         .white,            // Primary (Layer 1)
                         Color(white: 0.3), // Secondary (Layer 2)
-                        Palette.bookBrown // Tertiary (Layer 3)
+                        Color.bookBrown // Tertiary (Layer 3)
                     )
                     .contentTransition(.symbolEffect(.replace))
                     .applyGradientSymbolColor()
@@ -1266,6 +1266,7 @@ struct MenuGame: Identifiable {
             case .crazy8s:     return "crazy8sTitleText"
             case .mauMau:      return "mauMauTitleText"
             case .irishSwitch: return "switchTitleText"
+            case .pesten:      return "pestenTitleText"
             }
         case .unknown:  return ""
         }

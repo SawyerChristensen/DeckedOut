@@ -243,7 +243,7 @@ struct GolfGameView: View {
                 )
             
             if let topCard = visibleDiscardCard { // we have cards in the discard pile; display the top one
-                CardView(frontImage: topCard.imageName)
+                CrossfadingDiscardCard(frontImage: topCard.imageName, crossfadeFromBack: $game.discardCrossfadeFromBack, cardHeight: 130)
                     .aspectRatio(0.7, contentMode: .fit)
                     .frame(width: 91, height: 130)
                     .onTapGesture { handleDiscardTap() }
@@ -410,8 +410,8 @@ struct GolfGameView: View {
                 playerSlotFrames[index] = frame
             }
         )
-        .shadow(color: game.playerHasWon ? Palette.winYellow : .clear, radius: winGlowRadius)
-        .shadow(color: game.playerHasWon ? Palette.winYellow.opacity(0.5) : .clear, radius: winGlowRadius) //to increase the yellow's intensity
+        .shadow(color: game.playerHasWon ? Color.winYellow : .clear, radius: winGlowRadius)
+        .shadow(color: game.playerHasWon ? Color.winYellow.opacity(0.5) : .clear, radius: winGlowRadius) //to increase the yellow's intensity
         .onAppear {
             if game.playerHasWon {
                 withAnimation(.linear(duration: 0.67).speed(motionSpeed)) {

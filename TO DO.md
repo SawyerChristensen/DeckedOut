@@ -10,11 +10,12 @@
 - [x] More localized main game title cards
   - [x] Make the art argument determined by the local. crazy 8s knight art should be enabled for mau mau, other arts should always be the same regardless
 - [x] The background audio stops after the discard sound effect (FIXED)
-- [ ] Make stacking 2s automatic in the normal version of Crazy 8s. If the opponent has a 2, do not end the turn. Instead make the opponent play their 2, and so the user draws 4 unless they have a second 2. Then check if the opponent has the 4th 2, although will be rare. The last player to have a 2 played at them draws 2, 4, 6, or 8 depending on the amount of 2s played. 
-- [ ] Discard animation bug fixes
+- [x] Make stacking 2s automatic in the normal version of Crazy 8s. If the opponent has a 2, do not end the turn. Instead make the opponent play their 2, and so the user draws 4 unless they have a second 2. Then check if the opponent has the 4th 2, although will be rare. The last player to have a 2 played at them draws 2, 4, 6, or 8 depending on the amount of 2s played. 
+  - [x] Implement for 1v1
+- [x] Discard animation bug fixes
   - [x] Make the discarded card animate from the correct index. it did with the old system, but not with the action log
   - [x] The fade transition should only happen if the opponent discards  a card and the user is starting their turn
-  - [ ] Our current fade transition solution works for crazy 8s. See if it works for other game modes as well. The solution should be game-agnostic
+  - [x] Our current fade transition solution works for crazy 8s. See if it works for other game modes as well. The solution should be game-agnostic (TEST)
 - [x] Add a +5 wild card that is naturally disabled in Crazy 8s play, but can be enabled in some variants
 - [x] Mau Mau variant of Crazy 8s
   - [x] Make sure jack logo card gets enabled for mau mau
@@ -22,26 +23,27 @@
   - [x] Call it Mau Mau if the region is germany but we are using english. We should detect variants and display the title of those variants even if our region is different (ie, a british user sends their american friend a game. itll still say "crazy 8s" despite the actual rules being switch)
   - [x] Create new rules text for mau mau. It probably currently displays the old crazy 8s rules. Make the rules view detect the current game variant and display different text.
   - [x] Transcript views
-- [ ] Switch variant for Ireland/UK
+- [x] Switch variant for Ireland/UK
   - [x] Backend
   - [x] Transcript views
   - [x] Rules text
-  - [ ] Test red jack cancels out black jack, then they play agian. make sure this series gets animated properly. look into how we currently convey turns and what to animate to the opponent
-- [ ] Pesten variant for the Netherlands
-  - [ ] Backend
-  - [ ] Transcript
-  - [ ] Rules text
-- [ ] Other Crazy 8s regional variants? Olsen?
-- [ ] Review existing localizations
-  - [ ] All variant rules translated
-  - [ ] All titles/UI/main menu assets
-  - [ ] See if there are oppurtunites to add regional dialects for better regional language support (only requires minor additions)
-  - [ ] Finalize all other languages except base Chinese
-- [ ] Localize ASC listing graphics showing support for variants
-  - [ ] German 
-  - [ ] Portuguese
+  - [x] Test red jack cancels out black jack, then they play agian. make sure this series gets animated properly. look into how we currently convey turns and what to animate to the opponent
+- [x] Pesten variant for the Netherlands
+  - [x] Backend
+  - [x] Transcript
+  - [x] Rules text
+- [x] Remove Custom Colors and refer to the colors defined in Assets
+- [x] Review existing localizations
+  - [x] All titles/UI/main menu assets
+- [x] Localize ASC listing graphics showing support for variants
+  - [x] German
+  - [x] Dutch
+  - [x] English (UK) w/ Switch & Union Jack
+  - [x] Portuguese
 
 ### Update 3.6.1
+- [ ] Finalize all localizations 
+- [ ] See if there are opportunites to add regional dialects for better regional language support (only requires minor additions)
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
   - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
 - [ ] Deprecate the legacy Crazy 8s animation-reconstruction payload fields now that turns are conveyed via the `turnActions` action log.
@@ -106,13 +108,17 @@
 ### Card Games
 - [x] Gin Rummy
 - [x] Crazy 8s
+  - [x] Mau Mau Variant
+  - [x] Switch Variant
+  - [x] Pesten Variant
+  - [ ] Others?
 - [x] Golf
 - [ ] Cribbage
 - [ ] Spades (4 players)
 - [ ] Hearts
 - [ ] Euchre (4 players)
 - [ ] Idiot
-- [ ] Switch
+- [ ] Vändtia
 - [ ] Scopa?
 - [ ] Whot?
 - [ ] Yaniv?
@@ -127,13 +133,13 @@
 
 ### Monetization Tiers & Card Backs
 - [ ] **Remove Ads ($0.99):** Core functionality *(Blocker: Requires ad integration first)*
-- [ ] **Premium Card Backs ($0.99 - $1.99):** *(Includes Remove Ads bundle)*
+- [ ] **Premium Card Backs ($0.49 - $0.99):** *(Includes Remove Ads bundle)*
   - [ ] Lantern Card Back *(Letters glow illumination effect)*
   - [ ] Team Trees charity theme
   - [ ] Honeycomb pattern *(Bee charity theme)*
   - [ ] Animated looping backgrounds?
   - [ ] Solid Gold texture
-  - [ ] **Ultra Custom ($2.99):** Photo upload capabilities
+  - [ ] **Ultra Custom ($1.99):** Photo upload capabilities
 - [ ] **Card Fronts**
   - [ ] *Free Tier:* Basic regional layout variations
   - [ ] *Free Tier:* Accessibility-friendly zoomed layout
@@ -150,11 +156,11 @@
 ## 🛑 Known Issues & Critical Bugs
 
 ### Core App & Framework Blocks
-- [ ] **First Launch Hang:** Investigate why app goes to a white screen and fails to load when opened for the first time via the App Store.
-- [ ] **Game Center Integration:** Resolve Game Center support limitations for iMessage-only apps *(Collaborate with Apple engineering / documentation).*
+- [ ] **First Launch Hang:** Investigate why app goes to a white screen and fails to load when opened for the first time via the App Store. *(Does this still happen?)*
+- [ ] **Game Center Integration:** Resolve Game Center support limitations for iMessage-only apps *(Collaborate with Apple engineering / documentation. Submitted via Feedback Assistant). *
 
 ### UI Layout & Z-Index Artifacts
-- [ ] Fix rendering hierarchy in group chat Crazy 8s: "Selected" text renders below opponent hand's Z value.
+- [ ] Fix rendering hierarchy in group chat Crazy 8s: "Selected" text renders below opponent hand's Z value. 
 - [ ] Refactor opponent hand Z-index layers: Must sit lower than the deck layer, but drawn cards must dynamically spawn on top to prevent clipping.
 
 ### Animation Glitches
@@ -163,6 +169,7 @@
 
 ### Accessibility Additions
 - [ ] Enable Voice Control users to be able to send discard and automatically send messages the same way that discarding a card via touch does
+  - *Note: This is currently not possible with the current way Apple treats the send() function. A touch interaction seems to be needed for send() to work. This issue was reported via Feedback Assistant*
 
 ---
 
@@ -175,6 +182,7 @@
 - [ ] Implement auto-sorting capability for player hands.
 - [ ] Add a visual drag gesture interaction to the discard pile in Gin in addition to standard taps.
 - [ ] Redesign win screen using an expressive Joker card asset (happy/sad dynamically based on outcome with colored drop shadows).
+- [ ] Test +2 stacking in Crazy 8 groupchats
 
 ### Accessibility & System Preferences
 - [ ] **Reduce Motion support:** Disable main menu card flips and themes menu entry animations when system flag is active *(Prefer cross-fade transitions).*

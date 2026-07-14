@@ -15,12 +15,14 @@ enum Crazy8sVariant: String, Codable {
     case crazy8s   // International default: 8 wild, 2 draws, Queen skips, Ace reverses
     case mauMau    // German variant: Jack wild, 7 draws, 8 skips, 9 reverses
     case irishSwitch // UK/Ireland "Switch": Ace wild, 2 draws two, switch jacks draw five (red jacks cancel), 8 skips, King reverses
+    case pesten    // Dutch "Pesten": Jack wild, 2 draws two, 7 plays again (sticky seven), 8 skips, Ace reverses
 
     var wildRank: Rank { // choose the next suit
         switch self {
         case .crazy8s:   return .eight
         case .mauMau:    return .jack
         case .irishSwitch: return .ace
+        case .pesten:    return .jack
         }
     }
     var drawTwoRank: Rank { // next player draws two
@@ -28,6 +30,7 @@ enum Crazy8sVariant: String, Codable {
         case .crazy8s:   return .two
         case .mauMau:    return .seven
         case .irishSwitch: return .two
+        case .pesten:    return .two
         }
     }
     var skipRank: Rank { // skip the next player
@@ -35,6 +38,7 @@ enum Crazy8sVariant: String, Codable {
         case .crazy8s:   return .queen
         case .mauMau:    return .eight
         case .irishSwitch: return .eight
+        case .pesten:    return .eight
         }
     }
     var reverseRank: Rank { // reverse direction (groupchat)
@@ -42,6 +46,16 @@ enum Crazy8sVariant: String, Codable {
         case .crazy8s:   return .ace
         case .mauMau:    return .nine
         case .irishSwitch: return .king
+        case .pesten:    return .ace
+        }
+    }
+    /// A rank that grants the player an immediate bonus turn instead of passing (Pesten's "sticky
+    /// seven"). nil for variants without the mechanic. Comparing a non-optional `Rank` against this
+    /// yields false when nil, so the play-again branch stays dormant for every other variant.
+    var playAgainRank: Rank? {
+        switch self {
+        case .pesten: return .seven
+        default:      return nil
         }
     }
     /// The variant a newly created game should use, based on the creator's region.
@@ -53,8 +67,11 @@ enum Crazy8sVariant: String, Codable {
         let mauMauRegions: Set<String> = ["DE", "AT", "CH", "LI", "BR", "PT"]
         // UK and Ireland, where it's played as "Switch".
         let switchRegions: Set<String> = ["GB", "IE"]
+        // The Netherlands and Belgium (Flanders), where it's played as "Pesten".
+        let pestenRegions: Set<String> = ["NL", "BE"]
         if mauMauRegions.contains(region) { return .mauMau }
         if switchRegions.contains(region) { return .irishSwitch }
+        if pestenRegions.contains(region) { return .pesten }
         return .crazy8s
     }
 
@@ -67,6 +84,7 @@ enum Crazy8sVariant: String, Codable {
         case .crazy8s:     return String(localized: "Crazy 8s", comment: "Game title for Crazy 8s, displayed in the main menu")
         case .mauMau:      return String(localized: "Mau-Mau", comment: "Game title for the German Mau-Mau variant of Crazy 8s")
         case .irishSwitch: return String(localized: "Switch", comment: "Game title for the UK/Ireland Switch variant of Crazy 8s")
+        case .pesten:      return String(localized: "Pesten", comment: "Game title for the Dutch Pesten variant of Crazy 8s")
         }
     }
 
@@ -75,7 +93,7 @@ enum Crazy8sVariant: String, Codable {
     /// (dropping separators like the hyphen in "Mau-Mau").
     var titleLetters: [String] {
         switch self {
-        case .mauMau, .irishSwitch:
+        case .mauMau, .irishSwitch, .pesten:
             return displayName.uppercased().compactMap { $0.isLetter || $0.isNumber ? String($0) : nil }
         case .crazy8s:
             let currentLanguage = Locale.preferredLanguages.first ?? "en"
@@ -85,12 +103,10 @@ enum Crazy8sVariant: String, Codable {
                 return ["瘋", "狂", "8"]
             } else if currentLanguage.hasPrefix("da") {
                 return ["O", "L", "S", "E", "N"]
-            } else if currentLanguage.hasPrefix("nl") {
-                return ["P", "E", "S", "T", "E", "N"]
             } else if currentLanguage.hasPrefix("fr") {
                 return ["8", "A", "M", "E", "R", "I", "C", "A", "I", "N"]
-            } else if currentLanguage.hasPrefix("de") || currentLanguage.hasPrefix("pt") {
-                return ["M", "A", "U", "M", "A", "U"]
+            } else if currentLanguage.hasPrefix("pt") {
+                return ["O", "I", "T", "O", "M", "A", "L", "U", "C", "O"]
             } else if currentLanguage.hasPrefix("hi") {
                 return ["क्रे", "ज़ी", "8", "S"]
             } else if currentLanguage.hasPrefix("it") {
@@ -135,6 +151,8 @@ enum Crazy8sVariant: String, Codable {
             return ["MAU", "MAU"]                                                // 3, 3
         case .irishSwitch:
             return ["~LETS~", "~PLAY~", "SWITCH"]                                // 6, 6, 6
+        case .pesten:
+            return ["~LETS~", "~PLAY~", "PESTEN"]                                // 6, 6, 6
         case .crazy8s:
             if lang.hasPrefix("zh-Hant") { return ["讓我們", "一起玩", "瘋狂8"] }   // 3, 3, 3
             if lang.hasPrefix("zh-Hans") { return ["让我们", "一起玩", "疯狂8"] }   // 3, 3, 3
@@ -165,6 +183,7 @@ enum Crazy8sTurnAction: Codable {
     case chooseSuit(Suit)                  // the acting player selected the active suit (after a wild)
     case forceDraw(Card)                   // the acting player forced this card from the deck onto the NEXT player
     case counterPlay(Card, fromIndex: Int) // the NEXT player auto-played this card (from this index of their hand) during the acting turn (e.g. Switch red-jack cancel)
+    case seatPlay(Card, fromIndex: Int, seat: Int) // a non-acting seat auto-played a draw-two during a group-chat stack; replayed from that seat's arc position, skipping that seat's turn
 }
 
 // V1: Legacy 2-player game snapshot
@@ -249,6 +268,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var pendingPlayerPenaltyDraws: Int = 0 // count of cards the local player needs to receive as a penalty animation
     @Published var deckShouldShowPlayerBack: Bool = false // flip the deck to the user's card back ahead of penalty draws so the animated card and the deck share a back
     private var skipNextSeat: Bool = false // set when the user plays a queen in V2; advances currentSeatIndex by 2 on send
+    private var overrideNextSeat: Int? = nil // set during a group-chat draw-two stack: the turn jumps straight to the seat that couldn't answer, skipping the seats that auto-stacked
     private var previousPlayerSeatIndex: Int = 0 // the actual seat that played the previous turn (handles queen-skip)
     private var isDirectionReversed: Bool = false // toggled when an ace is played in V2; flips seat-advancement direction
     var hasPerformedInitialLoad: Bool = false //stays local. this is just for the 0.5 delay in game view when you open a message
@@ -405,9 +425,20 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             //block further player interaction while the penalty animation plays
             phase = .animationPhase
             activeSuitOverride = nil
-            Task { @MainActor in
-                await dealPenaltyCards(count: 2)
-                completeTurn()
+            if is1v1 {
+                //1v1: the draw-two card stacks (Crazy 8s 2, Mau-Mau 7, Switch 2). The opponent can bounce
+                //the penalty back with a draw-two of their own, and so on, until someone can't answer;
+                //that player draws 2 cards per draw-two played.
+                Task { @MainActor in
+                    await resolveStackingTwos()
+                }
+            } else {
+                //Group chat: the draw-two cascades forward. Each seat that holds a draw-two auto-plays it,
+                //passing the growing penalty to the next seat, until we reach a seat that can't answer —
+                //they draw the whole stack and the turn jumps straight to them, skipping the seats between.
+                Task { @MainActor in
+                    await resolveStackingTwosGroup()
+                }
             }
         } else if variant == .irishSwitch && card.isSwitchJack {
             //Switch: a switch jack (J♠/J♣) forces five cards on the opponent — unless they hold a red jack (J♥/J♦), which cancels it.
@@ -461,6 +492,18 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             isDirectionReversed.toggle()
             activeSuitOverride = nil
             completeTurn()
+        } else if card.rank == variant.playAgainRank {
+            //Pesten "sticky seven": play a 7 and immediately go again. Like the 1v1 skip bonus, this
+            //keeps the turn local in both 1v1 and group chat — we don't send, so the turn never passes.
+            //The accumulated turnActions replay the whole bonus sequence to the next player verbatim.
+            activeSuitOverride = nil
+            if !playerHand.isEmpty {
+                _ = recordLocalTurn()
+                cardsDrawnThisTurn = 0
+                checkHandPlayability()
+            } else {
+                completeTurn() //played their last card on the seven — completeTurn handles the win + send
+            }
         } else {
             activeSuitOverride = nil
             completeTurn()
@@ -468,15 +511,19 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     }
 
     @MainActor
-    private func dealPenaltyCards(count: Int) async {
-        //In V2 3+ player, swap the active opponent slot to the next seat so the penalty draws animate into their hand.
+    private func dealPenaltyCards(count: Int, toSeat: Int? = nil) async {
+        //In V2 3+ player, swap the active opponent slot to the penalized seat so the penalty draws animate into their hand.
         let isMultiOpponent = !is1v1 && seats.count > 2
         let step = isDirectionReversed ? -1 : 1
-        let nextSeat = seats.isEmpty ? 0 : ((mySeatIndex + step) % seats.count + seats.count) % seats.count
+        let computedNext = seats.isEmpty ? 0 : ((mySeatIndex + step) % seats.count + seats.count) % seats.count
+        let targetSeat = toSeat ?? computedNext
 
         if isMultiOpponent {
-            animatingOpponentSeat = nextSeat
-            opponentHand = allHands.indices.contains(nextSeat) ? allHands[nextSeat] : []
+            //commit whatever hand is currently animating before switching the active slot (the cascade may
+            //have left a stacking seat active), then bring the penalized seat's hand up to animate into it.
+            if allHands.indices.contains(animatingOpponentSeat) { allHands[animatingOpponentSeat] = opponentHand }
+            animatingOpponentSeat = targetSeat
+            opponentHand = allHands.indices.contains(targetSeat) ? allHands[targetSeat] : []
         }
 
         for _ in 0..<count {
@@ -490,8 +537,8 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             guard !deck.isEmpty else { break }
             let drawn = deck.popLast()!
             opponentHand.append(drawn)
-            if isMultiOpponent, allHands.indices.contains(nextSeat) {
-                allHands[nextSeat].append(drawn)
+            if isMultiOpponent, allHands.indices.contains(targetSeat) {
+                allHands[targetSeat].append(drawn)
             }
             opponentCardAnimatingFromDeck = drawn
             turnActions.append(.forceDraw(drawn)) //forced onto the next player; replayed into their hand
@@ -502,6 +549,154 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         if isMultiOpponent {
             //restore opponentHand to the previous opponent's hand so sendV2GameState's previousSeat assignment is a no-op
             opponentHand = allHands.indices.contains(previousPlayerSeatIndex) ? allHands[previousPlayerSeatIndex] : []
+        }
+    }
+
+    // Stacking draw-twos (1v1, any variant: Crazy 8s 2, Mau-Mau 7, Switch 2). The user has already played
+    // one draw-two (recorded as a .play and sitting on the discard). The opponent may answer with a draw-two
+    // of their own — auto-played here, bouncing the penalty back — then the user auto-stacks a third if they
+    // hold one, and the opponent a fourth, and so on. Whoever can't answer draws 2 cards per draw-two played
+    // (2, 4, 6, or 8). The whole exchange runs on the
+    // acting player's device and is captured in the action log so the other device replays it verbatim:
+    // the opponent's answers as .counterPlay, the user's own stacked 2s as .play, and the loser's draws as
+    // .forceDraw (opponent loses → their turn) or .draw (user loses → they keep a bonus turn).
+    @MainActor
+    private func resolveStackingTwos() async {
+        var twosPlayed = 1            // the 2 the user just played
+        var opponentToAnswer = true  // the opponent answers the user's 2 first, then it alternates
+
+        while true {
+            if opponentToAnswer {
+                guard let index = opponentHand.firstIndex(where: { $0.rank == variant.drawTwoRank }) else { break }
+                let two = opponentHand[index]
+                twosPlayed += 1
+                turnActions.append(.counterPlay(two, fromIndex: index)) //opponent auto-answers from their hand slot
+                try? await Task.sleep(nanoseconds: 400_000_000) //let the previous card land first
+                opponentCardAnimatingToDiscard = two //opponentDiscardCard commits & removes it on landing
+                try? await Task.sleep(nanoseconds: 800_000_000)
+                if isGameOver { break } //opponent emptied their hand answering with their last 2
+            } else {
+                guard let index = playerHand.firstIndex(where: { $0.rank == variant.drawTwoRank }) else { break }
+                let two = playerHand.remove(at: index)
+                discardPile.append(two)
+                turnActions.append(.play(two, fromIndex: index))
+                twosPlayed += 1
+                SoundManager.instance.playCardSlap()
+                HapticManager.instance.playCardSlap()
+                try? await Task.sleep(nanoseconds: 600_000_000)
+                if playerHand.isEmpty { playerHasWon = true; break } //user stacked their last card
+            }
+            opponentToAnswer.toggle()
+        }
+
+        if isGameOver {
+            //opponent emptied their hand answering — they win. Send the final state; keep the game-over UI.
+            sendGameStateSwitch()
+            return
+        }
+        if playerHasWon {
+            completeTurn() //user emptied their hand stacking their last 2; completeTurn handles the win + send
+            return
+        }
+
+        let penalty = twosPlayed * 2
+        if opponentToAnswer {
+            //loop ended waiting on the OPPONENT → they couldn't answer, so they draw and the turn passes to them
+            await dealPenaltyCards(count: penalty)
+            completeTurn()
+        } else {
+            //loop ended waiting on the USER → they couldn't answer, so they draw and keep the turn (bonus play)
+            await dealPenaltyCardsToSelf(count: penalty)
+            _ = recordLocalTurn()
+            cardsDrawnThisTurn = 0
+            if phase == .animationPhase {
+                phase = .mainPhase
+                checkHandPlayability()
+            }
+        }
+    }
+
+    // Stacking draw-twos (group chat). The user has already played one draw-two (recorded as a .play,
+    // sitting on the discard). The penalty cascades forward: each following seat that holds a draw-two
+    // auto-plays it — recorded as a .seatPlay so the receiver replays it from that seat's arc position —
+    // passing the growing stack to the next seat, until we reach a seat that can't answer. That seat draws
+    // the whole stack (2 cards per draw-two played) and the turn jumps straight to them, skipping the seats
+    // that auto-stacked. If every other seat answers, the stack wraps back to the original player, who
+    // draws it and keeps their turn (a bonus play, mirroring the 1v1 self-draw). The entire cascade runs on
+    // the acting player's device and is captured in the action log so every other device replays it verbatim.
+    @MainActor
+    private func resolveStackingTwosGroup() async {
+        guard seats.count > 1 else { completeTurn(); return }
+        var twosPlayed = 1 // the draw-two the user just played
+        let step = isDirectionReversed ? -1 : 1
+        var seat = ((mySeatIndex + step) % seats.count + seats.count) % seats.count
+        var seatsChecked = 0 // safety bound: never revisit the acting player, even if the whole table stacks
+
+        while seatsChecked < seats.count - 1 {
+            guard allHands.indices.contains(seat),
+                  let index = allHands[seat].firstIndex(where: { $0.rank == variant.drawTwoRank }) else { break }
+            let two = allHands[seat][index]
+
+            // Switch the active opponent to this seat and animate their forced auto-play.
+            if allHands.indices.contains(animatingOpponentSeat) { allHands[animatingOpponentSeat] = opponentHand }
+            animatingOpponentSeat = seat
+            opponentHand = allHands[seat]
+            turnActions.append(.seatPlay(two, fromIndex: index, seat: seat))
+            try? await Task.sleep(nanoseconds: 400_000_000) // let the arc reposition to this seat
+            opponentCardAnimatingToDiscard = two             // opponentDiscardCard commits & removes it on landing
+            try? await Task.sleep(nanoseconds: 800_000_000)
+            allHands[seat] = opponentHand                    // reflect the played card back into the seat's hand
+            twosPlayed += 1
+
+            if isGameOver {
+                //this seat emptied their hand on the forced play — they win. Stop the cascade and pass the
+                //turn onward normally so every device detects the win (winner via empty hand, others via animation).
+                overrideNextSeat = ((seat + step) % seats.count + seats.count) % seats.count
+                sendGameStateSwitch()
+                return
+            }
+
+            seat = ((seat + step) % seats.count + seats.count) % seats.count
+            seatsChecked += 1
+        }
+
+        let penalty = twosPlayed * 2
+        if seat == mySeatIndex {
+            //Every other seat answered — the stack wraps back to the original player, who draws it and keeps
+            //the turn (bonus play). Like the 1v1 self-draw, this keeps the turn local; we don't send here.
+            await dealPenaltyCardsToSelf(count: penalty)
+            _ = recordLocalTurn()
+            cardsDrawnThisTurn = 0
+            if phase == .animationPhase {
+                phase = .mainPhase
+                checkHandPlayability()
+            }
+        } else {
+            //`seat` couldn't answer: they draw the whole stack and the turn jumps straight to them.
+            overrideNextSeat = seat
+            await dealPenaltyCards(count: penalty, toSeat: seat)
+            completeTurn()
+        }
+    }
+
+    //Draw a stacked draw-two penalty into the local player's own hand (1v1). Mirrors dealPenaltyCards but
+    //the forced cards land locally and are recorded as .draw actions, so the opponent replays them as the
+    //acting player drawing from the deck. Appending each card animates it in via the player hand view.
+    @MainActor
+    private func dealPenaltyCardsToSelf(count: Int) async {
+        for _ in 0..<count {
+            //If the deck would run out mid-penalty, reshuffle the discard pile back into the deck (preserving the top 2 cards).
+            if deck.isEmpty, discardPile.count > 2 {
+                let topDiscard = discardPile.popLast()!
+                let secondDiscard = discardPile.popLast()!
+                deck = discardPile.shuffled()
+                discardPile = [secondDiscard, topDiscard]
+            }
+            guard !deck.isEmpty else { break }
+            let drawn = deck.popLast()!
+            playerHand.append(drawn)
+            turnActions.append(.draw(drawn)) //acting player drew; replayed as the opponent drawing on the other device
+            try? await Task.sleep(nanoseconds: 800_000_000) // 0.8s, matches draw cadence
         }
     }
 
@@ -555,10 +750,15 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         } else {
             opponentHand.removeLast()
         }
+        //Keep the active seat's stored hand in sync so it renders correctly once it goes static again
+        //(matters during a group-chat draw-two stack, where the active arc slot hops between seats).
+        if !is1v1, allHands.indices.contains(animatingOpponentSeat) {
+            allHands[animatingOpponentSeat] = opponentHand
+        }
         discardPile.append(card)
         // Record the discarding opponent's back so the discard pile can cross-fade this card's front
         // from their theme into the local player's theme as their turn ends.
-        discardCrossfadeFromBack = is1v1 ? opponentCardBack : cardBack(forSeat: animatingOpponentSeat)
+        discardCrossfadeFromBack = cardBack(forSeat: animatingOpponentSeat) // 1v1 handled inside
         SoundManager.instance.playCardSlap()
         HapticManager.instance.playCardSlap()
 
@@ -579,6 +779,39 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         if let index = playerHand.firstIndex(of: card) {
             playerHand.remove(at: index)
         }
+        discardPile.append(card)
+        SoundManager.instance.playCardSlap()
+        HapticManager.instance.playCardSlap()
+    }
+
+    //Group-chat draw-two stack replay: bring a stacking seat's hand up as the active arc hand so its
+    //auto-played draw-two can fly to the discard, mirroring what the sender animated. opponentDiscardCard
+    //commits the card (and syncs allHands) once it lands.
+    func beginSeatPlayAnimation(forSeat seat: Int) {
+        guard phase == .animationPhase || isAnimatingOpponentTurn else { return }
+        animatingOpponentSeat = seat
+        opponentHand = allHands.indices.contains(seat) ? allHands[seat] : []
+    }
+
+    //Return the active arc slot to the acting player after a draw-two stack moved it onto a stacking seat.
+    //Needed only for the rare wrap-around, where the stack circles the whole table back to the acting
+    //player and their own follow-up draws/plays must animate from their seat again. Returns true when it
+    //actually switched, so the caller can wait for the arc to reposition.
+    @discardableResult
+    func restoreActingSeatIfNeeded(_ seat: Int) -> Bool {
+        guard phase == .animationPhase || isAnimatingOpponentTurn else { return false }
+        guard animatingOpponentSeat != seat else { return false }
+        if allHands.indices.contains(animatingOpponentSeat) { allHands[animatingOpponentSeat] = opponentHand }
+        animatingOpponentSeat = seat
+        opponentHand = allHands.indices.contains(seat) ? allHands[seat] : []
+        return true
+    }
+
+    //Commit a stacking seat's auto-play with no arc animation. Used when that seat is the local player's
+    //own (a spectator who was part of the stack): their seat isn't drawn in the opponent arc, so there's
+    //no hand to fly the card from — we just drop it onto the discard.
+    func commitSeatPlayWithoutAnimation(_ card: Card) {
+        guard phase == .animationPhase || isAnimatingOpponentTurn else { return }
         discardPile.append(card)
         SoundManager.instance.playCardSlap()
         HapticManager.instance.playCardSlap()
@@ -828,6 +1061,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         self.pendingPlayerPenaltyDraws = 0
         self.deckShouldShowPlayerBack = false
         self.skipNextSeat = false
+        self.overrideNextSeat = nil
         self.previousPlayerSeatIndex = 0
         self.isDirectionReversed = false
         self.hasPerformedInitialLoad = false
@@ -861,10 +1095,10 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     // For a V2 spectator watching a third seat get penalized, the forced cards are dropped from the
     // script and rendered statically via `allHands`.
     private func prepareAnimation(log: [Crazy8sTurnAction], opponentPostTurnHand: [Card], localIsPenaltyRecipient: Bool) -> Bool {
-        print("=== prepareAnimation: \(log.count) action(s) ===")
+        /*print("=== prepareAnimation: \(log.count) action(s) ===")
         for (i, action) in log.enumerated() {
             print("  [\(i)] \(action)")
-        }
+        }*/
 
         self.opponentHand = opponentPostTurnHand
         self.pendingPlayerPenaltyDraws = 0
@@ -880,7 +1114,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         // played/countered cards from the log. If a reshuffle displaced them, replay isn't safe.
         let playedOntoDiscard: [Card] = actions.compactMap { action in
             switch action {
-            case .play(let c, _), .counterPlay(let c, _): return c
+            case .play(let c, _), .counterPlay(let c, _), .seatPlay(let c, _, _): return c
             default: return nil
             }
         }
@@ -905,6 +1139,15 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             case .counterPlay(let card, let fromIndex):
                 discardPile.removeLast()
                 playerHand.insert(card, at: min(fromIndex, playerHand.count))
+            case .seatPlay(let card, let fromIndex, let seat):
+                //rewind a stacking seat's auto-play: peel it off the discard and return it to that seat's
+                //hand. For the local player's OWN past auto-play (spectator watching a stack they were part
+                //of), there's no arc slot to animate from, so we only rewind the discard and re-commit it
+                //statically during the forward replay.
+                discardPile.removeLast()
+                if seat != mySeatIndex, allHands.indices.contains(seat) {
+                    allHands[seat].insert(card, at: min(fromIndex, allHands[seat].count))
+                }
             case .chooseSuit:
                 break //no positional change; the suit reveals during forward replay
             }
@@ -1126,10 +1369,11 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             allHands[previousPlayerSeatIndex] = opponentHand
         }
 
-        //skipNextSeat advances by 2 instead of 1 when the user played a queen; direction follows the ace-toggled flag
+        //A draw-two stack jumps the turn straight to the seat that couldn't answer; otherwise skipNextSeat
+        //advances by 2 (queen skip) and direction follows the ace-toggled flag.
         let step = isDirectionReversed ? -1 : 1
         let advancement = (skipNextSeat ? 2 : 1) * step
-        let nextSeat = ((mySeatIndex + advancement) % seats.count + seats.count) % seats.count
+        let nextSeat = overrideNextSeat ?? ((mySeatIndex + advancement) % seats.count + seats.count) % seats.count
 
         var outgoingBacks = seatCardBacks
         if outgoingBacks.count < seats.count {
@@ -1169,6 +1413,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         self.seatCardBacks = outgoingBacks
         self.animatingOpponentSeat = mySeatIndex
         self.skipNextSeat = false
+        self.overrideNextSeat = nil
         //Defer the iMessage send to the next runloop so SwiftUI commits the discard state change first.
         Task { @MainActor [weak self] in
             self?.onTurnCompleted?(stateData, .crazy8s)

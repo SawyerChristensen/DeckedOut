@@ -172,9 +172,7 @@ struct GinGameView: View {
                 )
             
             if let topCard = game.discardPile.last { // we have cards in the discard pile; display the top one
-                CardView(frontImage: topCard.imageName)
-                    //.id(topCard.id) //for instant transitions
-                    //.transition(.identity) // /to get rid of fade
+                CrossfadingDiscardCard(frontImage: topCard.imageName, crossfadeFromBack: $game.discardCrossfadeFromBack)
                     .onTapGesture { handleDiscardTap() }
                     .shadow(color: game.phase == .discardPhase && isHoveringDiscard ? .white : .black.opacity(0.2),
                             radius: game.phase == .discardPhase && isHoveringDiscard ? 15 : 5)
@@ -229,7 +227,7 @@ struct GinGameView: View {
             }
         )
         .padding(.bottom, 40)
-        .shadow(color: game.playerHasWon ? Palette.winYellow : .black.opacity(0.25), radius: handShadowRadius, x: (handShadowRadius - 5) / 2) //when handShadowRadius is 15 or 5 it results in offsets of 5 and 0
+        .shadow(color: game.playerHasWon ? Color.winYellow : .black.opacity(0.25), radius: handShadowRadius, x: (handShadowRadius - 5) / 2) //when handShadowRadius is 15 or 5 it results in offsets of 5 and 0
         .onAppear {
             if game.playerHasWon {
                 withAnimation(.linear(duration: 1).speed(motionSpeed)) {

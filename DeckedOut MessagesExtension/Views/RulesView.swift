@@ -154,6 +154,8 @@ struct RulesView: View {
                 specialPage = (.system("j.circle.fill"), "Mau-Mau!", "Jacks are wild! Sevens make the next opponent draw two, Eights skip, Nines reverse the direction of play.")
             case .irishSwitch:
                 specialPage = (.system("a.circle.fill"), "Switch!", "Aces are wild! Twos make the next opponent draw two, and black Jacks make them draw five — unless a red Jack cancels it. Eights skip, Kings reverse the direction of play.")
+            case .pesten:
+                specialPage = (.system("j.circle.fill"), "Pesten!", "Jacks are wild! Twos make the next opponent draw two, Sevens let you play again, Eights skip, Aces reverse the direction of play.")
             }
             return [
                 (.custom("colored.square.stack.3d.up"), "The Deal", "Each player is dealt a hand of cards. The remaining cards form the draw pile, and the top card starts the discard pile."),

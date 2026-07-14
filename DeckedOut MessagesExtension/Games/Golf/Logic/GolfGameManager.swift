@@ -71,6 +71,11 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var opponentCardBack: String = "cardBackRed" //v1: the single opponent's equipped back
     @Published var seatCardBacks: [String] = [] //v2: parallel to `seats`; updated each turn
 
+    // Set the instant an opponent's card lands on the discard pile: holds that opponent's equipped
+    // card-back name. The discard pile reads it to cross-fade the just-landed card's front from the
+    // opponent's theme into the local player's equipped theme, then clears it. nil at every other time.
+    @Published var discardCrossfadeFromBack: String? = nil
+
     // Multiplayer (V2) properties
     var seats: [UUID] = []
     var mySeatIndex: Int = 0
@@ -255,6 +260,9 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         }
 
         discardPile.append(cardToDiscard)
+        // Record the discarding opponent's back so the discard pile can cross-fade this card's front
+        // from their theme into the local player's theme as their turn ends.
+        discardCrossfadeFromBack = cardBack(forSeat: animatingOpponentSeat) // 1v1 handled inside
         SoundManager.instance.playCardSlap()
         HapticManager.instance.playCardSlap()
 
@@ -558,6 +566,7 @@ class GolfManager: ObservableObject, GameEngine, GroupChatCapable {
         self.goingOutSeat = nil
         self.opponentCardBack = "cardBackRed"
         self.seatCardBacks = []
+        self.discardCrossfadeFromBack = nil
     }
 
     private func applyOpponentTurnVisuals(state: GolfGameState) -> Bool {

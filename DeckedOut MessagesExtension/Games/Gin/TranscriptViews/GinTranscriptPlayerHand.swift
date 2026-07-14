@@ -144,11 +144,11 @@ struct GinTranscriptPlayerHand: View {
     
     private var shadowColor: Color {
         if opponentWon {
-            return Palette.lossRed.opacity(0.8)
+            return Color.lossRed.opacity(0.8)
         } else if cardFlipTrigger {
             return .white.opacity(0.5)
         } else if playerWon {
-            return Palette.winYellow.opacity(0.8)
+            return Color.winYellow.opacity(0.8)
         } else {
             return .black.opacity(0.15)
         }

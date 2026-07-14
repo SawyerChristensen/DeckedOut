@@ -55,8 +55,9 @@ extension DeckTheme {
         DeckTheme(title: "Classic Red",
                   logoCard: "cardBackRed",
                   productID: nil, //included
-                  rulesColor: Palette.salmonRed),
+                  rulesColor: Color.salmonRed),
         
+        // MARK: Gradient Series
         DeckTheme(title: "Sunset",
                   logoCard: "cardBackSunset",
                   //productID: "Sawyer.DeckedOut.Theme.SunsetGradient",
@@ -69,6 +70,7 @@ extension DeckTheme {
                   requiredWins: 2,
                   rulesColor: Color(red: 35/255, green: 170/255, blue: 235/255)),
         
+        // MARK: Custom Series
         DeckTheme(title: "Koi", /// $1
                   logoCard: "cardBackKoi",
                   productID: "Sawyer.DeckedOut.Theme.Koi",
@@ -77,12 +79,14 @@ extension DeckTheme {
         
         DeckTheme(title: "Spider's Web", /// $1
                   logoCard: "cardBackWeb",
+                  fronts: "Web", // only the ace of spades is themed; every other front falls back to default
                   productID: "Sawyer.DeckedOut.Theme.Web",
                   rulesColor: Color(red: 0.10, green: 0.10, blue: 0.10)),
         
+        // MARK: Country Series
         DeckTheme(title: "American Flag", /// $1
                   logoCard: "cardBackAmerica",
-                  fronts: "America", // only the jokers are themed; every other front falls back to default
+                  fronts: "America", // only the jokers & ace of spades is themed; every other front falls back to default
                   productID: "Sawyer.DeckedOut.Theme.AmericanFlag",
                   regionCode: "US",
                   rulesColor: Color(red: 179/255, green: 25/255, blue: 66/255), //red
@@ -277,6 +281,7 @@ extension DeckTheme {
                   textColor: Color(red: 255/255, green: 255/255, blue: 0/255), //yellow
                   outlineColor: Color(red: 218/255, green: 37/255, blue: 29/255)), //red
 
+        // MARK: Full Deck Series
         DeckTheme(title: "Enchanted", /// $2
                   logoCard: "cardBackEnchanted",
                   fronts: "Enchanted",

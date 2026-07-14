@@ -72,7 +72,7 @@ struct GinOpponentHandView: View {
                     .opacity(cardWaitingToAnimate == card ? 0 : 1)
                     .rotationEffect(isAnimating ? animationRotationCorrection : restingRotation)
                     .offset(isAnimating ? animationOffset : .zero)
-                    .shadow(color: game.opponentHasWon ? Palette.lossRed : .black.opacity(0.25), radius: game.opponentHasWon ? winGlowRadius : (isAnimating ? animatingShadowRadius : 20))
+                    .shadow(color: game.opponentHasWon ? Color.lossRed : .black.opacity(0.25), radius: game.opponentHasWon ? winGlowRadius : (isAnimating ? animatingShadowRadius : 20))
                     .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(Double(index) * 0.1).speed(motionSpeed),
                         value: game.phase == .gameEndPhase // trigger the flip once the round resolves, after the turn animation
                     )
