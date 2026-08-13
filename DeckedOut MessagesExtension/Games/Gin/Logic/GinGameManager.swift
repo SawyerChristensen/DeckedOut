@@ -7,6 +7,14 @@
 
 import Foundation
 
+// A mid-turn hand snapshot tagged with the turn it belongs to, so a stash left behind by an
+// interrupted turn (e.g. the app got killed before the post-send completion handler could clear
+// it) can only be restored into that exact same turn, never a later one.
+private struct MidTurnStash: Codable {
+    let turnNumber: Int
+    let hand: [Card]
+}
+
 enum GinRoundWinType: String, Codable {
     case gin
     case knock
@@ -248,7 +256,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     }
     
     func discardCard(card: Card) { //possible room for refactoring/removing discardCard
-        guard phase == .discardPhase, let index = playerHand.firstIndex(of: card) else { return }
+        guard phase == .discardPhase, let index = playerHand.firstIndex(of: card) else {
+            return
+        }
         // Capture and clear the local knock intent at discard-time so one tap only applies to one discard.
         let shouldEvaluateKnock = shouldKnockOnDiscard
         shouldKnockOnDiscard = false
@@ -339,12 +349,13 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
     
     func saveMidTurnState(conversationID: String) {
         guard phase == .discardPhase, let sID = sessionID else { return } //only save if the user is currently in the middle of a turn
-        
-        if let encoded = try? JSONEncoder().encode(playerHand) {
+
+        let stash = MidTurnStash(turnNumber: turnNumber, hand: playerHand)
+        if let encoded = try? JSONEncoder().encode(stash) {
             UserDefaults.standard.set(encoded, forKey: "midTurn_\(sID.uuidString)")
         }
     }
-    
+
     func clearMidTurnState(conversationID: String) {
         guard let sID = sessionID else { return }
         UserDefaults.standard.removeObject(forKey: "midTurn_\(sID.uuidString)")
@@ -366,9 +377,9 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         let isInitialLoad = (self.sessionID == nil)
         let isSameSession = (self.sessionID == state.sessionID)
         let isNewTurn = state.turnNumber > self.turnNumber
-        
+
         guard isInitialLoad || (isSameSession && isNewTurn) || isExplicitChange else { return }
-        
+
         if isExplicitChange {
             resetToInit()
         }
@@ -388,19 +399,34 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
             self.opponentCardBack = sentBack
         }
 
-        if isPlayersTurn, //does not check if this is the same game session!! just the same conversation!!
-           let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
-           let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
-            self.playerHand = stashedHand
+        let midTurnKey = "midTurn_\(state.sessionID.uuidString)"
+        var matchingStash: MidTurnStash? = nil
+        if isPlayersTurn,
+           let data = UserDefaults.standard.data(forKey: midTurnKey),
+           let stash = try? JSONDecoder().decode(MidTurnStash.self, from: data) {
+            // The stash is only valid for the exact turn it was captured on. Same sessionID (so
+            // definitely this game) but a lower turnNumber means an earlier turn's stash was never
+            // cleared (e.g. the app was killed before the post-send completion handler ran) — it's
+            // an orphan left over from the bug this tagging is meant to prevent, so discard it and
+            // fall through to a normal fresh-turn load instead of restoring stale cards.
+            if stash.turnNumber == state.turnNumber {
+                matchingStash = stash
+            } else {
+                UserDefaults.standard.removeObject(forKey: midTurnKey)
+            }
+        }
+
+        if let stash = matchingStash { //the user is mid-turn, and the stash matches this exact turn...
+            self.playerHand = stash.hand
             self.opponentHand = state.senderHand
             if let topDeckCard = deck.last,
-               stashedHand.contains(where: { $0.id == topDeckCard.id }) { // the user previously drew from the deck
+               stash.hand.contains(where: { $0.id == topDeckCard.id }) { // the user previously drew from the deck
                 deck.removeLast()
             } else { //the user drew from the discard pile instead
                 discardPile.removeLast()
             }
             phase = .discardPhase
-            
+
         } else if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
             // Derive the local winner flags from the round result up front. If the opponent's
@@ -553,14 +579,27 @@ class GinRummyManager: ObservableObject, GameEngine, GroupChatCapable {
         let playerBeforeUser = (seatIndex - 1 + state.seats.count) % state.seats.count
         self.animatingOpponentSeat = playerBeforeUser
 
+        let midTurnKey = "midTurn_\(state.sessionID.uuidString)"
+        var matchingStash: MidTurnStash? = nil
         if isMyTurn,
-           let data = UserDefaults.standard.data(forKey: "midTurn_\(state.sessionID.uuidString)"),
-           let stashedHand = try? JSONDecoder().decode([Card].self, from: data) { //the user is mid-turn...
+           let data = UserDefaults.standard.data(forKey: midTurnKey),
+           let stash = try? JSONDecoder().decode(MidTurnStash.self, from: data) {
+            // Same sessionID, but a lower turnNumber means an earlier turn's stash never got
+            // cleared (e.g. the app was killed before the post-send completion handler ran).
+            // Discard the orphan instead of restoring cards from a turn that's already over.
+            if stash.turnNumber == state.turnNumber {
+                matchingStash = stash
+            } else {
+                UserDefaults.standard.removeObject(forKey: midTurnKey)
+            }
+        }
+
+        if let stash = matchingStash {
             self.isSpectating = false
             self.opponentHand = state.hands[playerBeforeUser]
-            self.playerHand = stashedHand
+            self.playerHand = stash.hand
             if let topDeckCard = deck.last,
-               stashedHand.contains(where: { $0.id == topDeckCard.id }) {
+               stash.hand.contains(where: { $0.id == topDeckCard.id }) {
                 deck.removeLast()
             } else {
                 discardPile.removeLast()
