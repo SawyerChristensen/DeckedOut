@@ -2,16 +2,6 @@
 ---
 
 ## 🚀 Active Release Milestones
-### Update 3.6.1
-- [x] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
-  - *Note: Removed in 3.6.1. "isSinglePlayer" was introduced 2026-05-10 (groupchat support), "is1v1" replaced it 2026-06-16. Accepted trade-off: any surviving group-chat message from that ~5-week window (isSinglePlayer=false, no is1v1 key) will now fail to load as a group game if ever reopened — judged acceptable given the age and narrowness of that window.*
-- [x] Deprecate the legacy Crazy 8s animation-reconstruction payload fields now that turns are conveyed via the `turnActions` action log.
-  - *Note: Removed in 3.6.1. The action-log refactor (`turnActions`) shipped in 3.6.0 on 2026-07-08 and had been live 4+ weeks with no reported issues, so the compat window was judged closed. Removed `cardsOpponentDrew`/`cardsDrawnByLastPlayer`, `penaltyCardsDealt`, and `switchCounters` (plus the now-dead `SwitchCounter` type and `switchCountersThisTurn` accumulator) — confirmed via grep that none of these were ever read on decode, only written for pre-refactor clients. Made `turnActions` non-optional (`[]` on the first turn) and dropped the `turnActions == nil` "snap, no animation" fallback in `loadLegacyState`/`loadV2State`/`prepareAnimation` accordingly. `didDiscard`/`lastPlayerDidDiscard` were kept — they still drive the carried-over-suit display. Accepted trade-off: any in-flight game with an opponent still on a pre-3.6.0 build will fail to decode the next message it receives.*
-- [ ] Review legacy load states functions (pre-3.0 groupchat update)
-  - *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
-  - Might be advisable to unify the loading architecture for both single and multiplayer to allow for easier building of Cribbage
-
-
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Implement Cribbage
   - [ ] Backend
@@ -40,6 +30,7 @@
   - [ ] Bundle ID swizzle was "working" but it does not appear to work in production, and also messages with the bundled asset lookups.
   - [ ] Get rid of jacks queens and kings explanation in golf master gc text (translate/upload with claude) (doesnt really matter now)
   - [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
+  - [ ] Update Game Center achievements titles/descriptions to reflect local variants
 - [ ] Monetization Strategy
   - [ ] Add more Card Back IAPs
   - [ ] Add IAP localizations in ASC (automate w/script?)

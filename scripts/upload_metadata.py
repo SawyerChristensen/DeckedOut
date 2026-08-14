@@ -66,6 +66,7 @@ def load_config() -> None:
 # Xcode locale → App Store Connect locale. Game Center uses the same codes.
 LOCALE_MAP: dict[str, str] = {
     "en": "en-US",
+    "en-GB": "en-GB",
     "da": "da",
     "de": "de-DE",
     "es": "es-ES",
@@ -86,6 +87,7 @@ LOCALE_MAP: dict[str, str] = {
 }
 
 LANGUAGE_NAMES: dict[str, str] = {
+    "en-GB": "English (UK)",
     "da": "Danish",
     "de": "German",
     "es": "Spanish (Spain)",
