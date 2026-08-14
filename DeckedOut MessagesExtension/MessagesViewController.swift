@@ -243,6 +243,7 @@ class MessagesViewController: MSMessagesAppViewController {
                 if legacyState.turnNumber == 0 { // Game invite view
                     Crazy8sTranscriptInvite(
                         inviterCardBackOverride: legacyState.senderCardBack,
+                        legacyVariant: legacyState.variant,
                         onHeightChange: { [weak self] height in
                             self?.transcriptHeight = height
                         }

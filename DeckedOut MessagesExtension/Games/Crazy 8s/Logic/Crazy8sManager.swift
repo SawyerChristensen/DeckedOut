@@ -142,17 +142,21 @@ enum Crazy8sVariant: String, Codable {
     /// `lang.hasPrefix(...)` branch for a language whose spelling splits into equal-length
     /// pages; anything ragged should fall through to the English default. The proper-name
     /// variants aren't localized (Mau-Mau/Switch are the same in every language).
+    ///
+    /// Pad shorter words with plain spaces (not `~` or other filler glyphs) — `LetterCardImage`
+    /// draws a space as a blank card face, so the padded slot reads as a face-down card that
+    /// later flips to reveal the real letter, instead of a stray decorative glyph.
     var titleWords: [String] {
         let lang = Locale.preferredLanguages.first ?? "en"
         switch self {
         case .mauMau:
-            if lang.hasPrefix("de") { return ["ZEIT", "FURS", "MAU~", "MAU!"] }  // 4, 4, 4, 4
-            if lang.hasPrefix("en") { return ["LETS", "PLAY", "MAU~", "MAU!"] }  // 4, 4, 4, 4
+            if lang.hasPrefix("de") { return ["ZEIT", "FURS", "MAU ", "MAU!"] }  // 4, 4, 4, 4
+            if lang.hasPrefix("en") { return ["LETS", "PLAY", "MAU ", "MAU!"] }  // 4, 4, 4, 4
             return ["MAU", "MAU"]                                                // 3, 3
         case .irishSwitch:
-            return ["~LETS~", "~PLAY~", "SWITCH"]                                // 6, 6, 6
+            return [" LETS ", " PLAY ", "SWITCH"]                               // 6, 6, 6
         case .pesten:
-            return ["~LETS~", "~PLAY~", "PESTEN"]                                // 6, 6, 6
+            return [" LETS ", " PLAY ", "PESTEN"]                               // 6, 6, 6
         case .crazy8s:
             if lang.hasPrefix("zh-Hant") { return ["讓我們", "一起玩", "瘋狂8"] }   // 3, 3, 3
             if lang.hasPrefix("zh-Hans") { return ["让我们", "一起玩", "疯狂8"] }   // 3, 3, 3

@@ -4,8 +4,7 @@
 ## 🚀 Active Release Milestones
 
 ### Update 3.6.1
-- [x] Convert the localized InfoPlists to a central file like localizable
-- [ ] If I send a Switch game to a user who plays Crazy 8s it displays Crazy 8s instead of Switch
+- [x] If I send a Switch game to a user who plays Crazy 8s it displays Crazy 8s instead of Switch
 - [ ] Finalize all localizations
 - [ ] See if there are opportunites to add regional dialects for better regional language support (only requires minor additions)
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"

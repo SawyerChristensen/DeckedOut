@@ -7,6 +7,34 @@
 
 import SwiftUI
 
+struct LetterCardView: View { //cards where both sides are letters
+    let frontChar: String
+    let backChar: String
+    let isFlipped: Bool
+    var cardBackName: String? = nil
+
+    var rotation: Double {
+        isFlipped ? 180 : 0
+    }
+
+    var body: some View {
+        ZStack {
+            // BACK (Visible when rotation is > 90)
+            LetterCardImage(character: backChar, overrideCardBackName: cardBackName)
+                .modifier(FlipOpacity(rotation: rotation + 180))
+                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+
+            // FRONT (Visible when rotation is < 90)
+            LetterCardImage(character: frontChar, overrideCardBackName: cardBackName)
+                .modifier(FlipOpacity(rotation: rotation))
+        }
+        .rotation3DEffect(
+            .degrees(isFlipped ? 180 : 0),
+            axis: (x: 0.0, y: 1.0, z: 0.0)
+        )
+    }
+}
+
 struct LetterCardImage: View {
     let character: String
     var overrideCardBackName: String? = nil //if set, overrides the user's selected card back (e.g. show inviter's theme in transcripts)
@@ -77,6 +105,7 @@ struct LetterCardImage: View {
     private var effectiveName: String { CurrentTheme.existingBackName(overrideCardBackName ?? cardBackSelection.selectedName) }
 
     private var effectiveBaseName: String {
+        if character == " " { return effectiveName }
         let candidate = effectiveName + "Base"
         return UIImage(named: candidate) != nil ? candidate : effectiveName
     }
@@ -144,34 +173,6 @@ struct LetterCardImage: View {
                             y: sin(angle) * style.strokeWidth + style.verticalOffset)
             }
         }
-    }
-}
-
-struct LetterCardView: View { //cards where both sides are letters
-    let frontChar: String
-    let backChar: String
-    let isFlipped: Bool
-    var cardBackName: String? = nil
-
-    var rotation: Double {
-        isFlipped ? 180 : 0
-    }
-
-    var body: some View {
-        ZStack {
-            // BACK (Visible when rotation is > 90)
-            LetterCardImage(character: backChar, overrideCardBackName: cardBackName)
-                .modifier(FlipOpacity(rotation: rotation + 180))
-                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-
-            // FRONT (Visible when rotation is < 90)
-            LetterCardImage(character: frontChar, overrideCardBackName: cardBackName)
-                .modifier(FlipOpacity(rotation: rotation))
-        }
-        .rotation3DEffect(
-            .degrees(isFlipped ? 180 : 0),
-            axis: (x: 0.0, y: 1.0, z: 0.0)
-        )
     }
 }
 

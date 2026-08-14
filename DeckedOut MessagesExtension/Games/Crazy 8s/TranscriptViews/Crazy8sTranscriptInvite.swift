@@ -10,6 +10,7 @@ import SwiftUI
 struct Crazy8sTranscriptInvite: View {
     var gameState: Crazy8sV2GameState? = nil
     var inviterCardBackOverride: String? = nil //used by the legacy 1v1 path where gameState isn't passed in
+    var legacyVariant: Crazy8sVariant? = nil //used by the legacy 1v1 path where gameState isn't passed in
     var onHeightChange: ((CGFloat) -> Void)? = nil
     
     private var joinedPlayerCount: Int { gameState?.seats.filter { $0 != Crazy8sManager.unclaimedSeat }.count ?? 0 }
@@ -24,8 +25,9 @@ struct Crazy8sTranscriptInvite: View {
         let idx = joinedPlayerCount - 1
         return backs.indices.contains(idx) ? backs[idx] : nil
     }
-    // Prefer the payload variant; the legacy 1v1 invite path carries no state, so fall back to region.
-    private var variant: Crazy8sVariant { gameState?.variant ?? Crazy8sVariant.forCurrentRegion() }
+    // Prefer the payload variant (V2), then the sender's variant carried separately (legacy 1v1).
+    // Region is only a last resort for pre-2.0 senders whose payload predates the variant field.
+    private var variant: Crazy8sVariant { gameState?.variant ?? legacyVariant ?? Crazy8sVariant.forCurrentRegion() }
     private var inviteCaption: String {
         String(localized: "Let's Play \(variant.displayName)!", comment: "Crazy 8s invite caption/summary, %@ is the game/variant name")
     }
