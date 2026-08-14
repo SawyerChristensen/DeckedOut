@@ -52,16 +52,18 @@ struct CardView: View { //where only one side is a (letter?)
                                    : cardBackSelection.themedFrontName(for: frontImage)
     }
 
+    /// The resolved back asset name, validated with fallback only when `validatesAssetNames`.
+    private var resolvedBackName: String {
+        let rawBack = backImageName ?? cardBackSelection.selectedName
+        return validatesAssetNames ? CurrentTheme.existingBackName(rawBack) : rawBack
+    }
+
     @ViewBuilder
     private var backImage: some View {
         if let letter = backLetter {
             LetterCardImage(character: letter, overrideCardBackName: backImageName)
         } else {
-            let rawBack = backImageName ?? cardBackSelection.selectedName
-            let backName = validatesAssetNames ? CurrentTheme.existingBackName(rawBack) : rawBack
-            Image(backName)
-                .resizable()
-                .aspectRatio(0.7, contentMode: .fit)
+            CrossfadingBackImage(name: resolvedBackName)
         }
     }
 
@@ -94,6 +96,52 @@ struct CardView: View { //where only one side is a (letter?)
             .degrees(rotation),
             axis: (x: 0.0, y: 1.0, z: 0.0) // Rotate around Y-axis
         )
+    }
+}
+
+/// A card-back image that cross-fades when `name` changes, instead of popping instantly. Used
+/// anywhere a card back is shown standalone — a hand's `CardView`s, and the deck stack (which
+/// isn't a `CardView` at all, just stacked back images) — so a theme change (e.g. an opponent's
+/// default red back updating to their equipped theme once their invite response arrives) always
+/// dissolves rather than snapping.
+struct CrossfadingBackImage: View {
+    var name: String
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private var motionSpeed: Double { reduceMotion ? 0.66 : 1.0 }
+
+    /// The previously-shown name, laid on top and faded out. `token` guards the deferred cleanup
+    /// so a rapid second change doesn't clear a fresh fade.
+    @State private var fadingName: String? = nil
+    @State private var fadeOpacity: Double = 0
+    @State private var token: Int = 0
+
+    var body: some View {
+        ZStack {
+            Image(name)
+                .resizable()
+                .aspectRatio(0.7, contentMode: .fit)
+
+            if let fadingName {
+                Image(fadingName)
+                    .resizable()
+                    .aspectRatio(0.7, contentMode: .fit)
+                    .opacity(fadeOpacity)
+            }
+        }
+        .onChange(of: name) { oldValue, newValue in
+            guard oldValue != newValue else { return }
+            token += 1
+            let current = token
+            fadingName = oldValue
+            fadeOpacity = 1
+            withAnimation(.easeInOut(duration: 0.4).speed(motionSpeed)) {
+                fadeOpacity = 0
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 / motionSpeed) {
+                if token == current { fadingName = nil }
+            }
+        }
     }
 }
 

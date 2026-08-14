@@ -451,9 +451,6 @@ class MessagesViewController: MSMessagesAppViewController {
         let jsonString = stateData.base64EncodedString()
         var components = URLComponents()
         components.queryItems = [
-            // Send both keys during the transition. "isSinglePlayer" is deprecated in
-            // favor of "is1v1"; keep sending it so clients that predate "is1v1" keep working.
-            URLQueryItem(name: "isSinglePlayer", value: String(activeGameEngine?.is1v1 ?? true)),
             URLQueryItem(name: "is1v1", value: String(activeGameEngine?.is1v1 ?? true)),
             URLQueryItem(name: "gameType", value: gameType.rawValue),
             URLQueryItem(name: "gameState", value: jsonString)]
@@ -479,9 +476,6 @@ class MessagesViewController: MSMessagesAppViewController {
         let stateDataJSONString = stateData.base64EncodedString()
         var components = URLComponents()
         components.queryItems = [
-            // Send both keys during the transition. "isSinglePlayer" is deprecated in
-            // favor of "is1v1"; keep sending it so clients that predate "is1v1" keep working.
-            URLQueryItem(name: "isSinglePlayer", value: String(activeGameEngine?.is1v1 ?? true)),
             URLQueryItem(name: "is1v1", value: String(activeGameEngine?.is1v1 ?? true)),
             URLQueryItem(name: "gameType", value: gameType.rawValue),
             URLQueryItem(name: "gameState", value: stateDataJSONString)]
@@ -585,9 +579,6 @@ class MessagesViewController: MSMessagesAppViewController {
     private func sendJoinMessage(session: MSSession, conversation: MSConversation, gameType: GameType, is1v1: Bool, stateData: Data) {
         var components = URLComponents()
         components.queryItems = [
-            // Send both keys during the transition. "isSinglePlayer" is deprecated in
-            // favor of "is1v1"; keep sending it so clients that predate "is1v1" keep working.
-            URLQueryItem(name: "isSinglePlayer", value: String(is1v1)),
             URLQueryItem(name: "is1v1", value: String(is1v1)),
             URLQueryItem(name: "gameType", value: gameType.rawValue),
             URLQueryItem(name: "gameState", value: stateData.base64EncodedString())]
@@ -670,11 +661,10 @@ class MessagesViewController: MSMessagesAppViewController {
             gameType = .ginRummy
         }
 
-        // 1v1 flag: prefer the new "is1v1" key, falling back to the deprecated
-        // "isSinglePlayer" key for messages sent by clients that predate the rename.
-        // Absent on both = legacy 1.x message, which defaults to 1v1 (true).
+        // "isSinglePlayer" fallback removed (accepted trade-off: any surviving group-chat
+        // message from the pre-"is1v1" window, 2026-05-10 to 2026-06-16, will now fail to
+        // load as a group game). Absent = legacy 1.x message or that stale window, defaults to 1v1 (true).
         let is1v1String = components.queryItems?.first(where: { $0.name == "is1v1" })?.value
-            ?? components.queryItems?.first(where: { $0.name == "isSinglePlayer" })?.value
         let is1v1 = Bool(is1v1String ?? "true") ?? true
 
         return (type: gameType, data: stateData, is1v1: is1v1)

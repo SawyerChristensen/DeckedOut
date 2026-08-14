@@ -166,15 +166,6 @@ enum Crazy8sVariant: String, Codable {
     }
 }
 
-// A Switch counter that resolved during the sender's turn: they played `switchJack`
-// (J♠/J♣) and the receiver's `redJack` (J♥/J♦) cancelled the pick-up-5. Recorded so the receiver
-// can replay the exchange. Metadata (not discard order) drives the replay, since a red jack is also
-// a legal normal play on a switch jack and a reshuffle can reorder the pile.
-struct SwitchCounter: Codable {
-    let switchJack: Card // the card the sender played
-    let redJack: Card   // the card the receiver auto-played to cancel it
-}
-
 // One atomic, animatable event within a single player's turn, recorded in chronological order by
 // the acting player and replayed verbatim by the next player. This is the animation "script": it
 // replaces reverse-engineering the turn from the final snapshot (drawn-card counts, stacked-queen
@@ -197,15 +188,12 @@ struct Crazy8sLegacyGameState: Codable, BasicGameState {
     let discardPile: [Card]
     let senderHand: [Card]
     let receiverHand: [Card]
-    let cardsOpponentDrew: Int
     let didDiscard: Bool
     let activeSuitOverride: Suit?
     let turnNumber: Int
     let senderCardBack: String? //the card-back the sender has equipped; optional for backward compat
-    let penaltyCardsDealt: Int? //cards forced on receiver due to a wild card (e.g. a 2); optional for backward compat
     let variant: Crazy8sVariant? //regional rule variant; optional for backward compat (absent = .crazy8s)
-    let switchCounters: [SwitchCounter]? //Switch: switch-jack/red-jack cancels this turn, chronological; optional for backward compat
-    let turnActions: [Crazy8sTurnAction]? //chronological animation script for this turn; optional for backward compat (absent = snap, no animation)
+    let turnActions: [Crazy8sTurnAction] //chronological animation script for this turn; empty on the first turn (nothing to replay)
 }
 
 // V2: Seat-based groupchat multiplayer game snapshot
@@ -217,15 +205,13 @@ struct Crazy8sV2GameState: Codable, V2GameState {
     let hands: [[Card]]
     let currentSeatIndex: Int
     let turnNumber: Int
-    let cardsDrawnByLastPlayer: Int
     let lastPlayerDidDiscard: Bool
     let activeSuitOverride: Suit?
     let seatCardBacks: [String]? //parallel to seats; optional for backward compat
-    let penaltyCardsDealt: Int? //cards forced on next player due to a wild card (e.g. a 2); optional for backward compat
     let lastPlayerSeatIndex: Int? //who actually played last turn; differs from (currentSeatIndex - 1) when a queen skipped a seat. Optional for backward compat
     let directionIsReversed: Bool? //flipped each time an ace is played; controls whether seat advancement is +1 or -1. Optional for backward compat
     let variant: Crazy8sVariant? //regional rule variant; optional for backward compat (absent = .crazy8s)
-    let turnActions: [Crazy8sTurnAction]? //chronological animation script for this turn; optional for backward compat (absent = snap, no animation)
+    let turnActions: [Crazy8sTurnAction] //chronological animation script for this turn; empty on the first turn (nothing to replay)
 }
 
 // MARK: The Game Engine
@@ -242,7 +228,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     // Snapshot of playerHand taken on the first sort of a cycle, restored when the user returns to the unsorted state.
     private var originalPlayerHandOrder: [Card]? = nil
     @Published var opponentHand: [Card] = []
-    @Published var cardsDrawnThisTurn: Int = 0 //cards the local player has drawn this turn; sent as cardsOpponentDrew for legacy-client compat
+    @Published var cardsDrawnThisTurn: Int = 0 //cards the local player has drawn this turn
     @Published var userDidDiscard: Bool = false
     @Published var opponentDidDiscard: Bool = false
     @Published var activeSuitOverride: Suit?
@@ -267,7 +253,6 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     @Published var actionsToAnimate: [Crazy8sTurnAction] = []
     // Actions accumulated during the local player's turn (across bonus plays), sent in the payload.
     private var turnActions: [Crazy8sTurnAction] = []
-    private var switchCountersThisTurn: [SwitchCounter] = []   // Switch: counters accumulated during the local player's turn; sent in the payload (legacy compat)
     @Published var penaltyCardsForcedOnOpponent: Int = 0 // count of cards we forced on the opponent this turn (e.g. via a 2)
     @Published var pendingPlayerPenaltyDraws: Int = 0 // count of cards the local player needs to receive as a penalty animation
     @Published var deckShouldShowPlayerBack: Bool = false // flip the deck to the user's card back ahead of penalty draws so the animated card and the deck share a back
@@ -457,7 +442,6 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 //to the local player for their bonus turn.
                 phase = .animationPhase
                 turnActions.append(.counterPlay(redJack, fromIndex: redJackIndex)) //the next player auto-plays their red jack; replayed from their hand slot
-                switchCountersThisTurn.append(SwitchCounter(switchJack: card, redJack: redJack)) //legacy compat: lets pre-refactor clients replay the exchange
                 _ = recordLocalTurn()
                 cardsDrawnThisTurn = 0
                 Task { @MainActor in
@@ -884,10 +868,10 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
 
         if isPlayersTurn { //the user is beginning their turn...
             self.playerHand = state.receiverHand
-            let hasVisualsToAnimate = prepareAnimation(log: state.turnActions ?? [], opponentPostTurnHand: state.senderHand, localIsPenaltyRecipient: true)
+            let hasVisualsToAnimate = prepareAnimation(log: state.turnActions, opponentPostTurnHand: state.senderHand, localIsPenaltyRecipient: true)
             if hasVisualsToAnimate {
                 phase = .animationPhase
-            } else { //first turn, or a pre-refactor sender (snap to the final state)
+            } else { //first turn (snap to the final state)
                 self.activeSuitOverride = state.activeSuitOverride
                 phase = .mainPhase
                 checkHandPlayability()
@@ -1009,10 +993,10 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             self.isSpectating = false
             self.isAnimatingOpponentTurn = false
             self.animatingOpponentSeat = actualPreviousPlayer
-            let hasVisualsToAnimate = prepareAnimation(log: state.turnActions ?? [], opponentPostTurnHand: state.hands[actualPreviousPlayer], localIsPenaltyRecipient: true)
+            let hasVisualsToAnimate = prepareAnimation(log: state.turnActions, opponentPostTurnHand: state.hands[actualPreviousPlayer], localIsPenaltyRecipient: true)
             if hasVisualsToAnimate {
                 phase = .animationPhase
-            } else { //first turn, or a pre-refactor sender (snap to the final state)
+            } else { //first turn (snap to the final state)
                 self.activeSuitOverride = state.activeSuitOverride
                 phase = .mainPhase
                 checkHandPlayability()
@@ -1027,7 +1011,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             } else {
                 self.animatingOpponentSeat = actualPreviousPlayer
                 //spectator: penalty cards go to a third seat, so they aren't a local-hand animation
-                let hasVisualsToAnimate = prepareAnimation(log: state.turnActions ?? [], opponentPostTurnHand: state.hands[actualPreviousPlayer], localIsPenaltyRecipient: false)
+                let hasVisualsToAnimate = prepareAnimation(log: state.turnActions, opponentPostTurnHand: state.hands[actualPreviousPlayer], localIsPenaltyRecipient: false)
                 if !hasVisualsToAnimate { self.activeSuitOverride = state.activeSuitOverride }
                 phase = .idlePhase
                 isAnimatingOpponentTurn = hasVisualsToAnimate
@@ -1057,7 +1041,6 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
         self.actionsToAnimate = []
         self.turnActions = []
         self.playerCardAnimatingToDiscard = nil
-        self.switchCountersThisTurn = []
         self.opponentCardAnimatingToDiscard = nil
         self.opponentCardAnimatingFromDeck = nil
         self.discardCrossfadeFromBack = nil
@@ -1092,7 +1075,7 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
     //
     // On entry, playerHand/deck/discardPile must hold the authoritative post-turn board, and
     // `opponentPostTurnHand` is the previous player's authoritative hand. Returns false (→ snap, no
-    // animation) when there's no log (a pre-refactor sender) or the discard pile no longer matches the
+    // animation) when there's no log (first turn) or the discard pile no longer matches the
     // log (a mid-turn reshuffle displaced the played cards — resolve statically).
     //
     // `localIsPenaltyRecipient` is true when forced (penalty) cards land in the local player's hand.
@@ -1207,15 +1190,12 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 discardPile: newDiscardPile,
                 senderHand: newHands[0],
                 receiverHand: newHands[1],
-                cardsOpponentDrew: 0,
                 didDiscard: false,
                 activeSuitOverride: nil,
                 turnNumber: 0,
                 senderCardBack: myCardBack,
-                penaltyCardsDealt: nil,
                 variant: variant,
-                switchCounters: nil,
-                turnActions: nil
+                turnActions: []
             )
             self.is1v1 = true
             return try? JSONEncoder().encode(legacyState)
@@ -1231,15 +1211,13 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
                 hands: newHands,
                 currentSeatIndex: 1 % playerCount,
                 turnNumber: 0,
-                cardsDrawnByLastPlayer: 0,
                 lastPlayerDidDiscard: false,
                 activeSuitOverride: nil,
                 seatCardBacks: initialBacks,
-                penaltyCardsDealt: nil,
                 lastPlayerSeatIndex: nil,
                 directionIsReversed: nil,
                 variant: variant,
-                turnActions: nil
+                turnActions: []
             )
             self.is1v1 = false
             return try? JSONEncoder().encode(initialState)
@@ -1292,15 +1270,13 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             hands: state.hands,
             currentSeatIndex: nextSeatIndex,
             turnNumber: state.turnNumber + 1,
-            cardsDrawnByLastPlayer: 0,
             lastPlayerDidDiscard: false,
             activeSuitOverride: state.activeSuitOverride,
             seatCardBacks: updatedBacks,
-            penaltyCardsDealt: nil,
             lastPlayerSeatIndex: nil,
             directionIsReversed: state.directionIsReversed,
             variant: state.variant,
-            turnActions: nil)
+            turnActions: [])
 
         return try? JSONEncoder().encode(updatedState)
     }
@@ -1340,15 +1316,12 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             discardPile: self.discardPile,
             senderHand: self.playerHand,
             receiverHand: self.opponentHand,
-            cardsOpponentDrew: self.cardsDrawnThisTurn,
             didDiscard: self.userDidDiscard,
             activeSuitOverride: activeSuitOverride,
             turnNumber: self.turnNumber + 1,
             senderCardBack: CurrentTheme.shared.selectedName,
-            penaltyCardsDealt: penaltyCardsForcedOnOpponent > 0 ? penaltyCardsForcedOnOpponent : nil,
             variant: variant,
-            switchCounters: switchCountersThisTurn.isEmpty ? nil : switchCountersThisTurn,
-            turnActions: turnActions.isEmpty ? nil : turnActions
+            turnActions: turnActions
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {
@@ -1356,7 +1329,6 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             return
         }
 
-        self.switchCountersThisTurn = [] //consumed for this outgoing turn
         self.turnActions = []            //consumed for this outgoing turn
         self.turnNumber += 1
         //Defer the iMessage send to the next runloop so SwiftUI commits the discard state change
@@ -1395,15 +1367,13 @@ class Crazy8sManager: ObservableObject, GameEngine, GroupChatCapable {
             hands: self.allHands,
             currentSeatIndex: nextSeat,
             turnNumber: self.turnNumber + 1,
-            cardsDrawnByLastPlayer: self.cardsDrawnThisTurn,
             lastPlayerDidDiscard: self.userDidDiscard,
             activeSuitOverride: self.activeSuitOverride,
             seatCardBacks: outgoingBacks,
-            penaltyCardsDealt: penaltyCardsForcedOnOpponent > 0 ? penaltyCardsForcedOnOpponent : nil,
             lastPlayerSeatIndex: mySeatIndex,
             directionIsReversed: isDirectionReversed,
             variant: variant,
-            turnActions: turnActions.isEmpty ? nil : turnActions
+            turnActions: turnActions
         )
 
         guard let stateData = try? JSONEncoder().encode(currentGameState) else {

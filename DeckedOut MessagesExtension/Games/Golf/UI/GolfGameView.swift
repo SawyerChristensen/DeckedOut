@@ -92,7 +92,8 @@ struct GolfGameView: View {
             if game.phase == .idlePhase {
                 WaitingOverlayView(
                     joinedCount: game.isJoiningPhase ? game.seats.filter { $0 != GolfManager.unclaimedSeat }.count : nil,
-                    totalCount: game.isJoiningPhase ? game.seats.count : nil
+                    totalCount: game.isJoiningPhase ? game.seats.count : nil,
+                    is1v1: game.is1v1
                 )
                     .transition(.opacity.animation(.easeInOut(duration: 0.5).speed(motionSpeed)))
             }
@@ -157,13 +158,9 @@ struct GolfGameView: View {
         ZStack {
             ForEach(0..<5) { i in
                 ZStack {
-                    Image(cardBackSelection.selectedName)
-                        .resizable()
-                        .aspectRatio(0.7, contentMode: .fit)
+                    CrossfadingBackImage(name: cardBackSelection.selectedName)
                         .opacity(isMyTurn ? 1 : 0)
-                    Image(game.opponentDeckCardBack)
-                        .resizable()
-                        .aspectRatio(0.7, contentMode: .fit)
+                    CrossfadingBackImage(name: game.opponentDeckCardBack)
                         .opacity(isMyTurn ? 0 : 1)
                 }
                 .frame(height: 130)

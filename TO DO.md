@@ -2,16 +2,11 @@
 ---
 
 ## 🚀 Active Release Milestones
-
 ### Update 3.6.1
-- [x] If I send a Switch game to a user who plays Crazy 8s it displays Crazy 8s instead of Switch
-- [x] Finalize all localizations
-- [x] See if there are opportunites to add regional dialects for better regional language support (only requires minor additions)
-- [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
-  - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
-- [ ] Deprecate the legacy Crazy 8s animation-reconstruction payload fields now that turns are conveyed via the `turnActions` action log.
-  - *Note: As of the action-log refactor, `Crazy8sManager` records an ordered `turnActions` log per turn and the receiver replays it directly (see `prepareAnimation` + `animateOpponentsTurn`). The old snapshot-reconstruction fields are still SENT purely so not-yet-updated clients can decode our messages: `cardsOpponentDrew`/`cardsDrawnByLastPlayer`, `penaltyCardsDealt`, and `switchCounters`. After 1-2 update generations, stop populating them and make them optional (or remove them). `didDiscard`/`lastPlayerDidDiscard` stay — they still drive the carried-over-suit display.*
-  - *Also remove the "snap, no animation" fallback in `loadLegacyState`/`loadV2State` (the `turnActions == nil` branch) once no in-flight games predate the action log.*
+- [x] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
+  - *Note: Removed in 3.6.1. "isSinglePlayer" was introduced 2026-05-10 (groupchat support), "is1v1" replaced it 2026-06-16. Accepted trade-off: any surviving group-chat message from that ~5-week window (isSinglePlayer=false, no is1v1 key) will now fail to load as a group game if ever reopened — judged acceptable given the age and narrowness of that window.*
+- [x] Deprecate the legacy Crazy 8s animation-reconstruction payload fields now that turns are conveyed via the `turnActions` action log.
+  - *Note: Removed in 3.6.1. The action-log refactor (`turnActions`) shipped in 3.6.0 on 2026-07-08 and had been live 4+ weeks with no reported issues, so the compat window was judged closed. Removed `cardsOpponentDrew`/`cardsDrawnByLastPlayer`, `penaltyCardsDealt`, and `switchCounters` (plus the now-dead `SwitchCounter` type and `switchCountersThisTurn` accumulator) — confirmed via grep that none of these were ever read on decode, only written for pre-refactor clients. Made `turnActions` non-optional (`[]` on the first turn) and dropped the `turnActions == nil` "snap, no animation" fallback in `loadLegacyState`/`loadV2State`/`prepareAnimation` accordingly. `didDiscard`/`lastPlayerDidDiscard` were kept — they still drive the carried-over-suit display. Accepted trade-off: any in-flight game with an opponent still on a pre-3.6.0 build will fail to decode the next message it receives.*
 - [ ] Review legacy load states functions (pre-3.0 groupchat update)
   - *Note: Evaluate if keeping them is advisable to prevent crashes for stragglers, or if safe to deprecate.*
   - Might be advisable to unify the loading architecture for both single and multiplayer to allow for easier building of Cribbage

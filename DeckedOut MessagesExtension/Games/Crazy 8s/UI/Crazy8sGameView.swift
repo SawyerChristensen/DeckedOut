@@ -46,7 +46,8 @@ struct Crazy8sGameView: View {
             if game.phase == .idlePhase {
                 WaitingOverlayView(
                     joinedCount: game.isJoiningPhase ? game.seats.filter { $0 != Crazy8sManager.unclaimedSeat }.count : nil,
-                    totalCount: game.isJoiningPhase ? game.seats.count : nil
+                    totalCount: game.isJoiningPhase ? game.seats.count : nil,
+                    is1v1: game.is1v1
                 )
                     .transition(.opacity.animation(.easeInOut(duration: 0.5).speed(motionSpeed)))
             }
@@ -118,13 +119,9 @@ struct Crazy8sGameView: View {
         ZStack {
             ForEach(0..<5) { i in
                 ZStack {
-                    Image(cardBackSelection.selectedName)
-                        .resizable()
-                        .aspectRatio(0.7, contentMode: .fit)
+                    CrossfadingBackImage(name: cardBackSelection.selectedName)
                         .opacity(showsPlayerDeckBack ? 1 : 0)
-                    Image(game.opponentDeckCardBack)
-                        .resizable()
-                        .aspectRatio(0.7, contentMode: .fit)
+                    CrossfadingBackImage(name: game.opponentDeckCardBack)
                         .opacity(showsPlayerDeckBack ? 0 : 1)
                 }
                 .frame(height: 145)

@@ -11,7 +11,7 @@ import Combine
 struct WaitingOverlayView: View {
     var joinedCount: Int? = nil
     var totalCount: Int? = nil
-    var isSinglePlayer: Bool = true
+    var is1v1: Bool = true
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private var motionSpeed: Double { reduceMotion ? 0.66 : 1.0 } //animations should run at 2/3 speed when "Reduce Motion" is enabled
@@ -20,7 +20,7 @@ struct WaitingOverlayView: View {
 
     let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
-    private var waitingLabel: String { isSinglePlayer ? String(localized: "Waiting for opponent") : String(localized: "Waiting for opponents") }
+    private var waitingLabel: String { is1v1 ? String(localized: "Waiting for opponent") : String(localized: "Waiting for opponents") }
 
     var body: some View {
         ZStack {
