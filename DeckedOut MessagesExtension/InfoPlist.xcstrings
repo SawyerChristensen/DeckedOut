@@ -129,6 +129,18 @@
             "state" : "translated",
             "value" : "紙牌遊戲"
           }
+        },
+        "de-CH" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenspiele"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogos de cartas"
+          }
         }
       }
     },

@@ -5,8 +5,8 @@
 
 ### Update 3.6.1
 - [x] If I send a Switch game to a user who plays Crazy 8s it displays Crazy 8s instead of Switch
-- [ ] Finalize all localizations
-- [ ] See if there are opportunites to add regional dialects for better regional language support (only requires minor additions)
+- [x] Finalize all localizations
+- [x] See if there are opportunites to add regional dialects for better regional language support (only requires minor additions)
 - [ ] Fully Deprecate references to "isSinglePlayer" referencing 1v1 play and replace with "is1v1"
   - *Note: This needs to be done slowly. Right now messages we carry a "isSinglePlayer" payload telling the game engine this is 1v1 play. For 1-2 update generations, there needs to be both "isSinglePlayer" and "is1v1" in the payload so the transition works smoothly***** with app versions who haven't updated yet. Detect both and remove isSinglePlayer in a future update.
 - [ ] Deprecate the legacy Crazy 8s animation-reconstruction payload fields now that turns are conveyed via the `turnActions` action log.
