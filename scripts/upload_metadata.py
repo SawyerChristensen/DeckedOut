@@ -5,12 +5,18 @@ Reads scripts/metadata.json and pushes every filled locale to App Store Connect.
 Locales set to null are skipped — fill them in first (ask Claude Code, or pass
 --translate to call the Anthropic API directly).
 
+Pushes, per locale:
+    - App name + subtitle      -> appInfoLocalizations   (from metadata["app_info"])
+    - What's New / description  -> appStoreVersionLocalizations
+    - Achievement text + images -> gameCenterAchievementLocalizations
+
 Usage:
     python upload_metadata.py                   # upload what's in metadata.json
     python upload_metadata.py --dry-run         # show what would be uploaded
     python upload_metadata.py --version 1.2.0   # target a specific App Store version
     python upload_metadata.py --translate       # auto-fill missing locales via Claude API first
     python upload_metadata.py --translate-only  # fill JSON via Claude API, don't upload
+    python upload_metadata.py --skip-app-info   # leave app name/subtitle untouched
 
 Requires env vars (load from ~/.appstoreconnect/config.env or your shell):
     ASC_KEY_ID         App Store Connect API key ID (10-char string)
@@ -70,6 +76,7 @@ LOCALE_MAP: dict[str, str] = {
     "da": "da",
     "de": "de-DE",
     "es": "es-ES",
+    "fi": "fi",
     "fr": "fr-FR",
     "hi": "hi",
     "it": "it",
@@ -77,7 +84,9 @@ LOCALE_MAP: dict[str, str] = {
     "ko": "ko",
     "nb": "no",
     "nl": "nl-NL",
+    "pl": "pl",
     "pt-BR": "pt-BR",
+    "pt-PT": "pt-PT",
     "ru": "ru",
     "sv": "sv",
     "tr": "tr",
@@ -91,6 +100,7 @@ LANGUAGE_NAMES: dict[str, str] = {
     "da": "Danish",
     "de": "German",
     "es": "Spanish (Spain)",
+    "fi": "Finnish",
     "fr": "French (France)",
     "hi": "Hindi",
     "it": "Italian",
@@ -98,7 +108,9 @@ LANGUAGE_NAMES: dict[str, str] = {
     "ko": "Korean",
     "nb": "Norwegian Bokmål",
     "nl": "Dutch",
+    "pl": "Polish",
     "pt-BR": "Brazilian Portuguese",
+    "pt-PT": "Portuguese (Portugal)",
     "ru": "Russian",
     "sv": "Swedish",
     "tr": "Turkish",
@@ -118,6 +130,18 @@ ACHIEVEMENT_ATTR_MAP = {
     "title": "name",  # NOTE: gameCenterAchievementLocalizations uses "name"
     "before_earned_description": "beforeEarnedDescription",
     "after_earned_description": "afterEarnedDescription",
+}
+APP_INFO_ATTR_MAP = {
+    "name": "name",
+    "subtitle": "subtitle",
+}
+
+# States in which App Store version metadata / the appInfo (name, subtitle) can
+# still be edited via the API.
+EDITABLE_STATES = {
+    "PREPARE_FOR_SUBMISSION", "WAITING_FOR_REVIEW", "METADATA_REJECTED",
+    "REJECTED", "DEVELOPER_REJECTED", "INVALID_BINARY",
+    "DEVELOPER_REMOVED_FROM_SALE", "REPLACED_WITH_NEW_VERSION",
 }
 
 
@@ -143,6 +167,8 @@ def collect_missing(metadata: dict) -> list[tuple[list[str], str, str, int, str]
                 continue
             walk(val, path + [key])
 
+    if "app_info" in metadata:
+        walk(metadata["app_info"], ["app_info"])
     walk(metadata["version_localizations"], ["version_localizations"])
     walk(metadata["achievements"], ["achievements"])
     return out
@@ -335,21 +361,80 @@ def find_app_id(client: ASCClient, bundle_id: str) -> str:
 def find_editable_version(client: ASCClient, app_id: str,
                           version_string: str | None) -> str:
     """Find a version that's still editable (whatsNew etc. can be changed)."""
-    editable_states = {
-        "PREPARE_FOR_SUBMISSION", "WAITING_FOR_REVIEW", "METADATA_REJECTED",
-        "REJECTED", "DEVELOPER_REJECTED", "INVALID_BINARY",
-        "DEVELOPER_REMOVED_FROM_SALE", "REPLACED_WITH_NEW_VERSION",
-    }
     data = client.get(f"apps/{app_id}/appStoreVersions",
                       params={"limit": 20})["data"]
     for v in data:
         attrs = v["attributes"]
         if version_string and attrs["versionString"] != version_string:
             continue
-        if attrs["appStoreState"] in editable_states:
+        if attrs["appStoreState"] in EDITABLE_STATES:
             print(f"  Using version {attrs['versionString']} (state: {attrs['appStoreState']})")
             return v["id"]
     sys.exit("No editable App Store version found. Create one in App Store Connect first.")
+
+
+def find_editable_app_info(client: ASCClient, app_id: str) -> str:
+    """Return the id of the appInfo whose name/subtitle are currently editable."""
+    data = client.get(f"apps/{app_id}/appInfos", params={"limit": 10})["data"]
+    for info in data:
+        if info["attributes"].get("appStoreState") in EDITABLE_STATES:
+            return info["id"]
+    sys.exit("No editable appInfo found — app name/subtitle can't be changed right now.")
+
+
+def upload_app_info_localizations(client: ASCClient, app_id: str,
+                                  metadata: dict) -> None:
+    """PATCH/POST app name + subtitle on the editable appInfo, per locale.
+
+    Only locales with a non-null value in metadata['app_info'] are touched;
+    values already identical to what's live are skipped.
+    """
+    app_info = metadata.get("app_info")
+    if not app_info:
+        print("  No 'app_info' section in metadata.json — skipping.")
+        return
+
+    info_id = find_editable_app_info(client, app_id)
+    existing = client.get(f"appInfos/{info_id}/appInfoLocalizations",
+                          params={"limit": 60})["data"]
+    by_locale = {loc["attributes"]["locale"]: loc["id"] for loc in existing}
+    current_attrs = {loc["attributes"]["locale"]: loc["attributes"] for loc in existing}
+
+    for xcode_loc in metadata["_meta"]["locales"]:
+        asc_loc = LOCALE_MAP[xcode_loc]
+        attributes = {}
+        for json_key, asc_attr in APP_INFO_ATTR_MAP.items():
+            val = app_info.get(json_key, {}).get(xcode_loc)
+            if not val:
+                continue
+            if current_attrs.get(asc_loc, {}).get(asc_attr) == val:
+                continue
+            attributes[asc_attr] = val
+        if not attributes:
+            continue
+
+        if asc_loc in by_locale:
+            loc_id = by_locale[asc_loc]
+            print(f"  [{asc_loc}] updating: {', '.join(attributes)}")
+            client.patch(f"appInfoLocalizations/{loc_id}", {
+                "data": {
+                    "type": "appInfoLocalizations",
+                    "id": loc_id,
+                    "attributes": attributes,
+                }
+            })
+        else:
+            print(f"  [{asc_loc}] creating: {', '.join(attributes)}")
+            attributes["locale"] = asc_loc
+            client.post("appInfoLocalizations", {
+                "data": {
+                    "type": "appInfoLocalizations",
+                    "attributes": attributes,
+                    "relationships": {
+                        "appInfo": {"data": {"type": "appInfos", "id": info_id}}
+                    },
+                }
+            })
 
 
 def find_previous_version_localizations(client: ASCClient, app_id: str,
@@ -625,6 +710,8 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true",
                         help="Print upload calls without making them.")
     parser.add_argument("--version", help="Target a specific App Store version string.")
+    parser.add_argument("--skip-app-info", action="store_true",
+                        help="Skip app name & subtitle (appInfoLocalizations).")
     parser.add_argument("--skip-version", action="store_true",
                         help="Skip App Store version metadata (only do Game Center).")
     parser.add_argument("--skip-achievements", action="store_true",
@@ -647,6 +734,10 @@ def main() -> None:
     bundle_id = metadata["_meta"]["bundle_id"]
     print(f"\nLooking up app {bundle_id}...")
     app_id = find_app_id(client, bundle_id)
+
+    if not args.skip_app_info:
+        print("\n=== App name & subtitle ===")
+        upload_app_info_localizations(client, app_id, metadata)
 
     if not args.skip_version:
         print("\n=== App Store version localizations ===")

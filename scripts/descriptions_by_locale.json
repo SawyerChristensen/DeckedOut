@@ -1,0 +1,349 @@
+{
+  "_meta": {
+    "description": "Read-only snapshot of the live App Store listing text per locale, pulled from App Store Connect. Not consumed by any script. Regenerate: cd scripts && .venv/bin/python fetch_metadata.py --json (version fields) plus appInfoLocalizations for name/subtitle.",
+    "bundle_id": "Sawyer.DeckedOut",
+    "pulled_at": "2026-09-02",
+    "editable_version": {
+      "version": "3.6.2",
+      "state": "PREPARE_FOR_SUBMISSION",
+      "created": "2026-09-02"
+    },
+    "on_store_version": {
+      "version": "3.6.1",
+      "state": "READY_FOR_SALE",
+      "created": "2026-07-21"
+    }
+  },
+  "editable_version_locales": {
+    "da": {
+      "name": "Kortspil til iMessage",
+      "subtitle": "Spil mod venner i Beskeder!",
+      "description": "Udfordr dine venner til klassiske kortspil uden besværet med at oprette konti eller skifte mellem apps. Uanset om du venter på et svar eller bare vil slå tiden ihjel under en chat, er et spil altid kun et tryk væk! Bliv i spilvinduet for en sammenhængende oplevelse, eller kom tilbage senere, når du har tid! \n\nInkluderede spil:\nGin Rummy: Klassisk Gin. Lav kombinationer af sekvenser og sæt.\nOlsen: Vind ved at være den første til at slippe af med alle dine kort. 8'ere er jokere!\nGolf: Prøv at holde din score lav i dette strategiske favoritspil.\n\nDin plads ved bordet er klar! Del din første hånd ud i dag!",
+      "keywords": "kabale,rommy,olsen,gin,poker,golf,multiplayer,online,gratis,dansk,chat,venner,klassisk,strategi",
+      "promotionalText": "",
+      "whatsNew": "Fejlrettelser"
+    },
+    "de-DE": {
+      "name": "Kartenspiele in iMessage",
+      "subtitle": "Mau Mau, Rommé & Golf im Chat",
+      "description": "Fordere deine Freunde zu klassischen Kartenspielen heraus, ohne lästige Kontoanmeldungen oder App-Wechsel. Egal, ob du auf eine Antwort wartest oder einfach nur die Zeit während eines Chats totschlagen möchtest – ein Spiel ist immer nur einen Fingertipp entfernt! Bleib im Spielfenster, um nahtlos weiterzuspielen, oder komm später wieder, wenn du Zeit hast! \n\nEnthaltene Spiele:\nGin Rummy: Klassisches Straight Gin. Bilde Reihen und Dreiergruppen.\nVerrückte Achten: Werde als Erster deine Karten los, um zu gewinnen. 8er sind Joker!\nGolf: Versuche, deine Punktzahl in diesem beliebten Strategiespiel niedrig zu halten.\n\nDein Platz am Tisch ist bereit! Gib noch heute dein erstes Blatt aus!",
+      "keywords": "MauMau,Gin,Rummy,Rommé,Golf,Mehrspieler,Online,Freunde,Poker,Solitär,Klassisch,1v1,Paare,Chatten",
+      "promotionalText": "",
+      "whatsNew": "Fehlerbehebungen"
+    },
+    "en-GB": {
+      "name": "Card Games for iMessage",
+      "subtitle": "Gin Rummy, Switch and Golf!",
+      "description": "Challenge your friends to classic card games without the friction of creating accounts or switching apps. Whether you’re waiting for a reply or just want to kill time between messages, a game is always one tap away! Drop a game into any text thread or group chat. Stay in the game window for a continuous experience, or come back later when you have the time!\n\nGames Included:\nGin Rummy: Classic straight Gin. Create melds of runs and sets.\nSwitch: Get rid of your cards first to win. Aces are wild!\nGolf: Try to keep your score low in this strategic favorite.\n\nYour seat at the table is ready! Deal your first hand today!",
+      "keywords": "switch,multiplayer,classic,texting,couples,pigeon,social,friends,free,poker,solitaire,hearts,spades",
+      "promotionalText": "",
+      "whatsNew": "Bug fixes"
+    },
+    "en-US": {
+      "name": "Card Games for iMessage",
+      "subtitle": "Gin Rummy, Crazy 8s and Golf!",
+      "description": "Challenge your friends to classic card games without the friction of creating accounts or switching apps. Whether you’re waiting for a reply or just want to kill time between messages, a game is always one tap away! Drop a game into any text thread or group chat. Stay in the game window for a continuous experience, or come back later when you have the time!\n\nGames Included:\nGin Rummy: Classic straight Gin. Create melds of runs and sets.\nCrazy 8s: Get rid of your cards first to win. 8s are wild!\nGolf: Try to keep your score low in this strategic favorite.\n\nYour seat at the table is ready! Deal your first hand today!",
+      "keywords": "eights,multiplayer,classic,texting,couples,pigeon,social,friends,free,poker,solitaire,hearts,spades",
+      "promotionalText": "",
+      "whatsNew": "Bug fixes"
+    },
+    "es-ES": {
+      "name": "Juegos de cartas para iMessage",
+      "subtitle": "Gin Rummy, Ochos Locos y Golf",
+      "description": "Desafía a tus amigos a juegos de cartas clásicos sin la molestia de crear cuentas o cambiar de aplicación. Tanto si estás esperando una respuesta como si solo quieres matar el tiempo mientras chateas, ¡una partida está siempre a un solo toque de distancia! Quédate en la ventana del juego para disfrutar de una experiencia ininterrumpida, ¡o vuelve más tarde cuando tengas tiempo! \n\nJuegos incluidos:\nGin Rummy: Gin clásico. Crea combinaciones de secuencias y tríos.\nOchos Locos: Deshazte de tus cartas primero para ganar. ¡Los 8 son comodines!\nGolf: Intenta mantener tu puntuación baja en este clásico estratégico.\n\n¡Tu asiento en la mesa está listo! ¡Reparte tu primera mano hoy mismo!",
+      "keywords": "multijugador,amigos,duelo,mensajes,chat,clásico,gratis,póker,baraja,solitario,parejas,novios,pigeon",
+      "promotionalText": "",
+      "whatsNew": "Corrección de errores"
+    },
+    "fi": {
+      "name": "Korttipelit iMessagessa",
+      "subtitle": "Haasta kaverit korttipeliin",
+      "description": "Haasta kaverisi klassisiin korttipeleihin ilman tilien luomista tai sovellusten välillä vaihtamista. Odotatpa vastausta tai haluat vain kuluttaa aikaa viestien välissä – peli on aina yhden napautuksen päässä! Pudota peli mihin tahansa keskusteluun tai ryhmächättiin. Pysy pelinäkymässä yhtäjaksoista kokemusta varten tai palaa myöhemmin, kun sinulla on aikaa!\n\nMukana olevat pelit:\nGin Rummy: Klassista suoraa Giniä. Muodosta suoria ja sarjoja.\nCrazy 8s: Pääse eroon korteistasi ensimmäisenä ja voita. Kasit ovat jokereita!\nGolf: Yritä pitää pisteesi matalina tässä strategisessa suosikissa.\n\nPaikkasi pöydässä on valmis! Jaa ensimmäinen kätesi jo tänään!",
+      "keywords": "pasianssi,pokeri,kasino,tuppi,rommi,gin,golf,moninpeli,ilmainen,ystävät,klassinen,chatti,kaksinpeli",
+      "promotionalText": "",
+      "whatsNew": "Virhekorjauksia"
+    },
+    "fr-FR": {
+      "name": "Jeux de cartes pour iMessage",
+      "subtitle": "Défiez vos amis directement !",
+      "description": "Défiez vos amis à des jeux de cartes classiques sans avoir à créer de compte ni à changer d'application. Que vous attendiez une réponse ou que vous souhaitiez simplement passer le temps pendant une discussion, une partie est toujours à portée de main ! Restez dans la fenêtre de jeu pour une expérience ininterrompue, ou revenez plus tard quand vous aurez le temps ! \n\nJeux inclus :\nGin rami : Le Gin classique. Formez des combinaisons de suites et de paires.\n8 américain : Débarrassez-vous de vos cartes en premier pour gagner. Les 8 sont des jokers !\nGolf : Essayez de garder un score bas dans ce grand classique stratégique.\n\nVotre place à la table est prête ! Distribuez votre première main dès aujourd'hui !",
+      "keywords": "rami,gin rami,8 américain,cartes,multijoueur,classique,en ligne,amis,social,poker,duel,1v1,gratuit",
+      "promotionalText": "",
+      "whatsNew": "Corrections de bugs"
+    },
+    "hi": {
+      "name": "iMessage के लिए कार्ड गेम्स",
+      "subtitle": "दोस्तों को चैलेंज करें!",
+      "description": "खाते बनाने या ऐप बदलने की झंझट के बिना अपने दोस्तों को क्लासिक कार्ड गेम्स की चुनौती दें। चाहे आप जवाब का इंतज़ार कर रहे हों या चैट के दौरान बस समय बिताना चाहते हों, एक गेम हमेशा बस एक टैप की दूरी पर है! एक निरंतर अनुभव के लिए गेम विंडो में ही रहें, या जब आपका समय हो तो बाद में वापस आएं!\n\nशामिल गेम्स:\nजिन रमी: क्लासिक स्ट्रेट जिन। रन और सेट के मेल्ड बनाएं।\nक्रेज़ी 8s: जीतने के लिए सबसे पहले अपने कार्ड खत्म करें। 8s वाइल्ड हैं!\nगोल्फ: इस रणनीतिक पसंदीदा खेल में अपना स्कोर कम रखने की कोशिश करें।\n\nमेज़ पर आपकी सीट तैयार है! आज ही अपना पहला हाथ खेलें!",
+      "keywords": "रम्मी,जिन,क्रेजी 8,ताश,मल्टीप्लेयर,क्लासिक,1v1,पोकर,चैट,संदेश,सोशल,दोस्त,फ्री,गेम,मज़ा,मुकाबला",
+      "promotionalText": "",
+      "whatsNew": "बग फ़िक्स"
+    },
+    "it": {
+      "name": "Giochi di carte per iMessage",
+      "subtitle": "Sfida i tuoi amici in chat!",
+      "description": "Sfida i tuoi amici a giochi di carte classici senza il fastidio di creare account o passare da un'app all'altra. Che tu stia aspettando una risposta o voglia semplicemente ammazzare il tempo durante una chat, basta un tocco per giocare! Rimani nella finestra di gioco per un'esperienza senza interruzioni, oppure torna più tardi quando hai tempo! \n\nGiochi inclusi:\nGin Rummy: Il classico Gin Rummy. Crea scale e combinazioni vincenti.\nOtto Americano: Sii il primo a finire le carte per vincere. Gli 8 sono jolly!\nGolf: Mantieni il punteggio più basso possibile in questo popolare gioco strategico.\n\nIl tuo posto al tavolo è pronto! Distribuisci la tua prima mano oggi stesso!",
+      "keywords": "gin,rummy,ramino,otto,americano,golf,gratis,coppie,classico,poker,scala40,burraco,solitario,scopa",
+      "promotionalText": "",
+      "whatsNew": "Correzione di bug"
+    },
+    "ja": {
+      "name": "iMessageで遊べるカードゲーム",
+      "subtitle": "チャットしながら手軽に対戦！",
+      "description": "アカウント作成やアプリ切り替えの手間なしに、友達と定番のカードゲームで対戦しましょう。返信を待っている時でも、チャット中の暇つぶしでも、ゲームはいつでもワンタップで始められます！ゲーム画面に留まってプレイを続けたり、時間がある時に後で戻ってプレイしたり、自由に楽しめます！\n\n収録ゲーム：\nジン・ラミー：定番のストレート・ジン。連続した数字や同じ数字のセットで組み合わせを作りましょう。\nクレイジーエイト：手札を先にすべて出し切って勝利を目指しましょう。8はワイルドカードです！\nゴルフ：戦略性が求められるこの人気ゲームで、スコアを低く抑えましょう。\n\nテーブルの席は用意されています！今すぐ最初のハンドを配りましょう！",
+      "keywords": "大富豪,ババ抜き,神経衰弱,七並べ,オンライン,二人,ジン・ラミー, ポーカー,ソリティア,ラミー,トランプ,カードゲーム,暇つぶし,脳トレ, カップル,対戦,友達,クレイジーエイト,ゴルフ",
+      "promotionalText": "",
+      "whatsNew": "バグ修正"
+    },
+    "ko": {
+      "name": "iMessage 카드 게임",
+      "subtitle": "진러미, 크레이지 8, 골프 카드 게임 컬렉션",
+      "description": "계정 생성이나 앱 전환의 번거로움 없이 친구들과 클래식 카드 게임 대결을 펼쳐보세요. 답장을 기다리는 중이든, 채팅 도중 시간을 때우고 싶든, 게임은 항상 한 번의 탭만으로 시작됩니다! 게임 창을 닫지 않고 계속 플레이하거나, 시간이 날 때 다시 돌아와도 됩니다! \n\n포함된 게임:\n진러미: 클래식 스트레이트 진. 연속 카드와 세트 조합을 만들어보세요.\n크레이지 8: 카드를 먼저 모두 없애는 사람이 승리합니다. 8은 와일드 카드입니다!\n골프: 전략이 중요한 이 인기 게임에서 점수를 낮게 유지해 보세요.\n\n테이블 자리가 준비되었습니다! 오늘 바로 첫 패를 받아보세요!",
+      "keywords": "진러미,크레이지8,골프,카드게임,보드게임,친구랑,1대1,대전,멀티플레이,클래식,전략,심심풀이,아이메시지,채팅,무료,실시간,두뇌게임,카드,대결,멀티,포커,솔리테르,2인용,커플,내기",
+      "promotionalText": "",
+      "whatsNew": "버그 수정"
+    },
+    "nl-NL": {
+      "name": "Kaartspellen voor iMessage",
+      "subtitle": "Pesten, Gin & Golf in de chat",
+      "description": "Daag je vrienden uit voor klassieke kaartspellen zonder het gedoe van het aanmaken van accounts of het wisselen van apps. Of je nu op een antwoord wacht of gewoon even de tijd wilt doden tijdens een chat, een spelletje is altijd maar één tik verwijderd! Blijf in het spelvenster voor een ononderbroken ervaring, of kom later terug als je tijd hebt! \n\nInbegrepen spellen:\nGin Rummy: Klassieke Rummy. Maak combinaties van reeksen en sets.\nPesten: Speel als eerste je kaarten weg om te winnen. 8-en zijn jokers!\nGolf: Probeer je score laag te houden in deze strategische favoriet.\n\nJe plaats aan tafel staat klaar! Deel vandaag nog je eerste hand!",
+      "keywords": "kaarten,gin rummy,pesten,poker,gratis,vrienden,chatten,sociaal,1v1,multiplayer,klassiek,klaverjassen",
+      "promotionalText": "",
+      "whatsNew": "Bugfixes"
+    },
+    "no": {
+      "name": "Kortspill for iMessage",
+      "subtitle": "Utfordre venner i chatten",
+      "description": "Utfordre vennene dine til klassiske kortspill uten å måtte opprette kontoer eller bytte mellom apper. Enten du venter på et svar eller bare vil slå i hjel tiden mens du chatter, er et spill alltid bare ett trykk unna! Bli i spillvinduet for en sammenhengende opplevelse, eller kom tilbake senere når du har tid! \n\nInkluderte spill:\nGin Rummy: Klassisk Gin. Lag kombinasjoner av sekvenser og sett.\nVri-åtter: Bli kvitt kortene dine først for å vinne. 8-tallene er jokere!\nGolf: Prøv å holde poengsummen lav i denne strategiske favoritten.\n\nPlassen din ved bordet er klar! Del ut din første hånd i dag!",
+      "keywords": "kortspill,gin,rummy,vri-åtter,golf,flerspiller,venner,gratis,klassisk,par,duell,chat,sosiale,olsen",
+      "promotionalText": "",
+      "whatsNew": "Feilrettinger"
+    },
+    "pl": {
+      "name": "Gry karciane w iMessage",
+      "subtitle": "Gin Rummy, Crazy 8s i Golf",
+      "description": "Wyzwij znajomych na klasyczne gry karciane bez zakładania kont i przełączania aplikacji. Niezależnie od tego, czy czekasz na odpowiedź, czy po prostu chcesz zabić czas między wiadomościami, gra jest zawsze o jedno dotknięcie stąd! Dodaj grę do dowolnej rozmowy lub czatu grupowego. Zostań w oknie gry, aby grać bez przerw, albo wróć później, gdy znajdziesz czas!\n\nDostępne gry:\nGin Rummy: Klasyczny gin. Twórz sekwensy i zestawy.\nCrazy 8s: Pozbądź się kart jako pierwszy, aby wygrać. Ósemki są jokerami!\nGolf: Staraj się utrzymać niski wynik w tej strategicznej klasyce.\n\nTwoje miejsce przy stole czeka! Rozdaj pierwsze rozdanie już dziś!",
+      "keywords": "pasjans,poker,makao,tysiąc,remik,brydż,kanasta,wojna,karty,online,darmowe,znajomi,czat,klasyczne",
+      "promotionalText": "",
+      "whatsNew": "Poprawki błędów"
+    },
+    "pt-BR": {
+      "name": "Jogos de Cartas no iMessage",
+      "subtitle": "Gin Rummy, Mau-Mau e Golfe",
+      "description": "Desafia os teus amigos a jogos de cartas clássicos sem o incómodo de criar contas ou mudar de aplicação. Quer estejas à espera de uma resposta ou apenas queiras passar o tempo durante uma conversa, um jogo está sempre à distância de um toque! Mantém-te na janela do jogo para uma experiência contínua ou volta mais tarde, quando tiveres tempo! \n\nJogos incluídos:\nGin Rummy: Gin clássico. Cria combinações de sequências e conjuntos.\nOito Maluco: Livra-te das tuas cartas primeiro para ganhares. Os 8 são curingas!\nGolfe: Tenta manter a tua pontuação baixa neste favorito estratégico.\n\nO teu lugar à mesa está pronto! Joga a tua primeira mão hoje!",
+      "keywords": "cartas,baralho,gin,rummy,rami,oito,maluco,golfe,multiplayer,amigos,mensagens,chat,gratis,classico",
+      "promotionalText": "",
+      "whatsNew": "Correções de bugs"
+    },
+    "pt-PT": {
+      "name": "Jogos de cartas para iMessage",
+      "subtitle": "Gin Rummy, Oito Maluco, Golfe",
+      "description": "Desafia os teus amigos para jogos de cartas clássicos sem o incómodo de criar contas ou trocar de aplicação. Quer estejas à espera de uma resposta, quer só queiras passar o tempo entre mensagens, um jogo está sempre à distância de um toque! Coloca um jogo em qualquer conversa ou grupo. Fica na janela do jogo para uma experiência contínua ou volta mais tarde, quando tiveres tempo!\n\nJogos incluídos:\nGin Rummy: Gin clássico. Cria combinações de sequências e conjuntos.\nOito Maluco: Livra-te primeiro das tuas cartas para ganhar. Os 8 valem tudo!\nGolfe: Tenta manter a pontuação baixa neste clássico estratégico.\n\nO teu lugar à mesa está pronto! Joga a tua primeira mão hoje!",
+      "keywords": "sueca,bisca,solitário,póquer,copas,espadas,rami,duelo,multijogador,online,grátis,amigos,casais,chat",
+      "promotionalText": "",
+      "whatsNew": "Correções de erros"
+    },
+    "ru": {
+      "name": "Карточные игры в iMessage",
+      "subtitle": "Рамми, Восьмёрки, Гольф в чате",
+      "description": "Вызывайте друзей на классические карточные игры без лишних хлопот с созданием учетных записей или переключением между приложениями. Ждете ли вы ответа или просто хотите скоротать время во время чата, игра всегда на расстоянии одного касания! Оставайтесь в окне игры, чтобы не прерывать процесс, или вернитесь позже, когда у вас появится время! \n\nВключенные игры:\nДжин-рамми: классический прямой джин. Составляйте комбинации из последовательностей и наборов.\nВосьмёрки: Избавьтесь от своих карт первым, чтобы выиграть. Восьмерки — джокеры!\nГольф: Постарайтесь набрать как можно меньше очков в этой популярной стратегической игре.\n\nВаше место за столом готово! Раздайте свою первую руку уже сегодня!",
+      "keywords": "Карты,Джин Рамми,Восьмерки,Гольф,Онлайн,Бесплатно,Друзья,1на1,Чат,Мультиплеер,Классика,Стратегия",
+      "promotionalText": "",
+      "whatsNew": "Исправление ошибок"
+    },
+    "sv": {
+      "name": "Kortspel i iMessage",
+      "subtitle": "Vändåtta, Rummy och Golf",
+      "description": "Utmana dina vänner i klassiska kortspel utan krångel med att skapa konton eller byta app. Oavsett om du väntar på ett svar eller bara vill fördriva tiden under en chatt är ett spel alltid bara ett tryck bort! Stanna kvar i spelfönstret för en sammanhängande upplevelse, eller kom tillbaka senare när du har tid! \n\nSpel som ingår:\nGin Rummy: Klassisk Gin Rummy. Skapa kombinationer av sekvenser och par.\nVändåtta: Bli av med dina kort först för att vinna. 8:or är jokrar!\nGolf: Försök att hålla din poäng låg i denna strategiska favorit.\n\nDin plats vid bordet är klar! Dela ut din första hand idag!",
+      "keywords": "vändåtta,gin rummy,golf,kortspel,multiplayer,vänner,chatt,klassiskt,online,gratis,1v1,socialt,spel",
+      "promotionalText": "",
+      "whatsNew": "Buggfixar"
+    },
+    "tr": {
+      "name": "iMessage: Kart Oyunları",
+      "subtitle": "Mesajlaşırken Kart Oyna",
+      "description": "Hesap oluşturma veya uygulama değiştirme zahmetine girmeden arkadaşlarınıza klasik kart oyunlarında meydan okuyun. İster bir cevap bekliyor olun, ister sohbet sırasında sadece vakit geçirmek istiyor olun, bir oyun her zaman tek dokunuş uzaklıkta! Kesintisiz bir deneyim için oyun penceresinde kalın ya da zamanınız olduğunda daha sonra geri dönün! \n\nDahil Olan Oyunlar:\nGin Rummy: Klasik düz Gin. Sıralı ve üçlü gruplar oluşturun.\nÇılgın 8’li: Kazanmak için kartlarınızı ilk bitiren olun. 8'ler joker!\nGolf: Bu stratejik favori oyunda puanınızı düşük tutmaya çalışın.\n\nMasadaki yeriniz hazır! Bugün ilk elinizi dağıtın!",
+      "keywords": "iMessage,kart,oyun,remi,gin,rummy,çılgın,sekizli,golf,mesaj,sohbet,arkadaş,1v1,düello,klasik,eğlence",
+      "promotionalText": "",
+      "whatsNew": "Hata düzeltmeleri"
+    },
+    "vi": {
+      "name": "Game Bài cho iMessage",
+      "subtitle": "Gin Rummy, Tám Quậy và Golf!",
+      "description": "Thách đấu bạn bè với các trò chơi bài kinh điển mà không phải bận tâm về việc tạo tài khoản hay chuyển đổi ứng dụng. Dù bạn đang chờ tin nhắn phản hồi hay chỉ muốn giết thời gian trong lúc trò chuyện, một ván bài luôn sẵn sàng chỉ với một cú chạm! Tiếp tục ở lại cửa sổ trò chơi để có một trải nghiệm liền mạch, hoặc quay lại chơi tiếp khi bạn rảnh rỗi!\n\nCác trò chơi bao gồm:\nGin Rummy: Trò chơi Gin nguyên bản, kinh điển. Hãy tạo các bộ dây (runs) và bộ đồng cấp (sets).\nTám Quậy: Trở thành người đánh hết bài đầu tiên để giành chiến thắng. Các quân 8 là những lá bài vạn năng!\nBài Golf: Cố gắng giữ điểm số của bạn ở mức thấp nhất trong trò chơi mang tính chiến thuật được yêu thích này.\n\nChỗ ngồi của bạn tại bàn chơi đã sẵn sàng! Hãy bắt đầu ván bài đầu tiên của bạn ngay hôm nay!",
+      "keywords": "nhiều người chơi,cổ điển,nhắn tin,cặp đôi,bạn bè,miễn phí,poker,xếp bài,solitaire,tiến lên,phỏm",
+      "promotionalText": "",
+      "whatsNew": "Sửa lỗi"
+    },
+    "zh-Hans": {
+      "name": "iMessage 纸牌游戏合集",
+      "subtitle": "金拉米、疯狂8、高尔夫纸牌",
+      "description": "无需注册账号或切换应用，即可邀请好友畅玩经典纸牌游戏。无论是在等待回复，还是想在聊天时打发时间，只需轻点一下，游戏即刻开启！留在游戏界面中享受无缝体验，或者等有空时再回来继续！\n\n包含游戏：\n金拉米：经典的直金拉米。组成顺子和四张同点牌的牌组。\n疯狂8：率先出完手牌获胜。8点牌可作万能牌！\n高尔夫纸牌：在这款备受喜爱的策略游戏中，努力保持低分。\n\n您的座位已就绪！今天就来发第一手牌吧！",
+      "keywords": "金拉米,拉米,疯狂8,疯狂八,扑克,棋牌,纸牌,卡牌,合集,经典,多人,联网,对战,好友,策略,PK,休闲,益智,短信,imessage,打牌,桌游,双人,竞技,小游戏,回合制,聊天,单挑,免费,情侣",
+      "promotionalText": "",
+      "whatsNew": "错误修复"
+    },
+    "zh-Hant": {
+      "name": "iMessage 紙牌遊戲合集",
+      "subtitle": "金拉米、瘋狂8、高爾夫紙牌",
+      "description": "無需繁瑣的帳號註冊或切換應用程式，即可與朋友挑戰經典紙牌遊戲。無論是等待回覆，還是想在聊天時打發時間，一場遊戲只需輕點一下！留在遊戲視窗中享受無縫體驗，或等到有空時再回來繼續！\n\n內含遊戲：\n金拉米：經典的直線金拉米。組成順子與組牌。\n瘋狂8：率先出完手牌即勝。8點牌可當萬能牌！\n高爾夫紙牌：在這款策略性十足的熱門遊戲中，盡量保持低分。\n\n您的座位已備妥！今天就來發第一手牌吧！",
+      "keywords": "金拉米,拉米,瘋狂8,撲克,棋牌,紙牌,卡牌,合集,經典,多人,連網,對戰,好友,策略,PK,休閒,益智,簡訊,imessage,打牌,桌遊,雙人,麻將,競技,撲克牌,高爾夫,小遊戲,免費,情侶,單挑",
+      "promotionalText": "",
+      "whatsNew": "錯誤修復"
+    }
+  },
+  "on_store_version_locales": {
+    "da": {
+      "name": "Kortspil til iMessage",
+      "subtitle": "Spil mod venner i Beskeder!",
+      "description": "Udfordr dine venner til klassiske kortspil uden besværet med at oprette konti eller skifte mellem apps. Uanset om du venter på et svar eller bare vil slå tiden ihjel under en chat, er et spil altid kun et tryk væk! Bliv i spilvinduet for en sammenhængende oplevelse, eller kom tilbage senere, når du har tid! \n\nInkluderede spil:\nGin Rummy: Klassisk Gin. Lav kombinationer af sekvenser og sæt.\nOlsen: Vind ved at være den første til at slippe af med alle dine kort. 8'ere er jokere!\nGolf: Prøv at holde din score lav i dette strategiske favoritspil.\n\nDin plads ved bordet er klar! Del din første hånd ud i dag!",
+      "keywords": "kabale,rommy,olsen,gin,poker,golf,multiplayer,online,gratis,dansk,chat,venner,klassisk,strategi",
+      "promotionalText": "",
+      "whatsNew": "Fejlrettelser og forbedringer af oversættelser."
+    },
+    "de-DE": {
+      "name": "Kartenspiele in iMessage",
+      "subtitle": "Mau Mau, Rommé & Golf im Chat",
+      "description": "Fordere deine Freunde zu klassischen Kartenspielen heraus, ohne lästige Kontoanmeldungen oder App-Wechsel. Egal, ob du auf eine Antwort wartest oder einfach nur die Zeit während eines Chats totschlagen möchtest – ein Spiel ist immer nur einen Fingertipp entfernt! Bleib im Spielfenster, um nahtlos weiterzuspielen, oder komm später wieder, wenn du Zeit hast! \n\nEnthaltene Spiele:\nGin Rummy: Klassisches Straight Gin. Bilde Reihen und Dreiergruppen.\nVerrückte Achten: Werde als Erster deine Karten los, um zu gewinnen. 8er sind Joker!\nGolf: Versuche, deine Punktzahl in diesem beliebten Strategiespiel niedrig zu halten.\n\nDein Platz am Tisch ist bereit! Gib noch heute dein erstes Blatt aus!",
+      "keywords": "MauMau,Gin,Rummy,Rommé,Golf,Mehrspieler,Online,Freunde,Poker,Solitär,Klassisch,1v1,Paare,Chatten",
+      "promotionalText": "",
+      "whatsNew": "Fehlerbehebungen und Verbesserungen der Lokalisierung."
+    },
+    "en-GB": {
+      "name": "Card Games for iMessage",
+      "subtitle": "Gin Rummy, Switch and Golf!",
+      "description": "Challenge your friends to classic card games without the friction of creating accounts or switching apps. Whether you’re waiting for a reply or just want to kill time between messages, a game is always one tap away! Drop a game into any text thread or group chat. Stay in the game window for a continuous experience, or come back later when you have the time!\n\nGames Included:\nGin Rummy: Classic straight Gin. Create melds of runs and sets.\nSwitch: Get rid of your cards first to win. Aces are wild!\nGolf: Try to keep your score low in this strategic favorite.\n\nYour seat at the table is ready! Deal your first hand today!",
+      "keywords": "switch,multiplayer,classic,texting,couples,pigeon,social,friends,free,poker,solitaire,hearts,spades",
+      "promotionalText": "",
+      "whatsNew": "Bug fixes & localisation improvements."
+    },
+    "en-US": {
+      "name": "Card Games for iMessage",
+      "subtitle": "Gin Rummy, Crazy 8s and Golf!",
+      "description": "Challenge your friends to classic card games without the friction of creating accounts or switching apps. Whether you’re waiting for a reply or just want to kill time between messages, a game is always one tap away! Drop a game into any text thread or group chat. Stay in the game window for a continuous experience, or come back later when you have the time!\n\nGames Included:\nGin Rummy: Classic straight Gin. Create melds of runs and sets.\nCrazy 8s: Get rid of your cards first to win. 8s are wild!\nGolf: Try to keep your score low in this strategic favorite.\n\nYour seat at the table is ready! Deal your first hand today!",
+      "keywords": "eights,multiplayer,classic,texting,couples,pigeon,social,friends,free,poker,solitaire,hearts,spades",
+      "promotionalText": "",
+      "whatsNew": "Bug fixes & localization improvements."
+    },
+    "es-ES": {
+      "name": "Juegos de cartas para iMessage",
+      "subtitle": "Gin Rummy, Ochos Locos y Golf",
+      "description": "Desafía a tus amigos a juegos de cartas clásicos sin la molestia de crear cuentas o cambiar de aplicación. Tanto si estás esperando una respuesta como si solo quieres matar el tiempo mientras chateas, ¡una partida está siempre a un solo toque de distancia! Quédate en la ventana del juego para disfrutar de una experiencia ininterrumpida, ¡o vuelve más tarde cuando tengas tiempo! \n\nJuegos incluidos:\nGin Rummy: Gin clásico. Crea combinaciones de secuencias y tríos.\nOchos Locos: Deshazte de tus cartas primero para ganar. ¡Los 8 son comodines!\nGolf: Intenta mantener tu puntuación baja en este clásico estratégico.\n\n¡Tu asiento en la mesa está listo! ¡Reparte tu primera mano hoy mismo!",
+      "keywords": "multijugador,amigos,duelo,mensajes,chat,clásico,gratis,póker,baraja,solitario,parejas,novios,pigeon",
+      "promotionalText": "",
+      "whatsNew": "Corrección de errores y mejoras de localización."
+    },
+    "fr-FR": {
+      "name": "Jeux de cartes pour iMessage",
+      "subtitle": "Défiez vos amis directement !",
+      "description": "Défiez vos amis à des jeux de cartes classiques sans avoir à créer de compte ni à changer d'application. Que vous attendiez une réponse ou que vous souhaitiez simplement passer le temps pendant une discussion, une partie est toujours à portée de main ! Restez dans la fenêtre de jeu pour une expérience ininterrompue, ou revenez plus tard quand vous aurez le temps ! \n\nJeux inclus :\nGin rami : Le Gin classique. Formez des combinaisons de suites et de paires.\n8 américain : Débarrassez-vous de vos cartes en premier pour gagner. Les 8 sont des jokers !\nGolf : Essayez de garder un score bas dans ce grand classique stratégique.\n\nVotre place à la table est prête ! Distribuez votre première main dès aujourd'hui !",
+      "keywords": "rami,gin rami,8 américain,cartes,multijoueur,classique,en ligne,amis,social,poker,duel,1v1,gratuit",
+      "promotionalText": "",
+      "whatsNew": "Corrections de bugs et améliorations de la localisation."
+    },
+    "hi": {
+      "name": "iMessage के लिए कार्ड गेम्स",
+      "subtitle": "दोस्तों को चैलेंज करें!",
+      "description": "खाते बनाने या ऐप बदलने की झंझट के बिना अपने दोस्तों को क्लासिक कार्ड गेम्स की चुनौती दें। चाहे आप जवाब का इंतज़ार कर रहे हों या चैट के दौरान बस समय बिताना चाहते हों, एक गेम हमेशा बस एक टैप की दूरी पर है! एक निरंतर अनुभव के लिए गेम विंडो में ही रहें, या जब आपका समय हो तो बाद में वापस आएं!\n\nशामिल गेम्स:\nजिन रमी: क्लासिक स्ट्रेट जिन। रन और सेट के मेल्ड बनाएं।\nक्रेज़ी 8s: जीतने के लिए सबसे पहले अपने कार्ड खत्म करें। 8s वाइल्ड हैं!\nगोल्फ: इस रणनीतिक पसंदीदा खेल में अपना स्कोर कम रखने की कोशिश करें।\n\nमेज़ पर आपकी सीट तैयार है! आज ही अपना पहला हाथ खेलें!",
+      "keywords": "रम्मी,जिन,क्रेजी 8,ताश,मल्टीप्लेयर,क्लासिक,1v1,पोकर,चैट,संदेश,सोशल,दोस्त,फ्री,गेम,मज़ा,मुकाबला",
+      "promotionalText": "",
+      "whatsNew": "बग फ़िक्स और लोकलाइज़ेशन सुधार।"
+    },
+    "it": {
+      "name": "Giochi di carte per iMessage",
+      "subtitle": "Sfida i tuoi amici in chat!",
+      "description": "Sfida i tuoi amici a giochi di carte classici senza il fastidio di creare account o passare da un'app all'altra. Che tu stia aspettando una risposta o voglia semplicemente ammazzare il tempo durante una chat, basta un tocco per giocare! Rimani nella finestra di gioco per un'esperienza senza interruzioni, oppure torna più tardi quando hai tempo! \n\nGiochi inclusi:\nGin Rummy: Il classico Gin Rummy. Crea scale e combinazioni vincenti.\nOtto Americano: Sii il primo a finire le carte per vincere. Gli 8 sono jolly!\nGolf: Mantieni il punteggio più basso possibile in questo popolare gioco strategico.\n\nIl tuo posto al tavolo è pronto! Distribuisci la tua prima mano oggi stesso!",
+      "keywords": "gin,rummy,ramino,otto,americano,golf,gratis,coppie,classico,poker,scala40,burraco,solitario,scopa",
+      "promotionalText": "",
+      "whatsNew": "Correzioni di bug e miglioramenti alla localizzazione."
+    },
+    "ja": {
+      "name": "iMessageで遊べるカードゲーム",
+      "subtitle": "チャットしながら手軽に対戦！",
+      "description": "アカウント作成やアプリ切り替えの手間なしに、友達と定番のカードゲームで対戦しましょう。返信を待っている時でも、チャット中の暇つぶしでも、ゲームはいつでもワンタップで始められます！ゲーム画面に留まってプレイを続けたり、時間がある時に後で戻ってプレイしたり、自由に楽しめます！\n\n収録ゲーム：\nジン・ラミー：定番のストレート・ジン。連続した数字や同じ数字のセットで組み合わせを作りましょう。\nクレイジーエイト：手札を先にすべて出し切って勝利を目指しましょう。8はワイルドカードです！\nゴルフ：戦略性が求められるこの人気ゲームで、スコアを低く抑えましょう。\n\nテーブルの席は用意されています！今すぐ最初のハンドを配りましょう！",
+      "keywords": "大富豪,ババ抜き,神経衰弱,七並べ,オンライン,二人,ジン・ラミー, ポーカー,ソリティア,ラミー,トランプ,カードゲーム,暇つぶし,脳トレ, カップル,対戦,友達,クレイジーエイト,ゴルフ",
+      "promotionalText": "",
+      "whatsNew": "バグ修正とローカライズの改善を行いました。"
+    },
+    "ko": {
+      "name": "iMessage 카드 게임",
+      "subtitle": "진러미, 크레이지 8, 골프 카드 게임 컬렉션",
+      "description": "계정 생성이나 앱 전환의 번거로움 없이 친구들과 클래식 카드 게임 대결을 펼쳐보세요. 답장을 기다리는 중이든, 채팅 도중 시간을 때우고 싶든, 게임은 항상 한 번의 탭만으로 시작됩니다! 게임 창을 닫지 않고 계속 플레이하거나, 시간이 날 때 다시 돌아와도 됩니다! \n\n포함된 게임:\n진러미: 클래식 스트레이트 진. 연속 카드와 세트 조합을 만들어보세요.\n크레이지 8: 카드를 먼저 모두 없애는 사람이 승리합니다. 8은 와일드 카드입니다!\n골프: 전략이 중요한 이 인기 게임에서 점수를 낮게 유지해 보세요.\n\n테이블 자리가 준비되었습니다! 오늘 바로 첫 패를 받아보세요!",
+      "keywords": "진러미,크레이지8,골프,카드게임,보드게임,친구랑,1대1,대전,멀티플레이,클래식,전략,심심풀이,아이메시지,채팅,무료,실시간,두뇌게임,카드,대결,멀티,포커,솔리테르,2인용,커플,내기",
+      "promotionalText": "",
+      "whatsNew": "버그 수정 및 현지화 개선 사항이 반영되었습니다."
+    },
+    "nl-NL": {
+      "name": "Kaartspellen voor iMessage",
+      "subtitle": "Pesten, Gin & Golf in de chat",
+      "description": "Daag je vrienden uit voor klassieke kaartspellen zonder het gedoe van het aanmaken van accounts of het wisselen van apps. Of je nu op een antwoord wacht of gewoon even de tijd wilt doden tijdens een chat, een spelletje is altijd maar één tik verwijderd! Blijf in het spelvenster voor een ononderbroken ervaring, of kom later terug als je tijd hebt! \n\nInbegrepen spellen:\nGin Rummy: Klassieke Rummy. Maak combinaties van reeksen en sets.\nPesten: Speel als eerste je kaarten weg om te winnen. 8-en zijn jokers!\nGolf: Probeer je score laag te houden in deze strategische favoriet.\n\nJe plaats aan tafel staat klaar! Deel vandaag nog je eerste hand!",
+      "keywords": "kaarten,gin rummy,pesten,poker,gratis,vrienden,chatten,sociaal,1v1,multiplayer,klassiek,klaverjassen",
+      "promotionalText": "",
+      "whatsNew": "Bugfixes en verbeteringen aan de lokalisatie."
+    },
+    "no": {
+      "name": "Kortspill for iMessage",
+      "subtitle": "Utfordre venner i chatten",
+      "description": "Utfordre vennene dine til klassiske kortspill uten å måtte opprette kontoer eller bytte mellom apper. Enten du venter på et svar eller bare vil slå i hjel tiden mens du chatter, er et spill alltid bare ett trykk unna! Bli i spillvinduet for en sammenhengende opplevelse, eller kom tilbake senere når du har tid! \n\nInkluderte spill:\nGin Rummy: Klassisk Gin. Lag kombinasjoner av sekvenser og sett.\nVri-åtter: Bli kvitt kortene dine først for å vinne. 8-tallene er jokere!\nGolf: Prøv å holde poengsummen lav i denne strategiske favoritten.\n\nPlassen din ved bordet er klar! Del ut din første hånd i dag!",
+      "keywords": "kortspill,gin,rummy,vri-åtter,golf,flerspiller,venner,gratis,klassisk,par,duell,chat,sosiale,olsen",
+      "promotionalText": "",
+      "whatsNew": "Feilrettinger og forbedringer av oversettelser."
+    },
+    "pt-BR": {
+      "name": "Jogos de Cartas no iMessage",
+      "subtitle": "Gin Rummy, Mau-Mau e Golfe",
+      "description": "Desafia os teus amigos a jogos de cartas clássicos sem o incómodo de criar contas ou mudar de aplicação. Quer estejas à espera de uma resposta ou apenas queiras passar o tempo durante uma conversa, um jogo está sempre à distância de um toque! Mantém-te na janela do jogo para uma experiência contínua ou volta mais tarde, quando tiveres tempo! \n\nJogos incluídos:\nGin Rummy: Gin clássico. Cria combinações de sequências e conjuntos.\nOito Maluco: Livra-te das tuas cartas primeiro para ganhares. Os 8 são curingas!\nGolfe: Tenta manter a tua pontuação baixa neste favorito estratégico.\n\nO teu lugar à mesa está pronto! Joga a tua primeira mão hoje!",
+      "keywords": "cartas,baralho,gin,rummy,rami,oito,maluco,golfe,multiplayer,amigos,mensagens,chat,gratis,classico",
+      "promotionalText": "",
+      "whatsNew": "Correções de bugs e melhorias de localização."
+    },
+    "ru": {
+      "name": "Карточные игры в iMessage",
+      "subtitle": "Рамми, Восьмёрки, Гольф в чате",
+      "description": "Вызывайте друзей на классические карточные игры без лишних хлопот с созданием учетных записей или переключением между приложениями. Ждете ли вы ответа или просто хотите скоротать время во время чата, игра всегда на расстоянии одного касания! Оставайтесь в окне игры, чтобы не прерывать процесс, или вернитесь позже, когда у вас появится время! \n\nВключенные игры:\nДжин-рамми: классический прямой джин. Составляйте комбинации из последовательностей и наборов.\nВосьмёрки: Избавьтесь от своих карт первым, чтобы выиграть. Восьмерки — джокеры!\nГольф: Постарайтесь набрать как можно меньше очков в этой популярной стратегической игре.\n\nВаше место за столом готово! Раздайте свою первую руку уже сегодня!",
+      "keywords": "Карты,Джин Рамми,Восьмерки,Гольф,Онлайн,Бесплатно,Друзья,1на1,Чат,Мультиплеер,Классика,Стратегия",
+      "promotionalText": "",
+      "whatsNew": "Исправления ошибок и улучшения локализации."
+    },
+    "sv": {
+      "name": "Kortspel i iMessage",
+      "subtitle": "Vändåtta, Rummy och Golf",
+      "description": "Utmana dina vänner i klassiska kortspel utan krångel med att skapa konton eller byta app. Oavsett om du väntar på ett svar eller bara vill fördriva tiden under en chatt är ett spel alltid bara ett tryck bort! Stanna kvar i spelfönstret för en sammanhängande upplevelse, eller kom tillbaka senare när du har tid! \n\nSpel som ingår:\nGin Rummy: Klassisk Gin Rummy. Skapa kombinationer av sekvenser och par.\nVändåtta: Bli av med dina kort först för att vinna. 8:or är jokrar!\nGolf: Försök att hålla din poäng låg i denna strategiska favorit.\n\nDin plats vid bordet är klar! Dela ut din första hand idag!",
+      "keywords": "vändåtta,gin rummy,golf,kortspel,multiplayer,vänner,chatt,klassiskt,online,gratis,1v1,socialt,spel",
+      "promotionalText": "",
+      "whatsNew": "Buggfixar och förbättringar av lokaliseringen."
+    },
+    "tr": {
+      "name": "iMessage: Kart Oyunları",
+      "subtitle": "Mesajlaşırken Kart Oyna",
+      "description": "Hesap oluşturma veya uygulama değiştirme zahmetine girmeden arkadaşlarınıza klasik kart oyunlarında meydan okuyun. İster bir cevap bekliyor olun, ister sohbet sırasında sadece vakit geçirmek istiyor olun, bir oyun her zaman tek dokunuş uzaklıkta! Kesintisiz bir deneyim için oyun penceresinde kalın ya da zamanınız olduğunda daha sonra geri dönün! \n\nDahil Olan Oyunlar:\nGin Rummy: Klasik düz Gin. Sıralı ve üçlü gruplar oluşturun.\nÇılgın 8’li: Kazanmak için kartlarınızı ilk bitiren olun. 8'ler joker!\nGolf: Bu stratejik favori oyunda puanınızı düşük tutmaya çalışın.\n\nMasadaki yeriniz hazır! Bugün ilk elinizi dağıtın!",
+      "keywords": "iMessage,kart,oyun,remi,gin,rummy,çılgın,sekizli,golf,mesaj,sohbet,arkadaş,1v1,düello,klasik,eğlence",
+      "promotionalText": "",
+      "whatsNew": "Hata düzeltmeleri ve yerelleştirme iyileştirmeleri."
+    },
+    "vi": {
+      "name": "Game Bài cho iMessage",
+      "subtitle": "Gin Rummy, Tám Quậy và Golf!",
+      "description": "Thách đấu bạn bè với các trò chơi bài kinh điển mà không phải bận tâm về việc tạo tài khoản hay chuyển đổi ứng dụng. Dù bạn đang chờ tin nhắn phản hồi hay chỉ muốn giết thời gian trong lúc trò chuyện, một ván bài luôn sẵn sàng chỉ với một cú chạm! Tiếp tục ở lại cửa sổ trò chơi để có một trải nghiệm liền mạch, hoặc quay lại chơi tiếp khi bạn rảnh rỗi!\n\nCác trò chơi bao gồm:\nGin Rummy: Trò chơi Gin nguyên bản, kinh điển. Hãy tạo các bộ dây (runs) và bộ đồng cấp (sets).\nTám Quậy: Trở thành người đánh hết bài đầu tiên để giành chiến thắng. Các quân 8 là những lá bài vạn năng!\nBài Golf: Cố gắng giữ điểm số của bạn ở mức thấp nhất trong trò chơi mang tính chiến thuật được yêu thích này.\n\nChỗ ngồi của bạn tại bàn chơi đã sẵn sàng! Hãy bắt đầu ván bài đầu tiên của bạn ngay hôm nay!",
+      "keywords": "nhiều người chơi,cổ điển,nhắn tin,cặp đôi,bạn bè,miễn phí,poker,xếp bài,solitaire,tiến lên,phỏm",
+      "promotionalText": "",
+      "whatsNew": "Sửa lỗi và cải thiện bản địa hóa."
+    },
+    "zh-Hans": {
+      "name": "iMessage 纸牌游戏合集",
+      "subtitle": "金拉米、疯狂8、高尔夫纸牌",
+      "description": "无需注册账号或切换应用，即可邀请好友畅玩经典纸牌游戏。无论是在等待回复，还是想在聊天时打发时间，只需轻点一下，游戏即刻开启！留在游戏界面中享受无缝体验，或者等有空时再回来继续！\n\n包含游戏：\n金拉米：经典的直金拉米。组成顺子和四张同点牌的牌组。\n疯狂8：率先出完手牌获胜。8点牌可作万能牌！\n高尔夫纸牌：在这款备受喜爱的策略游戏中，努力保持低分。\n\n您的座位已就绪！今天就来发第一手牌吧！",
+      "keywords": "金拉米,拉米,疯狂8,疯狂八,扑克,棋牌,纸牌,卡牌,合集,经典,多人,联网,对战,好友,策略,PK,休闲,益智,短信,imessage,打牌,桌游,双人,竞技,小游戏,回合制,聊天,单挑,免费,情侣",
+      "promotionalText": "",
+      "whatsNew": "修复错误并改进本地化。"
+    },
+    "zh-Hant": {
+      "name": "iMessage 紙牌遊戲合集",
+      "subtitle": "金拉米、瘋狂8、高爾夫紙牌",
+      "description": "無需繁瑣的帳號註冊或切換應用程式，即可與朋友挑戰經典紙牌遊戲。無論是等待回覆，還是想在聊天時打發時間，一場遊戲只需輕點一下！留在遊戲視窗中享受無縫體驗，或等到有空時再回來繼續！\n\n內含遊戲：\n金拉米：經典的直線金拉米。組成順子與組牌。\n瘋狂8：率先出完手牌即勝。8點牌可當萬能牌！\n高爾夫紙牌：在這款策略性十足的熱門遊戲中，盡量保持低分。\n\n您的座位已備妥！今天就來發第一手牌吧！",
+      "keywords": "金拉米,拉米,瘋狂8,撲克,棋牌,紙牌,卡牌,合集,經典,多人,連網,對戰,好友,策略,PK,休閒,益智,簡訊,imessage,打牌,桌遊,雙人,麻將,競技,撲克牌,高爾夫,小遊戲,免費,情侶,單挑",
+      "promotionalText": "",
+      "whatsNew": "修復錯誤並改進在地化。"
+    }
+  }
+}
