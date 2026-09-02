@@ -38,7 +38,7 @@ class MessagesViewController: MSMessagesAppViewController {
     @objc private func sceneWillDeactivate(_ notification: Notification) { //for detecting scene closues on ipad
         guard let scene = notification.object as? UIScene,
               scene == view.window?.windowScene else { return }
-        SoundManager.instance.stopBackgroundMusic()
+        SoundManager.instance.stopBackgroundMusic(owner: self)
     }
     
     override func viewWillLayoutSubviews() {
@@ -73,6 +73,9 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: - Conversation Handling
     override func willBecomeActive(with conversation: MSConversation) {
         super.willBecomeActive(with: conversation)
+        // A theme bought in the sister app on this device lands in the shared App Group silently —
+        // there's no notification for it, so re-read on every activation. Must be above the guard.
+        StoreManager.shared.refreshSisterEntitlements()
         guard let message = conversation.selectedMessage, // Do we have a message? Can we decode it?
             let gameInfo = extractGameInfo(from: message) else { //No message to decode, the user is opening the main menu
             if presentationStyle != .transcript && children.isEmpty {
@@ -91,6 +94,9 @@ class MessagesViewController: MSMessagesAppViewController {
             presentTranscriptView(for: gameInfo.type, stateData: gameInfo.data, isFromMe: isFromMe, localParticipantID: conversation.localParticipantIdentifier)
         } else {
             loadGameStateToMemory(from: message, conversation: conversation)
+            // Becoming active again with the game still on screen — willResignActive stopped the
+            // music on the way out, and willTransition won't fire to bring it back.
+            if isShowingGameView { SoundManager.instance.startBackgroundMusic(owner: self) }
         }
     }
 
@@ -99,7 +105,11 @@ class MessagesViewController: MSMessagesAppViewController {
     }
 
     override func willResignActive(with conversation: MSConversation) { //immediate closing changes
-        SoundManager.instance.stopBackgroundMusic()
+        // Transcript instances resign constantly — a live-layout bubble is built and torn down for
+        // every message sent or received — and they'd otherwise silence the game running above them.
+        if presentationStyle != .transcript {
+            SoundManager.instance.stopBackgroundMusic(owner: self)
+        }
         super.willResignActive(with: conversation)
     }
 
@@ -345,8 +355,12 @@ class MessagesViewController: MSMessagesAppViewController {
         }
 
         presentView(UIHostingController(rootView: menuView))
-        SoundManager.instance.stopBackgroundMusic()
+        SoundManager.instance.stopBackgroundMusic(owner: self)
     }
+
+    /// The menu is the only non-game thing this controller ever presents outside a transcript, so
+    /// "showing something that isn't the menu" is the game.
+    private var isShowingGameView: Bool { !children.isEmpty && !(children.first is UIHostingController<MainMenuView>) }
     
     private func presentGameView() {
         guard let engine = activeGameEngine else { return }
@@ -371,7 +385,7 @@ class MessagesViewController: MSMessagesAppViewController {
         }
         
         presentView(gameViewController)
-        SoundManager.instance.startBackgroundMusic()
+        SoundManager.instance.startBackgroundMusic(owner: self)
     }
     
     private func presentView(_ viewController: UIViewController) {

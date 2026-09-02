@@ -1,152 +1,55 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "crazy8sTitleTextEnglish.png",
-      "idiom" : "universal",
-      "scale" : "1x"
+      "filename": "crazy8sTitleTextEnglish.png",
+      "idiom": "universal"
     },
     {
-      "idiom" : "universal",
-      "scale" : "2x"
+      "filename": "crazy8sTitleTextChineseS.png",
+      "idiom": "universal",
+      "locale": "zh-Hans"
     },
     {
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename": "crazy8sTitleTextChineseT.png",
+      "idiom": "universal",
+      "locale": "zh-Hant"
     },
     {
-      "filename" : "crazy8sTitleTextChineseS.png",
-      "idiom" : "universal",
-      "locale" : "zh-Hans",
-      "scale" : "1x"
+      "filename": "crazy8sTitleTextDutch.png",
+      "idiom": "universal",
+      "locale": "nl"
     },
     {
-      "idiom" : "universal",
-      "locale" : "zh-Hans",
-      "scale" : "2x"
+      "filename": "crazy8sTitleTextFrench.png",
+      "idiom": "universal",
+      "locale": "fr"
     },
     {
-      "idiom" : "universal",
-      "locale" : "zh-Hans",
-      "scale" : "3x"
+      "filename": "crazy8sTitleCardKorean.png",
+      "idiom": "universal",
+      "locale": "ko"
     },
     {
-      "filename" : "crazy8sTitleTextChineseT.png",
-      "idiom" : "universal",
-      "locale" : "zh-Hant",
-      "scale" : "1x"
+      "filename": "crazy8sTitleTextItalian.png",
+      "idiom": "universal",
+      "locale": "it"
     },
     {
-      "idiom" : "universal",
-      "locale" : "zh-Hant",
-      "scale" : "2x"
+      "filename": "crazy8sTitleCardRussian.png",
+      "idiom": "universal",
+      "locale": "ru"
     },
     {
-      "idiom" : "universal",
-      "locale" : "zh-Hant",
-      "scale" : "3x"
-    },
-    {
-      "filename" : "crazy8sTitleTextDutch.png",
-      "idiom" : "universal",
-      "locale" : "nl",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "nl",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "nl",
-      "scale" : "3x"
-    },
-    {
-      "filename" : "crazy8sTitleTextFrench.png",
-      "idiom" : "universal",
-      "locale" : "fr",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "fr",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "fr",
-      "scale" : "3x"
-    },
-    {
-      "filename" : "crazy8sTitleCardKorean.png",
-      "idiom" : "universal",
-      "locale" : "ko",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "ko",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "ko",
-      "scale" : "3x"
-    },
-    {
-      "filename" : "crazy8sTitleTextItalian.png",
-      "idiom" : "universal",
-      "locale" : "it",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "it",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "it",
-      "scale" : "3x"
-    },
-    {
-      "filename" : "crazy8sTitleCardRussian.png",
-      "idiom" : "universal",
-      "locale" : "ru",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "ru",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "ru",
-      "scale" : "3x"
-    },
-    {
-      "filename" : "crazy8sTitleTextVietnamese.png",
-      "idiom" : "universal",
-      "locale" : "vi",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "vi",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "locale" : "vi",
-      "scale" : "3x"
+      "filename": "crazy8sTitleTextVietnamese.png",
+      "idiom": "universal",
+      "locale": "vi"
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
   },
-  "properties" : {
-    "localizable" : true
+  "properties": {
+    "localizable": true
   }
 }

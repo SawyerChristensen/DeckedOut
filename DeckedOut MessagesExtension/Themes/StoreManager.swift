@@ -19,14 +19,31 @@ final class StoreManager: ObservableObject {
     /// `start()` has resolved the storefront. Used as an additional signal for region-gated themes.
     @Published private(set) var storefrontCountryCode: String? = nil
 
+    /// Canonical IDs (e.g. `"Theme.Koi"`) owned through the sister app, PocketPoker. Merged into
+    /// `isOwned` / `directlyOwns` so a theme bought in either app is usable in both.
+    /// See `SharedEntitlements` for how this crosses the app boundary.
+    @Published private(set) var sisterCanonicalIDs: Set<String> = []
+
     /// Non-consumable IAP that grants every other paid IAP.
     static let masterUnlockProductID = "Sawyer.DeckedOut.MasterUnlock"
-    var ownsMasterUnlock: Bool { ownedProductIDs.contains(Self.masterUnlockProductID) }
+
+    /// A master unlock is deliberately a master unlock for *both* games: bought in either app, it
+    /// grants every paid theme here too. The sister app only ever publishes the master unlock
+    /// itself (not the themes it implies), so this check is what expands it on the far side.
+    var ownsMasterUnlock: Bool {
+        ownedProductIDs.contains(Self.masterUnlockProductID)
+            || sisterCanonicalIDs.contains(SharedEntitlements.masterUnlockCanonical)
+    }
 
     private var updatesTask: Task<Void, Never>?
+    private var cloudObserver: NSObjectProtocol?
     private var hasStarted = false
 
     private init() {}
+
+    deinit {
+        if let cloudObserver { NotificationCenter.default.removeObserver(cloudObserver) }
+    }
 
     /// Idempotent: starts the transaction listener and loads products + entitlements.
     func start() async {
@@ -35,9 +52,34 @@ final class StoreManager: ObservableObject {
         if let storefront = await Storefront.current {
             storefrontCountryCode = storefront.countryCode
         }
+        observeSisterEntitlements()
         updatesTask = listenForTransactions()
         await loadProducts()
         await refreshEntitlements()
+    }
+
+    /// Re-read what the sister app owns. Two plist reads and no StoreKit round-trip, so this is
+    /// cheap enough to call on every activation — which is necessary: a same-device purchase in the
+    /// sister app just writes the App Group, with no notification this process would otherwise see.
+    /// Call from `willBecomeActive(with:)`.
+    func refreshSisterEntitlements() {
+        SharedEntitlements.synchronizeCloud()
+        sisterCanonicalIDs = SharedEntitlements.fromSisterApps()
+    }
+
+    /// Covers the other direction: a purchase made in the sister app on *another* device, which
+    /// arrives as an iCloud change rather than an activation.
+    private func observeSisterEntitlements() {
+        SharedEntitlements.synchronizeCloud()
+        cloudObserver = NotificationCenter.default.addObserver(
+            forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: NSUbiquitousKeyValueStore.default,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.sisterCanonicalIDs = SharedEntitlements.fromSisterApps()
+            }
+        }
     }
 
     func loadProducts() async {
@@ -59,6 +101,8 @@ final class StoreManager: ObservableObject {
             }
         }
         ownedProductIDs = owned
+        SharedEntitlements.publish(localProductIDs: owned)
+        sisterCanonicalIDs = SharedEntitlements.fromSisterApps()
     }
 
     /// Returns true if the purchase completed (or was already owned). False on cancel/pending/failure.
@@ -77,6 +121,7 @@ final class StoreManager: ObservableObject {
                 if case .verified(let transaction) = verification {
                     ownedProductIDs.insert(transaction.productID)
                     await transaction.finish()
+                    SharedEntitlements.publish(localProductIDs: ownedProductIDs)
                     return true
                 }
                 return false
@@ -91,6 +136,10 @@ final class StoreManager: ObservableObject {
     }
 
     /// Required for non-consumable IAPs. Wire up to a "Restore Purchases" button.
+    ///
+    /// Note this only restores *this* app's ledger — `AppStore.sync()` cannot see PocketPoker's
+    /// purchases. Themes bought there come back via `SharedEntitlements` instead, which needs
+    /// either PocketPoker installed on this device or the same iCloud account signed in.
     func restore() async {
         try? await AppStore.sync()
         await refreshEntitlements()
@@ -102,6 +151,7 @@ final class StoreManager: ObservableObject {
         guard let id = productID else { return true }
         if ownsMasterUnlock { return true }
         return ownedProductIDs.contains(id)
+            || sisterCanonicalIDs.contains(SharedEntitlements.canonical(id))
     }
 
     /// True only if this exact IAP was purchased directly — master unlock does NOT count.
@@ -111,6 +161,7 @@ final class StoreManager: ObservableObject {
     func directlyOwns(_ productID: String?) -> Bool {
         guard let id = productID else { return true }
         return ownedProductIDs.contains(id)
+            || sisterCanonicalIDs.contains(SharedEntitlements.canonical(id))
     }
 
     /// Localized price for a product ID, or nil if products haven't loaded yet or IAPs are disabled.
@@ -128,8 +179,10 @@ final class StoreManager: ObservableObject {
         return Task { [weak self] in
             for await result in Transaction.updates {
                 guard case .verified(let transaction) = result else { continue }
-                self?.ownedProductIDs.insert(transaction.productID)
                 await transaction.finish()
+                // Full recompute, not an insert: a revocation has to be able to *shrink* the
+                // snapshot published to the sister app, not just grow it.
+                await self?.refreshEntitlements()
             }
         }
     }

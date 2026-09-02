@@ -17,10 +17,22 @@ nonisolated class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES
     
     // Audio Players
     private var backgroundMusicPlayer: AVAudioPlayer?
+    /// Whether the game currently wants music, as opposed to whether the player happens to be
+    /// running. An audio session interruption — a phone call, Siri, an alarm — pauses
+    /// `backgroundMusicPlayer` behind our back and never resumes it on its own, so the two can
+    /// drift apart; `handleInterruption` uses this to know whether to put them back together.
+    private var musicShouldBePlaying = false
+    /// Which view controller the music belongs to. iMessage runs several `MSMessagesAppViewController`
+    /// instances inside one extension process — the app itself, plus one per live-layout bubble in
+    /// the transcript — and every one of them reaches this same shared singleton. Every move sends a
+    /// message, every message adds a bubble, and the transcript instances behind it are created and
+    /// torn down as that happens; their `willResignActive` must not be able to stop the music
+    /// playing in the game sitting on top of them.
+    private weak var musicOwner: AnyObject?
     private var cardDealPlayer: AVAudioPlayer?
     private var cardSlapPlayer: AVAudioPlayer?
     private var gameOverPlayer: AVAudioPlayer?
-    
+
     //MARK: - INIT
     private override init() {
         super.init()
@@ -28,6 +40,14 @@ nonisolated class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES
         NotificationCenter.default.addObserver(self,
             selector: #selector(handleSecondaryAudioChange),
             name: AVAudioSession.silenceSecondaryAudioHintNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(handleInterruption),
+            name: AVAudioSession.interruptionNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(handleMediaServicesReset),
+            name: AVAudioSession.mediaServicesWereResetNotification,
             object: nil)
     }
     
@@ -65,16 +85,41 @@ nonisolated class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES
         }
     }
     
-    func startBackgroundMusic() {
+    func startBackgroundMusic(owner: AnyObject) {
+        musicOwner = owner
+        musicShouldBePlaying = true
         if backgroundMusicPlayer?.isPlaying == true { return }
+        if backgroundMusicPlayer != nil { // Paused by an interruption -> pick the song back up where it left off
+            resumeBackgroundMusic()
+            return
+        }
         playRandomSong() // Nothing playing? Start a song!
     }
-    
-    func stopBackgroundMusic() {
+
+    /// Only whoever started the music can stop it — see `musicOwner`. A `nil` owner means the
+    /// instance that started it is gone, so there is no one left to stop it on behalf of.
+    func stopBackgroundMusic(owner: AnyObject) {
+        guard musicOwner == nil || musicOwner === owner else { return }
+        musicOwner = nil
+        musicShouldBePlaying = false
         backgroundMusicPlayer?.stop()
+        backgroundMusicPlayer = nil // Drop the player so the next game opens on a freshly picked song
     }
-    
-    
+
+    /// Put the music back on if something silenced it without our asking — see `musicShouldBePlaying`.
+    private func resumeBackgroundMusicIfNeeded() {
+        guard musicShouldBePlaying, let player = backgroundMusicPlayer, !player.isPlaying else { return }
+        resumeBackgroundMusic()
+    }
+
+    private func resumeBackgroundMusic() {
+        // The user put their own audio on while we were quiet -> stay out of the way.
+        if AVAudioSession.sharedInstance().secondaryAudioShouldBeSilencedHint { return }
+        try? AVAudioSession.sharedInstance().setActive(true) // An interruption leaves the session deactivated
+        backgroundMusicPlayer?.play()
+    }
+
+
     //MARK: - Background Music Helper Functions
     private func playRandomSong() {
         // If the user is already playing audio, skip playing game background music
@@ -109,16 +154,63 @@ nonisolated class SoundManager: NSObject, AVAudioPlayerDelegate { //ALSO HANDLES
               let typeValue = userInfo[AVAudioSessionSilenceSecondaryAudioHintTypeKey] as? UInt,
               let type = AVAudioSession.SilenceSecondaryAudioHintType(rawValue: typeValue) else { return }
 
-        if type == .begin {
-            // User started playing music elsewhere -> Fade out ours
-            backgroundMusicPlayer?.setVolume(0, fadeDuration: 1.0)
-        } else {
-            // User stopped their music -> Fade ours back in
-            backgroundMusicPlayer?.play()
-            backgroundMusicPlayer?.setVolume(0.15, fadeDuration: 1.0)
+        onMain {
+            if type == .begin {
+                // User started playing music elsewhere -> Fade out ours
+                self.backgroundMusicPlayer?.setVolume(0, fadeDuration: 1.0)
+            } else {
+                // User stopped their music -> Fade ours back in
+                self.backgroundMusicPlayer?.play()
+                self.backgroundMusicPlayer?.setVolume(0.15, fadeDuration: 1.0)
+            }
         }
     }
-    
+
+    /// `AVAudioPlayer` pauses itself when the session is interrupted — a phone call, Siri, an
+    /// alarm — and stays paused forever unless someone starts it again. A game is sat in for
+    /// minutes at a time, so that is worth coming back from.
+    @objc private func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
+
+        switch type {
+        case .began:
+            break // The player has already paused itself; `musicShouldBePlaying` remembers we want it back
+        case .ended:
+            // Deliberately not gated on the `.shouldResume` option: this is ambient background
+            // music at 0.15 volume for a game the user is still sitting in front of, and
+            // `resumeBackgroundMusic()` already defers to any audio of their own.
+            onMain { self.resumeBackgroundMusicIfNeeded() }
+        @unknown default:
+            break
+        }
+    }
+
+    /// A media services reset invalidates every `AVAudioPlayer` we hold, so rebuild the lot.
+    @objc private func handleMediaServicesReset(notification: Notification) {
+        onMain {
+            let wantsMusic = self.musicShouldBePlaying
+
+            self.cardDealPlayer = nil
+            self.cardSlapPlayer = nil
+            self.gameOverPlayer = nil
+            self.backgroundMusicPlayer = nil
+
+            try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+            try? AVAudioSession.sharedInstance().setActive(true)
+
+            self.setupSFX()
+            if wantsMusic, let owner = self.musicOwner { self.startBackgroundMusic(owner: owner) }
+        }
+    }
+
+    /// Audio session notifications arrive on whatever thread the session server posts them from,
+    /// and `AVAudioPlayer` isn't thread-safe — every player here is created and driven on main.
+    private func onMain(_ work: @escaping @Sendable () -> Void) {
+        if Thread.isMainThread { work() } else { DispatchQueue.main.async(execute: work) }
+    }
+
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if player == backgroundMusicPlayer {
             // Song finished? Start the next one!

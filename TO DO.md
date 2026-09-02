@@ -2,7 +2,20 @@
 ---
 
 ## 🚀 Active Release Milestones
+
+### Update 3.7.0: PocketPoker Parity
+- [x] Fix backgorund music stopping like we did in pocket poker
+- [ ] Replace all DispatchQueues with Tasks (more modern)
+- [ ] Give a real frame space reservation rather than a hidden gin expanded submenu in each non-gin submenu
+  - [ ] Make the submenus spaced more like the pocket poker submenus 
+- [x] Remove GameLogoCards (deprecated after gameCardArtElements)
+- [x] See if all of the caption texts are accurate
+- [x] Fix why the Card Games for iMessage listing only displays English as a language and not all the others (test if fixed)
+- [ ] Asset compression like pocket poker. Migrate the new default deck fronts to be used here
+  - [ ] Use 150 card sizing instead of 145  (clean 1/3 of a 450 height card asset)
 ### Update 4.0.0: 4th Game Expansion
+- [ ] Test shared entitlements for IAPs
+- [ ] Test if multiple languages show up in the app store for CGFI
 - [ ] Implement Cribbage
   - [ ] Backend
     - [ ] Single Player
@@ -39,6 +52,10 @@
 - [ ] UI Polish
   - [ ] Create a unique, better win screen for each game
 - [ ] Organize and refactor project structure
+- [ ] Add 3D card elements and true 3D decks?
+  - [ ] Better shadows?
+  - [ ] A deal at the start of a game?
+    - [ ] Convert audio files to file type used in pocketpoker (only matters for quickly repeating sound effects)
 
 ### Localization
 - [ ] Dialects of already localized languages
@@ -111,14 +128,12 @@
 ### UI Layout & Z-Index Artifacts
 - [ ] Fix rendering hierarchy in group chat Crazy 8s: "Selected" text renders below opponent hand's Z value. 
 - [ ] Refactor opponent hand Z-index layers: Must sit lower than the deck layer, but drawn cards must dynamically spawn on top to prevent clipping.
-
-### Animation Glitches
-- [x] **Crazy 8s:** Discarding a Queen and immediately executing another card as the final move skips the Queen's discard animation.
-- [x] **1v1 Mode:** If drawing cards causes a user to receive a Queen, play it, draw more, and discard again, animations break if drawing more than 3 cards.
-
 ### Accessibility Additions
 - [ ] Enable Voice Control users to be able to send discard and automatically send messages the same way that discarding a card via touch does
   - *Note: This is currently not possible with the current way Apple treats the send() function. A touch interaction seems to be needed for send() to work. This issue was reported via Feedback Assistant*
+
+### Transcript / Caption Parity
+- [ ] **Golf live vs. template caption mismatches (minor, deferred):** `GolfTranscriptV2` shows game-over captions from the *viewer's* perspective without checking `isFromMe`, so a losing player is told "You won in Golf!" (Legacy view and template are correct); separately, the template's non-winning branch never emits "Last turn in Golf!" during the final go-around, always saying "Your turn in Golf!". Fix by passing `isFromMe` into `GolfTranscriptV2` (mirror Legacy's `isFromMe == playerWon` logic) and detecting the going-out state in `sendGameMove`. <Not sure if this is correct, but this is low priority because how many people are viewing groupchat golf games with a non-live view? (basically 0%)
 
 ---
 
@@ -204,4 +219,5 @@
 - [ ] Clean up initialization code: Move custom `init` logic inside `PlayerHandView` out of the extension and into the main declaration body wrapper.
 - [ ] Debug audio layer warning: Trace and eliminate the "audio session failure" print statement occurring in console streams.
 - [ ] Does "isFaceUp" need to be a passed variable?
+
 
