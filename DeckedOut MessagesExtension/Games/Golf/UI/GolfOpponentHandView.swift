@@ -172,7 +172,8 @@ struct GolfOpponentHandView: View {
             }
 
             // Commit the swap after animations complete
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.55 / motionSpeed) {
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: UInt64(550_000_000.0 / motionSpeed))
                 game.opponentReplaceCard()
                 game.opponentDepartingFromIndex = nil
                 

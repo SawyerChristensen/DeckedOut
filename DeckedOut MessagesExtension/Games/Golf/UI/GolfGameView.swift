@@ -303,7 +303,8 @@ struct GolfGameView: View {
             hoveringShadowRadius = 0
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(350_000_000.0 / motionSpeed))
             game.discardDrawnCard()
             hoveringCardOffset = .zero
             hoveringFlipRotation = 0
@@ -468,7 +469,8 @@ struct GolfGameView: View {
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.55 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(550_000_000.0 / motionSpeed))
             game.opponentReplaceCard()
             deckToDiscardCard = nil
             deckToDiscardOffset = .zero
@@ -541,7 +543,8 @@ struct GolfGameView: View {
         }
 
         // Commit the swap after animations land
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(350_000_000.0 / motionSpeed))
             game.replaceCard(at: index)
             departingIndex = nil
             departingOffset = .zero

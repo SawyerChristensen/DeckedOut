@@ -3,16 +3,6 @@
 
 ## 🚀 Active Release Milestones
 
-### Update 3.6.2: PocketPoker Parity
-- [x] Fix backgorund music stopping like we did in pocket poker
-- [ ] Replace all DispatchQueues with Tasks (more modern)
-- [ ] Give a real frame space reservation rather than a hidden gin expanded submenu in each non-gin submenu
-  - [ ] Make the submenus spaced more like the pocket poker submenus 
-- [x] Remove GameLogoCards (deprecated after gameCardArtElements)
-- [x] See if all of the caption texts are accurate
-- [x] Fix why the Card Games for iMessage listing only displays English as a language and not all the others (test if fixed)
-- [x] Asset compression like pocket poker. Migrate the new default deck fronts to be used here
-  - [x] Use 150 card sizing instead of 145  (clean 1/3 of a 450 height card asset)
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Test shared entitlements for IAPs
 - [ ] Test if multiple languages show up in the app store for CGFI

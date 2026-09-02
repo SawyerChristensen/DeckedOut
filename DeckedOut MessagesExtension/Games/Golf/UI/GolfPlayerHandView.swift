@@ -140,7 +140,8 @@ struct GolfPlayerHandView: View {
         }
         .onChange(of: game.playerCancelledIndices) { _, new in
             // Defer past the placement reset so the .animation(value: isCancelled) doesn't pull the offset reset into its transaction
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            Task {
+                try? await Task.sleep(nanoseconds: 50_000_000)
                 displayedCancelled = new
             }
         }
@@ -168,7 +169,8 @@ struct GolfPlayerHandView: View {
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(500_000_000.0 / motionSpeed))
             animatingCard = nil
             flipRotation = 0
         }

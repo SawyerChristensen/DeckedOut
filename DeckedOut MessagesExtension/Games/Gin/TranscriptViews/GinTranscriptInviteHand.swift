@@ -87,8 +87,9 @@ struct GinTranscriptInviteHand: View {
         
         // 2. Wait for animation to finish, then reset instantly
         // The delay here should match animation duration + stagger
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 1_500_000_000)
+
             // Disable animation for the reset to make it instant
             var transaction = Transaction()
             transaction.disablesAnimations = true

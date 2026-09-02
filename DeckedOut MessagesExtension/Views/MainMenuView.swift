@@ -813,9 +813,10 @@ struct MainMenuView: View {
                 crazy8sCompactSubmenu
                     .transition(.opacity)
             }
-            ginExpandedSubmenu
-                .hidden() //here to match crazy8sSubmenuView size to ginSubmenuView
         }
+        //claim the full screen so the compact submenu centres identically to Gin's,
+        //without rendering a hidden ginExpandedSubmenu just to borrow its size
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .animation(.easeInOut(duration: 0.25).speed(motionSpeed), value: isExpanded)
         .transition(.offset(y: UIScreen.main.bounds.height / 2))
     }
@@ -870,45 +871,35 @@ struct MainMenuView: View {
                 golfCompactSubmenu
                     .transition(.opacity)
             }
-            ginExpandedSubmenu
-                .hidden() //here to match golfSubmenuView size to ginSubmenuView
         }
+        //claim the full screen so the compact submenu centres identically to Gin's,
+        //without rendering a hidden ginExpandedSubmenu just to borrow its size
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .animation(.easeInOut(duration: 0.25).speed(motionSpeed), value: isExpanded)
         .transition(.offset(y: UIScreen.main.bounds.height / 2))
     }
     
+    /// Height a compact submenu body occupies in the Gin/Crazy 8s layout (deck art plus the
+    /// hand-size picker column). Golf has no picker, so it reserves this height with a plain
+    /// spacer rather than laying out a hidden picker column just to borrow its size.
+    private let compactSubmenuBodyHeight: CGFloat = 290
+
     private var golfCompactSubmenu: some View {
         ZStack(alignment: .topLeading) {
             backButton
                 .padding(.leading, 30)
-                
-            HStack {
-                Spacer()
-                deckSection
-                    .zIndex(999)
-                    .padding(.top, 50)
-                    .rotationEffect(.degrees(-10), anchor: .top)
-                Spacer()
-                
-                VStack(spacing: 20) {
-                    startButton
-                        .offset(x: 0, y: 100) //offset moves the start button down, but doesnt affect the layout
-                    handSizePicker
-                        .hidden() //makes the handSizePicker here invisible and non-interactive, but it still affects spacing
+
+            Color.clear
+                .frame(maxWidth: .infinity, maxHeight: compactSubmenuBodyHeight) // reserves the same body space as the other games
+                .overlay(alignment: .top) {
+                    ZStack(alignment: .top) {
+                        golfDeckGrid
+                            .zIndex(999)
+                            .padding(.top, 80)
+
+                        startButton
+                    }
                 }
-                .padding(.trailing, 10)
-            }
-            .hidden() // ^ just for reserving space
-            .overlay(alignment: .top) {
-                
-                ZStack(alignment: .top) {
-                    golfDeckGrid
-                        .zIndex(999)
-                        .padding(.top, 80)
-                    
-                    startButton
-                }
-            }
         }
     }
     

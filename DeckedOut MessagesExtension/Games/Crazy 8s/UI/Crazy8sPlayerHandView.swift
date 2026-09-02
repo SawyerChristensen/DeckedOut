@@ -139,7 +139,8 @@ struct Crazy8sPlayerHandView: View {
         }
         .frame(height: cardHeight)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { //kind of a bandaid solution but it works
+            Task { //kind of a bandaid solution but it works
+                try? await Task.sleep(nanoseconds: 100_000_000)
                 hasInitialLoadCompleted = true
             }
         }
@@ -173,7 +174,8 @@ struct Crazy8sPlayerHandView: View {
             voiceDiscardOffset = offset
             voiceDiscardRotation = .zero
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(450_000_000.0 / motionSpeed))
             game.playerAutoDiscardLanded(card: card)
             game.playerCardAnimatingToDiscard = nil
             voiceDiscardingCard = nil
@@ -202,7 +204,8 @@ struct Crazy8sPlayerHandView: View {
         }
 
         // Clear animation state after animation completes
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(500_000_000.0 / motionSpeed))
             animatingCard = nil
             flipRotation = 0
         }
@@ -301,7 +304,8 @@ struct Crazy8sPlayerHandView: View {
             voiceDiscardOffset = offset
             voiceDiscardRotation = .zero
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(450_000_000.0 / motionSpeed))
             game.discardCard(card: card)
             voiceDiscardingCard = nil
             voiceDiscardOffset = .zero

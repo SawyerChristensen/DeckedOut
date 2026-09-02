@@ -163,7 +163,8 @@ struct GinPlayerHandView: View {
         }
 
         // Clear animation state after animation completes
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(500_000_000.0 / motionSpeed))
             animatingCard = nil
             flipRotation = 0
         }
@@ -257,7 +258,8 @@ struct GinPlayerHandView: View {
             voiceDiscardOffset = offset
             voiceDiscardRotation = .zero
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(450_000_000.0 / motionSpeed))
             game.discardCard(card: card)
             voiceDiscardingCard = nil
             voiceDiscardOffset = .zero

@@ -152,7 +152,8 @@ struct Crazy8sOpponentHandView: View {
         }
 
         // Clear draw animation state
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(500_000_000.0 / motionSpeed))
             self.animatingCard = nil
         }
     }
@@ -182,7 +183,8 @@ struct Crazy8sOpponentHandView: View {
         }
 
         // Resolve animation state
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(500_000_000.0 / motionSpeed))
             animatingCard = nil
             animationOffset = .zero
             game.opponentDiscardCard(card: card)

@@ -177,7 +177,8 @@ struct GinOpponentHandView: View {
         }
 
         // Clear draw animation state and call discard animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(700_000_000.0 / motionSpeed))
             completion()
         }
     }
@@ -205,7 +206,8 @@ struct GinOpponentHandView: View {
         }
 
         // Resolve animation state
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 / motionSpeed) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(500_000_000.0 / motionSpeed))
             animatingCard = nil
             animationOffset = .zero
             game.opponentDiscardCard(card: card)

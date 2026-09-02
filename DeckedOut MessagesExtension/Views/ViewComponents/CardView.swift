@@ -138,7 +138,8 @@ struct CrossfadingBackImage: View {
             withAnimation(.easeInOut(duration: 0.4).speed(motionSpeed)) {
                 fadeOpacity = 0
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 / motionSpeed) {
+            Task {
+                try? await Task.sleep(nanoseconds: UInt64(400_000_000.0 / motionSpeed))
                 if token == current { fadingName = nil }
             }
         }
@@ -195,7 +196,8 @@ struct CrossfadingDiscardCard: View {
                 overlayOpacity = 0
             }
             // Remove the overlay once the fade completes (unless a newer fade has since started).
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 / motionSpeed) {
+            Task {
+                try? await Task.sleep(nanoseconds: UInt64(400_000_000.0 / motionSpeed))
                 if token == current { overlayBack = nil }
             }
         }

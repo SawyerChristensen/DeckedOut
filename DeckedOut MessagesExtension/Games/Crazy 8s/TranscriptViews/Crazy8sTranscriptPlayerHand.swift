@@ -84,13 +84,15 @@ struct Crazy8sTranscriptPlayerHand: View {
         if !cardFlipTrigger {
             cardFlipTrigger = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 1_200_000_000)
                 cardsAreExpanded = true
             }
         } else {
             cardsAreExpanded = false
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 400_000_000)
                 cardFlipTrigger = false
             }
         }
