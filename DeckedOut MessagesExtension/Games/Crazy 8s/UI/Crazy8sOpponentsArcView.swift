@@ -28,7 +28,7 @@ struct Crazy8sOpponentsArcView: View {
     }
 
     private var handScale: CGFloat { return 1.0 / sqrt(CGFloat(opponentCount)) } // 1 = 1.0, 2 = 0.71, 3 = 0.58, 4 = 0.5, 5 = 0.45...
-    private var scaledCardHeight: CGFloat { 145 * handScale }
+    private var scaledCardHeight: CGFloat { 150 * handScale }
     private var screenWidth: CGFloat {
         UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width
     }
@@ -133,9 +133,10 @@ struct Crazy8sOpponentsArcView: View {
 
     @ViewBuilder
     private func staticOpponentHand(cards: [Card], cardBackName: String = "cardBackRed") -> some View {
-        let cardW: CGFloat = (cards.count >= 10 ? 98 : 101.5) * handScale
-        let cardH: CGFloat = (cards.count >= 10 ? 140 : 145) * handScale
-        let sp: CGFloat = (cards.count >= 10 ? -72 : -66) * handScale
+        let m = Crazy8sHandMetrics.metrics(count: cards.count, scale: handScale)
+        let cardW: CGFloat = m.width
+        let cardH: CGFloat = m.height
+        let sp: CGFloat = m.spacing
         let center = Double(cards.count - 1) / 2.0
         let fan: Double = 4
         let yMult = 5.0 * Double(handScale)

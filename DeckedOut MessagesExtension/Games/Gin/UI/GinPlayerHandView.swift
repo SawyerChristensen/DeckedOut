@@ -39,10 +39,10 @@ struct GinPlayerHandView: View {
     @State private var voiceDiscardOffset: CGSize = .zero
     @State private var voiceDiscardRotation: Angle = .zero
     
-    // Card sizing
-    private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 } // 140 * 0.7 & 145 * 0.7
-    private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
-    private var spacing: CGFloat { cards.count >= 10 ? -72 : -66 }
+    // Card sizing — fixed. A Gin hand is only ever handSize or handSize + 1 cards, so it never shrinks.
+    private var cardWidth: CGFloat { 105 } // 150 * 0.7
+    private var cardHeight: CGFloat { 150 }
+    private var spacing: CGFloat { -66 }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
 
     var body: some View {

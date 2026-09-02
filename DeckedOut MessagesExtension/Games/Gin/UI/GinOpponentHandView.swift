@@ -41,10 +41,10 @@ struct GinOpponentHandView: View {
     @State private var animatingShadowRadius: CGFloat = 0
     @State private var animatingScaleCorrection: CGFloat = 1.0
 
-    // Card sizing
-    private var cardWidth: CGFloat { (cards.count >= 10 ? 98 : 101.5) * sizeScale }
-    private var cardHeight: CGFloat { (cards.count >= 10 ? 140 : 145) * sizeScale }
-    private var spacing: CGFloat { (cards.count >= 10 ? -72 : -66) * sizeScale }
+    // Card sizing — fixed. A Gin hand is only ever handSize or handSize + 1 cards, so it never shrinks.
+    private var cardWidth: CGFloat { 105 * sizeScale } // 150 * 0.7
+    private var cardHeight: CGFloat { 150 * sizeScale }
+    private var spacing: CGFloat { -66 * sizeScale }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
     private let fanningAngle: Double = 4
     

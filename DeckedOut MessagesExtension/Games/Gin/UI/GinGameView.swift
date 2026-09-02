@@ -121,7 +121,7 @@ struct GinGameView: View {
                     CrossfadingBackImage(name: game.opponentDeckCardBack)
                         .opacity(isMyTurn ? 0 : 1)
                 }
-                .frame(height: 145)
+                .frame(height: 150)
                 .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
                 .shadow(radius: i == 4 ? 1 : 8)
                 .animation(cardBackSelection.selectedName == game.opponentDeckCardBack ? nil : .easeInOut(duration: 0.4).speed(motionSpeed), value: isMyTurn)
@@ -157,7 +157,7 @@ struct GinGameView: View {
     private var discardPile: some View {
         ZStack {
             Color.clear // A ghost view reserves the space so Spacers don't collapse when discardPile.count == 0
-                .frame(width: 101.5, height: 145) // 101.5 = 145 * 0.7
+                .frame(width: 105, height: 150) // 105 = 150 * 0.7
                 .background(
                     GeometryReader { geo in
                         Color.clear
@@ -178,7 +178,7 @@ struct GinGameView: View {
             } else { // display an outline of where a discarded card *should* go
                 RoundedRectangle(cornerRadius: 8)
                     .strokeBorder(Color.white.opacity(0.2), lineWidth: 2)
-                    .frame(width: 101.5, height: 145)
+                    .frame(width: 105, height: 150)
             }
         }
         .accessibilityElement(children: .ignore)

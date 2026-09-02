@@ -946,7 +946,7 @@ struct MainMenuView: View {
                                 Image(jokerCardName)
                                     .resizable()
                                     .aspectRatio(0.7, contentMode: .fit)
-                                    .frame(height: 145)
+                                    .frame(height: 150)
                                 
                                 Group {
                                     Image(systemName: "bubble.left.fill")
@@ -977,7 +977,7 @@ struct MainMenuView: View {
                                 }
                             }
                             
-                            let cardHeight: CGFloat = 145
+                            let cardHeight: CGFloat = 150
                             let cardWidth: CGFloat = cardHeight * 0.7
 
                             // Math to collapse the 3x2 grid inward to a single central point
@@ -1052,7 +1052,7 @@ struct MainMenuView: View {
             Image(jokerCardName)
                 .resizable()
                 .aspectRatio(0.7, contentMode: .fit)
-                .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145)
+                .frame(height: viewModel.presentationStyle == .expanded ? 200 : 150)
             
             Group {
                 Image(systemName: "bubble.left.fill")
@@ -1087,7 +1087,7 @@ struct MainMenuView: View {
                 Image(cardBackSelection.selectedName)
                     .resizable()
                     .aspectRatio(0.7, contentMode: .fit)
-                    .frame(height: viewModel.presentationStyle == .expanded ? 200 : 145) // Make cards bigger in expanded!
+                    .frame(height: viewModel.presentationStyle == .expanded ? 200 : 150) // Make cards bigger in expanded!
                     .rotationEffect(i >= 5 - cardsAnimatedAway ? Angle(degrees: 45) : Angle(degrees: 0))
                     .offset(x: i >= 5 - cardsAnimatedAway ? (isIpad ? 400 : 225) : CGFloat(-i) * 3,
                             y: i >= 5 - cardsAnimatedAway ? (isIpad ? 300 : -450) : CGFloat(-i) * 3)
@@ -1197,7 +1197,7 @@ struct MainMenuView: View {
         Image(cardBackSelection.themedFrontName(for: imageName))
             .resizable()
             .aspectRatio(0.7, contentMode: .fit)
-            .frame(height: 145)
+            .frame(height: 150)
             .cornerRadius(8)
             .shadow(color: isSelected ? .white.opacity(0.5) : .black.opacity(0.3), radius: isSelected ? 15 : 5)
             .rotationEffect(.degrees(tilt))

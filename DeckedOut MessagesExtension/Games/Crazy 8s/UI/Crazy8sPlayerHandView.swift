@@ -42,10 +42,11 @@ struct Crazy8sPlayerHandView: View {
     // Cached global frame of each card slot; used to animate a manager-driven auto-discard (Switch red-jack counter)
     @State private var slotFrames: [Int: CGRect] = [:]
 
-    // Card sizing
-    private var cardWidth: CGFloat { cards.count >= 10 ? 98 : 101.5 } // 140 * 0.7 & 145 * 0.7
-    private var cardHeight: CGFloat { cards.count >= 10 ? 140 : 145 }
-    private var spacing: CGFloat { cards.count >= 10 ? -72 : -66 }
+    // Card sizing — shrinks a step per card once the hand passes Crazy8sHandMetrics.fullSizeCount
+    private var metrics: Crazy8sHandMetrics.Metrics { Crazy8sHandMetrics.metrics(count: cards.count) }
+    private var cardWidth: CGFloat { metrics.width }
+    private var cardHeight: CGFloat { metrics.height }
+    private var spacing: CGFloat { metrics.spacing }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
 
     var body: some View {

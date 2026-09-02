@@ -40,10 +40,11 @@ struct Crazy8sOpponentHandView: View {
     @State private var animatingShadowRadius: CGFloat = 0
     @State private var animatingScaleCorrection: CGFloat = 1.0
     
-    // Card sizing
-    private var cardWidth: CGFloat { (cards.count >= 10 ? 98 : 101.5) * sizeScale }
-    private var cardHeight: CGFloat { (cards.count >= 10 ? 140 : 145) * sizeScale }
-    private var spacing: CGFloat { (cards.count >= 10 ? -72 : -66) * sizeScale }
+    // Card sizing — shrinks a step per card once the hand passes Crazy8sHandMetrics.fullSizeCount
+    private var metrics: Crazy8sHandMetrics.Metrics { Crazy8sHandMetrics.metrics(count: cards.count, scale: sizeScale) }
+    private var cardWidth: CGFloat { metrics.width }
+    private var cardHeight: CGFloat { metrics.height }
+    private var spacing: CGFloat { metrics.spacing }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
     private let fanningAngle: Double = 4
     

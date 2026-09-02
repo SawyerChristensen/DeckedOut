@@ -124,7 +124,7 @@ struct Crazy8sGameView: View {
                     CrossfadingBackImage(name: game.opponentDeckCardBack)
                         .opacity(showsPlayerDeckBack ? 0 : 1)
                 }
-                .frame(height: 145)
+                .frame(height: 150)
                 .offset(x: CGFloat(-i) * 3, y: CGFloat(-i) * 3)
                 .shadow(radius: i == 4 ? 1 : 8)
                 .animation(cardBackSelection.selectedName == game.opponentDeckCardBack ? nil : .easeInOut(duration: 0.4).speed(motionSpeed), value: showsPlayerDeckBack)
@@ -169,7 +169,7 @@ struct Crazy8sGameView: View {
     private var discardPile: some View { //Clear background probably not needed, but its guarantees safety. (open to review)
         ZStack {
             Color.clear // A ghost view reserves the space so Spacers don't collapse when discardPile.count == 0
-                .frame(width: 101.5, height: 145) // 101.5 = 145 * 0.7
+                .frame(width: 105, height: 150) // 105 = 150 * 0.7
                 .background(
                     GeometryReader { geo in
                         Color.clear

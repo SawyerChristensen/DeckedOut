@@ -27,7 +27,7 @@ struct GinOpponentsArcView: View {
     }
 
     private var handScale: CGFloat { return 1.0 / sqrt(CGFloat(opponentCount)) } // 1 = 1.0, 2 = 0.71, 3 = 0.58, 4 = 0.5, 5 = 0.45...
-    private var scaledCardHeight: CGFloat { 145 * handScale }
+    private var scaledCardHeight: CGFloat { 150 * handScale }
     private var screenWidth: CGFloat {
         UIDevice.current.userInterfaceIdiom == .pad ? game.extensionWidth : UIScreen.main.bounds.width
     }
@@ -133,9 +133,9 @@ struct GinOpponentsArcView: View {
 
     @ViewBuilder
     private func staticOpponentHand(cards: [Card], cardBackName: String = "cardBackRed") -> some View {
-        let cardW: CGFloat = (cards.count >= 10 ? 98 : 101.5) * handScale
-        let cardH: CGFloat = (cards.count >= 10 ? 140 : 145) * handScale
-        let sp: CGFloat = (cards.count >= 10 ? -72 : -66) * handScale
+        let cardW: CGFloat = 105 * handScale // 150 * 0.7
+        let cardH: CGFloat = 150 * handScale
+        let sp: CGFloat = -66 * handScale
         let center = Double(cards.count - 1) / 2.0
         let fan: Double = 4
         let yMult = 5.0 * Double(handScale)

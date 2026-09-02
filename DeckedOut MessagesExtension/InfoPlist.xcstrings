@@ -16,6 +16,12 @@
             "value" : "Kartenspiele"
           }
         },
+        "de-CH" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenspiele"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -88,6 +94,12 @@
             "value" : "Jogos de cartas"
           }
         },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogos de cartas"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -129,17 +141,29 @@
             "state" : "translated",
             "value" : "紙牌遊戲"
           }
-        },
-        "de-CH" : {
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kartenspiele"
+            "state" : "new",
+            "value" : "DeckedOut MessagesExtension"
           }
-        },
-        "pt-PT" : {
+        }
+      }
+    },
+    "NSHumanReadableCopyright" : {
+      "comment" : "Copyright (human-readable)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jogos de cartas"
+            "state" : "new",
+            "value" : ""
           }
         }
       }

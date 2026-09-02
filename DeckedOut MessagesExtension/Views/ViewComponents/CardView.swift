@@ -15,7 +15,7 @@ struct CardView: View { //where only one side is a (letter?)
     var frontUIImage: UIImage? = nil
     var backLetter: String?
     var backImageName: String? = nil //custom card-back image; overrides the user's selected card back
-    var cardHeight : CGFloat = 145
+    var cardHeight : CGFloat = 150
     var rotation: Double = 0 //default to face up
     /// When true (default), the front/back asset names are validated to exist in this build,
     /// falling back to defaults. This guards transcript/game views where a peer may send a name
@@ -159,7 +159,7 @@ struct CrossfadingDiscardCard: View {
     /// One-shot trigger, bound to the game manager. Set it to the discarding opponent's card-back
     /// name to start a fade; this view immediately resets it to `nil`.
     @Binding var crossfadeFromBack: String?
-    var cardHeight: CGFloat = 145
+    var cardHeight: CGFloat = 150
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private var motionSpeed: Double { reduceMotion ? 0.66 : 1.0 }
