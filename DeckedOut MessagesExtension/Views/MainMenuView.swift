@@ -135,6 +135,7 @@ struct MainMenuView: View {
         .background(FeltBackgroundView())
         .onAppear {
             preloadWins()
+            preloadThemeArtwork()
         }
         .task {
             await store.start()
@@ -526,21 +527,9 @@ struct MainMenuView: View {
     
     // MARK: - Bottom Section
     private var bottomSection: some View {
-        ZStack {
-            // Game wheel — each card flips individually in place when showingThemes toggles.
-            gameCardWheel
-                .modifier(FlipOpacity(rotation: showingThemes ? 180 : 0))
-                .allowsHitTesting(!showingThemes)
-                .accessibilityHidden(showingThemes)
-                .accessibilityElement(children: showingThemes ? .ignore : .contain)
-
-            // Theme wheel — flips in to replace the game wheel; both card faces match.
-            themeCardWheel
-                .modifier(FlipOpacity(rotation: showingThemes ? 0 : 180))
-                .allowsHitTesting(showingThemes)
-                .accessibilityHidden(!showingThemes)
-                .accessibilityElement(children: showingThemes ? .contain : .ignore)
-        }
+        // One hand of cards, serving both carousels. Opening the theme picker turns it over in
+        // place; it is never swapped for, or stacked on top of, a second set of cards.
+        menuCardWheel
         //.zIndex(999) //keep the cards on top
         .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
         .scaleEffect(isExpanded ? 1.4 : 1.1)
@@ -549,11 +538,13 @@ struct MainMenuView: View {
         .accessibilityHidden(isCardWheelHidden)
     }
 
-    private var gameCardWheel: some View {
+    private var menuCardWheel: some View {
         MenuCardWheel(
             games: availableGames,
+            themes: themes,
             showingThemes: showingThemes,
-            onActiveIndexChange: { newIndex, direction in // handle real-time mid-swipe updates
+            selectedThemeIndex: selectedThemeIndex,
+            onActiveGameChange: { newIndex, direction in // handle real-time mid-swipe updates
                 if activeGameIndex != newIndex {
                     titleTransitionEdge = direction
                     withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
@@ -566,8 +557,26 @@ struct MainMenuView: View {
                     }
                 }
             },
+            onActiveThemeChange: { newIndex, direction in
+                if activeThemeIndex != newIndex {
+                    themeTitleTransitionEdge = (direction == .trailing) ? .leading : .trailing
+                    withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
+                        activeThemeIndex = newIndex
+                    }
+                }
+            },
             userSelectedGame: { index in // handle selecting a game
-                withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
+                // Must match `MenuCardWheel.selectionAnimation`. `hasSelectedGame` is
+                // `activeSubmenu != nil`, so its binding has *already* set this in the same update,
+                // inside the wheel's selection spring — this write only re-asserts it against the
+                // wheel's own index. Two writes to one piece of state in one update means whichever
+                // transaction the subtree ends up carrying decides how fast the hand lifts, and an
+                // in-flight settle spring is enough to change which one that is. With a shorter
+                // animation here the hand rose in 0.2s after a flick and 0.6s from rest, so the
+                // fixed delay on the title-bar fade below (tuned for the slow case) left the menu
+                // elements still on screen after the cards had swiped past them. Same animation
+                // both sides, one speed either way.
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.7).speed(motionSpeed)) {
                     activeSubmenu = availableGames[index].type
                 }
                 withAnimation(.linear(duration: 0.05).delay(0.12).speed(motionSpeed)) { //wait a bit then trigger a fast fade
@@ -582,6 +591,11 @@ struct MainMenuView: View {
                     isCardWheelHidden = true //hide AFTER the animation to render the cards invisible so they dont clip in when transitioning between compact and expanded in the subview
                 }
             },
+            onThemeSelected: { selectedIndex in
+                // Routes through the same endpoint as the Select button so tapping a card
+                // can't bypass the win-lock / ownership / purchase checks.
+                selectTheme(at: selectedIndex)
+            },
             hasSelectedGame: Binding(
                 get: { activeSubmenu != nil },
                 set: { newValue in
@@ -595,30 +609,23 @@ struct MainMenuView: View {
         )
     }
 
-    private var themeCardWheel: some View {
-        ThemeCardWheel(
-            themes: themes,
-            initialIndex: activeThemeIndex,
-            showingThemes: showingThemes,
-            selectedIndex: selectedThemeIndex,
-            onActiveIndexChange: { newIndex, direction in
-                if activeThemeIndex != newIndex {
-                    themeTitleTransitionEdge = (direction == .trailing) ? .leading : .trailing
-                    withAnimation(.easeInOut(duration: 0.2).speed(motionSpeed)) {
-                        activeThemeIndex = newIndex
-                    }
-                }
-            },
-            onThemeSelected: { selectedIndex in
-                // Routes through the same endpoint as the Select button so tapping a card
-                // can't bypass the win-lock / ownership / purchase checks.
-                selectTheme(at: selectedIndex)
-            }
-        )
-    }
-    
     
     // MARK: - Menu helper functions
+
+    /// Warms the asset cache for the theme picker's card backs.
+    ///
+    /// A card in the hand only builds its theme artwork once it has turned past edge-on, which is
+    /// what keeps the picker's images out of memory until they're wanted — but it would otherwise
+    /// put every first-time decode on the main thread at the exact midpoint of the flip, which is
+    /// the one frame that can least afford it. Touching them once when the menu appears makes that
+    /// midpoint a cache hit instead.
+    private func preloadThemeArtwork() {
+        let names = themes.map(\.logoCard)
+        Task.detached(priority: .utility) {
+            for name in names { _ = UIImage(named: name) }
+        }
+    }
+
     private func preloadWins() {
         for index in availableGames.indices {
             let title = availableGames[index].title

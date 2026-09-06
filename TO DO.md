@@ -1,8 +1,7 @@
-# Project Roadmap
+# Project TO DO
 ---
 
 ## 🚀 Active Release Milestones
-
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Test shared entitlements for IAPs
 - [ ] Test if multiple languages show up in the app store for CGFI

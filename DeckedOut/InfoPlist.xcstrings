@@ -7,139 +7,139 @@
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kortspil"
+            "value" : "Kortspil til iMessage"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kartenspiele"
+            "value" : "Kartenspiele in iMessage"
           }
         },
         "de-CH" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kartenspiele"
+            "value" : "Kartenspiele in iMessage"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Card Games"
+            "value" : "Card Games for iMessage"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Juegos de cartas"
+            "value" : "Juegos de cartas para iMessage"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Korttipelit"
+            "value" : "Korttipelit iMessagessa"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jeux de cartes"
+            "value" : "Jeux de cartes pour iMessage"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ताश के खेल"
+            "value" : "iMessage के लिए कार्ड गेम्स"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giochi di carte"
+            "value" : "Giochi di carte per iMessage"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "カードゲーム"
+            "value" : "iMessageで遊べるカードゲーム"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "카드 게임"
+            "value" : "iMessage 카드 게임"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kortspill"
+            "value" : "Kortspill for iMessage"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaartspellen"
+            "value" : "Kaartspellen voor iMessage"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gry karciane"
+            "value" : "Gry karciane w iMessage"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jogos de cartas"
+            "value" : "Jogos de Cartas no iMessage"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jogos de cartas"
+            "value" : "Jogos de cartas para iMessage"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Карты"
+            "value" : "Карточные игры в iMessage"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kortspel"
+            "value" : "Kortspel i iMessage"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kart Oyunları"
+            "value" : "iMessage: Kart Oyunları"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Game Bài"
+            "value" : "Game Bài cho iMessage"
           }
         },
         "zh" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "纸牌游戏"
+            "value" : "iMessage 纸牌游戏合集"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "纸牌游戏"
+            "value" : "iMessage 纸牌游戏合集"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "紙牌遊戲"
+            "value" : "iMessage 紙牌遊戲合集"
           }
         }
       }
