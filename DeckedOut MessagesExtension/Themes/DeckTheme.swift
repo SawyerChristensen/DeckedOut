@@ -77,7 +77,7 @@ extension DeckTheme {
                   rulesColor: Color(red: 100/255, green: 200/255, blue: 200/255), //blue
                   textColor: Color(red: 251/255, green: 250/255, blue: 204/255)), //orangeish red
         
-        DeckTheme(title: "Spider's Web", /// $1
+        DeckTheme(title: "Spiderweb", /// $1
                   logoCard: "cardBackWeb",
                   fronts: "Web", // only the ace of spades is themed; every other front falls back to default
                   productID: "Sawyer.DeckedOut.Theme.Web",

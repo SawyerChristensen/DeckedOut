@@ -56,6 +56,83 @@ struct MainMenuView: View {
         guard let required = themes[activeThemeIndex].requiredWins else { return false }
         return WinTracker.shared.totalWins < required
     }
+    /// True while the theme picker is open and displaying the American Flag theme — drives the eagle flyover.
+    private var isAmericaThemeActive: Bool {
+        showingThemes && themes[activeThemeIndex].logoCard == "cardBackAmerica"
+    }
+    // Eagle flyover (American Flag theme) — a one-shot pass across the screen, not a fly-in-and-rest:
+    // starts off-screen right, flies left, and exits off-screen left. It doesn't cross flat: a single
+    // linear 0->1 progress drives `EagleGlide`, which drops it in a very shallow swoop — a little high
+    // coming in, level with the title's band dead center, climbing again as it leaves. If the theme
+    // changes mid-flight, the glide is left to keep running while opacity fades it out wherever it is.
+    @State private var isEagleFlying = false
+    @State private var eagleProgress: Double = 0
+    @State private var eagleOpacity: Double = 1
+    @State private var eagleFlightGeneration = 0 //bumped on each new flight so stale completion timers can no-op instead of clobbering a newer flight
+    private let eagleFlightDuration: Double = 3.5
+
+    /// True while the theme picker is open and displaying the Spiderweb theme — drives the spider drop.
+    private var isSpiderThemeActive: Bool {
+        showingThemes && themes[activeThemeIndex].logoCard == "cardBackWeb"
+    }
+    // Spider drop (Spiderweb theme) — a round trip rather than the eagle's one-way pass: the spider
+    // descends upside down from off-screen top until it covers the 🕸️ that ends the theme's title, holds
+    // for a beat, rights itself, then climbs back up and out. Unlike the eagle it rides *inside* the title
+    // view, so it inherits that emoji's font and scaling and a trailing alignment parks it right on it.
+    @State private var isSpiderDropping = false
+    @State private var spiderOffsetY: CGFloat = 0
+    @State private var spiderRotation: Double = 0
+    @State private var spiderOpacity: Double = 1
+    @State private var spiderDropGeneration = 0 //bumped on each new drop so stale completion timers can no-op instead of clobbering a newer drop
+    @State private var spiderStartOffsetY: CGFloat = -500 //replaced once the title's on-screen position is measured
+    private let spiderDescentDuration: Double = 1.5
+    private let spiderHoldDuration: Double = 1.0
+    private let spiderSpinDuration: Double = 0.6
+
+    /// True while the theme picker is open and displaying the Koi theme — drives the koi's leap.
+    private var isKoiThemeActive: Bool {
+        showingThemes && themes[activeThemeIndex].logoCard == "cardBackKoi"
+    }
+    // Koi leap (Koi theme) — two halves of a single jump whose apex sits off the top of the screen: the
+    // fish swims in level from the left edge, banks upward and leaps out over the top, then re-enters
+    // the top further right nose-down, levels out as it hits the water again and swims off the right
+    // edge. Like the eagle it rides below the title rather than inside it, so it has the full width of
+    // the screen to cross. A single linear 0->1 progress drives both arcs; `KoiArc` turns that into a
+    // position and a heading, so the fish always points the way it's travelling.
+    @State private var isKoiLeaping = false
+    @State private var koiProgress: Double = 0
+    @State private var koiOpacity: Double = 1
+    @State private var koiLeapGeneration = 0 //bumped on each new leap so stale completion timers can no-op instead of clobbering a newer leap
+    @State private var koiExitOffsetY: CGFloat = -200 //replaced once the fish's on-screen position is measured
+    private let koiLeapDuration: Double = 3.0
+
+    /// True while the theme picker is open and displaying the Enchanted theme — drives the fox's shapeshifting.
+    private var isEnchantedThemeActive: Bool {
+        showingThemes && themes[activeThemeIndex].logoCard == "cardBackEnchanted"
+    }
+    // Fox shapeshift (Enchanted theme) — the only one of these that loops instead of playing once: the 🦊
+    // ending the Enchanted title shrinks away and a different woodland animal grows back in its place, over
+    // and over, for as long as the theme is showing. Every pass opens on the fox, runs the other animals in
+    // a fresh random order, then comes back to the fox and reshuffles. Like the spider it rides inside the
+    // title, so it inherits that emoji's font and scaling; unlike the spider it *replaces* the glyph rather
+    // than covering it — the title is split around the fox, so there's nothing left underneath for a
+    // narrower animal to leave peeking out.
+    private static let enchantedFox = "🦊"
+    private static let enchantedGlow = Color(red: 255/255, green: 209/255, blue: 89/255).opacity(0.8) //golden yellow; the Enchanted title glows this instead of the usual white
+    @State private var enchantedShapes: [String] = MainMenuView.makeEnchantedShapeCycle()
+    @State private var enchantedShapeIndex = 0
+    @State private var enchantedShapeOpacity: Double = 1
+    @State private var enchantedShapeScale: Double = 1
+    @State private var enchantedShapeGeneration = 0 //bumped on each new cycle so stale completion timers can no-op instead of clobbering a newer cycle
+    private let enchantedShapeHoldDuration: Double = 1.1
+    private let enchantedShapeSwapDuration: Double = 0.35
+
+    /// One full pass of the shapeshift: the fox first, then every other animal in a random order.
+    private static func makeEnchantedShapeCycle() -> [String] {
+        var animals = ["🦡", "🦌", "🐺", "🦫", "🦉", "🦆", "🐻", "🦝", "🐰", "🦨"]
+        if #available(iOS 17.4, *) { animals.append("🫎") } //the moose glyph only ships from 17.4 on; older systems would draw a missing-glyph box instead
+        return [enchantedFox] + animals.shuffled()
+    }
 
     private static func initialSelectedThemeIndex() -> Int {
         let name = CurrentTheme.shared.selectedName
@@ -218,12 +295,47 @@ struct MainMenuView: View {
     private var mainTitle: some View {
         ZStack {
             gameTitleFace
-            
+
             themeTitleFace
         }
         .padding(.top, isExpanded ? (isIpad ? 30 : 15) : 0) //pretty sure spacing doesnt include safearea - first element
         .scaleEffect(isExpanded ? 1.2 : 1)
         .rotation3DEffect(.degrees(showingThemes ? -180 : 0), axis: (x: 0, y: 1, z: 0))
+        //eagleOverlay is attached after the 3D flip so it never rotates with the title, and as an
+        //overlay it takes up no layout space of its own — it can't push the title/price apart.
+        //offset drops it below the title's bottom edge, into the gap before the price text.
+        .overlay(eagleOverlay.offset(y: isExpanded ? 36 : 18), alignment: .bottom)
+        //koiOverlay rides in the same band as the eagle, and for the same reasons — outside the 3D flip
+        //so it never rotates with the title, and as an overlay so it can leave the title's bounds freely.
+        .overlay(koiOverlay.offset(y: isExpanded ? 36 : 18), alignment: .bottom)
+        .onChange(of: isAmericaThemeActive) { _, isActive in
+            if isActive {
+                startEagleFlight()
+            } else {
+                stopEagleFlightAndFade()
+            }
+        }
+        .onChange(of: isSpiderThemeActive) { _, isActive in
+            if isActive {
+                startSpiderDrop()
+            } else {
+                stopSpiderDropAndFade()
+            }
+        }
+        .onChange(of: isKoiThemeActive) { _, isActive in
+            if isActive {
+                startKoiLeap()
+            } else {
+                stopKoiLeapAndFade()
+            }
+        }
+        .onChange(of: isEnchantedThemeActive) { _, isActive in
+            if isActive {
+                startEnchantedShapeshift()
+            } else {
+                stopEnchantedShapeshift()
+            }
+        }
     }
     
     private var gameTitleFace: some View {
@@ -244,13 +356,46 @@ struct MainMenuView: View {
             .accessibilityHidden(showingThemes)
     }
 
+    /// The Enchanted title's localized text split around its 🦊, or nil for every other theme — and for any
+    /// translation that has lost the fox, which then renders as an ordinary one-piece title.
+    private var enchantedTitleParts: (before: String, after: String)? {
+        guard themes[activeThemeIndex].logoCard == "cardBackEnchanted" else { return nil }
+        let title = String(localized: String.LocalizationValue(themes[activeThemeIndex].title))
+        guard let fox = title.range(of: Self.enchantedFox) else { return nil }
+        return (String(title[..<fox.lowerBound]), String(title[fox.upperBound...]))
+    }
+
+    /// The active theme's name: one plain localized Text, except for Enchanted, whose fox is lifted out into
+    /// its own view so it can be swapped for the other woodland animals.
+    @ViewBuilder
+    private var themeTitleText: some View {
+        if let parts = enchantedTitleParts {
+            HStack(spacing: 0) {
+                Text(verbatim: parts.before)
+                enchantedShapeView
+                Text(verbatim: parts.after)
+            }
+        } else {
+            Text(LocalizedStringKey(themes[activeThemeIndex].title))
+        }
+    }
+
+    /// The glow behind the theme's name. Enchanted glows gold — words and shapeshifting animal alike, since
+    /// this is one shadow over the whole title; every other theme keeps the menu's usual faint white.
+    private var themeTitleGlow: Color {
+        themes[activeThemeIndex].logoCard == "cardBackEnchanted" ? Self.enchantedGlow : .white.opacity(0.33)
+    }
+
     private var themeTitleFace: some View {
-        Text(LocalizedStringKey(themes[activeThemeIndex].title))
+        themeTitleText
+            //Attached before .font so the spider inherits it, and before the 3D flip below so the flip's
+            //180° cancels the parent's -180° for the spider exactly as it does for the title text.
+            .overlay(alignment: .trailing) { spiderOverlay }
             .font(.largeTitle)
             .fontWeight(.semibold)
             .fontDesign(.serif)
             .foregroundColor(.white)
-            .shadow(color: .white.opacity(0.33), radius: 5)
+            .shadow(color: themeTitleGlow, radius: 5)
             .id(activeThemeIndex)
             .transition(.asymmetric(
                 insertion: .move(edge: themeTitleTransitionEdge).combined(with: .opacity),
@@ -262,6 +407,289 @@ struct MainMenuView: View {
             .accessibilityLabel(Text("Selected theme: \(themes[activeThemeIndex].title)", comment: "VoiceOver accessibility label that announces the currently selected card-back theme, e.g. 'Selected theme: Sunset'"))
             .accessibilityHidden(!showingThemes)
     }
+
+    /// Eagle emoji that flies across the screen (right to left) while the American Flag theme is showing.
+    private var eagleOverlay: some View {
+        Text("🦅")
+            .font(.system(size: isExpanded ? 40 : 30))
+            //.shadow(color: .black.opacity(0.25), radius: 5)
+            .modifier(EagleGlide(progress: eagleProgress, screenWidth: UIScreen.main.bounds.width))
+            .opacity(isEagleFlying ? eagleOpacity : 0)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    private func startEagleFlight() {
+        eagleFlightGeneration += 1
+        let generation = eagleFlightGeneration //stamps this flight so stale timers below can recognize they've been superseded
+
+        //A plain assignment isn't enough to guarantee an instant snap: if the previous flight's linear
+        //animation is still interpolating eagleProgress when this runs, SwiftUI retargets that animation
+        //in place rather than cutting it off, so the new glide starts blended with the old one's leftover
+        //momentum (fast, then settling into the real speed). Disabling animations for the reset forces a
+        //hard, non-interpolated snap so every restart begins from a clean, motionless state.
+        var resetTransaction = Transaction()
+        resetTransaction.disablesAnimations = true
+        withTransaction(resetTransaction) {
+            eagleProgress = 0 //snap back off-screen right, at the high end of the swoop
+            eagleOpacity = 1
+            isEagleFlying = true
+        }
+
+        //Linear on purpose: the crossing holds one steady speed the whole way, and the swoop is shaped
+        //inside EagleGlide rather than by easing this — easing here would slow the horizontal pass too.
+        withAnimation(.linear(duration: eagleFlightDuration).speed(motionSpeed)) {
+            eagleProgress = 1 //glide off-screen left
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + eagleFlightDuration / motionSpeed) {
+            guard generation == eagleFlightGeneration else { return } //a newer flight has since started — leave its state alone
+            isEagleFlying = false //flight finished naturally; reset for next time
+        }
+    }
+
+    private func stopEagleFlightAndFade() {
+        guard isEagleFlying else { return }
+        let generation = eagleFlightGeneration //the flight being stopped, not a new one — stopping never starts a fresh generation
+        //leave eagleProgress's animation running so the eagle keeps drifting while it fades, rather than
+        //snapping to a stop — it just fades out wherever that motion happens to be.
+        withAnimation(.easeOut(duration: 0.3).speed(motionSpeed)) {
+            eagleOpacity = 0
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 / motionSpeed) {
+            guard generation == eagleFlightGeneration else { return } //a new flight started before this fade finished
+            isEagleFlying = false
+        }
+    }
+
+    /// Spider that lowers onto the 🕸️ ending the Spiderweb title. It deliberately sets no font of its
+    /// own: attached inside the title, it inherits the title's, so it renders at the same size as that web
+    /// emoji and trailing-aligns onto exactly the glyph it's aiming for — in any language, at any Dynamic
+    /// Type size, and through the title's scaleEffects — without any of it having to be measured.
+    private var spiderOverlay: some View {
+        Text("🕷️")
+            .background( //measures how far up the spider must travel to clear the top of the screen
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear { updateSpiderStartOffset(from: proxy.frame(in: .global)) }
+                        .onChange(of: proxy.frame(in: .global)) { _, frame in
+                            updateSpiderStartOffset(from: frame)
+                        }
+                }
+            )
+            .rotationEffect(.degrees(spiderRotation))
+            .offset(y: spiderOffsetY)
+            .opacity(isSpiderDropping ? spiderOpacity : 0)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    /// Where the spider parks when off-screen, as an offset from the web it hangs above. `frame` is the
+    /// spider's *layout* position, which ignores the title's scaleEffects — under those this offset renders
+    /// larger than it's computed here, which only ever carries the spider further off-screen.
+    private func updateSpiderStartOffset(from frame: CGRect) {
+        guard frame.height > 0 else { return } //nothing laid out yet — keep the placeholder
+        spiderStartOffsetY = -(frame.maxY + frame.height)
+    }
+
+    private func startSpiderDrop() {
+        spiderDropGeneration += 1
+        let generation = spiderDropGeneration //stamps this drop so stale timers below can recognize they've been superseded
+
+        //Same reasoning as the eagle's reset: a plain assignment would retarget a still-running animation
+        //rather than cut it off, so a restarted drop would inherit the previous one's leftover momentum.
+        var resetTransaction = Transaction()
+        resetTransaction.disablesAnimations = true
+        withTransaction(resetTransaction) {
+            spiderOffsetY = spiderStartOffsetY //snap off-screen top
+            spiderRotation = 180 //comes down upside down, as if lowering head-first on a thread
+            spiderOpacity = 1
+            isSpiderDropping = true
+        }
+
+        withAnimation(.easeInOut(duration: spiderDescentDuration).speed(motionSpeed)) {
+            spiderOffsetY = 0 //trailing alignment already sits it on the web, so zero offset covers the emoji outright
+        }
+
+        let spinDelay = (spiderDescentDuration + spiderHoldDuration) / motionSpeed //descend, then hold on the web for a beat
+        DispatchQueue.main.asyncAfter(deadline: .now() + spinDelay) {
+            guard generation == spiderDropGeneration, isSpiderDropping else { return } //a newer drop (or a fade-out) has since taken over
+            withAnimation(.easeInOut(duration: spiderSpinDuration).speed(motionSpeed)) {
+                spiderRotation = 360 //turns upright in place, ready to climb back the way it came — 360 rather than 0 so the half turn runs clockwise
+            }
+        }
+
+        let climbDelay = spinDelay + spiderSpinDuration / motionSpeed
+        DispatchQueue.main.asyncAfter(deadline: .now() + climbDelay) {
+            guard generation == spiderDropGeneration, isSpiderDropping else { return }
+            withAnimation(.easeIn(duration: spiderDescentDuration).speed(motionSpeed)) {
+                spiderOffsetY = spiderStartOffsetY //back up and off the top of the screen
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + climbDelay + spiderDescentDuration / motionSpeed) {
+            guard generation == spiderDropGeneration else { return }
+            isSpiderDropping = false //round trip finished naturally; reset for next time
+        }
+    }
+
+    private func stopSpiderDropAndFade() {
+        guard isSpiderDropping else { return }
+        let generation = spiderDropGeneration //the drop being stopped, not a new one — stopping never starts a fresh generation
+        //leave spiderOffsetY's animation running so the spider keeps moving while it fades, rather than
+        //snapping to a stop — it just fades out wherever that motion happens to be.
+        withAnimation(.easeOut(duration: 0.3).speed(motionSpeed)) {
+            spiderOpacity = 0
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 / motionSpeed) {
+            guard generation == spiderDropGeneration else { return } //a new drop started before this fade finished
+            isSpiderDropping = false
+        }
+    }
+
+    /// Koi that leaps over the top of the screen while the Koi theme is showing.
+    private var koiOverlay: some View {
+        Text("🐟")
+            .font(.system(size: isExpanded ? 40 : 30))
+            .background( //measures how far up the fish must travel to clear the top of the screen
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear { updateKoiExitOffset(from: proxy.frame(in: .global)) }
+                        .onChange(of: proxy.frame(in: .global)) { _, frame in
+                            updateKoiExitOffset(from: frame)
+                        }
+                }
+            )
+            //🐟 is drawn facing left and the whole leap travels right, so it's mirrored once here,
+            //underneath KoiArc, leaving that free to rotate it into the direction of travel as normal.
+            .scaleEffect(x: -1)
+            .modifier(KoiArc(progress: koiProgress,
+                             screenWidth: UIScreen.main.bounds.width,
+                             exitY: koiExitOffsetY))
+            .opacity(isKoiLeaping ? koiOpacity : 0)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    /// How far above the waterline the koi has to be to clear the top of the screen, as an offset from
+    /// where it rests. Measured like the spider's: `frame` is the fish's *layout* position, so it ignores
+    /// the title's scaleEffects — under those this offset renders larger than it's computed here, which
+    /// only ever carries the fish further off-screen.
+    private func updateKoiExitOffset(from frame: CGRect) {
+        guard frame.height > 0 else { return } //nothing laid out yet — keep the placeholder
+        koiExitOffsetY = -(frame.maxY + frame.height)
+    }
+
+    private func startKoiLeap() {
+        koiLeapGeneration += 1
+        let generation = koiLeapGeneration //stamps this leap so stale timers below can recognize they've been superseded
+
+        //Same reasoning as the eagle's reset: a plain assignment would retarget a still-running animation
+        //rather than cut it off, so a restarted leap would inherit the previous one's leftover momentum.
+        var resetTransaction = Transaction()
+        resetTransaction.disablesAnimations = true
+        withTransaction(resetTransaction) {
+            koiProgress = 0 //snap back off-screen left, at the waterline
+            koiOpacity = 1
+            isKoiLeaping = true
+        }
+
+        //Linear on purpose: the burst out of the water and the fall back into it are eased separately
+        //inside KoiArc, which one curve spanning both of them couldn't express.
+        withAnimation(.linear(duration: koiLeapDuration).speed(motionSpeed)) {
+            koiProgress = 1
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + koiLeapDuration / motionSpeed) {
+            guard generation == koiLeapGeneration else { return } //a newer leap has since started — leave its state alone
+            isKoiLeaping = false //leap finished naturally; reset for next time
+        }
+    }
+
+    private func stopKoiLeapAndFade() {
+        guard isKoiLeaping else { return }
+        let generation = koiLeapGeneration //the leap being stopped, not a new one — stopping never starts a fresh generation
+        //leave koiProgress's animation running so the fish keeps swimming while it fades, rather than
+        //snapping to a stop — it just fades out wherever that motion happens to be.
+        withAnimation(.easeOut(duration: 0.3).speed(motionSpeed)) {
+            koiOpacity = 0
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 / motionSpeed) {
+            guard generation == koiLeapGeneration else { return } //a new leap started before this fade finished
+            isKoiLeaping = false
+        }
+    }
+
+    /// The animal currently standing in for the Enchanted theme's fox.
+    private var enchantedShape: String {
+        enchantedShapes.indices.contains(enchantedShapeIndex) ? enchantedShapes[enchantedShapeIndex] : Self.enchantedFox
+    }
+
+    /// The shapeshifting animal spliced into the Enchanted title in place of its 🦊. Like the spider it
+    /// deliberately sets no font of its own: sitting inside the title, it inherits the title's, so it renders
+    /// at exactly the size — in any language, at any Dynamic Type size, through the title's scaleEffects —
+    /// that the fox it replaced would have.
+    private var enchantedShapeView: some View {
+        Text(verbatim: enchantedShape)
+            .scaleEffect(enchantedShapeScale)
+            .opacity(enchantedShapeOpacity)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    private func startEnchantedShapeshift() {
+        enchantedShapeGeneration += 1
+        let generation = enchantedShapeGeneration //stamps this cycle so stale timers below can recognize they've been superseded
+
+        //Same reasoning as the eagle's reset: a plain assignment would retarget a still-running animation
+        //rather than cut it off, so a restarted cycle would open blended with the previous one's leftover fade.
+        var resetTransaction = Transaction()
+        resetTransaction.disablesAnimations = true
+        withTransaction(resetTransaction) {
+            enchantedShapes = Self.makeEnchantedShapeCycle()
+            enchantedShapeIndex = 0 //the fox always leads
+            enchantedShapeOpacity = 1
+            enchantedShapeScale = 1
+        }
+        scheduleEnchantedShapeSwap(generation: generation)
+    }
+
+    /// Holds the animal on screen for a beat, shrinks it away, swaps the next one in behind the cover of
+    /// that gap and grows it back — then queues itself again, so the cycle runs until the theme changes.
+    private func scheduleEnchantedShapeSwap(generation: Int) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + enchantedShapeHoldDuration / motionSpeed) {
+            guard generation == enchantedShapeGeneration else { return } //a newer cycle (or a stop) has since taken over
+            withAnimation(.easeIn(duration: enchantedShapeSwapDuration).speed(motionSpeed)) {
+                enchantedShapeOpacity = 0
+                enchantedShapeScale = 0.6 //shrinks out rather than simply fading, so the swap reads as the animal transforming
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + enchantedShapeSwapDuration / motionSpeed) {
+                guard generation == enchantedShapeGeneration else { return }
+                advanceEnchantedShape() //swapped while it's invisible, so the two animals are never on screen together
+                withAnimation(.easeOut(duration: enchantedShapeSwapDuration).speed(motionSpeed)) {
+                    enchantedShapeOpacity = 1
+                    enchantedShapeScale = 1
+                }
+                scheduleEnchantedShapeSwap(generation: generation)
+            }
+        }
+    }
+
+    /// Steps to the next animal, reshuffling as the fox comes back around so no two passes run the same order.
+    private func advanceEnchantedShape() {
+        let next = enchantedShapeIndex + 1
+        if next < enchantedShapes.count {
+            enchantedShapeIndex = next
+        } else {
+            enchantedShapes = Self.makeEnchantedShapeCycle()
+            enchantedShapeIndex = 0
+        }
+    }
+
+    /// Stops the cycle wherever it stands. Nothing is reset here — the title is already animating away, and
+    /// ``startEnchantedShapeshift()`` puts the fox back before the next one arrives.
+    private func stopEnchantedShapeshift() {
+        enchantedShapeGeneration += 1
+    }
+    
 
     private var mainSubtitle: some View {
         ZStack {
@@ -1221,6 +1649,175 @@ struct MainMenuView: View {
             ]) // What Voice Control listens for
             .accessibilityAddTraits(.isButton) // Tells the system it's clickable
             .accessibilityAddTraits(isSelected ? .isSelected : []) // Announces the visual state
+    }
+}
+
+/// Places the eagle along its pass: turns one 0-to-1 progress into a position on a very shallow swoop —
+/// in from off the right a little above the band it crosses, down to that band dead center, then back up
+/// and out the left. Only the height is shaped here; progress maps straight onto the horizontal travel,
+/// so the eagle crosses at one constant speed however the swoop is tuned.
+///
+/// Each half is a parabola, and both meet the center flat, so the dip bottoms out smoothly instead of
+/// creasing. Their sizes are written as the height the eagle sits at while crossing the *edge of the
+/// screen*, not at the ends of its travel: the travel runs half a screen past each edge, so the tallest,
+/// steepest part of each parabola is always off-screen and the numbers here would badly overstate the
+/// swoop if they were read as its extremes.
+private struct EagleGlide: GeometryEffect {
+    var progress: Double
+    let screenWidth: CGFloat
+
+    /// Heights, in points, at which the eagle crosses each edge of the screen. Small on purpose — the
+    /// swoop should read as a drift rather than a dive. The exit sits a little above the entrance so the
+    /// pass finishes climbing away, instead of just returning to the height it came in at.
+    private static let entryRise: CGFloat = 10
+    private static let exitRise: CGFloat = 14
+
+    /// Half the horizontal travel: the eagle starts a full screen width right of center and finishes a
+    /// full width left of it, well clear of both edges.
+    private var travelExtent: CGFloat { screenWidth }
+    /// Where the edge of the screen falls along that travel, as a fraction of it.
+    private var edgeFraction: CGFloat { (screenWidth / 2) / travelExtent }
+
+    var animatableData: Double {
+        get { progress }
+        set { progress = newValue }
+    }
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let position = 1 - 2 * CGFloat(progress) //+1 off the right at the start, -1 off the left at the end
+        let rise = position > 0 ? Self.entryRise : Self.exitRise //taller half on the way out
+        let edges = position / edgeFraction //1 as it crosses an edge of the screen, 0 dead center
+        return ProjectionTransform(CGAffineTransform(
+            translationX: position * travelExtent,
+            y: -rise * edges * edges //negative is up: highest at the ends, level with the band in the middle
+        ))
+    }
+}
+
+/// Places the koi along its leap: turns one 0-to-1 progress into a position and the heading to match, so
+/// the fish banks into each curve rather than sliding along it flat.
+///
+/// The jump is two quadratic Beziers with the apex between them, off the top of the screen: the first
+/// carries the fish from the left edge up and out, the second brings it back in further right and down
+/// to the waterline, where it swims off to the right. Progress arrives linear and is eased *inside* each
+/// arc — decelerating on the way up, accelerating on the way down — which is what makes the two halves
+/// read as one thrown arc rather than two unrelated passes.
+private struct KoiArc: GeometryEffect {
+    var progress: Double
+    let screenWidth: CGFloat
+    /// Offset that puts the fish clear of the top of the screen — negative, i.e. upwards.
+    let exitY: CGFloat
+
+    private static let gapShare: Double = 0.02  //coasting over the apex, entirely off-screen
+    private static let leapShare: Double = (1 - gapShare) / 2 //the climb and the dive split the rest evenly
+    private static var diveStart: Double { leapShare + gapShare }
+    /// How sharply each arc eases. Kept mild on purpose: the steeper the ease, the more of the run the
+    /// fish spends crawling through the off-screen ends of its arcs instead of visibly crossing the screen.
+    private static let easeExponent: Double = 1.4
+    /// How far past the side of the screen each arc starts and ends, so the fish is fully hidden there.
+    private static let sideMargin: CGFloat = 35
+    /// How far *past* the center each arc carries before it turns around, as a fraction of the screen
+    /// width. The two arcs therefore overlap horizontally, above the top edge where none of it shows.
+    /// What the eye tracks isn't where an arc ends but where the fish crosses that edge, and the two
+    /// move in opposite directions as this grows: the climb goes out further right, the dive comes back
+    /// further left.
+    ///
+    /// Those two crossings coincide at about 0.05 — the fish then vanishes and returns on the same spot.
+    /// Above that they trade places, so it returns to the *left* of where it left: at the value set here
+    /// that's a ~105pt backwards step, taken at the very top of the screen. That's the deliberate trade —
+    /// a wider, later exit and an earlier entrance, bought with that step — and it buys no extra
+    /// on-screen time, so this constant is purely about where the crossings sit.
+    ///
+    /// Far enough out that the arcs now intersect *below* the top edge rather than above it, which is
+    /// what makes the visible shape an X rather than a peak: the fish leaves the frame still climbing
+    /// and comes back already falling, so the apex it's arcing over is never actually on screen.
+    private static let apexOverlap: CGFloat = 0.20
+    /// How far along each arc its control point sits. High, so the fish tracks the waterline on the way
+    /// in and then whips up steeply as it leaves, rather than drifting across on a lazy diagonal.
+    private static let controlBias: CGFloat = 0.70
+
+    var animatableData: Double {
+        get { progress }
+        set { progress = newValue }
+    }
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let (arc, t) = segment(at: progress)
+        let position = arc.point(at: t)
+        //A GeometryEffect's transform is applied in the view's own space, whose origin is its top-left
+        //corner, so the rotation is sandwiched between a move to the fish's center and back — otherwise
+        //it would swing the fish around that corner instead of turning it in place.
+        let center = CGPoint(x: size.width / 2, y: size.height / 2)
+        let transform = CGAffineTransform.identity
+            .translatedBy(x: position.x, y: position.y)
+            .translatedBy(x: center.x, y: center.y)
+            .rotated(by: arc.heading(at: t))
+            .translatedBy(x: -center.x, y: -center.y)
+        return ProjectionTransform(transform)
+    }
+
+    /// Which arc the fish is on at `progress`, and how far along it is once eased. The coast over the
+    /// apex parks it at the end of the climb, which is already off-screen, so nothing shows during it.
+    ///
+    /// The easing runs the way it does because the apex is off-screen: what's actually on screen is the
+    /// fish powering up out of the water and, later, hitting it again and gliding away. So the climb
+    /// accelerates and the descent slows, and the projectile's own deceleration into the apex and fall
+    /// back out of it happen out of frame, in the arcs' eased ends.
+    private func segment(at progress: Double) -> (Bezier, CGFloat) {
+        if progress < Self.leapShare {
+            let u = progress / Self.leapShare
+            return (leapArc, CGFloat(pow(u, Self.easeExponent))) //builds speed as it drives up and out
+        }
+        if progress < Self.diveStart {
+            return (leapArc, 1)
+        }
+        let u = min((progress - Self.diveStart) / (1 - Self.diveStart), 1)
+        return (diveArc, CGFloat(1 - pow(1 - u, Self.easeExponent))) //sheds it again against the water
+    }
+
+    /// Up and out: enters level with the water off the left edge, banks upward, and crosses the top of
+    /// the screen dead center, carrying a little past it before the arc ends. The control point sits back
+    /// at the waterline so the fish swims in flat before the curve lifts it — the bend *is* the leap.
+    private var leapArc: Bezier {
+        let start = CGPoint(x: -screenWidth / 2 - Self.sideMargin, y: 0)
+        let end = CGPoint(x: screenWidth * Self.apexOverlap, y: exitY)
+        return Bezier(start: start,
+                      control: CGPoint(x: start.x + (end.x - start.x) * Self.controlBias, y: 0),
+                      end: end)
+    }
+
+    /// Down and away: starts back past center, comes down through the top edge dead center nose-first,
+    /// then flattens out into the water and swims off the right edge. Point for point `leapArc` run
+    /// backwards — mirrored endpoints, same control bias measured from the far end — so the two together
+    /// are one symmetric jump, and the fish reappears exactly where it went out.
+    private var diveArc: Bezier {
+        let start = CGPoint(x: -screenWidth * Self.apexOverlap, y: exitY)
+        let end = CGPoint(x: screenWidth / 2 + Self.sideMargin, y: 0)
+        return Bezier(start: start,
+                      control: CGPoint(x: end.x - (end.x - start.x) * Self.controlBias, y: 0),
+                      end: end)
+    }
+
+    /// Quadratic Bezier — one smooth bend, and cheap enough to differentiate for the heading every frame.
+    private struct Bezier {
+        let start: CGPoint
+        let control: CGPoint
+        let end: CGPoint
+
+        func point(at t: CGFloat) -> CGPoint {
+            let inverse = 1 - t
+            return CGPoint(
+                x: inverse * inverse * start.x + 2 * inverse * t * control.x + t * t * end.x,
+                y: inverse * inverse * start.y + 2 * inverse * t * control.y + t * t * end.y
+            )
+        }
+
+        /// Angle of the curve's tangent in radians — the direction the fish is actually travelling.
+        func heading(at t: CGFloat) -> CGFloat {
+            let dx = 2 * (1 - t) * (control.x - start.x) + 2 * t * (end.x - control.x)
+            let dy = 2 * (1 - t) * (control.y - start.y) + 2 * t * (end.y - control.y)
+            return atan2(dy, dx)
+        }
     }
 }
 

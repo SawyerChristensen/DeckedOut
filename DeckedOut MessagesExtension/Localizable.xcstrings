@@ -2699,6 +2699,18 @@
         }
       }
     },
+    "🐟" : {
+      "comment" : "A fish emoji.",
+      "shouldTranslate" : false
+    },
+    "🕷️" : {
+      "comment" : "The spider emoji",
+      "shouldTranslate" : false
+    },
+    "🦅" : {
+      "comment" : "The bald eagle emoji.",
+      "shouldTranslate" : false
+    },
     "Ace" : {
       "comment" : "Card rank: Ace",
       "localizations" : {
@@ -24952,7 +24964,7 @@
         }
       }
     },
-    "Spider's Web" : {
+    "Spiderweb" : {
       "comment" : "Card back theme name displayed on the main menu",
       "extractionState" : "manual",
       "localizations" : {
@@ -24977,7 +24989,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spider’s Web 🕸️"
+            "value" : "Spiderweb 🕸️"
           }
         },
         "es" : {

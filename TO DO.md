@@ -2,6 +2,14 @@
 ---
 
 ## 🚀 Active Release Milestones
+
+### 3.6.3 - Theme Menu Animations & Fixes
+- [x] Koi Animation
+- [x] Spider Animation
+- [x] Eagle Animation
+- [x] Enchanted Animation
+- [x] Main Menu Bug Fix
+
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Test shared entitlements for IAPs
 - [ ] Test if multiple languages show up in the app store for CGFI
@@ -108,7 +116,7 @@
 
 ---
 
-## 🛑 Known Issues & Critical Bugs
+## 🛑 Known Issues
 
 ### Core App & Framework Blocks
 - [ ] **First Launch Hang:** Investigate why app goes to a white screen and fails to load when opened for the first time via the App Store. *(Does this still happen?)*
@@ -208,5 +216,7 @@
 - [ ] Clean up initialization code: Move custom `init` logic inside `PlayerHandView` out of the extension and into the main declaration body wrapper.
 - [ ] Debug audio layer warning: Trace and eliminate the "audio session failure" print statement occurring in console streams.
 - [ ] Does "isFaceUp" need to be a passed variable?
+
+
 
 
