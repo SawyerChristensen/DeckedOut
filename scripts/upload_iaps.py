@@ -185,13 +185,26 @@ class ASCClient:
 
 # ---------- StoreKit parsing ----------
 
+# StoreKit accepts a bare language code where App Store Connect insists on a
+# regional one; posting the bare form fails with IAP_LOCALIZATION_UNSUPPORTED_
+# LOCALE_CODE. Everything else differs only by separator. Keyed on the StoreKit
+# spelling, values verified against the locales ASC accepted for the sister app.
+LOCALE_OVERRIDES = {
+    "de": "de-DE",
+    "fr": "fr-FR",
+    "nl": "nl-NL",
+}
+
+
 def asc_locale(storekit_locale: str) -> str:
     """Map a StoreKit locale code to its App Store Connect equivalent.
 
-    StoreKit uses underscores (en_US, de_DE, pt_BR, zh_Hans); ASC uses hyphens
-    (en-US, de-DE, pt-BR, zh-Hans). The only difference is the separator, so a
-    straight replace covers every code we use.
+    StoreKit uses underscores (en_US, pt_BR, zh_Hans); ASC uses hyphens (en-US,
+    pt-BR, zh-Hans). A straight replace covers most codes; LOCALE_OVERRIDES
+    handles the few where ASC also requires a region.
     """
+    if storekit_locale in LOCALE_OVERRIDES:
+        return LOCALE_OVERRIDES[storekit_locale]
     return storekit_locale.replace("_", "-")
 
 

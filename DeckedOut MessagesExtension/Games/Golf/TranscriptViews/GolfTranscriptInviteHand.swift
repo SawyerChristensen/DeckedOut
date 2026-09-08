@@ -11,26 +11,7 @@ import Combine
 struct GolfTranscriptInviteHand: View {
     var cardBackName: String? = nil
 
-    var words: [String] {
-        // Get the user's top preferred language, default to English if unavailable
-        let currentLanguage = Locale.preferredLanguages.first ?? "en"
-        
-        if currentLanguage.hasPrefix("zh-Hant") { // Traditional Chinese
-            return ["讓我們", "一起玩", "高爾夫"]
-
-        } else if currentLanguage.hasPrefix("zh-Hans") { // Simplified Chinese
-            return ["让我们", "一起玩", "高尔夫"]
-
-        } else if currentLanguage.hasPrefix("tr") { // Turkish
-            return ["HADI", "GOLF", "OYNA"]
-
-        } else if currentLanguage.hasPrefix("de") { // German
-            return ["ZEIT", "FURS", "GOLF"]
-
-        } else { // Default (English)
-            return ["LETS", "PLAY", "GOLF"]
-        }
-    }
+    var words: [String] { DeckInviteChant.words(for: .golf) }
     
     // State to track which word index we are on
     @State private var currentWordIndex = 0
@@ -48,9 +29,18 @@ struct GolfTranscriptInviteHand: View {
     var charCount: Int {
         words.map(\.count).max() ?? 0
     }
-    
+
+    // Fan spacing: a comfortable baseline for short titles (≤ 4 cards), then a damper that
+    // pulls the cards tighter for every extra card so longer titles still fit the bubble.
+    private var spacing: CGFloat {
+        let baseSpacing: CGFloat = -25   // spacing for 4 cards or fewer
+        let damperPerCard: CGFloat = 5   // extra compression for each card beyond 4
+        let extraCards = max(0, charCount - 4)
+        return baseSpacing - CGFloat(extraCards) * damperPerCard
+    }
+
     var body: some View {
-        HStack(spacing: charCount == 4 ? -30 : -25) {
+        HStack(spacing: spacing) {
             ForEach(0..<charCount, id: \.self) { index in
                 
                 // Calculate the Current Character (Front)

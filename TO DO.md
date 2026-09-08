@@ -8,7 +8,8 @@
 - [x] Spider Animation
 - [x] Eagle Animation
 - [x] Enchanted Animation
-- [x] Main Menu Bug Fix
+- [x] Theme Menu Transition Bug Fix
+- [x] New Invite Localizations (reference pocket poker)
 
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Test shared entitlements for IAPs
@@ -37,7 +38,6 @@
   - [x] Game Center is enabled in ASC
   - [x] Entitlements are present in both the extension and parent stub
   - [x] Game Center capability is enabled as an identifier in another ASC section somewhere (cant remember where)
-  - [ ] Bundle ID swizzle was "working" but it does not appear to work in production, and also messages with the bundled asset lookups.
   - [ ] Get rid of jacks queens and kings explanation in golf master gc text (translate/upload with claude) (doesnt really matter now)
   - [ ] Change Game Center 1 & 2 win icons to be sunset and ocean
   - [ ] Update Game Center achievements titles/descriptions to reflect local variants
