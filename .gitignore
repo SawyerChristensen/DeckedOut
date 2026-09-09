@@ -104,3 +104,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# keyword analyzer output — regenerable; decisions live in metadata.json + keyword_history.json
+scripts/keyword_analysis/

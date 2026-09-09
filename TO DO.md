@@ -3,14 +3,6 @@
 
 ## 🚀 Active Release Milestones
 
-### 3.6.3 - Theme Menu Animations & Fixes
-- [x] Koi Animation
-- [x] Spider Animation
-- [x] Eagle Animation
-- [x] Enchanted Animation
-- [x] Theme Menu Transition Bug Fix
-- [x] New Invite Localizations (reference pocket poker)
-
 ### Update 4.0.0: 4th Game Expansion
 - [ ] Test shared entitlements for IAPs
 - [ ] Test if multiple languages show up in the app store for CGFI
