@@ -39,10 +39,20 @@ struct GinPlayerHandView: View {
     @State private var voiceDiscardOffset: CGSize = .zero
     @State private var voiceDiscardRotation: Angle = .zero
     
-    // Card sizing — fixed. A Gin hand is only ever handSize or handSize + 1 cards, so it never shrinks.
-    private var cardWidth: CGFloat { 105 } // 150 * 0.7
-    private var cardHeight: CGFloat { 150 }
-    private var spacing: CGFloat { -66 }
+    // Card sizing — solved against the width on screen so the fan never runs past the edges. A Gin hand
+    // is handSize or handSize + 1 cards, and at handSize 10 that is well past what a fixed 105pt card
+    // with a 39pt sliver fits on a phone.
+    private var metrics: HandMetrics.Metrics {
+        HandMetrics.metrics(
+            count: cards.count,
+            availableWidth: HandMetrics.availableWidth(extensionWidth: game.extensionWidth)
+        )
+    }
+    private var cardWidth: CGFloat { metrics.width }
+    private var cardHeight: CGFloat { metrics.height }
+    private var spacing: CGFloat { metrics.spacing }
+    private var fanningAngle: Double { metrics.fanStep }
+    private var fanningOffset: CGFloat { metrics.riseStep }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
 
     var body: some View {
@@ -54,8 +64,8 @@ struct GinPlayerHandView: View {
                 let index = cards.firstIndex(of: card)!
                 let visualIndex = calculateVisualIndex(for: index)
                 
-                let angle = Angle.degrees((Double(visualIndex) - centerOffset) * 4) // fanningAngle = 4
-                let yOffset = abs((Double(visualIndex) - centerOffset) * 5) //fanningOffset = 5
+                let angle = Angle.degrees((Double(visualIndex) - centerOffset) * fanningAngle)
+                let yOffset = abs(CGFloat(Double(visualIndex) - centerOffset) * fanningOffset)
                 let stride = cardWidth + spacing
                 let xOffset = CGFloat(visualIndex - index) * stride
                     

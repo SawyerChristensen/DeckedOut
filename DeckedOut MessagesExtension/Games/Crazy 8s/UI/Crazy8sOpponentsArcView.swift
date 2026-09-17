@@ -133,13 +133,13 @@ struct Crazy8sOpponentsArcView: View {
 
     @ViewBuilder
     private func staticOpponentHand(cards: [Card], cardBackName: String = "cardBackRed") -> some View {
-        let m = Crazy8sHandMetrics.metrics(count: cards.count, scale: handScale)
+        let m = HandMetrics.metrics(count: cards.count, availableWidth: screenWidth / handScale, scale: handScale)
         let cardW: CGFloat = m.width
         let cardH: CGFloat = m.height
         let sp: CGFloat = m.spacing
         let center = Double(cards.count - 1) / 2.0
-        let fan: Double = 4
-        let yMult = 5.0 * Double(handScale)
+        let fan: Double = m.fanStep
+        let yMult = Double(m.riseStep)
 
         HStack(spacing: sp) {
             ForEach(cards) { card in

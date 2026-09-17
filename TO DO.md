@@ -1,6 +1,5 @@
 # Project TO DO
 ---
-
 ## 🚀 Active Release Milestones
 
 ### Update 4.0.0: 4th Game Expansion

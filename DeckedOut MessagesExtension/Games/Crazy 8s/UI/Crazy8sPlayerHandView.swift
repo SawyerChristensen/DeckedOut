@@ -42,11 +42,18 @@ struct Crazy8sPlayerHandView: View {
     // Cached global frame of each card slot; used to animate a manager-driven auto-discard (Switch red-jack counter)
     @State private var slotFrames: [Int: CGRect] = [:]
 
-    // Card sizing — shrinks a step per card once the hand passes Crazy8sHandMetrics.fullSizeCount
-    private var metrics: Crazy8sHandMetrics.Metrics { Crazy8sHandMetrics.metrics(count: cards.count) }
+    // Card sizing — solved against the width on screen so the fan never runs past the edges
+    private var metrics: HandMetrics.Metrics {
+        HandMetrics.metrics(
+            count: cards.count,
+            availableWidth: HandMetrics.availableWidth(extensionWidth: game.extensionWidth)
+        )
+    }
     private var cardWidth: CGFloat { metrics.width }
     private var cardHeight: CGFloat { metrics.height }
     private var spacing: CGFloat { metrics.spacing }
+    private var fanningAngle: Double { metrics.fanStep }
+    private var fanningOffset: CGFloat { metrics.riseStep }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
 
     var body: some View {
@@ -58,8 +65,8 @@ struct Crazy8sPlayerHandView: View {
                 let index = cards.firstIndex(of: card)!
                 let visualIndex = calculateVisualIndex(for: index)
                 
-                let angle = Angle.degrees((Double(visualIndex) - centerOffset) * 4) // fanningAngle = 4
-                let yOffset = abs((Double(visualIndex) - centerOffset) * 5) //fanningOffset = 5
+                let angle = Angle.degrees((Double(visualIndex) - centerOffset) * fanningAngle)
+                let yOffset = abs(CGFloat(Double(visualIndex) - centerOffset) * fanningOffset)
                 let stride = cardWidth + spacing
                 let xOffset = CGFloat(visualIndex - index) * stride
                     
@@ -161,8 +168,8 @@ struct Crazy8sPlayerHandView: View {
             game.playerCardAnimatingToDiscard = nil
             return
         }
-        let fanAngle = Angle.degrees((Double(index) - centerOffset) * 4)
-        let arcYOffset = abs((Double(index) - centerOffset) * 5)
+        let fanAngle = Angle.degrees((Double(index) - centerOffset) * fanningAngle)
+        let arcYOffset = abs(CGFloat(Double(index) - centerOffset) * fanningOffset)
         voiceDiscardingCard = card
         voiceDiscardRotation = fanAngle
         // Subtract the arc's resting y-offset so the card lands centered on the discard pile

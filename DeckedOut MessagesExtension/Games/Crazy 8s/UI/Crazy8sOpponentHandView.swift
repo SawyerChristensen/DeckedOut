@@ -40,13 +40,20 @@ struct Crazy8sOpponentHandView: View {
     @State private var animatingShadowRadius: CGFloat = 0
     @State private var animatingScaleCorrection: CGFloat = 1.0
     
-    // Card sizing — shrinks a step per card once the hand passes Crazy8sHandMetrics.fullSizeCount
-    private var metrics: Crazy8sHandMetrics.Metrics { Crazy8sHandMetrics.metrics(count: cards.count, scale: sizeScale) }
+    // Card sizing — solved against the width on screen so the fan never runs past the edges. The budget
+    // is divided by sizeScale because the whole hand is shrunk by that factor after it has been laid out.
+    private var metrics: HandMetrics.Metrics {
+        HandMetrics.metrics(
+            count: cards.count,
+            availableWidth: HandMetrics.availableWidth(extensionWidth: game.extensionWidth) / sizeScale,
+            scale: sizeScale
+        )
+    }
     private var cardWidth: CGFloat { metrics.width }
     private var cardHeight: CGFloat { metrics.height }
     private var spacing: CGFloat { metrics.spacing }
     private var centerOffset: Double { Double(cards.count - 1) / 2.0 }
-    private let fanningAngle: Double = 4
+    private var fanningAngle: Double { metrics.fanStep }
     
     var body: some View {
         RotatedHandLayout(
@@ -219,7 +226,7 @@ struct RotatedHandLayout: Layout {
         for (index, subview) in subviews.enumerated() {
             // 1. Calculate base local layout (mimicking HStack + your arc yOffset)
             let baseX = (Double(index) - centerIndex) * Double(cardWidth + spacing)
-            let baseY = -abs((Double(index) - centerIndex) * 5.0 * Double(sizeScale))
+            let baseY = -abs((Double(index) - centerIndex) * Double(HandMetrics.fanRisePerCard) * Double(sizeScale))
             
             // 2. Rotate coordinates mathematically
             let rotatedX = baseX * c - baseY * s
