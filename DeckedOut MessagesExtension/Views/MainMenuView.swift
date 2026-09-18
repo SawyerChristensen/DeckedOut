@@ -787,22 +787,48 @@ struct MainMenuView: View {
     private var midSection: some View {
         Spacer()
             .frame(maxWidth: .infinity)
-            .overlay(alignment: .leading) {
-                rulesButton
-                    .padding(.leading, isExpanded ? (isIpad ? 270 : 75) : (showButtonShapes ? 10 : 25))
-                    .padding(.top, isExpanded ? (isIpad ? -120 : -130) : (showButtonShapes ? 20 : 0))
-                    .opacity(isTitleBarHidden ? 0 : 1)
-                    .accessibilityHidden(isTitleBarHidden)
-            }
-            .overlay(alignment: .trailing) {
-                customizationButton
-                    .padding(.trailing, isExpanded ? (isIpad ? 270 : 75) : (showButtonShapes ? 10 : 25))
-                    .padding(.top, isExpanded ? (isIpad ? 70 : 100) : (showButtonShapes ? 20 : 0))
-                    .opacity(isTitleBarHidden ? 0 : 1)
-                    .accessibilityHidden(isTitleBarHidden)
+            .overlay {
+                GeometryReader { proxy in
+                    menuButtons(in: proxy.size)
+                }
+                .opacity(isTitleBarHidden ? 0 : 1)
+                .accessibilityHidden(isTitleBarHidden)
             }
     }
-    
+
+    /// Rules and Themes, placed from the size of the gap the title and the hand actually leave
+    /// between them — never from the device. Messages hands an iPad extension a card that has
+    /// nothing to do with the screen it's on (a phone-sized popover on an 11" and a 13" alike, in
+    /// either orientation), so anything keyed off the idiom or `UIScreen` is only ever right on the
+    /// one iPad it was tuned on. Everything here is a fraction of `size` instead, pinned so that on
+    /// the phone it was designed for it lands exactly where the old fixed paddings put it.
+    ///
+    /// Compact keeps the two buttons level on one row. Expanded staggers them — Rules above on the
+    /// left, Themes below on the right — since at that size they're too wide to share a row.
+    private func menuButtons(in size: CGSize) -> some View {
+        //Both buttons hug a phone-width column, so a wide container centres them over the hand
+        //rather than stranding one at each edge.
+        let column = min(size.width, 440)
+        let inset = isExpanded ? column * 0.1866 : (showButtonShapes ? 10 : 25) //75pt on a 402pt phone
+        //How far apart the two sit vertically, and how far the pair rides above the gap's centre.
+        //The floor keeps them from ever stacking on top of each other in a very short container.
+        let stagger = isExpanded ? max(size.height * 0.344, 85) : 0
+        let lift = isExpanded ? -size.height * 0.053 : (showButtonShapes ? 10 : 0)
+
+        return ZStack {
+            rulesButton
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .offset(y: lift - stagger / 2)
+
+            customizationButton
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .offset(y: lift + stagger / 2)
+        }
+        .padding(.horizontal, inset)
+        .frame(width: isExpanded ? column : size.width)
+        .frame(width: size.width, height: size.height)
+    }
+
     private var rulesButton: some View {
         Button(action: {
             let impact = UIImpactFeedbackGenerator(style: .medium)
@@ -839,7 +865,7 @@ struct MainMenuView: View {
                 ZStack(alignment: .leading) {
                     if showingThemes {
                         Text("Back")
-                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .font(isExpanded ? .title : .headline)
                             .fontWeight(.semibold)
                             .foregroundStyle(.white)
                             .transition(
@@ -849,7 +875,7 @@ struct MainMenuView: View {
                             )
                     } else {
                         Text("Rules")
-                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .font(isExpanded ? .title : .headline)
                             .fontWeight(.semibold)
                             .foregroundStyle(.white)
                             .transition(
@@ -897,7 +923,7 @@ struct MainMenuView: View {
                 ZStack(alignment: .leading) {
                     if !showingThemes {
                         Text("Themes")
-                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .font(isExpanded ? .title : .headline)
                             .fontWeight(.semibold)
                             .foregroundStyle(.white)
                             .transition(
@@ -908,7 +934,7 @@ struct MainMenuView: View {
                             )
                     } else {
                         Text("Select")
-                            .font(isExpanded ? (isIpad ? .title2 : .title) : .headline)
+                            .font(isExpanded ? .title : .headline)
                             .fontWeight(.semibold)
                             .foregroundStyle(.white)
                             .transition(
@@ -959,7 +985,7 @@ struct MainMenuView: View {
         // place; it is never swapped for, or stacked on top of, a second set of cards.
         menuCardWheel
         //.zIndex(999) //keep the cards on top
-        .frame(maxWidth: UIScreen.main.bounds.width) //dont let the cards expand the zstack when they fan out
+        .frame(minWidth: 0, maxWidth: .infinity) //dont let the cards expand the zstack when they fan out — takes the container's width, NOT the screen's: on iPad Messages hosts us in a card far narrower than the screen, and sizing to the screen laid the whole menu out that wide behind it
         .scaleEffect(isExpanded ? 1.4 : 1.1)
         .offset(y: isExpanded ? (isInSubmenu ? -175 : 5) : 40) //40: in compact main menu
         .opacity(isCardWheelHidden ? 0 : 1)

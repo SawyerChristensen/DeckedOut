@@ -43,12 +43,17 @@ class MessagesViewController: MSMessagesAppViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        let currentWidth = self.view.bounds.width
+        let currentWidth = hostedWidth //the width the table is laid out at, which on iPad is not the card's — see layoutFittedView()
         if let engine = activeGameEngine, engine.extensionWidth != currentWidth {
             engine.extensionWidth = currentWidth
         }
     }
-    
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        layoutFittedView() //the card changes size with rotation, the keyboard and compact/expanded
+    }
+
     private func setupFeedbackSystems() {
         _ = HapticManager.instance //init Haptic engine on main thread (required)
         
@@ -366,7 +371,7 @@ class MessagesViewController: MSMessagesAppViewController {
         guard let engine = activeGameEngine else { return }
         let gameViewController: UIViewController
         
-        engine.extensionWidth = self.view.bounds.width
+        engine.extensionWidth = hostedWidth
         
         if let ginManager = engine as? GinRummyManager {
             if self.children.first is UIHostingController<GinRootView> { return }
@@ -395,19 +400,76 @@ class MessagesViewController: MSMessagesAppViewController {
         //add the new view controller
         self.addChild(viewController)
         viewController.view.frame = self.view.bounds
-        viewController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(viewController.view)
-        
-        NSLayoutConstraint.activate([
-            viewController.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-            viewController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            viewController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            viewController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-        ])
-        
+
+        if fitsHostedViewToDesignSize {
+            // Sized and scaled by hand in layoutFittedView() — edge constraints would pin the
+            // view's bounds to the card's, which is exactly the size it must NOT be laid out at.
+            viewController.view.translatesAutoresizingMaskIntoConstraints = true
+            viewController.view.autoresizingMask = []
+            layoutFittedView()
+        } else {
+            viewController.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                viewController.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                viewController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                viewController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                viewController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            ])
+        }
+
         viewController.didMove(toParent: self)
     }
-    
+
+    // MARK: - Fitting the phone layout to iPad's card
+    //
+    // Every interactive screen — menu, submenus, tables, rules — was designed against an iPhone's
+    // Messages sheet, and on an iPhone that is always what it gets. On an iPad it isn't: Messages
+    // hosts the extension in a floating card whose size has nothing to do with the device (roughly
+    // 393x703 on one 11" iPad, 320x481 on another, and different again in landscape), while still
+    // calling it `.expanded`. Laid out straight into a card smaller than the design, the screens
+    // don't reflow — they overflow: the title runs edge to edge, the hand climbs over the buttons,
+    // and the top and bottom of the submenu are cut off. It reads as the whole app being zoomed in.
+    //
+    // So on iPad the hosted view is laid out at the size it was designed for and then scaled, as
+    // one piece, down to the card. Nothing inside has to know: every screen sees a phone-sized
+    // container, in any card, on any iPad, in either orientation. It only ever scales DOWN — a card
+    // at least as large as the design (older iPadOS's near-fullscreen sheet) is left at 1:1.
+
+    /// The space an expanded screen needs: an iPhone sheet, less its safe areas.
+    private static let expandedDesignSize = CGSize(width: 393, height: 700)
+    /// The space a compact screen needs: the keyboard-height drawer on an iPhone.
+    private static let compactDesignSize = CGSize(width: 393, height: 280)
+
+    /// iPad only, and never a transcript bubble — those are sized by `contentSizeThatFits`.
+    private var fitsHostedViewToDesignSize: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad && presentationStyle != .transcript
+    }
+
+    /// How far the hosted view is scaled down to fit the card; 1 when it already fits.
+    private var fitScale: CGFloat {
+        let card = view.bounds.size
+        guard fitsHostedViewToDesignSize, card.width > 0, card.height > 0 else { return 1 }
+        let design = presentationStyle == .compact ? Self.compactDesignSize : Self.expandedDesignSize
+        return min(1, card.width / design.width, card.height / design.height)
+    }
+
+    /// The width the hosted screen is actually laid out at — the card's, in design space.
+    private var hostedWidth: CGFloat { view.bounds.width / fitScale }
+
+    private func layoutFittedView() {
+        guard fitsHostedViewToDesignSize, let hosted = children.first?.view else { return }
+        let card = view.bounds
+        let scale = fitScale
+        // bounds + center rather than frame: frame is undefined once a transform is applied.
+        let bounds = CGRect(x: 0, y: 0, width: card.width / scale, height: card.height / scale)
+        let center = CGPoint(x: card.midX, y: card.midY)
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
+        if hosted.bounds != bounds { hosted.bounds = bounds }
+        if hosted.center != center { hosted.center = center }
+        if hosted.transform != transform { hosted.transform = transform }
+    }
+
     private func removeAllChildViewControllers() {
         for child in self.children {
             child.willMove(toParent: nil)
